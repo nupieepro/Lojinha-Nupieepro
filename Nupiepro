@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lojinha Nupiepro</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --azul-deep: #1B1B3A; --laranja: #FF914D; --fundo: #F8F9FB;
+            --card-bg: #ffffff; --texto: #2D3436; --verde-zap: #25D366;
+            --vermelho-del: #FF4757; --sombra: 0 10px 30px rgba(0,0,0,0.06);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--fundo); color: var(--texto); padding-bottom: 130px; overflow-x: hidden; }
+
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--azul-deep); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease-out, visibility 0.5s;
+        }
+        .splash-img { 
+            width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--laranja);
+            box-shadow: 0 0 20px rgba(255, 145, 77, 0.5); animation: pulse 1.5s infinite; object-fit: cover;
+        }
+        .splash-text { color: white; margin-top: 15px; font-weight: 600; letter-spacing: 1px; font-size: 1.1rem; text-transform: uppercase; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .hidden { opacity: 0; visibility: hidden; }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--azul-deep) 0%, #2a2a5a 100%); color: white;
+            padding: 35px 20px 90px 20px; border-radius: 0 0 40px 40px; text-align: center;
+            box-shadow: 0 10px 20px rgba(27, 27, 58, 0.2); position: relative;
+        }
+        .brand-logo {
+            width: 100px; height: 100px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.2);
+            object-fit: cover; box-shadow: 0 8px 20px rgba(0,0,0,0.3); margin-bottom: 10px;
+        }
+        .brand { font-size: 2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0; line-height: 1; }
+        .brand span { color: var(--laranja); }
+        
+        /* NOVA ETIQUETA "LOJINHA" */
+        .store-title {
+            display: inline-block; background: var(--laranja); color: white;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 5px;
+            box-shadow: 0 4px 10px rgba(255, 145, 77, 0.4);
+        }
+
+        .sub-brand { font-size: 0.75rem; opacity: 0.9; font-weight: 400; letter-spacing: 0.5px; line-height: 1.4; max-width: 320px; margin: 5px auto 0; }
+        .welcome-msg { 
+            background: rgba(255,255,255,0.1); display: inline-block; padding: 5px 15px; 
+            border-radius: 20px; font-size: 0.75rem; margin-top: 15px; border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Filtros */
+        .filter-container { margin-top: -35px; position: relative; z-index: 20; padding: 0 20px; margin-bottom: 20px; }
+        .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; justify-content: center; }
+        .filter-btn {
+            padding: 10px 20px; background: white; border: none; border-radius: 25px;
+            font-size: 0.9rem; font-weight: 600; color: #888; white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; cursor: pointer;
+        }
+        .filter-btn.active { background: var(--azul-deep); color: white; box-shadow: 0 5px 15px rgba(27, 27, 58, 0.3); }
+
+        /* Grid & Card */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; position: relative; z-index: 10; }
+        @media(min-width: 768px) { .container { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; } }
+        .card { background: var(--card-bg); border-radius: 20px; overflow: hidden; box-shadow: var(--sombra); display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.03); transition: transform 0.2s; position: relative; }
+        .card:active { transform: scale(0.97); }
+        .image-wrapper { width: 100%; aspect-ratio: 1 / 1; background: #f0f2f5; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .prod-img { width: 100%; height: 100%; object-fit: cover; z-index: 2; }
+        .share-btn { position: absolute; top: 10px; right: 10px; width: 35px; height: 35px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.15); z-index: 5; color: var(--azul-deep); font-size: 0.9rem; cursor: pointer; }
+        .share-btn:active { transform: scale(0.9); background: #eee; }
+        .no-photo-placeholder { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(45deg, #f1f2f6, #ffffff); color: var(--azul-deep); z-index: 1; }
+        .no-photo-placeholder i { font-size: 2.5rem; margin-bottom: 10px; opacity: 0.3; }
+        .no-photo-placeholder span { font-size: 0.7rem; font-weight: 600; opacity: 0.5; text-transform: uppercase; }
+        .card-info { padding: 15px; text-align: center; display: flex; flex-direction: column; flex-grow: 1; cursor: pointer; }
+        .card-title { font-size: 0.85rem; font-weight: 600; color: var(--azul-deep); height: 38px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .card-price { font-size: 1.1rem; color: var(--laranja); font-weight: 800; margin-top: 5px; }
+        .tap-hint { font-size: 0.7rem; color: #aaa; margin-top: auto; padding-top: 8px; font-weight: 500; }
+
+        /* Modais */
+        .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 2000; display: none; justify-content: center; align-items: flex-end; backdrop-filter: blur(5px); }
+        .modal-bg.active { display: flex; animation: fadeIn 0.3s; }
+        .modal-panel { background: white; width: 100%; max-width: 500px; border-radius: 30px 30px 0 0; padding: 30px 25px; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s; max-height: 90vh; overflow-y: auto; position: relative; }
+        @media(min-width: 600px) { .modal-bg { align-items: center; } .modal-panel { border-radius: 25px; } }
+        .detail-img-box { width: 100%; height: 220px; background: #f9f9f9; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .detail-img { width: 100%; height: 100%; object-fit: contain; z-index: 2; position: relative; }
+        .detail-title { font-size: 1.4rem; font-weight: 700; color: var(--azul-deep); line-height: 1.2; }
+        .detail-price { font-size: 1.8rem; color: var(--laranja); font-weight: 800; margin: 5px 0 20px; }
+        .nice-select { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #eee; background: #fff; font-size: 1rem; color: #333; font-weight: 500; outline: none; margin-bottom: 20px; }
+        .qty-wrapper { display: flex; align-items: center; justify-content: space-between; background: #f4f6f8; padding: 8px; border-radius: 15px; border: 1px solid #eee; margin-bottom: 25px; }
+        .qty-btn { width: 45px; height: 45px; background: white; border: none; border-radius: 12px; font-size: 1.5rem; color: var(--azul-deep); font-weight: 700; cursor: pointer; }
+        .qty-num { font-size: 1.3rem; font-weight: 700; color: #333; }
+        .btn-primary { width: 100%; padding: 18px; border: none; border-radius: 15px; background: var(--azul-deep); color: white; font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: 0.2s; }
+        .btn-primary:active { transform: scale(0.98); }
+
+        /* Checkout & UI */
+        .cart-list { list-style: none; margin: 15px 0 20px; max-height: 200px; overflow-y: auto; border: 1px solid #eee; border-radius: 15px; padding: 10px; background: #fafafa; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .cart-item:last-child { border-bottom: none; }
+        .btn-trash { background: #ffecec; color: var(--vermelho-del); width: 35px; height: 35px; border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .input-box { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px; outline: none; transition: border 0.3s; }
+        .input-box:focus { border-color: var(--azul-deep); }
+        .radio-section { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .radio-option { padding: 15px; border: 1px solid #eee; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .radio-option:has(input:checked) { border-color: var(--laranja); background: #fff8f2; color: var(--laranja); font-weight: 700; }
+        .radio-option input { accent-color: var(--laranja); transform: scale(1.2); }
+        .float-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(150px); width: 90%; max-width: 450px; background: var(--azul-deep); color: white; padding: 12px 25px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 15px 40px rgba(27, 27, 58, 0.4); z-index: 100; transition: transform 0.4s; border: 2px solid var(--laranja); cursor: pointer; }
+        .float-bar.visible { transform: translateX(-50%) translateY(0); }
+        footer { text-align: center; color: #999; font-size: 0.8rem; margin-top: 30px; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; color: #ccc; }
+    </style>
+</head>
+<body>
+    <div id="splash-screen">
+        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Nupiepro Logo" class="splash-img">
+        <div class="splash-text">Lojinha Oficial Nupiepro</div>
+    </div>
+    <header>
+        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Nupiepro Logo" class="brand-logo">
+        <h1 class="brand">Nupiee<span>Pro</span></h1>
+        
+        <div class="store-title"><i class="fa-solid fa-store"></i> Lojinha Oficial</div>
+        
+        <div class="sub-brand">Núcleo Piauiense de Estudantes de Engenharia de Produção</div>
+        <div class="welcome-msg">👋 Bem-vindo(a), Nupilover!</div>
+    </header>
+
+    <div class="filter-container">
+        <div class="filter-scroll">
+            <button class="filter-btn active" onclick="filtrarProdutos('todos', this)">Todos</button>
+            <button class="filter-btn" onclick="filtrarProdutos('camisa', this)">Camisas</button>
+            <button class="filter-btn" onclick="filtrarProdutos('acessorio', this)">Acessórios</button>
+        </div>
+    </div>
+
+    <div class="container" id="vitrine-area"></div>
+
+    <footer>
+        Desenvolvido por <strong>Nupiepro 2026</strong> <i class="fa-solid fa-heart" style="color:var(--laranja); margin-left:3px;"></i>
+    </footer>
+
+    <div class="modal-bg" id="modal-details" onclick="fecharModais(event)">
+        <div class="modal-panel">
+            <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+
+            <div class="detail-img-box">
+                <img src="" id="detalhe-img" class="detail-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div id="detalhe-fallback" class="no-photo-placeholder" style="display:none; position:absolute; z-index:1;">
+                    <i class="fa-solid fa-box-open"></i><span>Sem Imagem</span>
+                </div>
+            </div>
+
+            <h2 id="detalhe-nome" class="detail-title">Nome</h2>
+            <div id="detalhe-preco" class="detail-price">R$ 0,00</div>
+
+            <div id="wrapper-tamanho" style="display:none;">
+                <label style="font-size:0.9rem; font-weight:600; color:#666; margin-bottom:8px; display:block;">Tamanho:</label>
+                <select id="select-tamanho" class="nice-select">
+                    <option value="P - BBL (Baby Look)">P - BBL (Baby Look)</option>
+                    <option value="M - BBL (Baby Look)">M - BBL (Baby Look)</option>
+                    <option value="G - BBL (Baby Look)">G - BBL (Baby Look)</option>
+                    <option value="GG - BBL (Baby Look)">GG - BBL (Baby Look)</option>
+                    <option value="P - Normal">P - Normal</option>
+                    <option value="M - Normal">M - Normal</option>
+                    <option value="G - Normal">G - Normal</option>
+                    <option value="GG - Normal">GG - Normal</option>
+                </select>
+            </div>
+
+            <label style="font-size:0.9rem; font-weight:600; color:#666; margin-bottom:8px; display:block;">Quantidade:</label>
+            <div class="qty-wrapper">
+                <button class="qty-btn" onclick="alterarQtd(-1)">-</button>
+                <div class="qty-num" id="detalhe-qtd">1</div>
+                <button class="qty-btn" onclick="alterarQtd(1)">+</button>
+            </div>
+
+            <button class="btn-primary" onclick="adicionarAoCarrinho()">Adicionar <i class="fa-solid fa-plus"></i></button>
+        </div>
+    </div>
+
+    <div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)">
+        <div class="modal-panel">
+            <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="color:var(--azul-deep); margin-bottom:15px;">Finalizar Compra</h2>
+
+            <ul class="cart-list" id="lista-carrinho"></ul>
+
+            <h3 style="color:var(--azul-deep); font-size:1.1rem; margin:15px 0 10px;">Seus Dados</h3>
+            <div style="font-size:0.8rem; color:#888; margin-bottom:10px;">Preencha uma vez e nós lembramos!</div>
+            
+            <input type="text" id="nome-cliente" class="input-box" placeholder="Seu Nome Completo *">
+            <input type="tel" id="zap-cliente" class="input-box" placeholder="Seu WhatsApp (com DDD) *">
+
+            <h3 style="color:var(--azul-deep); font-size:1.1rem; margin:15px 0 10px;">Entrega / Retirada</h3>
+            <div class="radio-section">
+                <label class="radio-option">
+                    <input type="radio" name="entrega" value="Retirada UFPI" checked onchange="toggleEndereco()"> 
+                    <i class="fa-solid fa-building-columns"></i> Retirada (UFPI)
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="entrega" value="Entrega" onchange="toggleEndereco()"> 
+                    <i class="fa-solid fa-motorcycle"></i> Entrega (Verif. Taxa)
+                </label>
+            </div>
+
+            <div id="box-endereco" style="display:none;">
+                <input type="text" id="endereco-cliente" class="input-box" placeholder="Endereço Completo para Entrega *">
+            </div>
+
+            <h3 style="color:var(--azul-deep); font-size:1.1rem; margin:15px 0 10px;">Pagamento</h3>
+            <div class="radio-section">
+                <label class="radio-option"><input type="radio" name="pgto" value="PIX" checked> PIX</label>
+                <label class="radio-option"><input type="radio" name="pgto" value="Dinheiro"> Dinheiro</label>
+                <label class="radio-option"><input type="radio" name="pgto" value="Cartão"> Cartão</label>
+            </div>
+
+            <button class="btn-primary" style="background:var(--verde-zap);" onclick="enviarPedidoZap()">
+                Enviar Pedido <i class="fa-brands fa-whatsapp"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="float-bar" id="barra-carrinho" onclick="abrirCheckout()">
+        <div style="line-height:1.1;">
+            <div id="barra-qtd" style="font-size: 0.8rem; opacity: 0.9;">0 itens</div>
+            <div id="barra-total" style="font-weight: 800; font-size: 1.1rem; color: var(--laranja);">R$ 0,00</div>
+        </div>
+        <div style="font-weight: 700; font-size:0.9rem;">Ver Sacola <i class="fa-solid fa-bag-shopping"></i></div>
+    </div>
+    <script>
+        const whatsappDestino = "5586999976226"; 
+
+        const produtos = [
+            { id: 1, nome: "Camisa PRETA - Eng. Produção", preco: 38.00, tipo: "camisa", categoria: "camisa", img: "https://i.ibb.co/TDhnM6xW/unnamed.png" },
+            { id: 2, nome: "Camisa BRANCA - Eng. Produção", preco: 38.00, tipo: "camisa", categoria: "camisa", img: "https://i.ibb.co/bM9mqjXS/unnamed-1.png" },
+            { id: 3, nome: "Camisa AZUL - Eng. Produção", preco: 38.00, tipo: "camisa", categoria: "camisa", img: "https://i.ibb.co/qLzdtvkN/unnamed-2.png" },
+            { id: 4, nome: "Ecobag Nupiepro", preco: 22.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/7dj3kxt0/unnamed-3.png" },
+            { id: 5, nome: "Bloco de Anotações", preco: 16.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/hxxnxrbF/unnamed-4.png" },
+            { id: 6, nome: "Chaveiro Abridor", preco: 5.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/Kj00Xbys/unnamed-5.png" },
+            { id: 7, nome: "Bottons Personalizados", preco: 5.00, tipo: "unico", categoria: "acessorio", img: "" }
+        ];
+
+        let carrinho = [];
+        let itemSelecionado = null;
+        let qtdTemporaria = 1;
+        let filtroAtual = 'todos';
+
+        // --- SPLASH SCREEN & LOAD ---
+        window.addEventListener('load', () => {
+            const splash = document.getElementById('splash-screen');
+            carregarDadosUsuario();
+            carregarVitrine();
+            setTimeout(() => {
+                splash.classList.add('hidden');
+                setTimeout(() => splash.style.display = 'none', 500);
+            }, 2000);
+        });
+
+        // --- SISTEMA DE FILTROS ---
+        function filtrarProdutos(cat, btn) {
+            filtroAtual = cat;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            carregarVitrine();
+        }
+
+        // --- SISTEMA DE COMPARTILHAR ---
+        function compartilhar(id, event) {
+            event.stopPropagation(); 
+            const prod = produtos.find(p => p.id === id);
+            const textoShare = `Olha o que encontrei na Lojinha Nupiepro: ${prod.nome} por R$ ${prod.preco.toFixed(2)}!`;
+            
+            if (navigator.share) {
+                navigator.share({ title: 'Nupiepro Store', text: textoShare, url: window.location.href }).catch(console.error);
+            } else {
+                alert("Copie o link para compartilhar: " + window.location.href);
+            }
+        }
+
+        const vitrineArea = document.getElementById('vitrine-area');
+        
+        function carregarVitrine() {
+            vitrineArea.innerHTML = '';
+            const produtosFiltrados = produtos.filter(p => filtroAtual === 'todos' || p.categoria === filtroAtual);
+
+            produtosFiltrados.forEach(p => {
+                let imgHTML = '';
+                if(p.img && p.img.length > 5) {
+                    imgHTML = `<img src="${p.img}" class="prod-img" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                               <div class="no-photo-placeholder" style="display:none;"><i class="fa-solid fa-image"></i><span>Ver Foto</span></div>`;
+                } else {
+                    let icon = p.nome.includes("Botton") ? "fa-certificate" : "fa-box-open";
+                    imgHTML = `<div class="no-photo-placeholder"><i class="fa-solid ${icon}" style="color:var(--laranja)"></i><span>${p.nome}</span></div>`;
+                }
+
+                vitrineArea.innerHTML += `
+                    <div class="card" onclick="abrirDetalhes(${p.id})">
+                        <div class="share-btn" onclick="compartilhar(${p.id}, event)"><i class="fa-solid fa-share-nodes"></i></div>
+                        <div class="image-wrapper">${imgHTML}</div>
+                        <div class="card-info" onclick="abrirDetalhes(${p.id})">
+                            <div class="card-title">${p.nome}</div>
+                            <div class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
+                            <div class="tap-hint">Ver Detalhes</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function abrirDetalhes(id) {
+            itemSelecionado = produtos.find(p => p.id === id);
+            qtdTemporaria = 1;
+
+            document.getElementById('detalhe-nome').innerText = itemSelecionado.nome;
+            document.getElementById('detalhe-preco').innerText = `R$ ${itemSelecionado.preco.toFixed(2).replace('.',',')}`;
+            document.getElementById('detalhe-qtd').innerText = qtdTemporaria;
+
+            const imgEl = document.getElementById('detalhe-img');
+            const fallbackEl = document.getElementById('detalhe-fallback');
+            
+            if(itemSelecionado.img) {
+                imgEl.src = itemSelecionado.img; imgEl.style.display = 'block'; fallbackEl.style.display = 'none';
+            } else {
+                imgEl.style.display = 'none'; fallbackEl.style.display = 'flex';
+                fallbackEl.querySelector('i').className = itemSelecionado.nome.includes("Botton") ? "fa-solid fa-certificate" : "fa-solid fa-box-open";
+            }
+
+            document.getElementById('wrapper-tamanho').style.display = (itemSelecionado.tipo === 'camisa') ? 'block' : 'none';
+            document.getElementById('modal-details').classList.add('active');
+        }
+
+        function fecharModais(e) {
+            if(e && e.target !== e.currentTarget) return;
+            document.getElementById('modal-details').classList.remove('active');
+            document.getElementById('modal-checkout').classList.remove('active');
+        }
+
+        function alterarQtd(valor) {
+            qtdTemporaria += valor;
+            if(qtdTemporaria < 1) qtdTemporaria = 1;
+            document.getElementById('detalhe-qtd').innerText = qtdTemporaria;
+        }
+
+        function adicionarAoCarrinho() {
+            let tamanhoEscolhido = 'Único';
+            if(itemSelecionado.tipo === 'camisa') {
+                tamanhoEscolhido = document.getElementById('select-tamanho').value;
+            }
+
+            const index = carrinho.findIndex(i => i.id === itemSelecionado.id && i.tamanho === tamanhoEscolhido);
+            if(index >= 0) carrinho[index].qtd += qtdTemporaria;
+            else carrinho.push({ ...itemSelecionado, tamanho: tamanhoEscolhido, qtd: qtdTemporaria });
+
+            document.getElementById('modal-details').classList.remove('active');
+            atualizarBarraFlutuante();
+        }
+
+        function atualizarBarraFlutuante() {
+            const bar = document.getElementById('barra-carrinho');
+            if(carrinho.length > 0) bar.classList.add('visible');
+            else bar.classList.remove('visible');
+
+            const total = carrinho.reduce((acc, item) => acc + (item.preco * item.qtd), 0);
+            const totalQtd = carrinho.reduce((acc, item) => acc + item.qtd, 0);
+
+            document.getElementById('barra-total').innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
+            document.getElementById('barra-qtd').innerText = `${totalQtd} item(ns)`;
+        }
+
+        function abrirCheckout() {
+            if(carrinho.length === 0) return;
+            renderizarListaCarrinho();
+            document.getElementById('modal-checkout').classList.add('active');
+        }
+
+        function renderizarListaCarrinho() {
+            const lista = document.getElementById('lista-carrinho');
+            lista.innerHTML = '';
+            if(carrinho.length === 0) { fecharModais(null); return; }
+
+            carrinho.forEach((item, idx) => {
+                let subtitulo = `R$ ${item.preco.toFixed(2).replace('.',',')}`;
+                if(item.tipo === 'camisa') subtitulo += ` | ${item.tamanho}`;
+                lista.innerHTML += `
+                    <li class="cart-item">
+                        <div class="cart-item-info"><strong>${item.qtd}x ${item.nome}</strong><span>${subtitulo}</span></div>
+                        <button class="btn-trash" onclick="removerDoCarrinho(${idx})"><i class="fa-solid fa-trash"></i></button>
+                    </li>
+                `;
+            });
+        }
+
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            atualizarBarraFlutuante();
+            renderizarListaCarrinho();
+        }
+
+        function toggleEndereco() {
+            const tipoEntrega = document.querySelector('input[name="entrega"]:checked').value;
+            document.getElementById('box-endereco').style.display = (tipoEntrega === 'Entrega') ? 'block' : 'none';
+        }
+
+        function salvarDadosUsuario(nome, zap, endereco) {
+            localStorage.setItem('nupiepro_nome', nome);
+            localStorage.setItem('nupiepro_zap', zap);
+            localStorage.setItem('nupiepro_endereco', endereco);
+        }
+
+        function carregarDadosUsuario() {
+            const nome = localStorage.getItem('nupiepro_nome');
+            const zap = localStorage.getItem('nupiepro_zap');
+            const endereco = localStorage.getItem('nupiepro_endereco');
+
+            if(nome) document.getElementById('nome-cliente').value = nome;
+            if(zap) document.getElementById('zap-cliente').value = zap;
+            if(endereco) document.getElementById('endereco-cliente').value = endereco;
+        }
+
+        function enviarPedidoZap() {
+            const nome = document.getElementById('nome-cliente').value;
+            const zap = document.getElementById('zap-cliente').value;
+            const tipoEntrega = document.querySelector('input[name="entrega"]:checked').value;
+            const endereco = document.getElementById('endereco-cliente').value;
+            const pgto = document.querySelector('input[name="pgto"]:checked').value;
+
+            if(!nome || !zap) { alert("Preencha Nome e WhatsApp!"); return; }
+            if(tipoEntrega === 'Entrega' && !endereco) { alert("Informe o endereço!"); return; }
+
+            salvarDadosUsuario(nome, zap, endereco);
+
+            let msg = `*LOJINHA OFICIAL NUPIEPRO* ⚙️\n------------------------------\n`;
+            msg += `👤 *Cliente:* ${nome}\n📱 *WhatsApp:* ${zap}\n`;
+            msg += `🚚 *Método:* ${tipoEntrega}\n`;
+            if(tipoEntrega === 'Entrega') msg += `📍 *Endereço:* ${endereco}\n`;
+            msg += `💳 *Pagamento:* ${pgto}\n\n*ITENS DO PEDIDO:*\n`;
+            
+            carrinho.forEach(item => {
+                msg += `📦 ${item.qtd}x *${item.nome}*\n`;
+                if(item.tipo === 'camisa') msg += `   └ Tam: ${item.tamanho}\n`;
+                msg += `   └ R$ ${(item.preco * item.qtd).toFixed(2).replace('.',',')}\n`;
+            });
+
+            const total = carrinho.reduce((acc, item) => acc + (item.preco * item.qtd), 0);
+            msg += `\n------------------------------\n*💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}*\n------------------------------\n`;
+            if(pgto === 'PIX') msg += `ℹ️ Aguardo a chave PIX.`;
+
+            window.open(`https://wa.me/${whatsappDestino}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
+
+
