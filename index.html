@@ -5,135 +5,228 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lojinha Nupiepro</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --azul-deep: #1B1B3A; --laranja: #FF914D; --fundo: #F8F9FB;
-            --card-bg: #ffffff; --texto: #2D3436; --verde-zap: #25D366;
-            --vermelho-del: #FF4757; --sombra: 0 10px 30px rgba(0,0,0,0.06);
+            --azul-deep: #1B1B3A; --laranja: #FF914D; --laranja-glow: rgba(255, 145, 77, 0.4);
+            --fundo: #F2F4F8; --card-bg: #ffffff; --texto: #2D3436; 
+            --verde-zap: #25D366; --vermelho-del: #FF4757;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+            --shadow-md: 0 8px 24px rgba(27, 27, 58, 0.08);
+            --shadow-lg: 0 15px 40px rgba(27, 27, 58, 0.12);
+            --glass: rgba(255, 255, 255, 0.85);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.5);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--fundo); color: var(--texto); padding-bottom: 130px; overflow-x: hidden; }
 
-        /* Splash Screen */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; /* Fonte mais moderna que Poppins */
+            background-color: var(--fundo); color: var(--texto); 
+            padding-bottom: 140px; overflow-x: hidden;
+            background-image: radial-gradient(circle at 10% 20%, rgba(27, 27, 58, 0.03) 0%, transparent 20%);
+        }
+
+        /* --- SPLASH SCREEN --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--azul-deep); z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.5s ease-out, visibility 0.5s;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
         }
         .splash-img { 
-            width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--laranja);
-            box-shadow: 0 0 20px rgba(255, 145, 77, 0.5); animation: pulse 1.5s infinite; object-fit: cover;
+            width: 110px; height: 110px; border-radius: 50%; border: 3px solid var(--laranja);
+            box-shadow: 0 0 30px var(--laranja-glow); animation: pulseLogo 2s infinite ease-in-out; object-fit: cover;
         }
-        .splash-text { color: white; margin-top: 15px; font-weight: 600; letter-spacing: 1px; font-size: 1.1rem; text-transform: uppercase; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        .hidden { opacity: 0; visibility: hidden; }
+        .splash-text { 
+            color: white; margin-top: 20px; font-weight: 700; letter-spacing: 2px; 
+            font-size: 0.9rem; text-transform: uppercase; opacity: 0; animation: fadeUp 0.8s forwards 0.3s;
+        }
+        @keyframes pulseLogo { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 145, 77, 0.4); } 70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 145, 77, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 145, 77, 0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        /* Header */
+        /* --- HEADER PREMIUM --- */
         header {
-            background: linear-gradient(135deg, var(--azul-deep) 0%, #2a2a5a 100%); color: white;
-            padding: 35px 20px 90px 20px; border-radius: 0 0 40px 40px; text-align: center;
-            box-shadow: 0 10px 20px rgba(27, 27, 58, 0.2); position: relative;
+            background: linear-gradient(145deg, #1B1B3A 0%, #252550 100%); color: white;
+            padding: 30px 20px 85px 20px; border-radius: 0 0 45px 45px; text-align: center;
+            box-shadow: 0 10px 30px rgba(27, 27, 58, 0.25); position: relative; overflow: hidden;
         }
+        /* Efeito de brilho no fundo do header */
+        header::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%); pointer-events: none;
+        }
+
         .brand-logo {
-            width: 100px; height: 100px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.2);
-            object-fit: cover; box-shadow: 0 8px 20px rgba(0,0,0,0.3); margin-bottom: 10px;
+            width: 80px; height: 80px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.15);
+            object-fit: cover; box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin-bottom: 8px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .brand { font-size: 2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0; line-height: 1; }
+        .brand-logo:active { transform: scale(0.95); }
+
+        .brand { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin: 0; line-height: 1; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .brand span { color: var(--laranja); }
         
-        /* NOVA ETIQUETA "LOJINHA" */
-        .store-title {
-            display: inline-block; background: var(--laranja); color: white;
-            padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 5px;
-            box-shadow: 0 4px 10px rgba(255, 145, 77, 0.4);
+        .store-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255, 145, 77, 0.15); color: var(--laranja); border: 1px solid rgba(255, 145, 77, 0.3);
+            padding: 4px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px; margin: 8px 0; backdrop-filter: blur(5px);
         }
 
-        .sub-brand { font-size: 0.75rem; opacity: 0.9; font-weight: 400; letter-spacing: 0.5px; line-height: 1.4; max-width: 320px; margin: 5px auto 0; }
-        .welcome-msg { 
-            background: rgba(255,255,255,0.1); display: inline-block; padding: 5px 15px; 
-            border-radius: 20px; font-size: 0.75rem; margin-top: 15px; border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        /* Filtros */
-        .filter-container { margin-top: -35px; position: relative; z-index: 20; padding: 0 20px; margin-bottom: 20px; }
-        .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; justify-content: center; }
+        .sub-brand { font-size: 0.75rem; opacity: 0.8; font-weight: 400; line-height: 1.4; max-width: 85%; margin: 0 auto; }
+        
+        /* --- FILTROS GLOW --- */
+        .filter-container { margin-top: -35px; position: relative; z-index: 20; padding: 0 20px; margin-bottom: 25px; }
+        .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 5px 5px 15px 5px; scrollbar-width: none; justify-content: center; }
         .filter-btn {
-            padding: 10px 20px; background: white; border: none; border-radius: 25px;
-            font-size: 0.9rem; font-weight: 600; color: #888; white-space: nowrap;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; cursor: pointer;
+            padding: 10px 22px; background: var(--card-bg); border: none; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 600; color: #888; white-space: nowrap;
+            box-shadow: var(--shadow-sm); transition: all 0.3s ease; cursor: pointer;
         }
-        .filter-btn.active { background: var(--azul-deep); color: white; box-shadow: 0 5px 15px rgba(27, 27, 58, 0.3); }
+        .filter-btn.active { 
+            background: var(--azul-deep); color: white; 
+            box-shadow: 0 8px 20px rgba(27, 27, 58, 0.25); transform: translateY(-2px);
+        }
 
-        /* Grid & Card */
+        /* --- GRID DE PRODUTOS --- */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; position: relative; z-index: 10; }
-        @media(min-width: 768px) { .container { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; } }
-        .card { background: var(--card-bg); border-radius: 20px; overflow: hidden; box-shadow: var(--sombra); display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.03); transition: transform 0.2s; position: relative; }
-        .card:active { transform: scale(0.97); }
-        .image-wrapper { width: 100%; aspect-ratio: 1 / 1; background: #f0f2f5; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .prod-img { width: 100%; height: 100%; object-fit: cover; z-index: 2; }
-        .share-btn { position: absolute; top: 10px; right: 10px; width: 35px; height: 35px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.15); z-index: 5; color: var(--azul-deep); font-size: 0.9rem; cursor: pointer; }
-        .share-btn:active { transform: scale(0.9); background: #eee; }
-        .no-photo-placeholder { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(45deg, #f1f2f6, #ffffff); color: var(--azul-deep); z-index: 1; }
-        .no-photo-placeholder i { font-size: 2.5rem; margin-bottom: 10px; opacity: 0.3; }
-        .no-photo-placeholder span { font-size: 0.7rem; font-weight: 600; opacity: 0.5; text-transform: uppercase; }
-        .card-info { padding: 15px; text-align: center; display: flex; flex-direction: column; flex-grow: 1; cursor: pointer; }
-        .card-title { font-size: 0.85rem; font-weight: 600; color: var(--azul-deep); height: 38px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .card-price { font-size: 1.1rem; color: var(--laranja); font-weight: 800; margin-top: 5px; }
-        .tap-hint { font-size: 0.7rem; color: #aaa; margin-top: auto; padding-top: 8px; font-weight: 500; }
+        @media(min-width: 768px) { .container { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; } }
 
-        /* Modais */
-        .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 2000; display: none; justify-content: center; align-items: flex-end; backdrop-filter: blur(5px); }
-        .modal-bg.active { display: flex; animation: fadeIn 0.3s; }
-        .modal-panel { background: white; width: 100%; max-width: 500px; border-radius: 30px 30px 0 0; padding: 30px 25px; box-shadow: 0 -10px 40px rgba(0,0,0,0.3); animation: slideUp 0.3s; max-height: 90vh; overflow-y: auto; position: relative; }
-        @media(min-width: 600px) { .modal-bg { align-items: center; } .modal-panel { border-radius: 25px; } }
-        .detail-img-box { width: 100%; height: 220px; background: #f9f9f9; border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .card {
+            background: var(--card-bg); border-radius: 20px; overflow: hidden;
+            box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; border: 1px solid #f0f0f0;
+        }
+        .card:active { transform: scale(0.96); }
+
+        .image-wrapper { width: 100%; aspect-ratio: 1 / 1; background: #f8f9fc; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .prod-img { width: 100%; height: 100%; object-fit: cover; z-index: 2; transition: transform 0.5s ease; }
+        
+        .share-btn {
+            position: absolute; top: 12px; right: 12px; width: 36px; height: 36px;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(4px); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 5; color: var(--azul-deep); font-size: 0.9rem; cursor: pointer;
+            transition: 0.2s;
+        }
+        .share-btn:active { transform: scale(0.85); background: var(--azul-deep); color: white; }
+
+        .no-photo-placeholder { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: var(--azul-deep); z-index: 1; }
+        .no-photo-placeholder i { font-size: 2rem; margin-bottom: 8px; opacity: 0.4; }
+        .no-photo-placeholder span { font-size: 0.7rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; }
+
+        .card-info { padding: 16px; text-align: center; display: flex; flex-direction: column; flex-grow: 1; cursor: pointer; }
+        .card-title { font-size: 0.85rem; font-weight: 700; color: var(--azul-deep); line-height: 1.3; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .card-price { font-size: 1.1rem; color: var(--laranja); font-weight: 800; margin-top: 6px; }
+        .tap-hint { font-size: 0.65rem; color: #adb5bd; margin-top: auto; padding-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* --- MODAIS COM GLASSMORPHISM --- */
+        .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(27, 27, 58, 0.6); backdrop-filter: blur(6px); z-index: 2000; display: none; justify-content: center; align-items: flex-end; opacity: 0; transition: opacity 0.3s; }
+        .modal-bg.active { display: flex; opacity: 1; }
+        
+        .modal-panel {
+            background: var(--card-bg); width: 100%; max-width: 500px;
+            border-radius: 30px 30px 0 0; padding: 30px 25px;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            max-height: 90vh; overflow-y: auto; position: relative;
+        }
+        @media(min-width: 600px) { .modal-bg { align-items: center; } .modal-panel { border-radius: 30px; } }
+
+        .detail-img-box {
+            width: 100%; height: 240px; background: #f4f6f9; border-radius: 20px; margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1px solid #eee;
+        }
         .detail-img { width: 100%; height: 100%; object-fit: contain; z-index: 2; position: relative; }
-        .detail-title { font-size: 1.4rem; font-weight: 700; color: var(--azul-deep); line-height: 1.2; }
-        .detail-price { font-size: 1.8rem; color: var(--laranja); font-weight: 800; margin: 5px 0 20px; }
-        .nice-select { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #eee; background: #fff; font-size: 1rem; color: #333; font-weight: 500; outline: none; margin-bottom: 20px; }
-        .qty-wrapper { display: flex; align-items: center; justify-content: space-between; background: #f4f6f8; padding: 8px; border-radius: 15px; border: 1px solid #eee; margin-bottom: 25px; }
-        .qty-btn { width: 45px; height: 45px; background: white; border: none; border-radius: 12px; font-size: 1.5rem; color: var(--azul-deep); font-weight: 700; cursor: pointer; }
-        .qty-num { font-size: 1.3rem; font-weight: 700; color: #333; }
-        .btn-primary { width: 100%; padding: 18px; border: none; border-radius: 15px; background: var(--azul-deep); color: white; font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: 0.2s; }
-        .btn-primary:active { transform: scale(0.98); }
+        .detail-title { font-size: 1.4rem; font-weight: 800; color: var(--azul-deep); line-height: 1.2; margin-bottom: 5px; }
+        .detail-price { font-size: 1.8rem; color: var(--laranja); font-weight: 800; margin-bottom: 25px; display: inline-block; }
 
-        /* Checkout & UI */
-        .cart-list { list-style: none; margin: 15px 0 20px; max-height: 200px; overflow-y: auto; border: 1px solid #eee; border-radius: 15px; padding: 10px; background: #fafafa; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; }
+        /* Controles Form */
+        .nice-select { width: 100%; padding: 16px; border-radius: 15px; border: 2px solid #eef2f6; background: #fff; font-size: 0.95rem; color: var(--texto); font-weight: 600; outline: none; margin-bottom: 20px; appearance: none; transition: 0.3s; }
+        .nice-select:focus { border-color: var(--azul-deep); }
+        
+        .qty-wrapper { display: flex; align-items: center; justify-content: space-between; background: #f8f9fc; padding: 6px; border-radius: 16px; border: 1px solid #eee; margin-bottom: 25px; }
+        .qty-btn { width: 48px; height: 48px; background: white; border: none; border-radius: 12px; font-size: 1.2rem; color: var(--azul-deep); font-weight: 700; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.05); transition: 0.2s; }
+        .qty-btn:active { transform: scale(0.9); }
+        .qty-num { font-size: 1.3rem; font-weight: 700; color: #333; }
+
+        .btn-primary {
+            width: 100%; padding: 18px; border: none; border-radius: 16px;
+            background: var(--azul-deep); color: white; font-size: 1rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            cursor: pointer; transition: 0.2s; box-shadow: 0 8px 20px rgba(27, 27, 58, 0.2);
+            position: relative; overflow: hidden;
+        }
+        .btn-primary::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.1); opacity: 0; transition: 0.2s; }
+        .btn-primary:active { transform: scale(0.98); }
+        .btn-primary:active::after { opacity: 1; }
+
+        /* Input Styles */
+        .input-box { width: 100%; padding: 16px; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 12px; outline: none; font-size: 0.95rem; transition: all 0.3s; background: #fbfbfb; font-family: inherit; }
+        .input-box:focus { border-color: var(--azul-deep); background: #fff; box-shadow: 0 0 0 3px rgba(27, 27, 58, 0.1); }
+        
+        .radio-option {
+            padding: 16px; border: 1px solid #eee; border-radius: 12px; display: flex; align-items: center; gap: 12px;
+            cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: 0.2s; margin-bottom: 10px;
+        }
+        .radio-option:has(input:checked) { border-color: var(--laranja); background: #fffbf8; color: var(--laranja); font-weight: 700; box-shadow: inset 0 0 0 1px var(--laranja); }
+        .radio-option input { accent-color: var(--laranja); width: 18px; height: 18px; }
+
+        /* Cart List */
+        .cart-list { list-style: none; margin: 15px 0 25px; max-height: 220px; overflow-y: auto; border: 1px solid #f0f0f0; border-radius: 16px; padding: 10px; background: #fafafa; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 10px; border-bottom: 1px solid #eee; }
         .cart-item:last-child { border-bottom: none; }
-        .btn-trash { background: #ffecec; color: var(--vermelho-del); width: 35px; height: 35px; border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .input-box { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px; outline: none; transition: border 0.3s; }
-        .input-box:focus { border-color: var(--azul-deep); }
-        .radio-section { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        .radio-option { padding: 15px; border: 1px solid #eee; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .radio-option:has(input:checked) { border-color: var(--laranja); background: #fff8f2; color: var(--laranja); font-weight: 700; }
-        .radio-option input { accent-color: var(--laranja); transform: scale(1.2); }
-        .float-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(150px); width: 90%; max-width: 450px; background: var(--azul-deep); color: white; padding: 12px 25px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 15px 40px rgba(27, 27, 58, 0.4); z-index: 100; transition: transform 0.4s; border: 2px solid var(--laranja); cursor: pointer; }
+        .btn-trash { background: #fff0f0; color: var(--vermelho-del); width: 36px; height: 36px; border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .btn-trash:active { background: #ffe0e0; }
+
+        /* --- BARRA FLUTUANTE DE VIDRO --- */
+        .float-bar {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(150px);
+            width: 90%; max-width: 450px; 
+            background: rgba(27, 27, 58, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            color: white; padding: 14px 30px; border-radius: 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 100;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
+        }
         .float-bar.visible { transform: translateX(-50%) translateY(0); }
-        footer { text-align: center; color: #999; font-size: 0.8rem; margin-top: 30px; }
+
+        /* --- TOAST NOTIFICATION (Novo!) --- */
+        #toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            background: white; color: var(--azul-deep); padding: 12px 25px;
+            border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            font-weight: 600; font-size: 0.9rem; z-index: 3000;
+            display: flex; align-items: center; gap: 10px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #toast.show { transform: translateX(-50%) translateY(0); }
+        #toast i { color: var(--verde-zap); font-size: 1.1rem; }
+
+        footer { text-align: center; color: #aaa; font-size: 0.75rem; margin-top: 40px; font-weight: 500; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; color: #ccc; }
+        .close-btn { position: absolute; top: 20px; right: 20px; background: #f0f2f5; width: 32px; height: 32px; border-radius: 50%; border: none; font-size: 1rem; color: #555; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     </style>
 </head>
 <body>
+    <div id="toast"><i class="fa-solid fa-circle-check"></i> Item adicionado à sacola!</div>
+
     <div id="splash-screen">
-        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Nupiepro Logo" class="splash-img">
+        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="splash-img">
         <div class="splash-text">Lojinha Oficial Nupiepro</div>
     </div>
-    <header>
-        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Nupiepro Logo" class="brand-logo">
+        <header>
+        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="brand-logo">
         <h1 class="brand">Nupiee<span>Pro</span></h1>
         
-        <div class="store-title"><i class="fa-solid fa-store"></i> Lojinha Oficial</div>
+        <div class="store-badge"><i class="fa-solid fa-store"></i> Loja Oficial</div>
         
         <div class="sub-brand">Núcleo Piauiense de Estudantes de Engenharia de Produção</div>
-        <div class="welcome-msg">👋 Bem-vindo(a), Nupilover!</div>
     </header>
 
     <div class="filter-container">
@@ -157,7 +250,7 @@
             <div class="detail-img-box">
                 <img src="" id="detalhe-img" class="detail-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
                 <div id="detalhe-fallback" class="no-photo-placeholder" style="display:none; position:absolute; z-index:1;">
-                    <i class="fa-solid fa-box-open"></i><span>Sem Imagem</span>
+                    <i class="fa-solid fa-box-open"></i><span>Sem Foto</span>
                 </div>
             </div>
 
@@ -165,7 +258,7 @@
             <div id="detalhe-preco" class="detail-price">R$ 0,00</div>
 
             <div id="wrapper-tamanho" style="display:none;">
-                <label style="font-size:0.9rem; font-weight:600; color:#666; margin-bottom:8px; display:block;">Tamanho:</label>
+                <label style="font-size:0.85rem; font-weight:700; color:#555; margin-bottom:8px; display:block;">Tamanho:</label>
                 <select id="select-tamanho" class="nice-select">
                     <option value="P - BBL (Baby Look)">P - BBL (Baby Look)</option>
                     <option value="M - BBL (Baby Look)">M - BBL (Baby Look)</option>
@@ -178,67 +271,64 @@
                 </select>
             </div>
 
-            <label style="font-size:0.9rem; font-weight:600; color:#666; margin-bottom:8px; display:block;">Quantidade:</label>
+            <label style="font-size:0.85rem; font-weight:700; color:#555; margin-bottom:8px; display:block;">Quantidade:</label>
             <div class="qty-wrapper">
-                <button class="qty-btn" onclick="alterarQtd(-1)">-</button>
+                <button class="qty-btn" onclick="alterarQtd(-1)"><i class="fa-solid fa-minus"></i></button>
                 <div class="qty-num" id="detalhe-qtd">1</div>
-                <button class="qty-btn" onclick="alterarQtd(1)">+</button>
+                <button class="qty-btn" onclick="alterarQtd(1)"><i class="fa-solid fa-plus"></i></button>
             </div>
 
-            <button class="btn-primary" onclick="adicionarAoCarrinho()">Adicionar <i class="fa-solid fa-plus"></i></button>
+            <button class="btn-primary" onclick="adicionarAoCarrinho()">Adicionar à Sacola</button>
         </div>
     </div>
 
     <div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)">
         <div class="modal-panel">
             <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="color:var(--azul-deep); margin-bottom:15px;">Finalizar Compra</h2>
+            <h2 style="color:var(--azul-deep); margin-bottom:20px; font-size:1.4rem;">Finalizar Pedido</h2>
 
             <ul class="cart-list" id="lista-carrinho"></ul>
 
-            <h3 style="color:var(--azul-deep); font-size:1.1rem; margin:15px 0 10px;">Seus Dados</h3>
-            <div style="font-size:0.8rem; color:#888; margin-bottom:10px;">Preencha uma vez e nós lembramos!</div>
-            
-            <input type="text" id="nome-cliente" class="input-box" placeholder="Seu Nome Completo *">
-            <input type="tel" id="zap-cliente" class="input-box" placeholder="Seu WhatsApp (com DDD) *">
+            <h3 style="color:var(--azul-deep); font-size:1rem; margin:20px 0 10px; font-weight:700;">Seus Dados</h3>
+            <input type="text" id="nome-cliente" class="input-box" placeholder="Seu Nome Completo">
+            <input type="tel" id="zap-cliente" class="input-box" placeholder="WhatsApp com DDD">
 
-            <h3 style="color:var(--azul-deep); font-size:1.1rem; margin:15px 0 10px;">Entrega / Retirada</h3>
+            <h3 style="color:var(--azul-deep); font-size:1rem; margin:20px 0 10px; font-weight:700;">Entrega</h3>
             <div class="radio-section">
                 <label class="radio-option">
                     <input type="radio" name="entrega" value="Retirada UFPI" checked onchange="toggleEndereco()"> 
-                    <i class="fa-solid fa-building-columns"></i> Retirada (UFPI)
+                    <i class="fa-solid fa-building-columns" style="color:#888;"></i> Retirada (UFPI)
                 </label>
                 <label class="radio-option">
                     <input type="radio" name="entrega" value="Entrega" onchange="toggleEndereco()"> 
-                    <i class="fa-solid fa-motorcycle"></i> Entrega (Verif. Taxa)
+                    <i class="fa-solid fa-motorcycle" style="color:#888;"></i> Entrega (Verif. Taxa)
                 </label>
             </div>
-
             <div id="box-endereco" style="display:none;">
-                <input type="text" id="endereco-cliente" class="input-box" placeholder="Endereço Completo para Entrega *">
+                <input type="text" id="endereco-cliente" class="input-box" placeholder="Endereço para entrega">
             </div>
 
-            <h3 style="color:var(--azul-deep); font-size:1.1rem; margin:15px 0 10px;">Pagamento</h3>
+            <h3 style="color:var(--azul-deep); font-size:1rem; margin:20px 0 10px; font-weight:700;">Pagamento</h3>
             <div class="radio-section">
                 <label class="radio-option"><input type="radio" name="pgto" value="PIX" checked> PIX</label>
                 <label class="radio-option"><input type="radio" name="pgto" value="Dinheiro"> Dinheiro</label>
                 <label class="radio-option"><input type="radio" name="pgto" value="Cartão"> Cartão</label>
             </div>
 
-            <button class="btn-primary" style="background:var(--verde-zap);" onclick="enviarPedidoZap()">
+            <button class="btn-primary" style="background:var(--verde-zap); margin-top:10px;" onclick="enviarPedidoZap()">
                 Enviar Pedido <i class="fa-brands fa-whatsapp"></i>
             </button>
         </div>
     </div>
 
     <div class="float-bar" id="barra-carrinho" onclick="abrirCheckout()">
-        <div style="line-height:1.1;">
-            <div id="barra-qtd" style="font-size: 0.8rem; opacity: 0.9;">0 itens</div>
-            <div id="barra-total" style="font-weight: 800; font-size: 1.1rem; color: var(--laranja);">R$ 0,00</div>
+        <div style="line-height:1.2;">
+            <div id="barra-qtd" style="font-size: 0.75rem; opacity: 0.8; font-weight:500;">0 itens</div>
+            <div id="barra-total" style="font-weight: 800; font-size: 1.15rem; color: var(--laranja);">R$ 0,00</div>
         </div>
-        <div style="font-weight: 700; font-size:0.9rem;">Ver Sacola <i class="fa-solid fa-bag-shopping"></i></div>
-    </div>
-    <script>
+        <div style="font-weight: 700; font-size:0.95rem;">Ver Sacola <i class="fa-solid fa-bag-shopping" style="margin-left:5px;"></i></div>
+                </div>
+                    <script>
         const whatsappDestino = "5586999976226"; 
 
         const produtos = [
@@ -256,18 +346,24 @@
         let qtdTemporaria = 1;
         let filtroAtual = 'todos';
 
-        // --- SPLASH SCREEN & LOAD ---
         window.addEventListener('load', () => {
             const splash = document.getElementById('splash-screen');
             carregarDadosUsuario();
             carregarVitrine();
             setTimeout(() => {
                 splash.classList.add('hidden');
-                setTimeout(() => splash.style.display = 'none', 500);
-            }, 2000);
+                setTimeout(() => splash.style.display = 'none', 600);
+            }, 2200);
         });
 
-        // --- SISTEMA DE FILTROS ---
+        // --- SISTEMA TOAST (Notificação) ---
+        function mostrarToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${msg}`;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
         function filtrarProdutos(cat, btn) {
             filtroAtual = cat;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -275,16 +371,14 @@
             carregarVitrine();
         }
 
-        // --- SISTEMA DE COMPARTILHAR ---
         function compartilhar(id, event) {
             event.stopPropagation(); 
             const prod = produtos.find(p => p.id === id);
             const textoShare = `Olha o que encontrei na Lojinha Nupiepro: ${prod.nome} por R$ ${prod.preco.toFixed(2)}!`;
-            
             if (navigator.share) {
                 navigator.share({ title: 'Nupiepro Store', text: textoShare, url: window.location.href }).catch(console.error);
             } else {
-                alert("Copie o link para compartilhar: " + window.location.href);
+                alert("Copie o link: " + window.location.href);
             }
         }
 
@@ -362,6 +456,7 @@
             if(index >= 0) carrinho[index].qtd += qtdTemporaria;
             else carrinho.push({ ...itemSelecionado, tamanho: tamanhoEscolhido, qtd: qtdTemporaria });
 
+            mostrarToast("Adicionado à sacola!");
             document.getElementById('modal-details').classList.remove('active');
             atualizarBarraFlutuante();
         }
@@ -461,5 +556,3 @@
     </script>
 </body>
 </html>
-
-
