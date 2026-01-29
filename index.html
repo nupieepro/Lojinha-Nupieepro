@@ -61,7 +61,7 @@
         /* --- HEADER COMPACTO & PREMIUM --- */
         header {
             background: linear-gradient(160deg, var(--roxo-brand) 20%, #1a1245 100%); color: var(--branco);
-            /* Padding inferior aumentado para acomodar os filtros */
+            /* Padding inferior ajustado para os filtros encaixarem */
             padding: 20px 20px 85px 20px; 
             border-radius: 0 0 45px 45px; text-align: center;
             box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
@@ -94,10 +94,9 @@
             border-radius: 15px; font-size: 0.7rem; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1);
         }
         
-        /* --- FILTROS (Ajustado para subir) --- */
+        /* --- FILTROS (Posicionamento Curvo) --- */
         .filter-container { 
-            /* Margem negativa maior para subir mais */
-            margin-top: -45px; 
+            margin-top: -45px; /* Sobe para dentro do header */
             position: relative; z-index: 20; padding: 0 20px; margin-bottom: 25px; 
         }
         .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 5px 5px 15px 5px; scrollbar-width: none; justify-content: center; }
@@ -203,7 +202,7 @@
         .float-bar {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(150px);
             width: 90%; max-width: 450px; 
-            background: var(--roxo-brand); /* Roxo sólido para contraste máximo */
+            background: var(--roxo-brand); 
             color: var(--branco); padding: 14px 30px; border-radius: 50px;
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: var(--shadow-lg); z-index: 100;
@@ -227,13 +226,12 @@
         footer { text-align: center; color: var(--texto-suave); font-size: 0.75rem; margin-top: 40px; font-weight: 500; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         
-        /* --- BOTÃO DE FECHAR (O "X" AGORA VISÍVEL) --- */
+        /* --- BOTÃO DE FECHAR (O "X" ROXO) --- */
         .close-btn { 
             position: absolute; top: 20px; right: 20px; 
             background: #f0f2f5; width: 36px; height: 36px; 
             border-radius: 50%; border: none; font-size: 1.2rem; 
-            /* Cor do ícone agora é o roxo da marca para destaque */
-            color: var(--roxo-brand); 
+            color: var(--roxo-brand); /* Cor roxa para o ícone */
             display: flex; align-items: center; justify-content: center; 
             cursor: pointer; transition: 0.2s; z-index: 10;
         }
@@ -247,7 +245,7 @@
         <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="splash-img">
         <div class="splash-text">Lojinha Oficial Nupiepro</div>
     </div>
-        <header>
+    <header>
         <div class="header-compact-row">
             <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="brand-logo">
             <div class="brand-info">
@@ -359,7 +357,7 @@
         </div>
         <div style="font-weight: 700; font-size:0.95rem;">Ver Sacola <i class="fa-solid fa-bag-shopping" style="margin-left:5px;"></i></div>
     </div>
-        <script>
+    <script>
         const whatsappDestino = "5586999976226"; 
 
         const produtos = [
@@ -377,17 +375,29 @@
         let qtdTemporaria = 1;
         let filtroAtual = 'todos';
 
+        // --- INICIALIZAÇÃO E DEEP LINKING ---
         window.addEventListener('load', () => {
             const splash = document.getElementById('splash-screen');
             carregarDadosUsuario();
             carregarVitrine();
+            
+            // Verifica se o link é direto (ex: .../?id=1)
+            const urlParams = new URLSearchParams(window.location.search);
+            const produtoId = urlParams.get('id');
+
+            if (produtoId) {
+                const idInt = parseInt(produtoId);
+                if(produtos.find(p => p.id === idInt)) {
+                    abrirDetalhes(idInt);
+                }
+            }
+
             setTimeout(() => {
                 splash.classList.add('hidden');
                 setTimeout(() => splash.style.display = 'none', 600);
             }, 2200);
         });
 
-        // --- SISTEMA TOAST (Notificação) ---
         function mostrarToast(msg) {
             const toast = document.getElementById('toast');
             toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${msg}`;
@@ -405,11 +415,19 @@
         function compartilhar(id, event) {
             event.stopPropagation(); 
             const prod = produtos.find(p => p.id === id);
+            
+            // Gera link específico do produto
+            const baseUrl = window.location.href.split('?')[0];
+            const linkDireto = `${baseUrl}?id=${id}`;
+
             const textoShare = `Olha o que encontrei na Lojinha Nupiepro: ${prod.nome} por R$ ${prod.preco.toFixed(2)}!`;
+            
             if (navigator.share) {
-                navigator.share({ title: 'Nupiepro Store', text: textoShare, url: window.location.href }).catch(console.error);
+                navigator.share({ title: 'Nupiepro Store', text: textoShare, url: linkDireto }).catch(console.error);
             } else {
-                alert("Copie o link: " + window.location.href);
+                navigator.clipboard.writeText(linkDireto).then(() => {
+                    alert("Link do produto copiado: " + linkDireto);
+                });
             }
         }
 
@@ -426,7 +444,6 @@
                                <div class="no-photo-placeholder" style="display:none;"><i class="fa-solid fa-image"></i><span>Ver Foto</span></div>`;
                 } else {
                     let icon = p.nome.includes("Botton") ? "fa-certificate" : "fa-box-open";
-                    // Atualizado para usar a variável de cor correta
                     imgHTML = `<div class="no-photo-placeholder"><i class="fa-solid ${icon}" style="color:var(--laranja-brand)"></i><span>${p.nome}</span></div>`;
                 }
 
@@ -470,6 +487,10 @@
             if(e && e.target !== e.currentTarget) return;
             document.getElementById('modal-details').classList.remove('active');
             document.getElementById('modal-checkout').classList.remove('active');
+            
+            // Limpa URL para não reabrir o modal ao atualizar
+            const baseUrl = window.location.href.split('?')[0];
+            window.history.replaceState({}, document.title, baseUrl);
         }
 
         function alterarQtd(valor) {
@@ -491,6 +512,9 @@
             mostrarToast("Adicionado à sacola!");
             document.getElementById('modal-details').classList.remove('active');
             atualizarBarraFlutuante();
+            
+            const baseUrl = window.location.href.split('?')[0];
+            window.history.replaceState({}, document.title, baseUrl);
         }
 
         function atualizarBarraFlutuante() {
