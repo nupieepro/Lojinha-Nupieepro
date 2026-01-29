@@ -13,6 +13,7 @@
             /* --- PALETA OFICIAL NUPIEPRO --- */
             --roxo-brand: #0f0732;   /* Roxo Escuro Oficial */
             --laranja-brand: #f85900; /* Laranja Vibrante Oficial */
+            --azul-coracao: #007bff; /* Azul para o coração */
             --branco: #ffffff;
 
             /* Derivações e UI */
@@ -24,7 +25,7 @@
             --verde-zap: #25D366; 
             --vermelho-del: #FF4757;
             
-            /* Sombras Premium usando a cor da marca */
+            /* Sombras Premium */
             --shadow-sm: 0 4px 12px rgba(15, 7, 50, 0.05);
             --shadow-md: 0 10px 30px rgba(15, 7, 50, 0.1);
             --shadow-lg: 0 20px 50px rgba(15, 7, 50, 0.15);
@@ -57,22 +58,21 @@
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        /* --- HEADER ULTRA-COMPACTO & PREMIUM --- */
+        /* --- HEADER COMPACTO & PREMIUM --- */
         header {
             background: linear-gradient(160deg, var(--roxo-brand) 20%, #1a1245 100%); color: var(--branco);
-            /* Padding reduzido drasticamente */
-            padding: 20px 20px 75px 20px; 
-            border-radius: 0 0 40px 40px; text-align: center;
+            /* Padding inferior aumentado para acomodar os filtros */
+            padding: 20px 20px 85px 20px; 
+            border-radius: 0 0 45px 45px; text-align: center;
             box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
         }
         
-        /* Layout horizontal para economizar altura */
         .header-compact-row {
             display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 12px;
         }
         
         .brand-logo {
-            width: 65px; height: 65px; /* Logo menor */
+            width: 65px; height: 65px; 
             border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);
             object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
@@ -94,8 +94,12 @@
             border-radius: 15px; font-size: 0.7rem; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1);
         }
         
-        /* --- FILTROS --- */
-        .filter-container { margin-top: -30px; position: relative; z-index: 20; padding: 0 20px; margin-bottom: 25px; }
+        /* --- FILTROS (Ajustado para subir) --- */
+        .filter-container { 
+            /* Margem negativa maior para subir mais */
+            margin-top: -45px; 
+            position: relative; z-index: 20; padding: 0 20px; margin-bottom: 25px; 
+        }
         .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 5px 5px 15px 5px; scrollbar-width: none; justify-content: center; }
         .filter-btn {
             padding: 8px 20px; background: var(--card-bg); border: none; border-radius: 30px;
@@ -222,7 +226,18 @@
 
         footer { text-align: center; color: var(--texto-suave); font-size: 0.75rem; margin-top: 40px; font-weight: 500; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .close-btn { position: absolute; top: 20px; right: 20px; background: #f0f2f5; width: 32px; height: 32px; border-radius: 50%; border: none; font-size: 1rem; color: #555; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        
+        /* --- BOTÃO DE FECHAR (O "X" AGORA VISÍVEL) --- */
+        .close-btn { 
+            position: absolute; top: 20px; right: 20px; 
+            background: #f0f2f5; width: 36px; height: 36px; 
+            border-radius: 50%; border: none; font-size: 1.2rem; 
+            /* Cor do ícone agora é o roxo da marca para destaque */
+            color: var(--roxo-brand); 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; transition: 0.2s; z-index: 10;
+        }
+        .close-btn:active { background: #e0e2e5; }
     </style>
 </head>
 <body>
@@ -256,7 +271,7 @@
     <div class="container" id="vitrine-area"></div>
 
     <footer>
-        Desenvolvido por <strong>Nupiepro 2026</strong> <i class="fa-solid fa-heart" style="color:var(--laranja-brand); margin-left:3px;"></i>
+        <strong>NUPIEEPRO 2026</strong> <i class="fa-solid fa-heart" style="color:var(--azul-coracao); margin-left:5px;"></i><i class="fa-solid fa-heart" style="color:var(--laranja-brand); margin-left:3px;"></i>
     </footer>
 
     <div class="modal-bg" id="modal-details" onclick="fecharModais(event)">
@@ -343,7 +358,7 @@
             <div id="barra-total" style="font-weight: 800; font-size: 1.15rem; color: var(--laranja-brand);">R$ 0,00</div>
         </div>
         <div style="font-weight: 700; font-size:0.95rem;">Ver Sacola <i class="fa-solid fa-bag-shopping" style="margin-left:5px;"></i></div>
-        </div>
+    </div>
         <script>
         const whatsappDestino = "5586999976226"; 
 
@@ -573,4 +588,3 @@
     </script>
 </body>
 </html>
-
