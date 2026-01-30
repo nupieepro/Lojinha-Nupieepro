@@ -39,7 +39,7 @@
             padding-bottom: 140px; overflow-x: hidden;
         }
 
-        /* --- SPLASH SCREEN (Abertura) --- */
+        /* --- SPLASH SCREEN --- */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--roxo-brand); z-index: 9999;
@@ -58,11 +58,10 @@
         @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        /* --- HEADER COMPACTO & PREMIUM --- */
+        /* --- HEADER COMPACTO --- */
         header {
             background: linear-gradient(160deg, var(--roxo-brand) 20%, #1a1245 100%); color: var(--branco);
-            /* Padding inferior ajustado para os filtros encaixarem */
-            padding: 20px 20px 85px 20px; 
+            padding: 20px 20px 90px 20px; 
             border-radius: 0 0 45px 45px; text-align: center;
             box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
         }
@@ -94,20 +93,32 @@
             border-radius: 15px; font-size: 0.7rem; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1);
         }
         
-        /* --- FILTROS (Posicionamento Curvo) --- */
+        /* --- FILTROS (ESTILO INVERTIDO) --- */
         .filter-container { 
-            margin-top: -45px; /* Sobe para dentro do header */
+            margin-top: -50px; /* Sobe para o roxo */
             position: relative; z-index: 20; padding: 0 20px; margin-bottom: 25px; 
         }
         .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 5px 5px 15px 5px; scrollbar-width: none; justify-content: center; }
+        
+        /* Botão INATIVO (Vidro/Transparente) */
         .filter-btn {
-            padding: 8px 20px; background: var(--card-bg); border: none; border-radius: 30px;
-            font-size: 0.85rem; font-weight: 600; color: var(--texto-suave); white-space: nowrap;
-            box-shadow: var(--shadow-sm); transition: all 0.3s ease; cursor: pointer;
+            padding: 8px 22px; 
+            background: rgba(255, 255, 255, 0.15); /* Efeito Vidro */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            font-size: 0.85rem; font-weight: 500; 
+            color: rgba(255, 255, 255, 0.9); /* Texto Branco */
+            white-space: nowrap; backdrop-filter: blur(5px);
+            transition: all 0.3s ease; cursor: pointer;
         }
+        
+        /* Botão ATIVO (Branco) */
         .filter-btn.active { 
-            background: var(--roxo-brand); color: var(--branco); 
-            box-shadow: 0 8px 20px rgba(15, 7, 50, 0.3); transform: translateY(-2px);
+            background: var(--branco); 
+            color: var(--roxo-brand); /* Texto Roxo */
+            font-weight: 700; border-color: var(--branco);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
+            transform: translateY(-2px);
         }
 
         /* --- GRID & CARDS --- */
@@ -142,7 +153,7 @@
         .card-price { font-size: 1.1rem; color: var(--laranja-brand); font-weight: 800; margin-top: 6px; }
         .tap-hint { font-size: 0.65rem; color: #aaa; margin-top: auto; padding-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* --- MODAIS (Glassmorphism Escuro) --- */
+        /* --- MODAIS --- */
         .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 7, 50, 0.7); backdrop-filter: blur(8px); z-index: 2000; display: none; justify-content: center; align-items: flex-end; opacity: 0; transition: opacity 0.3s; }
         .modal-bg.active { display: flex; opacity: 1; }
         
@@ -163,7 +174,6 @@
         .detail-title { font-size: 1.4rem; font-weight: 800; color: var(--roxo-brand); line-height: 1.2; margin-bottom: 5px; }
         .detail-price { font-size: 1.8rem; color: var(--laranja-brand); font-weight: 800; margin-bottom: 25px; display: inline-block; }
 
-        /* Controles Form */
         .nice-select { width: 100%; padding: 16px; border-radius: 15px; border: 2px solid #eef2f6; background: #fff; font-size: 0.95rem; color: var(--texto); font-weight: 600; outline: none; margin-bottom: 20px; appearance: none; transition: 0.3s; }
         .nice-select:focus { border-color: var(--roxo-brand); }
         
@@ -180,7 +190,6 @@
         }
         .btn-primary:active { transform: scale(0.98); }
 
-        /* Input Styles */
         .input-box { width: 100%; padding: 16px; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 12px; outline: none; font-size: 0.95rem; transition: all 0.3s; background: #fbfbfb; font-family: inherit; color: var(--texto); }
         .input-box:focus { border-color: var(--roxo-brand); background: #fff; box-shadow: 0 0 0 3px rgba(15, 7, 50, 0.1); }
         
@@ -191,14 +200,12 @@
         .radio-option:has(input:checked) { border-color: var(--laranja-brand); background: #fffbf8; color: var(--laranja-brand); font-weight: 700; box-shadow: inset 0 0 0 1px var(--laranja-brand); }
         .radio-option input { accent-color: var(--laranja-brand); width: 18px; height: 18px; }
 
-        /* Cart List */
         .cart-list { list-style: none; margin: 15px 0 25px; max-height: 220px; overflow-y: auto; border: 1px solid #f0f0f0; border-radius: 16px; padding: 10px; background: #fafafa; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 10px; border-bottom: 1px solid #eee; }
         .cart-item:last-child { border-bottom: none; }
         .btn-trash { background: #fff0f0; color: var(--vermelho-del); width: 36px; height: 36px; border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
         .btn-trash:active { background: #ffe0e0; }
 
-        /* --- BARRA FLUTUANTE PREMIUM --- */
         .float-bar {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(150px);
             width: 90%; max-width: 450px; 
@@ -211,7 +218,6 @@
         }
         .float-bar.visible { transform: translateX(-50%) translateY(0); }
 
-        /* --- TOAST NOTIFICATION --- */
         #toast {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
             background: white; color: var(--roxo-brand); padding: 12px 25px;
@@ -226,12 +232,11 @@
         footer { text-align: center; color: var(--texto-suave); font-size: 0.75rem; margin-top: 40px; font-weight: 500; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         
-        /* --- BOTÃO DE FECHAR (O "X" ROXO) --- */
         .close-btn { 
             position: absolute; top: 20px; right: 20px; 
             background: #f0f2f5; width: 36px; height: 36px; 
             border-radius: 50%; border: none; font-size: 1.2rem; 
-            color: var(--roxo-brand); /* Cor roxa para o ícone */
+            color: var(--roxo-brand); 
             display: flex; align-items: center; justify-content: center; 
             cursor: pointer; transition: 0.2s; z-index: 10;
         }
@@ -245,7 +250,7 @@
         <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="splash-img">
         <div class="splash-text">Lojinha Oficial Nupiepro</div>
     </div>
-    <header>
+        <header>
         <div class="header-compact-row">
             <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="brand-logo">
             <div class="brand-info">
@@ -356,8 +361,8 @@
             <div id="barra-total" style="font-weight: 800; font-size: 1.15rem; color: var(--laranja-brand);">R$ 0,00</div>
         </div>
         <div style="font-weight: 700; font-size:0.95rem;">Ver Sacola <i class="fa-solid fa-bag-shopping" style="margin-left:5px;"></i></div>
-    </div>
-    <script>
+                    </div>
+                        <script>
         const whatsappDestino = "5586999976226"; 
 
         const produtos = [
