@@ -1,109 +1,95 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lojinha Nupieepro</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>Inscrição | Nupieepro</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+:root{--main:#0f0732;--accent:#f85900;--bg:#f4f4f9;--glass:rgba(255,255,255,0.95)}*{box-sizing:border-box;margin:0;padding:0;font-family:'Plus Jakarta Sans',sans-serif}body{background:var(--main);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background-image:radial-gradient(circle at 10% 20%,#2a1b5e 0%,#0f0732 90%)}.card{background:var(--glass);backdrop-filter:blur(20px);width:100%;max-width:500px;border-radius:24px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.4);position:relative;z-index:10}.header{background:linear-gradient(135deg,var(--main) 0%,#1a1245 100%);padding:40px 30px;text-align:center;border-bottom:5px solid var(--accent);color:#fff}.header img{width:85px;border-radius:50%;border:3px solid var(--accent);margin-bottom:15px}.header h2{font-size:1.4rem;font-weight:800;line-height:1.2;margin-bottom:5px}.info-box{background:#f1f5f9;padding:25px 30px;border-bottom:1px solid #e2e8f0;font-size:.9rem;color:#334155}.info-item{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-weight:600;color:var(--main)}.desc-text{margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid #cbd5e1;line-height:1.6}form{padding:30px}.field{margin-bottom:20px}label{display:block;font-size:.85rem;font-weight:700;color:var(--main);margin-bottom:8px}input,select,textarea{width:100%;padding:16px;border:2px solid #e2e8f0;border-radius:12px;font-size:1rem;outline:none;transition:.3s;background:#fff}input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 8px 20px rgba(248,89,0,0.15);transform:translateY(-2px)}.btn{width:100%;padding:20px;background:var(--main);color:#fff;border:none;border-radius:14px;font-weight:800;cursor:pointer;transition:.3s;font-size:1.1rem;margin-top:10px}.btn:hover{background:#1a1245}.other-input{display:none;margin-top:10px}#loading{padding:80px 30px;text-align:center;color:#fff;font-weight:600}.spinner{width:50px;height:50px;border:5px solid rgba(255,255,255,0.3);border-top:5px solid var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}@keyframes spin{to{transform:rotate(360deg)}}.page-footer{position:fixed;bottom:15px;width:100%;text-align:center;color:#fff;font-size:.75rem;opacity:.5}div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm{background-color:var(--accent)!important}
+</style>
+</head>
+<body>
+<div id="loading"><div class="spinner"></div><p>Carregando...</p></div>
+<div class="card" id="card-main" style="display:none"><div class="header"><img src="https://i.ibb.co/FkYzNVcT/download.jpg"><h2 id="ev-titulo">---</h2><p>Núcleo Piauiense de Estudantes de Engenharia de Produção</p></div><div class="info-box" id="info-area" style="display:none"><div id="ev-desc" class="desc-text"></div><div class="info-item"><i class="fa-solid fa-calendar-day" style="color:var(--accent)"></i> <span id="ev-data"></span></div><div class="info-item"><i class="fa-solid fa-clock" style="color:var(--accent)"></i> <span id="ev-hora"></span></div><div class="info-item"><i class="fa-solid fa-microphone" style="color:var(--accent)"></i> <span id="ev-palestrante"></span></div><div class="info-item"><i class="fa-solid fa-video" style="color:var(--accent)"></i> <span id="ev-formato"></span></div></div><form id="form"><div class="field"><label>Nome Completo *</label><input type="text" name="Nome" required></div><div class="field"><label>E-mail *</label><input type="email" id="email1" name="Email" required autocomplete="off"></div><div class="field"><label>Confirme seu E-mail *</label><input type="email" id="email2" required autocomplete="off" onpaste="return false"></div><div class="field"><label>Instituição de Ensino *</label><select id="sel-inst" onchange="toggle('inst')" required><option value="" disabled selected>Selecione...</option><option>UFPI</option><option>FACID</option><option>UNIFSA</option><option>Outra</option></select><input type="text" id="out-inst" class="other-input" placeholder="Digite sua Instituição"><input type="hidden" name="Instituicao" id="final-inst"></div><div class="field"><label>Curso *</label><select id="sel-curso" onchange="toggle('curso')" required><option value="" disabled selected>Selecione...</option><option>Engenharia de Produção</option><option>Engenharia Mecânica</option><option>Engenharia Elétrica</option><option>Engenharia Civil</option><option>Outro</option></select><input type="text" id="out-curso" class="other-input" placeholder="Digite seu Curso"><input type="hidden" name="Curso" id="final-curso"></div><div class="field"><label>Período *</label><select name="Periodo" required><option value="" disabled selected>Selecione...</option><option>1º</option><option>2º</option><option>3º</option><option>4º</option><option>5º</option><option>6º</option><option>7º</option><option>8º</option><option>9º</option><option>10º</option><option>Concluinte / Formando</option><option>Egresso / Pós</option></select></div><div class="field"><label>Como ficou sabendo? *</label><select id="sel-origem" onchange="toggle('origem')" required><option value="" disabled selected>Selecione...</option><option>WhatsApp</option><option>Indicação</option><option>Instagram</option><option>Outra</option></select><input type="text" id="out-origem" class="other-input" placeholder="Digite onde soube"><input type="hidden" name="Origem" id="final-origem"></div><div class="field"><label>Dúvida específica? (Opcional)</label><textarea name="Duvida" rows="3"></textarea></div><input type="hidden" name="Evento" id="ev-hidden"><button type="button" class="btn" onclick="enviar()">CONFIRMAR INSCRIÇÃO <i class="fa-solid fa-arrow-right"></i></button></form></div>
 
-    <style>
-        :root {
-            /* --- PALETA OFICIAL NUPIEEPRO --- */
-            --roxo-brand: #0f0732;   /* Roxo Escuro Oficial */
-            --laranja-brand: #f85900; /* Laranja Vibrante Oficial */
-            --azul-coracao: #007bff; /* Azul para o coração */
-            --branco: #ffffff;
+<div class="card" id="tela-msg" style="display:none;text-align:center;padding:60px 40px">
+    <i id="icon-msg" class="fa-solid" style="font-size:5rem;margin-bottom:25px"></i>
+    <h2 id="tit-msg" style="color:var(--main);margin-bottom:15px"></h2>
+    <p id="txt-msg" style="color:#64748b;line-height:1.6"></p>
+</div>
 
-            /* Derivações e UI */
-            --laranja-glow: rgba(248, 89, 0, 0.3);
-            --fundo: #F5F7FB; 
-            --card-bg: #ffffff; 
-            --texto: #0f0732; 
-            --texto-suave: #5a5575;
-            --verde-zap: #25D366; 
-            --vermelho-del: #FF4757;
-            
-            /* Sombras Premium */
-            --shadow-sm: 0 4px 12px rgba(15, 7, 50, 0.05);
-            --shadow-md: 0 10px 30px rgba(15, 7, 50, 0.1);
-            --shadow-lg: 0 20px 50px rgba(15, 7, 50, 0.15);
-        }
+<div class="card" id="tela-fechado" style="display:none;text-align:center;padding:60px 40px">
+    <i class="fa-solid fa-lock" style="font-size:5rem;color:#cbd5e1;margin-bottom:25px"></i>
+    <h2 style="color:var(--main);margin-bottom:15px">Inscrições Encerradas</h2>
+    <p style="color:#64748b;line-height:1.6">As vagas foram preenchidas ou não há evento ativo.<br>Fique ligado em novas novidades no Instagram <strong>@nupieepro</strong> 💙🧡</p>
+</div>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+<div class="page-footer">NUPIEEPRO 2026 💙🧡</div>
+<script>
+// --- AQUI ESTÁ A SUA URL ---
+const API = "https://script.google.com/macros/s/AKfycbyHQG1P43Johs9NvxkaoKNELhsXagVmCammU2kCLmibsQriH7OP863nUZssCl3CNOLkoQ/exec";
+
+function toggle(t){const s=document.getElementById('sel-'+t),o=document.getElementById('out-'+t),f=document.getElementById('final-'+t);if(s.value.includes('Outr')||s.value.includes('Outra')){o.style.display='block';o.required=true;f.value='';o.focus()}else{o.style.display='none';o.required=false;f.value=s.value}}
+['inst','curso','origem'].forEach(t=>{document.getElementById('out-'+t).addEventListener('input',function(){document.getElementById('final-'+t).value=this.value})});
+
+window.onload=async()=>{
+    try{
+        const r=await fetch(API).then(res=>res.json());
+        document.getElementById('loading').style.display='none';
         
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--fundo); color: var(--texto); 
-            padding-bottom: 140px; overflow-x: hidden;
+        // LÓGICA DE EVENTO FECHADO
+        if(r.manutencao || r.status === "FECHADO"){
+            msg('lock','#cbd5e1','Inscrições Encerradas','As vagas foram preenchidas ou não há evento ativo.<br>Fique ligado em novas novidades no Instagram <strong>@nupieepro</strong> 💙🧡');
+        } else {
+            document.getElementById('card-main').style.display='block';
+            document.getElementById('ev-titulo').innerText=r.nome;
+            document.getElementById('ev-hidden').value=r.nome;
+            if(r.descricao){
+                document.getElementById('info-area').style.display='block';
+                document.getElementById('ev-desc').innerHTML=r.descricao;
+                document.getElementById('ev-data').innerText=r.data;
+                document.getElementById('ev-hora').innerText=r.horario;
+                document.getElementById('ev-palestrante').innerText=r.palestrante;
+                document.getElementById('ev-formato').innerText=r.formato;
+            }
         }
+    }catch(e){
+        msg('wifi','#cbd5e1','Erro de Conexão','Recarregue a página.');
+    }
+};
 
-        /* --- SPLASH SCREEN --- */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--roxo-brand); z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+async function enviar(){
+    const f=document.getElementById('form');
+    if(document.getElementById('email1').value.toLowerCase()!==document.getElementById('email2').value.toLowerCase()){return Swal.fire('Erro','E-mails não conferem.','error')}
+    if(!f.checkValidity()){f.reportValidity();return}
+    const b=document.querySelector('.btn');
+    b.innerHTML='PROCESSANDO...';b.disabled=true;
+    try{
+        const r=await fetch(API,{method:'POST',body:new URLSearchParams(new FormData(f))}).then(res=>res.json());
+        if(r.result==='success'){
+            document.getElementById('card-main').style.display='none';
+            msg('circle-check','#10b981','Inscrição Confirmada!','Sua vaga está garantida. Enviamos um e-mail. 💙🧡');
+        }else{
+            Swal.fire('Atenção',r.msg,'warning');
+            b.innerHTML='TENTAR NOVAMENTE';b.disabled=false
         }
-        .splash-img { 
-            width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--laranja-brand);
-            box-shadow: 0 0 35px var(--laranja-glow); animation: pulseLogo 2s infinite ease-in-out; object-fit: cover;
-        }
-        .splash-text { 
-            color: var(--branco); margin-top: 20px; font-weight: 700; letter-spacing: 1.5px; 
-            font-size: 0.85rem; text-transform: uppercase; opacity: 0; animation: fadeUp 0.8s forwards 0.3s;
-        }
-        @keyframes pulseLogo { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(248, 89, 0, 0.4); } 70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(248, 89, 0, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(248, 89, 0, 0); } }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    }catch(e){
+        Swal.fire('Erro','Falha na conexão.','error');
+        b.disabled=false;b.innerHTML='CONFIRMAR INSCRIÇÃO'
+    }
+}
 
-        /* --- HEADER COMPACTO --- */
-        header {
-            background: linear-gradient(160deg, var(--roxo-brand) 20%, #1a1245 100%); color: var(--branco);
-            padding: 20px 20px 90px 20px; 
-            border-radius: 0 0 45px 45px; text-align: center;
-            box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
-        }
-        
-        .header-compact-row {
-            display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 12px;
-        }
-        
-        .brand-logo {
-            width: 65px; height: 65px; 
-            border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);
-            object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .brand-info { text-align: left; }
-        .brand { font-size: 1.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0; line-height: 1; }
-        .brand span { color: var(--laranja-brand); }
-
-        .store-badge {
-            display: inline-block; background: var(--laranja-brand); color: var(--branco);
-            padding: 3px 10px; border-radius: 12px; font-size: 0.65rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;
-            box-shadow: 0 4px 10px var(--laranja-glow);
-        }
-
-        .sub-brand { font-size: 0.7rem; opacity: 0.85; font-weight: 400; line-height: 1.3; max-width: 90%; margin: 0 auto; }
-        .welcome-msg { 
-            background: rgba(255,255,255,0.08); display: inline-block; padding: 4px 12px; 
-            border-radius: 15px; font-size: 0.7rem; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        /* --- FILTROS (ESTILO INVERTIDO) --- */
-        .filter-container { 
-            margin-top: -50px; /* Sobe para o roxo */
-            position: relative; z-index: 20; padding: 0 20px; margin-bottom: 25px; 
-        }
-        .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 5px 5px 15px 5px; scrollbar-width: none; justify-content: center; }
-        
-        /* Botão INATIVO (Vidro/Transparente) */
-        .filter-btn {
-            padding: 8px 22px; 
-            background: rgba(255, 255, 255, 0.15); /* Efeito Vidro */
+function msg(i,c,t,d){
+    document.getElementById('tela-msg').style.display='block';
+    document.getElementById('card-main').style.display='none';
+    document.getElementById('tela-fechado').style.display='none'; 
+    document.getElementById('icon-msg').className='fa-solid fa-'+i;
+    document.getElementById('icon-msg').style.color=c;
+    document.getElementById('tit-msg').innerText=t;
+    document.getElementById('txt-msg').innerHTML=d;
+}
+</script></body></html>
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 30px;
             font-size: 0.85rem; font-weight: 500; 
