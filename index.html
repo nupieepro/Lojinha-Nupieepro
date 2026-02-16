@@ -10,7 +10,7 @@
 
     <style>
         :root {
-            /* --- PALETA OFICIAL NUPIEPRO --- */
+            /* --- PALETA OFICIAL NUPIEEPRO --- */
             --roxo-brand: #0f0732;   /* Roxo Escuro Oficial */
             --laranja-brand: #f85900; /* Laranja Vibrante Oficial */
             --azul-coracao: #007bff; /* Azul para o coração */
@@ -569,15 +569,15 @@
         }
 
         function salvarDadosUsuario(nome, zap, endereco) {
-            localStorage.setItem('nupiepro_nome', nome);
-            localStorage.setItem('nupiepro_zap', zap);
-            localStorage.setItem('nupiepro_endereco', endereco);
+            localStorage.setItem('nupieepro_nome', nome);
+            localStorage.setItem('nupieepro_zap', zap);
+            localStorage.setItem('nupieepro_endereco', endereco);
         }
 
         function carregarDadosUsuario() {
-            const nome = localStorage.getItem('nupiepro_nome');
-            const zap = localStorage.getItem('nupiepro_zap');
-            const endereco = localStorage.getItem('nupiepro_endereco');
+            const nome = localStorage.getItem('nupieepro_nome');
+            const zap = localStorage.getItem('nupieepro_zap');
+            const endereco = localStorage.getItem('nupieepro_endereco');
 
             if(nome) document.getElementById('nome-cliente').value = nome;
             if(zap) document.getElementById('zap-cliente').value = zap;
@@ -596,7 +596,7 @@
 
             salvarDadosUsuario(nome, zap, endereco);
 
-            let msg = `*LOJINHA OFICIAL NUPIEPRO* ⚙️\n------------------------------\n`;
+            let msg = `*LOJINHA OFICIAL NUPIEEPRO* ⚙️\n------------------------------\n`;
             msg += `👤 *Cliente:* ${nome}\n📱 *WhatsApp:* ${zap}\n`;
             msg += `🚚 *Método:* ${tipoEntrega}\n`;
             if(tipoEntrega === 'Entrega') msg += `📍 *Endereço:* ${endereco}\n`;
