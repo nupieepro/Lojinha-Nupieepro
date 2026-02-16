@@ -1,133 +1,115 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>Inscrição | Nupieepro</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-:root{--main:#0f0732;--accent:#f85900;--bg:#f4f4f9;--glass:rgba(255,255,255,0.95)}*{box-sizing:border-box;margin:0;padding:0;font-family:'Plus Jakarta Sans',sans-serif}body{background:var(--main);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background-image:radial-gradient(circle at 10% 20%,#2a1b5e 0%,#0f0732 90%)}.card{background:var(--glass);backdrop-filter:blur(20px);width:100%;max-width:500px;border-radius:24px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.4);position:relative;z-index:10}.header{background:linear-gradient(135deg,var(--main) 0%,#1a1245 100%);padding:40px 30px;text-align:center;border-bottom:5px solid var(--accent);color:#fff}.header img{width:85px;border-radius:50%;border:3px solid var(--accent);margin-bottom:15px}.header h2{font-size:1.4rem;font-weight:800;line-height:1.2;margin-bottom:5px}.info-box{background:#f1f5f9;padding:25px 30px;border-bottom:1px solid #e2e8f0;font-size:.9rem;color:#334155}.info-item{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-weight:600;color:var(--main)}.desc-text{margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid #cbd5e1;line-height:1.6}form{padding:30px}.field{margin-bottom:20px}label{display:block;font-size:.85rem;font-weight:700;color:var(--main);margin-bottom:8px}input,select,textarea{width:100%;padding:16px;border:2px solid #e2e8f0;border-radius:12px;font-size:1rem;outline:none;transition:.3s;background:#fff}input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 8px 20px rgba(248,89,0,0.15);transform:translateY(-2px)}.btn{width:100%;padding:20px;background:var(--main);color:#fff;border:none;border-radius:14px;font-weight:800;cursor:pointer;transition:.3s;font-size:1.1rem;margin-top:10px}.btn:hover{background:#1a1245}.other-input{display:none;margin-top:10px}#loading{padding:80px 30px;text-align:center;color:#fff;font-weight:600}.spinner{width:50px;height:50px;border:5px solid rgba(255,255,255,0.3);border-top:5px solid var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}@keyframes spin{to{transform:rotate(360deg)}}.page-footer{position:fixed;bottom:15px;width:100%;text-align:center;color:#fff;font-size:.75rem;opacity:.5}div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm{background-color:var(--accent)!important}
-</style>
-</head>
-<body>
-<div id="loading"><div class="spinner"></div><p>Carregando...</p></div>
-<div class="card" id="card-main" style="display:none"><div class="header"><img src="https://i.ibb.co/FkYzNVcT/download.jpg"><h2 id="ev-titulo">---</h2><p>Núcleo Piauiense de Estudantes de Engenharia de Produção</p></div><div class="info-box" id="info-area" style="display:none"><div id="ev-desc" class="desc-text"></div><div class="info-item"><i class="fa-solid fa-calendar-day" style="color:var(--accent)"></i> <span id="ev-data"></span></div><div class="info-item"><i class="fa-solid fa-clock" style="color:var(--accent)"></i> <span id="ev-hora"></span></div><div class="info-item"><i class="fa-solid fa-microphone" style="color:var(--accent)"></i> <span id="ev-palestrante"></span></div><div class="info-item"><i class="fa-solid fa-video" style="color:var(--accent)"></i> <span id="ev-formato"></span></div></div><form id="form"><div class="field"><label>Nome Completo *</label><input type="text" name="Nome" required></div><div class="field"><label>E-mail *</label><input type="email" id="email1" name="Email" required autocomplete="off"></div><div class="field"><label>Confirme seu E-mail *</label><input type="email" id="email2" required autocomplete="off" onpaste="return false"></div><div class="field"><label>Instituição de Ensino *</label><select id="sel-inst" onchange="toggle('inst')" required><option value="" disabled selected>Selecione...</option><option>UFPI</option><option>FACID</option><option>UNIFSA</option><option>Outra</option></select><input type="text" id="out-inst" class="other-input" placeholder="Digite sua Instituição"><input type="hidden" name="Instituicao" id="final-inst"></div><div class="field"><label>Curso *</label><select id="sel-curso" onchange="toggle('curso')" required><option value="" disabled selected>Selecione...</option><option>Engenharia de Produção</option><option>Engenharia Mecânica</option><option>Engenharia Elétrica</option><option>Engenharia Civil</option><option>Outro</option></select><input type="text" id="out-curso" class="other-input" placeholder="Digite seu Curso"><input type="hidden" name="Curso" id="final-curso"></div><div class="field"><label>Período *</label><select name="Periodo" required><option value="" disabled selected>Selecione...</option><option>1º</option><option>2º</option><option>3º</option><option>4º</option><option>5º</option><option>6º</option><option>7º</option><option>8º</option><option>9º</option><option>10º</option><option>Concluinte / Formando</option><option>Egresso / Pós</option></select></div><div class="field"><label>Como ficou sabendo? *</label><select id="sel-origem" onchange="toggle('origem')" required><option value="" disabled selected>Selecione...</option><option>WhatsApp</option><option>Indicação</option><option>Instagram</option><option>Outra</option></select><input type="text" id="out-origem" class="other-input" placeholder="Digite onde soube"><input type="hidden" name="Origem" id="final-origem"></div><div class="field"><label>Dúvida específica? (Opcional)</label><textarea name="Duvida" rows="3"></textarea></div><input type="hidden" name="Evento" id="ev-hidden"><button type="button" class="btn" onclick="enviar()">CONFIRMAR INSCRIÇÃO <i class="fa-solid fa-arrow-right"></i></button></form></div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lojinha Nupieepro</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<div class="card" id="tela-msg" style="display:none;text-align:center;padding:60px 40px">
-    <i id="icon-msg" class="fa-solid" style="font-size:5rem;margin-bottom:25px"></i>
-    <h2 id="tit-msg" style="color:var(--main);margin-bottom:15px"></h2>
-    <p id="txt-msg" style="color:#64748b;line-height:1.6"></p>
-</div>
+    <style>
+        :root {
+            /* --- PALETA OFICIAL NUPIEEPRO --- */
+            --roxo-brand: #0f0732;   /* Roxo Escuro Oficial */
+            --laranja-brand: #f85900; /* Laranja Vibrante Oficial */
+            --azul-coracao: #007bff; /* Azul para o coração */
+            --branco: #ffffff;
 
-<div class="card" id="tela-fechado" style="display:none;text-align:center;padding:60px 40px">
-    <i class="fa-solid fa-lock" style="font-size:5rem;color:#cbd5e1;margin-bottom:25px"></i>
-    <h2 style="color:var(--main);margin-bottom:15px">Inscrições Encerradas</h2>
-    <p style="color:#64748b;line-height:1.6">As vagas foram preenchidas ou não há evento ativo.<br>Fique ligado em novas novidades no Instagram <strong>@nupieepro</strong> 💙🧡</p>
-</div>
+            /* Derivações e UI */
+            --laranja-glow: rgba(248, 89, 0, 0.3);
+            --fundo: #F5F7FB; 
+            --card-bg: #ffffff; 
+            --texto: #0f0732; 
+            --texto-suave: #5a5575;
+            --verde-zap: #25D366; 
+            --vermelho-del: #FF4757;
+            
+            /* Sombras Premium */
+            --shadow-sm: 0 4px 12px rgba(15, 7, 50, 0.05);
+            --shadow-md: 0 10px 30px rgba(15, 7, 50, 0.1);
+            --shadow-lg: 0 20px 50px rgba(15, 7, 50, 0.15);
+        }
 
-<div class="page-footer">NUPIEEPRO 2026 💙🧡</div>
-<script>
-// --- AQUI ESTÁ A SUA URL ---
-const API = "https://script.google.com/macros/s/AKfycbyHQG1P43Johs9NvxkaoKNELhsXagVmCammU2kCLmibsQriH7OP863nUZssCl3CNOLkoQ/exec";
-
-function toggle(t){const s=document.getElementById('sel-'+t),o=document.getElementById('out-'+t),f=document.getElementById('final-'+t);if(s.value.includes('Outr')||s.value.includes('Outra')){o.style.display='block';o.required=true;f.value='';o.focus()}else{o.style.display='none';o.required=false;f.value=s.value}}
-['inst','curso','origem'].forEach(t=>{document.getElementById('out-'+t).addEventListener('input',function(){document.getElementById('final-'+t).value=this.value})});
-
-window.onload=async()=>{
-    try{
-        const r=await fetch(API).then(res=>res.json());
-        document.getElementById('loading').style.display='none';
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        // LÓGICA DE EVENTO FECHADO
-        if(r.manutencao || r.status === "FECHADO"){
-            msg('lock','#cbd5e1','Inscrições Encerradas','As vagas foram preenchidas ou não há evento ativo.<br>Fique ligado em novas novidades no Instagram <strong>@nupieepro</strong> 💙🧡');
-        } else {
-            document.getElementById('card-main').style.display='block';
-            document.getElementById('ev-titulo').innerText=r.nome;
-            document.getElementById('ev-hidden').value=r.nome;
-            if(r.descricao){
-                document.getElementById('info-area').style.display='block';
-                document.getElementById('ev-desc').innerHTML=r.descricao;
-                document.getElementById('ev-data').innerText=r.data;
-                document.getElementById('ev-hora').innerText=r.horario;
-                document.getElementById('ev-palestrante').innerText=r.palestrante;
-                document.getElementById('ev-formato').innerText=r.formato;
-            }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--fundo); color: var(--texto); 
+            padding-bottom: 140px; overflow-x: hidden;
         }
-    }catch(e){
-        msg('wifi','#cbd5e1','Erro de Conexão','Recarregue a página.');
-    }
-};
 
-async function enviar(){
-    const f=document.getElementById('form');
-    if(document.getElementById('email1').value.toLowerCase()!==document.getElementById('email2').value.toLowerCase()){return Swal.fire('Erro','E-mails não conferem.','error')}
-    if(!f.checkValidity()){f.reportValidity();return}
-    const b=document.querySelector('.btn');
-    b.innerHTML='PROCESSANDO...';b.disabled=true;
-    try{
-        const r=await fetch(API,{method:'POST',body:new URLSearchParams(new FormData(f))}).then(res=>res.json());
-        if(r.result==='success'){
-            document.getElementById('card-main').style.display='none';
-            msg('circle-check','#10b981','Inscrição Confirmada!','Sua vaga está garantida. Enviamos um e-mail. 💙🧡');
-        }else{
-            Swal.fire('Atenção',r.msg,'warning');
-            b.innerHTML='TENTAR NOVAMENTE';b.disabled=false
+        /* --- SPLASH SCREEN --- */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--roxo-brand); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
         }
-    }catch(e){
-        Swal.fire('Erro','Falha na conexão.','error');
-        b.disabled=false;b.innerHTML='CONFIRMAR INSCRIÇÃO'
-    }
-}
+        .splash-img { 
+            width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--laranja-brand);
+            box-shadow: 0 0 35px var(--laranja-glow); animation: pulseLogo 2s infinite ease-in-out; object-fit: cover;
+        }
+        .splash-text { 
+            color: var(--branco); margin-top: 20px; font-weight: 700; letter-spacing: 1.5px; 
+            font-size: 0.85rem; text-transform: uppercase; opacity: 0; animation: fadeUp 0.8s forwards 0.3s;
+        }
+        @keyframes pulseLogo { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(248, 89, 0, 0.4); } 70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(248, 89, 0, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(248, 89, 0, 0); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-function msg(i,c,t,d){
-    document.getElementById('tela-msg').style.display='block';
-    document.getElementById('card-main').style.display='none';
-    document.getElementById('tela-fechado').style.display='none'; 
-    document.getElementById('icon-msg').className='fa-solid fa-'+i;
-    document.getElementById('icon-msg').style.color=c;
-    document.getElementById('tit-msg').innerText=t;
-    document.getElementById('txt-msg').innerHTML=d;
-}
-</script></body></html>
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            font-size: 0.85rem; font-weight: 500; 
-            color: rgba(255, 255, 255, 0.9); /* Texto Branco */
-            white-space: nowrap; backdrop-filter: blur(5px);
-            transition: all 0.3s ease; cursor: pointer;
+        /* --- HEADER COMPACTO --- */
+        header {
+            background: linear-gradient(160deg, var(--roxo-brand) 20%, #1a1245 100%); color: var(--branco);
+            padding: 20px 20px 90px 20px; 
+            border-radius: 0 0 45px 45px; text-align: center;
+            box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
         }
         
-        /* Botão ATIVO (Branco) */
-        .filter-btn.active { 
-            background: var(--branco); 
-            color: var(--roxo-brand); /* Texto Roxo */
-            font-weight: 700; border-color: var(--branco);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
-            transform: translateY(-2px);
+        .header-compact-row {
+            display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 12px;
         }
+        
+        .brand-logo {
+            width: 65px; height: 65px; 
+            border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);
+            object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .brand-info { text-align: left; }
+        .brand { font-size: 1.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0; line-height: 1; }
+        .brand span { color: var(--laranja-brand); }
+
+        .store-badge {
+            display: inline-block; background: var(--laranja-brand); color: var(--branco);
+            padding: 3px 10px; border-radius: 12px; font-size: 0.65rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;
+            box-shadow: 0 4px 10px var(--laranja-glow);
+        }
+
+        .sub-brand { font-size: 0.7rem; opacity: 0.85; font-weight: 400; line-height: 1.3; max-width: 90%; margin: 0 auto; }
+        .welcome-msg { 
+            background: rgba(255,255,255,0.08); display: inline-block; padding: 4px 12px; 
+            border-radius: 15px; font-size: 0.7rem; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        /* --- FILTROS --- */
+        .filter-container { margin-top: -50px; position: relative; z-index: 20; padding: 0 20px; margin-bottom: 25px; }
+        .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 5px 5px 15px 5px; scrollbar-width: none; justify-content: center; }
+        .filter-btn { padding: 8px 22px; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; font-size: 0.85rem; font-weight: 500; color: rgba(255, 255, 255, 0.9); white-space: nowrap; backdrop-filter: blur(5px); transition: all 0.3s ease; cursor: pointer; }
+        .filter-btn.active { background: var(--branco); color: var(--roxo-brand); font-weight: 700; border-color: var(--branco); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); transform: translateY(-2px); }
 
         /* --- GRID & CARDS --- */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; position: relative; z-index: 10; }
         @media(min-width: 768px) { .container { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; } }
 
-        .card {
-            background: var(--card-bg); border-radius: 20px; overflow: hidden;
-            box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; border: 1px solid rgba(15, 7, 50, 0.05);
-        }
+        .card { background: var(--card-bg); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; border: 1px solid rgba(15, 7, 50, 0.05); }
         .card:active { transform: scale(0.96); }
 
         .image-wrapper { width: 100%; aspect-ratio: 1 / 1; background: #f8f9fc; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .prod-img { width: 100%; height: 100%; object-fit: cover; z-index: 2; transition: transform 0.5s ease; }
         
-        .share-btn {
-            position: absolute; top: 12px; right: 12px; width: 36px; height: 36px;
-            background: rgba(255,255,255,0.95); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 5; color: var(--roxo-brand); font-size: 0.9rem; cursor: pointer;
-            transition: 0.2s;
-        }
+        .share-btn { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 5; color: var(--roxo-brand); font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
         .share-btn:active { transform: scale(0.85); background: var(--roxo-brand); color: var(--branco); }
 
         .no-photo-placeholder { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #f5f7fa 0%, #e4e7ec 100%); color: var(--roxo-brand); z-index: 1; }
@@ -139,23 +121,14 @@ function msg(i,c,t,d){
         .card-price { font-size: 1.1rem; color: var(--laranja-brand); font-weight: 800; margin-top: 6px; }
         .tap-hint { font-size: 0.65rem; color: #aaa; margin-top: auto; padding-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* --- MODAIS --- */
+        /* --- MODAIS & INTERAÇÃO --- */
         .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 7, 50, 0.7); backdrop-filter: blur(8px); z-index: 2000; display: none; justify-content: center; align-items: flex-end; opacity: 0; transition: opacity 0.3s; }
         .modal-bg.active { display: flex; opacity: 1; }
         
-        .modal-panel {
-            background: var(--card-bg); width: 100%; max-width: 500px;
-            border-radius: 30px 30px 0 0; padding: 30px 25px;
-            box-shadow: var(--shadow-lg);
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            max-height: 90vh; overflow-y: auto; position: relative;
-        }
+        .modal-panel { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 30px 30px 0 0; padding: 30px 25px; box-shadow: var(--shadow-lg); animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); max-height: 90vh; overflow-y: auto; position: relative; }
         @media(min-width: 600px) { .modal-bg { align-items: center; } .modal-panel { border-radius: 30px; } }
 
-        .detail-img-box {
-            width: 100%; height: 240px; background: #f4f6f9; border-radius: 20px; margin-bottom: 20px;
-            display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1px solid #eee;
-        }
+        .detail-img-box { width: 100%; height: 240px; background: #f4f6f9; border-radius: 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1px solid #eee; }
         .detail-img { width: 100%; height: 100%; object-fit: contain; z-index: 2; position: relative; }
         .detail-title { font-size: 1.4rem; font-weight: 800; color: var(--roxo-brand); line-height: 1.2; margin-bottom: 5px; }
         .detail-price { font-size: 1.8rem; color: var(--laranja-brand); font-weight: 800; margin-bottom: 25px; display: inline-block; }
@@ -168,21 +141,13 @@ function msg(i,c,t,d){
         .qty-btn:active { transform: scale(0.9); }
         .qty-num { font-size: 1.3rem; font-weight: 700; color: var(--texto); }
 
-        .btn-primary {
-            width: 100%; padding: 18px; border: none; border-radius: 16px;
-            background: var(--roxo-brand); color: var(--branco); font-size: 1rem; font-weight: 700;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            cursor: pointer; transition: 0.2s; box-shadow: 0 8px 25px rgba(15, 7, 50, 0.25);
-        }
+        .btn-primary { width: 100%; padding: 18px; border: none; border-radius: 16px; background: var(--roxo-brand); color: var(--branco); font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 25px rgba(15, 7, 50, 0.25); }
         .btn-primary:active { transform: scale(0.98); }
 
         .input-box { width: 100%; padding: 16px; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 12px; outline: none; font-size: 0.95rem; transition: all 0.3s; background: #fbfbfb; font-family: inherit; color: var(--texto); }
         .input-box:focus { border-color: var(--roxo-brand); background: #fff; box-shadow: 0 0 0 3px rgba(15, 7, 50, 0.1); }
         
-        .radio-option {
-            padding: 16px; border: 1px solid #eee; border-radius: 12px; display: flex; align-items: center; gap: 12px;
-            cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: 0.2s; margin-bottom: 10px; color: var(--texto);
-        }
+        .radio-option { padding: 16px; border: 1px solid #eee; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: 0.2s; margin-bottom: 10px; color: var(--texto); }
         .radio-option:has(input:checked) { border-color: var(--laranja-brand); background: #fffbf8; color: var(--laranja-brand); font-weight: 700; box-shadow: inset 0 0 0 1px var(--laranja-brand); }
         .radio-option input { accent-color: var(--laranja-brand); width: 18px; height: 18px; }
 
@@ -192,51 +157,29 @@ function msg(i,c,t,d){
         .btn-trash { background: #fff0f0; color: var(--vermelho-del); width: 36px; height: 36px; border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
         .btn-trash:active { background: #ffe0e0; }
 
-        .float-bar {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(150px);
-            width: 90%; max-width: 450px; 
-            background: var(--roxo-brand); 
-            color: var(--branco); padding: 14px 30px; border-radius: 50px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: var(--shadow-lg); z-index: 100;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 2px solid var(--laranja-brand); cursor: pointer;
-        }
+        .float-bar { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(150px); width: 90%; max-width: 450px; background: var(--roxo-brand); color: var(--branco); padding: 14px 30px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-lg); z-index: 100; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); border: 2px solid var(--laranja-brand); cursor: pointer; }
         .float-bar.visible { transform: translateX(-50%) translateY(0); }
 
-        #toast {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-            background: white; color: var(--roxo-brand); padding: 12px 25px;
-            border-radius: 50px; box-shadow: var(--shadow-md);
-            font-weight: 600; font-size: 0.9rem; z-index: 3000;
-            display: flex; align-items: center; gap: 10px;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: white; color: var(--roxo-brand); padding: 12px 25px; border-radius: 50px; box-shadow: var(--shadow-md); font-weight: 600; font-size: 0.9rem; z-index: 3000; display: flex; align-items: center; gap: 10px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         #toast.show { transform: translateX(-50%) translateY(0); }
         #toast i { color: var(--verde-zap); font-size: 1.1rem; }
 
         footer { text-align: center; color: var(--texto-suave); font-size: 0.75rem; margin-top: 40px; font-weight: 500; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         
-        .close-btn { 
-            position: absolute; top: 20px; right: 20px; 
-            background: #f0f2f5; width: 36px; height: 36px; 
-            border-radius: 50%; border: none; font-size: 1.2rem; 
-            color: var(--roxo-brand); 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; transition: 0.2s; z-index: 10;
-        }
+        .close-btn { position: absolute; top: 20px; right: 20px; background: #f0f2f5; width: 36px; height: 36px; border-radius: 50%; border: none; font-size: 1.2rem; color: var(--roxo-brand); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; z-index: 10; }
         .close-btn:active { background: #e0e2e5; }
     </style>
 </head>
-<body>
+    <body>
     <div id="toast"><i class="fa-solid fa-circle-check"></i> Item adicionado à sacola!</div>
 
     <div id="splash-screen">
         <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="splash-img">
-        <div class="splash-text">Lojinha Oficial Nupiepro</div>
+        <div class="splash-text">Lojinha Oficial Nupieepro</div>
     </div>
-        <header>
+    
+    <header>
         <div class="header-compact-row">
             <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="brand-logo">
             <div class="brand-info">
@@ -348,14 +291,14 @@ function msg(i,c,t,d){
         </div>
         <div style="font-weight: 700; font-size:0.95rem;">Ver Sacola <i class="fa-solid fa-bag-shopping" style="margin-left:5px;"></i></div>
     </div>
-        <script>
+            <script>
         const whatsappDestino = "5586999976226"; 
 
         const produtos = [
             { id: 1, nome: "Camisa PRETA - Eng. Produção", preco: 38.00, tipo: "camisa", categoria: "camisa", img: "https://i.ibb.co/TDhnM6xW/unnamed.png" },
             { id: 2, nome: "Camisa BRANCA - Eng. Produção", preco: 38.00, tipo: "camisa", categoria: "camisa", img: "https://i.ibb.co/bM9mqjXS/unnamed-1.png" },
             { id: 3, nome: "Camisa AZUL - Eng. Produção", preco: 38.00, tipo: "camisa", categoria: "camisa", img: "https://i.ibb.co/qLzdtvkN/unnamed-2.png" },
-            { id: 4, nome: "Ecobag Nupiepro", preco: 22.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/7dj3kxt0/unnamed-3.png" },
+            { id: 4, nome: "Ecobag Nupieepro", preco: 22.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/7dj3kxt0/unnamed-3.png" },
             { id: 5, nome: "Bloco de Anotações", preco: 16.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/hxxnxrbF/unnamed-4.png" },
             { id: 6, nome: "Chaveiro Abridor", preco: 5.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/Kj00Xbys/unnamed-5.png" },
             { id: 7, nome: "Bottons Personalizados", preco: 5.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/mrsm95Kv/1769766015274.png" }
@@ -366,13 +309,12 @@ function msg(i,c,t,d){
         let qtdTemporaria = 1;
         let filtroAtual = 'todos';
 
-        // --- INICIALIZAÇÃO E DEEP LINKING ---
+        // --- INICIALIZAÇÃO ---
         window.addEventListener('load', () => {
             const splash = document.getElementById('splash-screen');
             carregarDadosUsuario();
             carregarVitrine();
             
-            // Verifica se o link é direto (ex: .../?id=1)
             const urlParams = new URLSearchParams(window.location.search);
             const produtoId = urlParams.get('id');
 
@@ -407,14 +349,13 @@ function msg(i,c,t,d){
             event.stopPropagation(); 
             const prod = produtos.find(p => p.id === id);
             
-            // Gera link específico do produto
             const baseUrl = window.location.href.split('?')[0];
             const linkDireto = `${baseUrl}?id=${id}`;
 
-            const textoShare = `Olha o que encontrei na Lojinha Nupiepro: ${prod.nome} por R$ ${prod.preco.toFixed(2)}!`;
+            const textoShare = `Olha o que encontrei na Lojinha Nupieepro: ${prod.nome} por R$ ${prod.preco.toFixed(2)}!`;
             
             if (navigator.share) {
-                navigator.share({ title: 'Nupiepro Store', text: textoShare, url: linkDireto }).catch(console.error);
+                navigator.share({ title: 'Nupieepro Store', text: textoShare, url: linkDireto }).catch(console.error);
             } else {
                 navigator.clipboard.writeText(linkDireto).then(() => {
                     alert("Link do produto copiado: " + linkDireto);
@@ -478,8 +419,6 @@ function msg(i,c,t,d){
             if(e && e.target !== e.currentTarget) return;
             document.getElementById('modal-details').classList.remove('active');
             document.getElementById('modal-checkout').classList.remove('active');
-            
-            // Limpa URL para não reabrir o modal ao atualizar
             const baseUrl = window.location.href.split('?')[0];
             window.history.replaceState({}, document.title, baseUrl);
         }
@@ -503,7 +442,6 @@ function msg(i,c,t,d){
             mostrarToast("Adicionado à sacola!");
             document.getElementById('modal-details').classList.remove('active');
             atualizarBarraFlutuante();
-            
             const baseUrl = window.location.href.split('?')[0];
             window.history.replaceState({}, document.title, baseUrl);
         }
@@ -603,3 +541,4 @@ function msg(i,c,t,d){
     </script>
 </body>
 </html>
+
