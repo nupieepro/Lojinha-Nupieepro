@@ -2,543 +2,2471 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lojinha Nupieepro</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- SEO -->
+    <title>NUPIEEPRO STORE</title>
+    <meta name="description" content="Loja oficial do Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI. Camisas, acessórios e muito mais!">
+    <link rel="canonical" href="https://nupieepro.github.io/">
+
+    <!-- Open Graph (preview bonito no WhatsApp e Instagram) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NUPIEEPRO STORE">
+    <meta property="og:description" content="Loja oficial do Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI.">
+    <meta property="og:image" content="https://i.ibb.co/7hcph2F/download.jpg">
+    <meta property="og:url" content="https://nupieepro.github.io/">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NUPIEEPRO STORE">
+    <meta name="twitter:description" content="Loja oficial do Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI.">
+    <meta name="twitter:image" content="https://i.ibb.co/7hcph2F/download.jpg">
+
+    <!-- PWA -->
+    <meta name="theme-color" content="#0f0732">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Nupieepro">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/7hcph2F/download.jpg">
+
+    <!-- GA4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Font Awesome com SRI -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <style>
+        /* ============================================================
+           VARIÁVEIS — PALETA OFICIAL NUPIEEPRO
+           ============================================================ */
         :root {
-            /* --- PALETA OFICIAL NUPIEEPRO --- */
-            --roxo-brand: #0f0732;   /* Roxo Escuro Oficial */
-            --laranja-brand: #f85900; /* Laranja Vibrante Oficial */
-            --azul-coracao: #007bff; /* Azul para o coração */
-            --branco: #ffffff;
-
-            /* Derivações e UI */
-            --laranja-glow: rgba(248, 89, 0, 0.3);
-            --fundo: #F5F7FB; 
-            --card-bg: #ffffff; 
-            --texto: #0f0732; 
-            --texto-suave: #5a5575;
-            --verde-zap: #25D366; 
-            --vermelho-del: #FF4757;
-            
-            /* Sombras Premium */
-            --shadow-sm: 0 4px 12px rgba(15, 7, 50, 0.05);
-            --shadow-md: 0 10px 30px rgba(15, 7, 50, 0.1);
-            --shadow-lg: 0 20px 50px rgba(15, 7, 50, 0.15);
+            --roxo-brand:    #0f0732;
+            --laranja-brand: #f85900;
+            --azul-coracao:  #007bff;
+            --branco:        #ffffff;
+            --laranja-glow:  rgba(248,89,0,0.3);
+            --fundo:         #F5F7FB;
+            --card-bg:       #ffffff;
+            --texto:         #0f0732;
+            --texto-suave:   #5a5575;
+            --verde-zap:     #25D366;
+            --vermelho-del:  #FF4757;
+            --amarelo:       #FFC107;
+            --shadow-sm: 0 4px 12px rgba(15,7,50,0.05);
+            --shadow-md: 0 10px 30px rgba(15,7,50,0.1);
+            --shadow-lg: 0 20px 50px rgba(15,7,50,0.15);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--fundo); color: var(--texto); 
-            padding-bottom: 140px; overflow-x: hidden;
+        /* ============================================================
+           RESET E BASE
+           ============================================================ */
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+            background-color: var(--fundo); color: var(--texto);
+            padding-bottom: 100px; overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
+        @media(min-width:768px){ body { padding-bottom: 60px; } }
+        @media(prefers-reduced-motion:reduce){ *, *::before, *::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+        img { max-width:100%; height:auto; display:block; }
+        button { font-family:inherit; cursor:pointer; }
+        a { color:inherit; text-decoration:none; }
 
-        /* --- SPLASH SCREEN --- */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--roxo-brand); z-index: 9999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+        /* ============================================================
+           TELA DE MANUTENÇÃO
+           ============================================================ */
+        #tela-manutencao {
+            display:none; position:fixed; inset:0;
+            background:var(--roxo-brand); z-index:99999;
+            flex-direction:column; align-items:center;
+            justify-content:center; text-align:center; padding:30px;
         }
-        .splash-img { 
-            width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--laranja-brand);
-            box-shadow: 0 0 35px var(--laranja-glow); animation: pulseLogo 2s infinite ease-in-out; object-fit: cover;
+        #tela-manutencao.ativa { display:flex; }
+        .manutencao-logo { width:100px; height:100px; border-radius:50%; border:3px solid var(--laranja-brand); box-shadow:0 0 35px var(--laranja-glow); object-fit:cover; margin-bottom:24px; animation:pulseLogo 2s infinite ease-in-out; }
+        .manutencao-titulo { color:var(--branco); font-size:1.4rem; font-weight:800; margin-bottom:12px; }
+        .manutencao-msg { color:rgba(255,255,255,0.85); font-size:0.95rem; line-height:1.6; margin-bottom:24px; }
+        .manutencao-insta { display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:var(--branco); padding:10px 20px; border-radius:30px; font-weight:700; font-size:0.9rem; }
+        .manutencao-insta i { color:var(--laranja-brand); }
+
+        /* ============================================================
+           AVISO FIXO TOPO
+           ============================================================ */
+        #aviso-topo { display:none; width:100%; padding:10px 20px; text-align:center; font-size:0.8rem; font-weight:600; position:relative; z-index:50; }
+        #aviso-topo.ativo { display:block; }
+        #aviso-topo.info    { background:#e3f2fd; color:#1565c0; }
+        #aviso-topo.alerta  { background:#fff8e1; color:#f57f17; }
+        #aviso-topo.urgente { background:#ffebee; color:#c62828; }
+
+        /* ============================================================
+           BANNER CUPOM TOPO
+           ============================================================ */
+        /* banner-cupom desativado — admin controla pelo painel */
+        #banner-cupom { display:none!important; }
+
+        /* ============================================================
+           SPLASH
+           ============================================================ */
+        #splash-screen { position:fixed; inset:0; background:var(--roxo-brand); z-index:9999; display:flex; flex-direction:column; align-items:center; justify-content:center; transition:opacity 0.6s ease, visibility 0.6s ease; }
+        .splash-img { width:100px; height:100px; border-radius:50%; border:3px solid var(--laranja-brand); box-shadow:0 0 35px var(--laranja-glow); animation:pulseLogo 2s infinite ease-in-out; object-fit:cover; }
+        .splash-text { color:var(--branco); margin-top:20px; font-weight:700; letter-spacing:1.5px; font-size:0.85rem; text-transform:uppercase; opacity:0; animation:fadeUp 0.8s forwards 0.3s; }
+        @keyframes pulseLogo { 0%{transform:scale(1);box-shadow:0 0 0 0 rgba(248,89,0,0.4)} 70%{transform:scale(1.05);box-shadow:0 0 0 20px rgba(248,89,0,0)} 100%{transform:scale(1);box-shadow:0 0 0 0 rgba(248,89,0,0)} }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        .hidden { opacity:0; visibility:hidden; pointer-events:none; }
+
+        /* ============================================================
+           HEADER
+           ============================================================ */
+        header { background:linear-gradient(160deg,var(--roxo-brand) 20%,#1a1245 100%); color:var(--branco); padding:20px 20px 90px 20px; border-radius:0 0 45px 45px; text-align:center; box-shadow:var(--shadow-lg); position:relative; overflow:hidden; }
+        .header-compact-row { display:flex; align-items:center; justify-content:center; gap:15px; margin-bottom:12px; }
+        .brand-logo { width:65px; height:65px; border-radius:50%; border:2px solid rgba(255,255,255,0.2); object-fit:cover; box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+        .brand-info { text-align:left; }
+        .brand { font-size:1.6rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin:0; line-height:1; }
+        .brand span { color:var(--laranja-brand); }
+        .store-badge { display:inline-block; background:var(--laranja-brand); color:var(--branco); padding:3px 10px; border-radius:12px; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-top:4px; box-shadow:0 4px 10px var(--laranja-glow); }
+        .header-icons { position:absolute; top:18px; right:18px; display:flex; gap:10px; align-items:center; }
+        .header-icon-btn { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:var(--branco); font-size:0.95rem; display:flex; align-items:center; justify-content:center; transition:0.2s; }
+        .header-icon-btn:active { background:rgba(255,255,255,0.25); }
+        .sub-brand { font-size:0.7rem; opacity:0.85; font-weight:400; line-height:1.3; max-width:90%; margin:0 auto; }
+        .welcome-msg { background:rgba(255,255,255,0.08); display:inline-block; padding:4px 12px; border-radius:15px; font-size:0.7rem; margin-top:8px; border:1px solid rgba(255,255,255,0.1); }
+        .header-busca { margin-top:14px; display:flex; align-items:center; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:30px; padding:8px 16px; max-width:380px; margin-left:auto; margin-right:auto; }
+        .header-busca i { color:rgba(255,255,255,0.6); margin-right:10px; }
+        .header-busca input { background:transparent; border:none; outline:none; color:var(--branco); font-family:inherit; font-size:0.85rem; width:100%; }
+        .header-busca input::placeholder { color:rgba(255,255,255,0.5); }
+        .contador-busca { text-align:center; font-size:0.75rem; color:var(--texto-suave); margin:-15px 0 10px; display:none; }
+        .contador-busca.ativo { display:block; }
+
+        /* ============================================================
+           FILTROS
+           ============================================================ */
+        .filter-container { margin-top:-50px; position:relative; z-index:20; padding:0 20px; margin-bottom:25px; }
+        .filter-scroll { display:flex; gap:10px; overflow-x:auto; padding:5px 5px 15px 5px; scrollbar-width:none; justify-content:center; }
+        .filter-scroll::-webkit-scrollbar { display:none; }
+        .filter-btn { padding:8px 22px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.1); border-radius:30px; font-size:0.85rem; font-weight:500; color:rgba(255,255,255,0.9); white-space:nowrap; backdrop-filter:blur(5px); transition:all 0.3s ease; cursor:pointer; }
+        .filter-btn.active { background:var(--branco); color:var(--roxo-brand); font-weight:700; border-color:var(--branco); box-shadow:0 5px 15px rgba(0,0,0,0.2); transform:translateY(-2px); }
+        .view-controls { display:flex; justify-content:flex-end; align-items:center; gap:8px; padding:0 20px; margin-bottom:12px; margin-top:-10px; position:relative; z-index:10; }
+        .view-btn { width:32px; height:32px; border-radius:8px; border:1px solid #ddd; background:var(--card-bg); color:var(--texto-suave); font-size:0.85rem; display:flex; align-items:center; justify-content:center; transition:0.2s; }
+        .view-btn.active { background:var(--roxo-brand); color:var(--branco); border-color:var(--roxo-brand); }
+
+        /* ============================================================
+           GRID & CARDS
+           ============================================================ */
+        .container { max-width:1100px; margin:0 auto; padding:0 20px; display:grid; grid-template-columns:repeat(2,1fr); gap:15px; position:relative; z-index:10; }
+        @media(min-width:768px){ .container { grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:30px; } }
+        .container.lista { grid-template-columns:1fr; }
+        .container.lista .card { flex-direction:row; height:100px; }
+        .container.lista .image-wrapper { width:100px; min-width:100px; aspect-ratio:auto; height:100px; }
+        .container.lista .tap-hint { display:none; }
+        .card { background:var(--card-bg); border-radius:20px; overflow:hidden; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; transition:all 0.3s cubic-bezier(0.25,0.8,0.25,1); position:relative; border:1px solid rgba(15,7,50,0.05); }
+        .card:active { transform:scale(0.96); }
+        .card.destaque { border:2px solid var(--laranja-brand); box-shadow:0 0 0 3px var(--laranja-glow),var(--shadow-md); }
+        .card.esgotado { opacity:0.55; filter:grayscale(0.4); }
+        .card.esgotado .card-info, .card.esgotado .share-btn, .card.esgotado .fav-btn { pointer-events:none; }
+        .skeleton { background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%); background-size:200% 100%; animation:skeleton-load 1.5s infinite; border-radius:20px; height:260px; }
+        @keyframes skeleton-load { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        .image-wrapper { width:100%; aspect-ratio:1/1; background:#f8f9fc; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+        .prod-img { width:100%; height:100%; object-fit:cover; z-index:2; transition:transform 0.5s ease; }
+        .share-btn { position:absolute; top:12px; right:12px; width:36px; height:36px; background:rgba(255,255,255,0.95); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0,0,0,0.1); z-index:5; color:var(--roxo-brand); font-size:0.9rem; transition:0.2s; border:none; }
+        .share-btn:active { transform:scale(0.85); background:var(--roxo-brand); color:var(--branco); }
+        .fav-btn { position:absolute; top:12px; left:12px; width:36px; height:36px; background:rgba(255,255,255,0.95); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0,0,0,0.1); z-index:5; color:#ccc; font-size:0.95rem; transition:0.2s; border:none; }
+        .fav-btn.ativo { color:#e74c3c; }
+        .fav-btn:active { transform:scale(0.85); }
+        .badge-wrapper { position:absolute; bottom:10px; left:10px; display:flex; flex-wrap:wrap; gap:4px; z-index:5; }
+        .badge { padding:3px 8px; border-radius:20px; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+        .badge-destaque  { background:var(--laranja-brand); color:#fff; animation:pulseBadge 2s infinite; }
+        .badge-novo      { background:#8e44ad; color:#fff; }
+        .badge-novidade  { background:#2980b9; color:#fff; }
+        .badge-promocao  { background:#27ae60; color:#fff; animation:pulseBadge 1.5s infinite; }
+        .badge-encomenda { background:#f39c12; color:#fff; }
+        .badge-esgotado  { background:#7f8c8d; color:#fff; }
+        .badge-ultimas   { background:var(--vermelho-del); color:#fff; }
+        @keyframes pulseBadge { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+        .no-photo-placeholder { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg,#f5f7fa 0%,#e4e7ec 100%); color:var(--roxo-brand); z-index:1; }
+        .no-photo-placeholder i { font-size:2rem; margin-bottom:8px; opacity:0.4; }
+        .no-photo-placeholder span { font-size:0.7rem; font-weight:700; opacity:0.6; text-transform:uppercase; }
+        .card-info { padding:16px; text-align:center; display:flex; flex-direction:column; flex-grow:1; cursor:pointer; }
+        .card-title { font-size:0.85rem; font-weight:700; color:var(--roxo-brand); line-height:1.3; height:36px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+        .card-price { font-size:1.1rem; color:var(--laranja-brand); font-weight:800; margin-top:6px; }
+        .card-price-riscado { font-size:0.75rem; color:var(--texto-suave); text-decoration:line-through; margin-top:2px; }
+        .card-desconto { font-size:0.7rem; color:#27ae60; font-weight:700; }
+        .tap-hint { font-size:0.65rem; color:#aaa; margin-top:auto; padding-top:8px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+        /* reações removidas — só admin vê analytics */
+        #vitrine-vazia { display:none; text-align:center; padding:60px 20px; grid-column:1/-1; }
+        #vitrine-vazia.ativo { display:block; }
+        #vitrine-vazia i { font-size:3rem; color:#ddd; margin-bottom:16px; }
+        #vitrine-vazia h3 { color:var(--texto-suave); font-size:1rem; margin-bottom:8px; }
+        #vitrine-vazia p { color:#bbb; font-size:0.85rem; }
+
+        /* ============================================================
+           MODAIS
+           ============================================================ */
+        .modal-bg { position:fixed; inset:0; background:rgba(15,7,50,0.7); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:2000; display:flex; justify-content:center; align-items:flex-end; opacity:0; visibility:hidden; pointer-events:none; transition:opacity 0.3s, visibility 0.3s; }
+        .modal-bg.active { opacity:1; visibility:visible; pointer-events:all; }
+        .modal-panel { background:var(--card-bg); width:100%; max-width:500px; border-radius:30px 30px 0 0; padding:30px 25px; box-shadow:var(--shadow-lg); animation:slideUp 0.4s cubic-bezier(0.16,1,0.3,1); max-height:92vh; overflow-y:auto; position:relative; }
+        @media(min-width:600px){ .modal-bg{align-items:center} .modal-panel{border-radius:30px} }
+        @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+        .close-btn { position:absolute; top:20px; right:20px; background:#f0f2f5; width:36px; height:36px; border-radius:50%; border:none; font-size:1.2rem; color:var(--roxo-brand); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:0.2s; z-index:10; }
+        .close-btn:active { background:#e0e2e5; }
+
+        /* Modal produto — carrossel */
+        .carrossel-wrapper { width:100%; height:240px; background:#f4f6f9; border-radius:20px; margin-bottom:20px; position:relative; overflow:hidden; border:1px solid #eee; }
+        .carrossel-track { display:flex; height:100%; transition:transform 0.35s ease; }
+        .carrossel-slide { min-width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+        .carrossel-slide img { width:100%; height:100%; object-fit:contain; cursor:zoom-in; }
+        .carrossel-nav { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.9); border:none; width:32px; height:32px; border-radius:50%; font-size:0.8rem; color:var(--roxo-brand); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow-sm); transition:0.2s; z-index:5; }
+        .carrossel-nav.prev { left:8px; }
+        .carrossel-nav.next { right:8px; }
+        .carrossel-nav:active { transform:translateY(-50%) scale(0.9); }
+        .carrossel-indicador { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.5); color:#fff; font-size:0.65rem; padding:2px 8px; border-radius:10px; font-weight:700; }
+
+        /* Lightbox */
+        #lightbox { position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:9000; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; pointer-events:none; transition:opacity 0.3s, visibility 0.3s; }
+        #lightbox.ativo { opacity:1; visibility:visible; pointer-events:all; }
+        #lightbox img { max-width:95vw; max-height:90vh; object-fit:contain; border-radius:12px; }
+        .close-lightbox { position:absolute; top:16px; right:16px; color:#fff; font-size:1.8rem; cursor:pointer; background:rgba(255,255,255,0.1); width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:none; }
+
+        /* Detalhes produto */
+        .detail-title { font-size:1.4rem; font-weight:800; color:var(--roxo-brand); line-height:1.2; margin-bottom:5px; }
+        .detail-preco-row { display:flex; align-items:baseline; gap:6px; margin-bottom:6px; flex-wrap:wrap; }
+        .detail-price { font-size:1.8rem; color:var(--laranja-brand); font-weight:800; }
+        .detail-price-riscado { font-size:1rem; color:var(--texto-suave); text-decoration:line-through; }
+        .detail-descricao { font-size:0.88rem; color:var(--texto-suave); line-height:1.6; margin-bottom:16px; padding:12px; background:#f8f9fc; border-radius:12px; }
+        .detail-estoque { font-size:0.78rem; color:var(--vermelho-del); font-weight:700; margin-bottom:12px; }
+        .detail-encomenda { font-size:0.78rem; background:#fff8e1; color:#f57f17; padding:8px 12px; border-radius:10px; margin-bottom:16px; font-weight:600; }
+        .nav-produto { display:flex; gap:8px; margin-bottom:16px; }
+        .nav-produto button { flex:1; padding:10px; border:1px solid #eee; border-radius:12px; background:#f8f9fc; color:var(--texto-suave); font-size:0.8rem; font-weight:600; transition:0.2s; }
+        .nav-produto button:active { background:#eee; }
+        .modal-acoes { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+        .btn-acao-sm { flex:1; min-width:80px; padding:8px 12px; border-radius:12px; border:1px solid #eee; background:#f8f9fc; color:var(--texto-suave); font-size:0.75rem; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px; transition:0.2s; }
+        .btn-acao-sm:active { background:#eee; }
+        .btn-acao-sm.fav-ativo { color:#e74c3c; border-color:#e74c3c; background:#fff0f0; }
+
+        /* Relacionados */
+        .relacionados-titulo { font-size:0.85rem; font-weight:700; color:var(--texto-suave); margin:20px 0 10px; text-transform:uppercase; letter-spacing:0.5px; }
+        .relacionados-scroll { display:flex; gap:10px; overflow-x:auto; scrollbar-width:none; padding-bottom:4px; }
+        .relacionados-scroll::-webkit-scrollbar { display:none; }
+        .relacionado-card { min-width:110px; background:#f8f9fc; border-radius:14px; overflow:hidden; border:1px solid #eee; cursor:pointer; transition:0.2s; flex-shrink:0; }
+        .relacionado-card:active { transform:scale(0.95); }
+        .relacionado-card img { width:100%; height:80px; object-fit:cover; }
+        .relacionado-card div { padding:6px 8px; font-size:0.7rem; font-weight:700; color:var(--roxo-brand); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .relacionado-card span { display:block; color:var(--laranja-brand); font-size:0.7rem; font-weight:800; padding:0 8px 6px; }
+
+        /* Avaliações */
+        .avaliacoes-section { margin-top:20px; }
+        .avaliacoes-titulo { font-size:0.85rem; font-weight:700; color:var(--texto-suave); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px; }
+        .avaliacao-item { background:#f8f9fc; border-radius:12px; padding:12px; margin-bottom:10px; }
+        .avaliacao-estrelas { color:var(--amarelo); font-size:0.8rem; margin-bottom:4px; }
+        .avaliacao-texto { font-size:0.82rem; color:var(--texto); line-height:1.5; }
+        .avaliacao-autor { font-size:0.72rem; color:var(--texto-suave); margin-top:6px; font-weight:600; }
+        .avaliacao-resposta { background:#fff3e0; border-left:3px solid var(--laranja-brand); padding:8px 10px; border-radius:0 8px 8px 0; margin-top:8px; font-size:0.78rem; color:var(--texto); }
+        .form-avaliacao { margin-top:12px; }
+        .estrelas-input { display:flex; gap:6px; margin-bottom:10px; }
+        .estrela-btn { font-size:1.4rem; background:none; border:none; color:#ddd; cursor:pointer; transition:0.15s; padding:0; }
+        .estrela-btn.ativo { color:var(--amarelo); }
+
+        /* Select / qty */
+        .nice-select { width:100%; padding:16px; border-radius:15px; border:2px solid #eef2f6; background:#fff; font-size:0.95rem; color:var(--texto); font-weight:600; outline:none; margin-bottom:20px; -webkit-appearance:none; appearance:none; transition:0.3s; }
+        .nice-select:focus { border-color:var(--roxo-brand); }
+        .qty-wrapper { display:flex; align-items:center; justify-content:space-between; background:#f8f9fc; padding:6px; border-radius:16px; border:1px solid #eee; margin-bottom:25px; }
+        .qty-btn { width:48px; height:48px; background:white; border:none; border-radius:12px; font-size:1.2rem; color:var(--roxo-brand); font-weight:700; cursor:pointer; box-shadow:var(--shadow-sm); transition:0.2s; }
+        .qty-btn:active { transform:scale(0.9); }
+        .qty-num { font-size:1.3rem; font-weight:700; color:var(--texto); }
+
+        /* ============================================================
+           BOTÕES
+           ============================================================ */
+        .btn-primary { width:100%; padding:18px; border:none; border-radius:16px; background:var(--roxo-brand); color:var(--branco); font-size:1rem; font-weight:700; display:flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; transition:0.2s; box-shadow:0 8px 25px rgba(15,7,50,0.25); }
+        .btn-primary:active { transform:scale(0.98); }
+        .btn-secondary { width:100%; padding:14px; border:2px solid var(--roxo-brand); border-radius:16px; background:transparent; color:var(--roxo-brand); font-size:0.9rem; font-weight:700; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; transition:0.2s; margin-top:10px; }
+        .btn-secondary:active { background:#f0f0f0; }
+        .btn-danger { width:100%; padding:12px; border:1px solid var(--vermelho-del); border-radius:12px; background:#fff0f0; color:var(--vermelho-del); font-size:0.85rem; font-weight:700; cursor:pointer; transition:0.2s; margin-top:8px; }
+        .btn-danger:active { background:#ffe0e0; }
+
+        /* ============================================================
+           CHECKOUT
+           ============================================================ */
+        .checkout-steps { display:flex; align-items:center; justify-content:center; gap:4px; margin-bottom:24px; }
+        .step { display:flex; flex-direction:column; align-items:center; gap:4px; flex:1; }
+        .step-circle { width:28px; height:28px; border-radius:50%; background:#eee; color:var(--texto-suave); font-size:0.7rem; font-weight:800; display:flex; align-items:center; justify-content:center; transition:0.3s; }
+        .step.ativo .step-circle { background:var(--roxo-brand); color:#fff; }
+        .step.concluido .step-circle { background:#27ae60; color:#fff; }
+        .step-label { font-size:0.55rem; color:var(--texto-suave); font-weight:600; text-align:center; }
+        .step-linha { flex:1; height:2px; background:#eee; margin-bottom:14px; max-width:30px; }
+        .step-linha.ativa { background:var(--roxo-brand); }
+        .cupom-section { background: linear-gradient(135deg, #0f0732 0%, #1a1245 100%); border-radius: 16px; padding: 16px; margin-bottom: 16px; border: 1px solid rgba(248,89,0,0.3); }
+        .cupom-section-titulo { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.8); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; }
+        .cupom-section-titulo i { color: var(--laranja-brand); }
+        .cupom-row { display: flex; gap: 8px; }
+        .cupom-input { flex: 1; padding: 12px 14px; border: 2px solid rgba(248,89,0,0.4); border-radius: 10px; font-size: 0.85rem; font-family: inherit; text-transform: uppercase; outline: none; transition: 0.2s; background: rgba(255,255,255,0.08); color: var(--branco); letter-spacing: 1px; font-weight: 700; }
+        .cupom-input::placeholder { color: rgba(255,255,255,0.4); font-weight: 400; letter-spacing: 0; text-transform: none; }
+        .cupom-input:focus { border-color: var(--laranja-brand); background: rgba(255,255,255,0.12); }
+        .cupom-btn { padding: 12px 16px; background: var(--laranja-brand); color: #fff; border: none; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap; box-shadow: 0 4px 12px var(--laranja-glow); }
+        .cupom-btn:active { transform: scale(0.96); }
+        #cupom-aplicado-box { display: none; margin-top: 10px; background: rgba(39,174,96,0.2); border: 1px solid rgba(39,174,96,0.4); border-radius: 8px; padding: 8px 12px; font-size: 0.8rem; color: #a8e6c0; font-weight: 600; align-items: center; gap: 6px; }
+        #cupom-aplicado-box.ativo { display: flex; }
+        .cupom-remover { margin-left: auto; background: none; border: none; color: #ff8a80; cursor: pointer; font-size: 0.8rem; font-weight: 700; }
+        .input-box { width:100%; padding:16px; border:1px solid #e0e0e0; border-radius:12px; margin-bottom:12px; outline:none; font-size:0.95rem; transition:all 0.3s; background:#fbfbfb; font-family:inherit; color:var(--texto); }
+        .input-box:focus { border-color:var(--roxo-brand); background:#fff; box-shadow:0 0 0 3px rgba(15,7,50,0.1); }
+        .input-label { font-size:0.8rem; font-weight:700; color:var(--texto-suave); margin-bottom:6px; display:block; }
+        .radio-option { padding:14px 16px; border:1px solid #eee; border-radius:12px; display:flex; align-items:center; gap:12px; cursor:pointer; font-size:0.9rem; font-weight:500; transition:0.2s; margin-bottom:10px; color:var(--texto); }
+        .radio-option:has(input:checked) { border-color:var(--laranja-brand); background:#fffbf8; color:var(--laranja-brand); font-weight:700; box-shadow:inset 0 0 0 1px var(--laranja-brand); }
+        .radio-option input { accent-color:var(--laranja-brand); width:18px; height:18px; }
+        .cart-list { list-style:none; margin:0 0 16px; max-height:200px; overflow-y:auto; border:1px solid #f0f0f0; border-radius:16px; padding:10px; background:#fafafa; }
+        .cart-item { display:flex; justify-content:space-between; align-items:center; padding:10px 8px; border-bottom:1px solid #eee; }
+        .cart-item:last-child { border-bottom:none; }
+        .cart-item-info strong { font-size:0.85rem; color:var(--roxo-brand); display:block; }
+        .cart-item-info span { font-size:0.75rem; color:var(--texto-suave); }
+        .cart-item-qtd { display:flex; align-items:center; gap:6px; font-size:0.8rem; }
+        .cart-item-qtd button { width:24px; height:24px; border-radius:6px; border:1px solid #ddd; background:#fff; font-size:0.75rem; color:var(--roxo-brand); display:flex; align-items:center; justify-content:center; }
+        .btn-trash { background:#fff0f0; color:var(--vermelho-del); width:32px; height:32px; border:none; border-radius:8px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:0.2s; flex-shrink:0; }
+        .btn-trash:active { background:#ffe0e0; }
+        .resumo-valores { background:#f8f9fc; border-radius:14px; padding:14px; margin-bottom:16px; }
+        .resumo-linha { display:flex; justify-content:space-between; font-size:0.85rem; color:var(--texto-suave); margin-bottom:6px; }
+        .resumo-linha.total { font-size:1rem; font-weight:800; color:var(--roxo-brand); margin-bottom:0; padding-top:8px; border-top:1px solid #eee; }
+        .resumo-linha.desconto { color:#27ae60; font-weight:700; }
+        .check-salvar { display:flex; align-items:center; gap:8px; margin-bottom:16px; cursor:pointer; font-size:0.82rem; color:var(--texto-suave); }
+        .check-salvar input { accent-color:var(--roxo-brand); width:16px; height:16px; }
+        .checklist-confirmacao { background:#f0f7ff; border-radius:14px; padding:14px; margin-bottom:16px; display:none; }
+        .checklist-confirmacao.ativo { display:block; }
+        .checklist-confirmacao h4 { font-size:0.82rem; font-weight:700; color:var(--roxo-brand); margin-bottom:10px; }
+        .check-item { display:flex; align-items:flex-start; gap:8px; font-size:0.8rem; color:var(--texto); margin-bottom:6px; }
+        .check-item i { color:#27ae60; margin-top:1px; flex-shrink:0; }
+
+        /* PIX */
+        .pix-section { display:none; text-align:center; background:#f8f9fc; border-radius:16px; padding:20px; margin-bottom:16px; }
+        .pix-section.ativo { display:block; }
+        .pix-qr { width:180px; height:180px; margin:0 auto 12px; border:3px solid var(--roxo-brand); border-radius:16px; overflow:hidden; background:#fff; padding:8px; }
+        .pix-qr canvas { width:100%!important; height:100%!important; }
+        .pix-valor { font-size:1.4rem; font-weight:800; color:var(--laranja-brand); margin-bottom:8px; }
+        .pix-chave { font-size:0.8rem; color:var(--texto-suave); background:#fff; border:1px solid #ddd; border-radius:8px; padding:8px 12px; margin-bottom:10px; word-break:break-all; }
+        .pix-copiar { padding:10px 20px; background:var(--roxo-brand); color:#fff; border:none; border-radius:10px; font-size:0.85rem; font-weight:700; cursor:pointer; transition:0.2s; display:flex; align-items:center; gap:6px; margin:0 auto 10px; }
+        .pix-copiar:active { transform:scale(0.96); }
+        .pix-timer { font-size:0.75rem; color:var(--vermelho-del); font-weight:700; }
+        .pix-destaque { display:none; background:#e8f5e9; border-radius:10px; padding:8px 12px; font-size:0.8rem; color:#2e7d32; font-weight:700; margin-bottom:12px; align-items:center; gap:6px; }
+        .pix-destaque.ativo { display:flex; }
+
+        /* Tela sucesso */
+        #tela-sucesso { display:none; text-align:center; padding:20px 0; }
+        #tela-sucesso.ativo { display:block; }
+        .sucesso-icon { font-size:4rem; margin-bottom:16px; }
+        .sucesso-titulo { font-size:1.4rem; font-weight:800; color:var(--roxo-brand); margin-bottom:8px; }
+        .sucesso-msg { font-size:0.9rem; color:var(--texto-suave); line-height:1.6; margin-bottom:20px; }
+        .sucesso-pedido { background:var(--roxo-brand); color:#fff; border-radius:12px; padding:12px 20px; font-size:0.85rem; font-weight:700; margin-bottom:20px; display:inline-block; }
+        .confete-container { position:fixed; inset:0; pointer-events:none; z-index:9998; overflow:hidden; }
+        .confete-particle { position:absolute; width:10px; height:10px; top:-10px; border-radius:2px; animation:confete-cair linear forwards; }
+        @keyframes confete-cair { to{transform:translateY(110vh) rotate(720deg); opacity:0;} }
+
+        /* ============================================================
+           BARRA FLUTUANTE
+           ============================================================ */
+        .float-bar { position:fixed; bottom:25px; left:50%; transform:translateX(-50%) translateY(150px); width:90%; max-width:450px; background:var(--roxo-brand); color:var(--branco); padding:14px 30px; border-radius:50px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-lg); z-index:100; transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1); border:2px solid var(--laranja-brand); cursor:pointer; }
+        .float-bar.visible { transform:translateX(-50%) translateY(0); }
+
+        /* ============================================================
+           TOAST
+           ============================================================ */
+        #toast { position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-100px); background:white; color:var(--roxo-brand); padding:12px 25px; border-radius:50px; box-shadow:var(--shadow-md); font-weight:600; font-size:0.9rem; z-index:3000; display:flex; align-items:center; gap:10px; transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275); max-width:90vw; text-align:center; }
+        #toast.show { transform:translateX(-50%) translateY(0); }
+        #toast.erro { color:var(--vermelho-del); }
+        #toast i { color:var(--verde-zap); font-size:1.1rem; }
+        #toast.erro i { color:var(--vermelho-del); }
+
+        /* ============================================================
+           BOTÃO TOPO / OFFLINE
+           ============================================================ */
+        #btn-topo { position:fixed; bottom:90px; right:20px; width:40px; height:40px; border-radius:50%; background:var(--roxo-brand); color:#fff; border:none; font-size:1rem; display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-md); cursor:pointer; opacity:0; visibility:hidden; transition:opacity 0.3s, visibility 0.3s; z-index:50; }
+        #btn-topo.visivel { opacity:1; visibility:visible; }
+        #aviso-offline { display:none; position:fixed; bottom:0; left:0; right:0; background:var(--vermelho-del); color:#fff; text-align:center; padding:10px; font-size:0.8rem; font-weight:700; z-index:500; }
+        #aviso-offline.ativo { display:block; }
+
+        /* ============================================================
+           HISTÓRICO / MEUS PEDIDOS
+           ============================================================ */
+        .pedido-historico { background:#f8f9fc; border-radius:14px; padding:14px; margin-bottom:12px; border:1px solid #eee; }
+        .pedido-historico-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+        .pedido-numero { font-size:0.8rem; font-weight:800; color:var(--roxo-brand); }
+        .pedido-data { font-size:0.7rem; color:var(--texto-suave); }
+        .pedido-total { font-size:1rem; font-weight:800; color:var(--laranja-brand); }
+        .pedido-itens { font-size:0.78rem; color:var(--texto-suave); line-height:1.5; }
+
+        /* ============================================================
+           FOOTER / SOBRE
+           ============================================================ */
+        footer { text-align:center; color:var(--texto-suave); font-size:0.75rem; margin-top:40px; font-weight:500; padding-bottom:10px; }
+        footer a { color:var(--laranja-brand); }
+        .sobre-logo { width:80px; height:80px; border-radius:50%; border:3px solid var(--laranja-brand); object-fit:cover; margin:0 auto 16px; display:block; }
+        .sobre-titulo { font-size:1.1rem; font-weight:800; color:var(--roxo-brand); text-align:center; margin-bottom:4px; }
+        .sobre-subtitulo { font-size:0.75rem; color:var(--texto-suave); text-align:center; margin-bottom:16px; }
+        .sobre-texto { font-size:0.85rem; color:var(--texto); line-height:1.7; margin-bottom:16px; }
+        .sobre-badges { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:20px; }
+        .sobre-badge { background:var(--roxo-brand); color:#fff; padding:5px 12px; border-radius:20px; font-size:0.7rem; font-weight:700; }
+
+        /* ── Fonte ajustável ── */
+        body.fonte-grande .card-title { font-size:1rem; }
+        body.fonte-grande .card-price { font-size:1.25rem; }
+        body.fonte-grande .detail-title { font-size:1.6rem; }
+        body.fonte-grande p, body.fonte-grande span, body.fonte-grande div { font-size:1.05em; }
+        #ctrl-fonte { position:fixed; bottom:90px; left:20px; display:flex; flex-direction:column; gap:4px; z-index:50; opacity:0; visibility:hidden; transition:opacity 0.3s,visibility 0.3s; }
+        #ctrl-fonte.visivel { opacity:1; visibility:visible; }
+        .fonte-btn { width:36px; height:36px; border-radius:50%; background:var(--roxo-brand); color:#fff; border:none; font-weight:800; cursor:pointer; box-shadow:var(--shadow-sm); font-size:0.8rem; display:flex; align-items:center; justify-content:center; }
+        .fonte-btn:active { transform:scale(0.9); }
+
+        /* ── Carteirinha digital ── */
+        .carteirinha { background:linear-gradient(135deg,var(--roxo-brand) 0%,#1a1245 100%); border-radius:20px; padding:24px; text-align:center; color:var(--branco); border:2px solid var(--laranja-brand); box-shadow:var(--shadow-lg); }
+        .carteirinha-logo { width:60px; height:60px; border-radius:50%; border:2px solid var(--laranja-brand); object-fit:cover; margin:0 auto 12px; display:block; }
+        .carteirinha-nome { font-size:1.1rem; font-weight:800; margin-bottom:4px; }
+        .carteirinha-sub { font-size:0.75rem; opacity:0.7; margin-bottom:16px; }
+        .carteirinha-qr { width:130px; height:130px; margin:0 auto 12px; background:#fff; border-radius:12px; padding:8px; }
+        .carteirinha-qr img { width:100%; height:100%; }
+        .carteirinha-num { font-size:0.7rem; opacity:0.6; letter-spacing:2px; margin-top:8px; }
+
+        /* ── Print ── */
+        @media print {
+            #splash-screen,header,.filter-container,.view-controls,
+            #vitrine-area,#card-cupom-vitrine,footer,.float-bar,
+            #btn-topo,#ctrl-fonte,#aviso-offline,#tela-manutencao,
+            #banner-cupom,#aviso-topo,
+            .cupom-section,.btn-danger,.btn-secondary,
+            .checkout-steps,.nav-produto,.modal-acoes,
+            #checkout-step-2,#checkout-step-3,#checkout-step-4,
+            .carrossel-nav,.close-btn { display:none!important; }
+            body { padding:0; background:#fff; }
+            .modal-bg { position:static!important; opacity:1!important; visibility:visible!important; pointer-events:all!important; background:none!important; display:block!important; }
+            .modal-panel { box-shadow:none!important; border-radius:0!important; max-height:none!important; padding:10px!important; }
+            #tela-sucesso { display:block!important; }
+            .confete-container { display:none!important; }
         }
-        .splash-text { 
-            color: var(--branco); margin-top: 20px; font-weight: 700; letter-spacing: 1.5px; 
-            font-size: 0.85rem; text-transform: uppercase; opacity: 0; animation: fadeUp 0.8s forwards 0.3s;
-        }
-        @keyframes pulseLogo { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(248, 89, 0, 0.4); } 70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(248, 89, 0, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(248, 89, 0, 0); } }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-
-        /* --- HEADER COMPACTO --- */
-        header {
-            background: linear-gradient(160deg, var(--roxo-brand) 20%, #1a1245 100%); color: var(--branco);
-            padding: 20px 20px 90px 20px; 
-            border-radius: 0 0 45px 45px; text-align: center;
-            box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
-        }
-        
-        .header-compact-row {
-            display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 12px;
-        }
-        
-        .brand-logo {
-            width: 65px; height: 65px; 
-            border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);
-            object-fit: cover; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .brand-info { text-align: left; }
-        .brand { font-size: 1.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin: 0; line-height: 1; }
-        .brand span { color: var(--laranja-brand); }
-
-        .store-badge {
-            display: inline-block; background: var(--laranja-brand); color: var(--branco);
-            padding: 3px 10px; border-radius: 12px; font-size: 0.65rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px;
-            box-shadow: 0 4px 10px var(--laranja-glow);
-        }
-
-        .sub-brand { font-size: 0.7rem; opacity: 0.85; font-weight: 400; line-height: 1.3; max-width: 90%; margin: 0 auto; }
-        .welcome-msg { 
-            background: rgba(255,255,255,0.08); display: inline-block; padding: 4px 12px; 
-            border-radius: 15px; font-size: 0.7rem; margin-top: 8px; border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        /* --- FILTROS --- */
-        .filter-container { margin-top: -50px; position: relative; z-index: 20; padding: 0 20px; margin-bottom: 25px; }
-        .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 5px 5px 15px 5px; scrollbar-width: none; justify-content: center; }
-        .filter-btn { padding: 8px 22px; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; font-size: 0.85rem; font-weight: 500; color: rgba(255, 255, 255, 0.9); white-space: nowrap; backdrop-filter: blur(5px); transition: all 0.3s ease; cursor: pointer; }
-        .filter-btn.active { background: var(--branco); color: var(--roxo-brand); font-weight: 700; border-color: var(--branco); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); transform: translateY(-2px); }
-
-        /* --- GRID & CARDS --- */
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; position: relative; z-index: 10; }
-        @media(min-width: 768px) { .container { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; } }
-
-        .card { background: var(--card-bg); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; border: 1px solid rgba(15, 7, 50, 0.05); }
-        .card:active { transform: scale(0.96); }
-
-        .image-wrapper { width: 100%; aspect-ratio: 1 / 1; background: #f8f9fc; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .prod-img { width: 100%; height: 100%; object-fit: cover; z-index: 2; transition: transform 0.5s ease; }
-        
-        .share-btn { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 5; color: var(--roxo-brand); font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
-        .share-btn:active { transform: scale(0.85); background: var(--roxo-brand); color: var(--branco); }
-
-        .no-photo-placeholder { position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #f5f7fa 0%, #e4e7ec 100%); color: var(--roxo-brand); z-index: 1; }
-        .no-photo-placeholder i { font-size: 2rem; margin-bottom: 8px; opacity: 0.4; }
-        .no-photo-placeholder span { font-size: 0.7rem; font-weight: 700; opacity: 0.6; text-transform: uppercase; }
-
-        .card-info { padding: 16px; text-align: center; display: flex; flex-direction: column; flex-grow: 1; cursor: pointer; }
-        .card-title { font-size: 0.85rem; font-weight: 700; color: var(--roxo-brand); line-height: 1.3; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .card-price { font-size: 1.1rem; color: var(--laranja-brand); font-weight: 800; margin-top: 6px; }
-        .tap-hint { font-size: 0.65rem; color: #aaa; margin-top: auto; padding-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        /* --- MODAIS & INTERAÇÃO --- */
-        .modal-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 7, 50, 0.7); backdrop-filter: blur(8px); z-index: 2000; display: none; justify-content: center; align-items: flex-end; opacity: 0; transition: opacity 0.3s; }
-        .modal-bg.active { display: flex; opacity: 1; }
-        
-        .modal-panel { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 30px 30px 0 0; padding: 30px 25px; box-shadow: var(--shadow-lg); animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); max-height: 90vh; overflow-y: auto; position: relative; }
-        @media(min-width: 600px) { .modal-bg { align-items: center; } .modal-panel { border-radius: 30px; } }
-
-        .detail-img-box { width: 100%; height: 240px; background: #f4f6f9; border-radius: 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; border: 1px solid #eee; }
-        .detail-img { width: 100%; height: 100%; object-fit: contain; z-index: 2; position: relative; }
-        .detail-title { font-size: 1.4rem; font-weight: 800; color: var(--roxo-brand); line-height: 1.2; margin-bottom: 5px; }
-        .detail-price { font-size: 1.8rem; color: var(--laranja-brand); font-weight: 800; margin-bottom: 25px; display: inline-block; }
-
-        .nice-select { width: 100%; padding: 16px; border-radius: 15px; border: 2px solid #eef2f6; background: #fff; font-size: 0.95rem; color: var(--texto); font-weight: 600; outline: none; margin-bottom: 20px; appearance: none; transition: 0.3s; }
-        .nice-select:focus { border-color: var(--roxo-brand); }
-        
-        .qty-wrapper { display: flex; align-items: center; justify-content: space-between; background: #f8f9fc; padding: 6px; border-radius: 16px; border: 1px solid #eee; margin-bottom: 25px; }
-        .qty-btn { width: 48px; height: 48px; background: white; border: none; border-radius: 12px; font-size: 1.2rem; color: var(--roxo-brand); font-weight: 700; cursor: pointer; box-shadow: var(--shadow-sm); transition: 0.2s; }
-        .qty-btn:active { transform: scale(0.9); }
-        .qty-num { font-size: 1.3rem; font-weight: 700; color: var(--texto); }
-
-        .btn-primary { width: 100%; padding: 18px; border: none; border-radius: 16px; background: var(--roxo-brand); color: var(--branco); font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 25px rgba(15, 7, 50, 0.25); }
-        .btn-primary:active { transform: scale(0.98); }
-
-        .input-box { width: 100%; padding: 16px; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 12px; outline: none; font-size: 0.95rem; transition: all 0.3s; background: #fbfbfb; font-family: inherit; color: var(--texto); }
-        .input-box:focus { border-color: var(--roxo-brand); background: #fff; box-shadow: 0 0 0 3px rgba(15, 7, 50, 0.1); }
-        
-        .radio-option { padding: 16px; border: 1px solid #eee; border-radius: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: 0.2s; margin-bottom: 10px; color: var(--texto); }
-        .radio-option:has(input:checked) { border-color: var(--laranja-brand); background: #fffbf8; color: var(--laranja-brand); font-weight: 700; box-shadow: inset 0 0 0 1px var(--laranja-brand); }
-        .radio-option input { accent-color: var(--laranja-brand); width: 18px; height: 18px; }
-
-        .cart-list { list-style: none; margin: 15px 0 25px; max-height: 220px; overflow-y: auto; border: 1px solid #f0f0f0; border-radius: 16px; padding: 10px; background: #fafafa; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 10px; border-bottom: 1px solid #eee; }
-        .cart-item:last-child { border-bottom: none; }
-        .btn-trash { background: #fff0f0; color: var(--vermelho-del); width: 36px; height: 36px; border: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .btn-trash:active { background: #ffe0e0; }
-
-        .float-bar { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(150px); width: 90%; max-width: 450px; background: var(--roxo-brand); color: var(--branco); padding: 14px 30px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-lg); z-index: 100; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); border: 2px solid var(--laranja-brand); cursor: pointer; }
-        .float-bar.visible { transform: translateX(-50%) translateY(0); }
-
-        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px); background: white; color: var(--roxo-brand); padding: 12px 25px; border-radius: 50px; box-shadow: var(--shadow-md); font-weight: 600; font-size: 0.9rem; z-index: 3000; display: flex; align-items: center; gap: 10px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        #toast.show { transform: translateX(-50%) translateY(0); }
-        #toast i { color: var(--verde-zap); font-size: 1.1rem; }
-
-        footer { text-align: center; color: var(--texto-suave); font-size: 0.75rem; margin-top: 40px; font-weight: 500; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        
-        .close-btn { position: absolute; top: 20px; right: 20px; background: #f0f2f5; width: 36px; height: 36px; border-radius: 50%; border: none; font-size: 1.2rem; color: var(--roxo-brand); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; z-index: 10; }
-        .close-btn:active { background: #e0e2e5; }
     </style>
 </head>
-    <body>
-    <div id="toast"><i class="fa-solid fa-circle-check"></i> Item adicionado à sacola!</div>
+<body>
 
-    <div id="splash-screen">
-        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="splash-img">
-        <div class="splash-text">Lojinha Oficial Nupieepro</div>
+<!-- ============================================================
+     HONEYPOT — campo invisível anti-bot
+     ============================================================ -->
+<input type="text" name="website" id="honeypot" style="display:none!important" tabindex="-1" autocomplete="off">
+
+<!-- ============================================================
+     TELA DE MANUTENÇÃO
+     ============================================================ -->
+<div id="tela-manutencao">
+    <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo Nupieepro" class="manutencao-logo">
+    <div class="manutencao-titulo">Estamos em Manutenção ⚙️</div>
+    <div class="manutencao-msg">Fique ligado em novas novidades!</div>
+    <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer" class="manutencao-insta">
+        <i class="fa-brands fa-instagram"></i> @nupieepro 💙🧡
+    </a>
+</div>
+
+<!-- ============================================================
+     AVISO FIXO TOPO
+     ============================================================ -->
+<div id="aviso-topo" class="info"></div>
+
+<!-- ============================================================
+     BANNER CUPOM
+     ============================================================ -->
+<div id="banner-cupom"></div>
+
+<!-- ============================================================
+     TOAST
+     ============================================================ -->
+<div id="toast"><i class="fa-solid fa-circle-check"></i> <span id="toast-msg">Item adicionado à sacola!</span></div>
+
+<!-- ============================================================
+     CONFETE
+     ============================================================ -->
+<div class="confete-container" id="confete-container"></div>
+
+<!-- ============================================================
+     SPLASH SCREEN
+     ============================================================ -->
+<div id="splash-screen">
+    <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo Nupieepro" class="splash-img">
+    <div class="splash-text">Lojinha Oficial Nupieepro</div>
+</div>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header>
+    <div class="header-icons">
+        <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer" class="header-icon-btn" aria-label="Instagram Nupieepro">
+            <i class="fa-brands fa-instagram"></i>
+        </a>
+        <button class="header-icon-btn" onclick="abrirSobre()" aria-label="Sobre o Nupieepro">
+            <i class="fa-solid fa-circle-info"></i>
+        </button>
+        <button class="header-icon-btn" onclick="abrirMeusPedidos()" aria-label="Meus pedidos">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+        </button>
     </div>
-    
-    <header>
-        <div class="header-compact-row">
-            <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="brand-logo">
-            <div class="brand-info">
-                <h1 class="brand">Nupiee<span>Pro</span></h1>
-                <div class="store-badge"><i class="fa-solid fa-store"></i> Oficial</div>
+
+    <div class="header-compact-row">
+        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo Nupieepro" class="brand-logo">
+        <div class="brand-info">
+            <h1 class="brand">Nupiee<span>Pro</span></h1>
+            <div class="store-badge"><i class="fa-solid fa-store"></i> Store</div>
+        </div>
+    </div>
+
+    <div class="sub-brand">Núcleo Piauiense de Estudantes de Engenharia de Produção</div>
+    <div class="welcome-msg">👋 Bem-vindo(a), Nupilover!</div>
+
+    <div class="header-busca">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        <input type="search" id="campo-busca" placeholder="Buscar produto..." autocomplete="off" maxlength="80" aria-label="Buscar produto">
+    </div>
+</header>
+
+<!-- ============================================================
+     FILTROS
+     ============================================================ -->
+<div class="filter-container">
+    <div class="filter-scroll" id="filtros-container">
+        <button class="filter-btn active" onclick="filtrarProdutos('todos', this)" aria-label="Todos os produtos">Todos</button>
+        <button class="filter-btn" onclick="filtrarProdutos('camisa', this)" aria-label="Filtrar camisas">Camisas</button>
+        <button class="filter-btn" onclick="filtrarProdutos('acessorio', this)" aria-label="Filtrar acessórios">Acessórios</button>
+        <button class="filter-btn" onclick="filtrarProdutos('favoritos', this)" aria-label="Meus favoritos">❤️ Favoritos</button>
+        <button class="filter-btn" id="btn-filtro-combos" style="display:none" onclick="filtrarProdutos('combo', this)" aria-label="Combos">🎁 Combos</button>
+    </div>
+</div>
+
+<!-- Contador de busca + controles de visualização -->
+<div class="contador-busca" id="contador-busca"></div>
+<div class="view-controls">
+    <button class="view-btn active" id="btn-grid" onclick="alterarView('grid')" aria-label="Visualização em grade"><i class="fa-solid fa-grip"></i></button>
+    <button class="view-btn" id="btn-lista" onclick="alterarView('lista')" aria-label="Visualização em lista"><i class="fa-solid fa-list"></i></button>
+</div>
+
+<!-- ============================================================
+     CARD DE CUPOM VISÍVEL NA VITRINE
+     ============================================================ -->
+<div id="card-cupom-vitrine" style="max-width:1100px;margin:0 auto 20px;padding:0 20px;position:relative;z-index:10;display:none">
+    <div style="background:linear-gradient(135deg,#0f0732 0%,#1a1245 100%);border-radius:20px;padding:20px 24px;border:1px solid rgba(248,89,0,0.35);box-shadow:0 8px 24px rgba(15,7,50,0.18);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <div style="background:var(--laranja-brand);border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px var(--laranja-glow)">
+            <i class="fa-solid fa-tag" style="color:#fff;font-size:1.1rem" aria-hidden="true"></i>
+        </div>
+        <div style="flex:1;min-width:200px">
+            <div style="color:var(--branco);font-weight:800;font-size:0.95rem;margin-bottom:4px">Tem cupom? Use antes de finalizar! 🎉</div>
+            <div style="color:rgba(255,255,255,0.7);font-size:0.8rem;line-height:1.5" id="cupom-vitrine-desc">Comece sua jornada na Engenharia de Produção com 10% de desconto em produtos como chaveiro, ecobag e bloco de notas.</div>
+        </div>
+        <button onclick="abrirCheckoutComCupom()" style="background:var(--laranja-brand);color:#fff;border:none;border-radius:12px;padding:10px 18px;font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 4px 12px var(--laranja-glow);flex-shrink:0">
+            Inserir cupom <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
+    </div>
+</div>
+
+<!-- ============================================================
+     VITRINE
+     ============================================================ -->
+<div class="container" id="vitrine-area">
+    <!-- Skeletons de carregamento -->
+    <div class="skeleton" aria-hidden="true"></div>
+    <div class="skeleton" aria-hidden="true"></div>
+    <div class="skeleton" aria-hidden="true"></div>
+    <div class="skeleton" aria-hidden="true"></div>
+</div>
+
+<!-- Vitrine vazia -->
+<div id="vitrine-vazia">
+    <i class="fa-solid fa-box-open" aria-hidden="true"></i>
+    <h3>Nenhum produto encontrado</h3>
+    <p>Tente outro termo ou categoria</p>
+</div>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+    <strong>NUPIEEPRO</strong>
+    <i class="fa-solid fa-heart" style="color:var(--azul-coracao);margin-left:5px;" aria-hidden="true"></i>
+    <i class="fa-solid fa-heart" style="color:var(--laranja-brand);margin-left:3px;" aria-hidden="true"></i>
+    &nbsp;·&nbsp;
+    <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer" aria-label="Instagram Nupieepro">
+        <i class="fa-brands fa-instagram"></i> @nupieepro
+    </a>
+</footer>
+
+<!-- ============================================================
+     LIGHTBOX
+     ============================================================ -->
+<div id="lightbox" role="dialog" aria-label="Foto ampliada">
+    <button class="close-lightbox" onclick="fecharLightbox()" aria-label="Fechar foto ampliada"><i class="fa-solid fa-xmark"></i></button>
+    <img id="lightbox-img" src="" alt="Foto ampliada do produto">
+</div>
+
+<!-- ============================================================
+     MODAL — DETALHES DO PRODUTO
+     ============================================================ -->
+<div class="modal-bg" id="modal-details" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Detalhes do produto">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+
+        <!-- Navegação entre produtos -->
+        <div class="nav-produto">
+            <button onclick="navegarProduto(-1)" aria-label="Produto anterior"><i class="fa-solid fa-arrow-left"></i> Anterior</button>
+            <button onclick="navegarProduto(1)" aria-label="Próximo produto">Próximo <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <!-- Carrossel de fotos -->
+        <div class="carrossel-wrapper" id="carrossel-wrapper">
+            <div class="carrossel-track" id="carrossel-track"></div>
+            <button class="carrossel-nav prev" onclick="moverCarrossel(-1)" aria-label="Foto anterior"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="carrossel-nav next" onclick="moverCarrossel(1)" aria-label="Próxima foto"><i class="fa-solid fa-chevron-right"></i></button>
+            <div class="carrossel-indicador" id="carrossel-indicador">1/1</div>
+        </div>
+
+        <!-- Info do produto -->
+        <h2 id="detalhe-nome" class="detail-title">Nome</h2>
+        <div class="detail-preco-row">
+            <div id="detalhe-preco" class="detail-price">R$ 0,00</div>
+            <div id="detalhe-preco-riscado" class="detail-price-riscado" style="display:none"></div>
+        </div>
+        <div id="detalhe-estoque" class="detail-estoque" style="display:none"></div>
+        <div id="detalhe-encomenda" class="detail-encomenda" style="display:none"></div>
+        <div id="detalhe-descricao" class="detail-descricao" style="display:none"></div>
+
+        <!-- Ações -->
+        <div class="modal-acoes">
+            <button class="btn-acao-sm" id="btn-fav-modal" onclick="toggleFavoritoModal()" aria-label="Favoritar produto">
+                <i class="fa-regular fa-heart"></i> Favoritar
+            </button>
+            <button class="btn-acao-sm" onclick="copiarLinkProduto()" aria-label="Copiar link do produto">
+                <i class="fa-solid fa-link"></i> Link
+            </button>
+            <button class="btn-acao-sm" onclick="gerarQrProduto()" aria-label="QR Code do produto">
+                <i class="fa-solid fa-qrcode"></i> QR
+            </button>
+        </div>
+
+        <!-- Tamanho (só pra camisa) -->
+        <div id="wrapper-tamanho" style="display:none">
+            <label class="input-label" for="select-tamanho">Tamanho:</label>
+            <select id="select-tamanho" class="nice-select" aria-label="Selecionar tamanho"></select>
+        </div>
+
+        <!-- Quantidade -->
+        <label class="input-label">Quantidade:</label>
+        <div class="qty-wrapper">
+            <button class="qty-btn" onclick="alterarQtd(-1)" aria-label="Diminuir quantidade"><i class="fa-solid fa-minus"></i></button>
+            <div class="qty-num" id="detalhe-qtd" aria-live="polite">1</div>
+            <button class="qty-btn" onclick="alterarQtd(1)" aria-label="Aumentar quantidade"><i class="fa-solid fa-plus"></i></button>
+        </div>
+
+        <button class="btn-primary" onclick="adicionarAoCarrinho()">
+            <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> Adicionar à Sacola
+        </button>
+
+        <!-- Produtos relacionados -->
+        <div id="relacionados-box" style="display:none">
+            <div class="relacionados-titulo">Você também pode gostar</div>
+            <div class="relacionados-scroll" id="relacionados-lista"></div>
+        </div>
+
+        <!-- Avaliações -->
+        <div class="avaliacoes-section">
+            <div class="avaliacoes-titulo">Avaliações</div>
+            <div id="lista-avaliacoes"></div>
+            <div class="form-avaliacao">
+                <div class="estrelas-input" id="estrelas-input" role="group" aria-label="Selecionar estrelas">
+                    <button class="estrela-btn" data-val="1" onclick="selecionarEstrela(1)" aria-label="1 estrela">★</button>
+                    <button class="estrela-btn" data-val="2" onclick="selecionarEstrela(2)" aria-label="2 estrelas">★</button>
+                    <button class="estrela-btn" data-val="3" onclick="selecionarEstrela(3)" aria-label="3 estrelas">★</button>
+                    <button class="estrela-btn" data-val="4" onclick="selecionarEstrela(4)" aria-label="4 estrelas">★</button>
+                    <button class="estrela-btn" data-val="5" onclick="selecionarEstrela(5)" aria-label="5 estrelas">★</button>
+                </div>
+                <textarea id="texto-avaliacao" class="input-box" placeholder="Conta o que achou do produto..." rows="2" maxlength="300" style="resize:none;margin-bottom:8px;" aria-label="Texto da avaliação"></textarea>
+                <input type="text" id="nome-avaliacao" class="input-box" placeholder="Seu nome" maxlength="50" aria-label="Seu nome para avaliação">
+                <button class="btn-secondary" onclick="confirmarAvaliacao()" style="margin-top:0">
+                    <i class="fa-solid fa-star" aria-hidden="true"></i> Enviar Avaliação
+                </button>
             </div>
         </div>
-        
-        <div class="sub-brand">Núcleo Piauiense de Estudantes de Engenharia de Produção</div>
-        <div class="welcome-msg">👋 Bem-vindo(a), Nupilover!</div>
-    </header>
-
-    <div class="filter-container">
-        <div class="filter-scroll">
-            <button class="filter-btn active" onclick="filtrarProdutos('todos', this)">Todos</button>
-            <button class="filter-btn" onclick="filtrarProdutos('camisa', this)">Camisas</button>
-            <button class="filter-btn" onclick="filtrarProdutos('acessorio', this)">Acessórios</button>
-        </div>
     </div>
+</div>
 
-    <div class="container" id="vitrine-area"></div>
+<!-- ============================================================
+     MODAL — CHECKOUT
+     ============================================================ -->
+<div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Finalizar pedido">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
 
-    <footer>
-        <strong>NUPIEEPRO 2026</strong> <i class="fa-solid fa-heart" style="color:var(--azul-coracao); margin-left:5px;"></i><i class="fa-solid fa-heart" style="color:var(--laranja-brand); margin-left:3px;"></i>
-    </footer>
+        <!-- Tela de sucesso (oculta inicialmente) -->
+        <div id="tela-sucesso">
+            <div class="sucesso-icon">🎉</div>
+            <div class="sucesso-titulo">Pedido enviado!</div>
+            <div id="sucesso-pedido-num" class="sucesso-pedido"></div>
+            <div class="sucesso-msg" id="sucesso-msg-motivacional"></div>
+            <button class="btn-primary" onclick="fecharModais(null)" style="margin-top:8px">
+                <i class="fa-solid fa-store" aria-hidden="true"></i> Continuar comprando
+            </button>
+            <button class="btn-secondary" onclick="abrirMeusPedidos()">
+                <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Ver meus pedidos
+            </button>
+            <button class="btn-secondary" onclick="imprimirPedido()" style="margin-top:0">
+                <i class="fa-solid fa-print" aria-hidden="true"></i> Imprimir comprovante
+            </button>
+            <button class="btn-secondary" onclick="compartilharCarrinho()" style="margin-top:0">
+                <i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Compartilhar pedido
+            </button>
+        </div>
 
-    <div class="modal-bg" id="modal-details" onclick="fecharModais(event)">
-        <div class="modal-panel">
-            <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <!-- Conteúdo do checkout -->
+        <div id="checkout-conteudo">
+            <h2 style="color:var(--roxo-brand);margin-bottom:16px;font-size:1.3rem;font-weight:800;">Finalizar Pedido</h2>
 
-            <div class="detail-img-box">
-                <img src="" id="detalhe-img" class="detail-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                <div id="detalhe-fallback" class="no-photo-placeholder" style="display:none; position:absolute; z-index:1;">
-                    <i class="fa-solid fa-box-open"></i><span>Sem Foto</span>
+            <!-- Steps -->
+            <div class="checkout-steps" aria-label="Etapas do pedido">
+                <div class="step ativo" id="step-1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Sacola</div>
+                </div>
+                <div class="step-linha" id="linha-1"></div>
+                <div class="step" id="step-2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Dados</div>
+                </div>
+                <div class="step-linha" id="linha-2"></div>
+                <div class="step" id="step-3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Pagamento</div>
+                </div>
+                <div class="step-linha" id="linha-3"></div>
+                <div class="step" id="step-4">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Confirmar</div>
                 </div>
             </div>
 
-            <h2 id="detalhe-nome" class="detail-title">Nome</h2>
-            <div id="detalhe-preco" class="detail-price">R$ 0,00</div>
-
-            <div id="wrapper-tamanho" style="display:none;">
-                <label style="font-size:0.85rem; font-weight:700; color:var(--texto-suave); margin-bottom:8px; display:block;">Tamanho:</label>
-                <select id="select-tamanho" class="nice-select">
-                    <option value="P - BBL (Baby Look)">P - BBL (Baby Look)</option>
-                    <option value="M - BBL (Baby Look)">M - BBL (Baby Look)</option>
-                    <option value="G - BBL (Baby Look)">G - BBL (Baby Look)</option>
-                    <option value="GG - BBL (Baby Look)">GG - BBL (Baby Look)</option>
-                    <option value="P - Normal">P - Normal</option>
-                    <option value="M - Normal">M - Normal</option>
-                    <option value="G - Normal">G - Normal</option>
-                    <option value="GG - Normal">GG - Normal</option>
-                </select>
-            </div>
-
-            <label style="font-size:0.85rem; font-weight:700; color:var(--texto-suave); margin-bottom:8px; display:block;">Quantidade:</label>
-            <div class="qty-wrapper">
-                <button class="qty-btn" onclick="alterarQtd(-1)"><i class="fa-solid fa-minus"></i></button>
-                <div class="qty-num" id="detalhe-qtd">1</div>
-                <button class="qty-btn" onclick="alterarQtd(1)"><i class="fa-solid fa-plus"></i></button>
-            </div>
-
-            <button class="btn-primary" onclick="adicionarAoCarrinho()">Adicionar à Sacola</button>
-        </div>
-    </div>
-
-    <div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)">
-        <div class="modal-panel">
-            <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
-            <h2 style="color:var(--roxo-brand); margin-bottom:20px; font-size:1.4rem; font-weight:800;">Finalizar Pedido</h2>
-
-            <ul class="cart-list" id="lista-carrinho"></ul>
-
-            <h3 style="color:var(--roxo-brand); font-size:1rem; margin:20px 0 10px; font-weight:700;">Seus Dados</h3>
-            <input type="text" id="nome-cliente" class="input-box" placeholder="Seu Nome Completo">
-            <input type="tel" id="zap-cliente" class="input-box" placeholder="WhatsApp com DDD">
-
-            <h3 style="color:var(--roxo-brand); font-size:1rem; margin:20px 0 10px; font-weight:700;">Entrega</h3>
-            <div class="radio-section">
-                <label class="radio-option">
-                    <input type="radio" name="entrega" value="Retirada UFPI" checked onchange="toggleEndereco()"> 
-                    <i class="fa-solid fa-building-columns" style="color:var(--texto-suave);"></i> Retirada (UFPI)
-                </label>
-                <label class="radio-option">
-                    <input type="radio" name="entrega" value="Entrega" onchange="toggleEndereco()"> 
-                    <i class="fa-solid fa-motorcycle" style="color:var(--texto-suave);"></i> Entrega (Verif. Taxa)
-                </label>
-            </div>
-            <div id="box-endereco" style="display:none;">
-                <input type="text" id="endereco-cliente" class="input-box" placeholder="Endereço para entrega">
-            </div>
-
-            <h3 style="color:var(--roxo-brand); font-size:1rem; margin:20px 0 10px; font-weight:700;">Pagamento</h3>
-            <div class="radio-section">
-                <label class="radio-option"><input type="radio" name="pgto" value="PIX" checked> PIX</label>
-                <label class="radio-option"><input type="radio" name="pgto" value="Dinheiro"> Dinheiro</label>
-                <label class="radio-option"><input type="radio" name="pgto" value="Cartão"> Cartão</label>
-            </div>
-
-            <button class="btn-primary" style="background:var(--verde-zap); margin-top:10px;" onclick="enviarPedidoZap()">
-                Enviar Pedido <i class="fa-brands fa-whatsapp"></i>
-            </button>
-        </div>
-    </div>
-
-    <div class="float-bar" id="barra-carrinho" onclick="abrirCheckout()">
-        <div style="line-height:1.2;">
-            <div id="barra-qtd" style="font-size: 0.75rem; opacity: 0.8; font-weight:500;">0 itens</div>
-            <div id="barra-total" style="font-weight: 800; font-size: 1.15rem; color: var(--laranja-brand);">R$ 0,00</div>
-        </div>
-        <div style="font-weight: 700; font-size:0.95rem;">Ver Sacola <i class="fa-solid fa-bag-shopping" style="margin-left:5px;"></i></div>
-    </div>
-            <script>
-        const whatsappDestino = "5586999976226"; 
-
-        const produtos = [
-            { id: 1, nome: "Camisa PRETA - Eng. Produção", preco: 38.00, tipo: "camisa", categoria: "camisa", img: "https://i.ibb.co/TDhnM6xW/unnamed.png" },
-            { id: 2, nome: "Camisa BRANCA - Eng. Produção", preco: 38.00, tipo: "camisa", categoria: "camisa", img: "https://i.ibb.co/bM9mqjXS/unnamed-1.png" },
-            { id: 3, nome: "Camisa AZUL - Eng. Produção", preco: 38.00, tipo: "camisa", categoria: "camisa", img: "https://i.ibb.co/qLzdtvkN/unnamed-2.png" },
-            { id: 4, nome: "Ecobag Nupieepro", preco: 22.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/7dj3kxt0/unnamed-3.png" },
-            { id: 5, nome: "Bloco de Anotações", preco: 16.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/hxxnxrbF/unnamed-4.png" },
-            { id: 6, nome: "Chaveiro Abridor", preco: 5.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/Kj00Xbys/unnamed-5.png" },
-            { id: 7, nome: "Bottons Personalizados", preco: 5.00, tipo: "unico", categoria: "acessorio", img: "https://i.ibb.co/mrsm95Kv/1769766015274.png" }
-        ];
-
-        let carrinho = [];
-        let itemSelecionado = null;
-        let qtdTemporaria = 1;
-        let filtroAtual = 'todos';
-
-        // --- INICIALIZAÇÃO ---
-        window.addEventListener('load', () => {
-            const splash = document.getElementById('splash-screen');
-            carregarDadosUsuario();
-            carregarVitrine();
-            
-            const urlParams = new URLSearchParams(window.location.search);
-            const produtoId = urlParams.get('id');
-
-            if (produtoId) {
-                const idInt = parseInt(produtoId);
-                if(produtos.find(p => p.id === idInt)) {
-                    abrirDetalhes(idInt);
-                }
-            }
-
-            setTimeout(() => {
-                splash.classList.add('hidden');
-                setTimeout(() => splash.style.display = 'none', 600);
-            }, 2200);
-        });
-
-        function mostrarToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${msg}`;
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
-        }
-
-        function filtrarProdutos(cat, btn) {
-            filtroAtual = cat;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-            carregarVitrine();
-        }
-
-        function compartilhar(id, event) {
-            event.stopPropagation(); 
-            const prod = produtos.find(p => p.id === id);
-            
-            const baseUrl = window.location.href.split('?')[0];
-            const linkDireto = `${baseUrl}?id=${id}`;
-
-            const textoShare = `Olha o que encontrei na Lojinha Nupieepro: ${prod.nome} por R$ ${prod.preco.toFixed(2)}!`;
-            
-            if (navigator.share) {
-                navigator.share({ title: 'Nupieepro Store', text: textoShare, url: linkDireto }).catch(console.error);
-            } else {
-                navigator.clipboard.writeText(linkDireto).then(() => {
-                    alert("Link do produto copiado: " + linkDireto);
-                });
-            }
-        }
-
-        const vitrineArea = document.getElementById('vitrine-area');
-        
-        function carregarVitrine() {
-            vitrineArea.innerHTML = '';
-            const produtosFiltrados = produtos.filter(p => filtroAtual === 'todos' || p.categoria === filtroAtual);
-
-            produtosFiltrados.forEach(p => {
-                let imgHTML = '';
-                if(p.img && p.img.length > 5) {
-                    imgHTML = `<img src="${p.img}" class="prod-img" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                               <div class="no-photo-placeholder" style="display:none;"><i class="fa-solid fa-image"></i><span>Ver Foto</span></div>`;
-                } else {
-                    let icon = p.nome.includes("Botton") ? "fa-certificate" : "fa-box-open";
-                    imgHTML = `<div class="no-photo-placeholder"><i class="fa-solid ${icon}" style="color:var(--laranja-brand)"></i><span>${p.nome}</span></div>`;
-                }
-
-                vitrineArea.innerHTML += `
-                    <div class="card" onclick="abrirDetalhes(${p.id})">
-                        <div class="share-btn" onclick="compartilhar(${p.id}, event)"><i class="fa-solid fa-share-nodes"></i></div>
-                        <div class="image-wrapper">${imgHTML}</div>
-                        <div class="card-info" onclick="abrirDetalhes(${p.id})">
-                            <div class="card-title">${p.nome}</div>
-                            <div class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
-                            <div class="tap-hint">Ver Detalhes</div>
-                        </div>
+            <!-- STEP 1: Sacola -->
+            <div id="checkout-step-1">
+                <!-- Cupom ANTES da sacola -->
+                <div class="cupom-section">
+                    <div class="cupom-section-titulo"><i class="fa-solid fa-tag" aria-hidden="true"></i> Insira seu cupom</div>
+                    <div class="cupom-row">
+                        <input type="text" id="campo-cupom" class="cupom-input" placeholder="Digite o código aqui" maxlength="20" autocomplete="off" aria-label="Código do cupom">
+                        <button class="cupom-btn" onclick="validarCupom()" aria-label="Aplicar cupom">Aplicar</button>
                     </div>
-                `;
+                    <div id="cupom-aplicado-box">
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        <span id="cupom-aplicado-texto"></span>
+                        <button class="cupom-remover" onclick="removerCupom()" aria-label="Remover cupom">✕</button>
+                    </div>
+                </div>
+
+                <ul class="cart-list" id="lista-carrinho" aria-label="Itens no carrinho"></ul>
+
+                <div class="resumo-valores" id="resumo-valores">
+                    <div class="resumo-linha"><span>Subtotal</span><span id="resumo-subtotal">R$ 0,00</span></div>
+                    <div class="resumo-linha desconto" id="resumo-desconto-linha" style="display:none"><span id="resumo-desconto-label">Desconto</span><span id="resumo-desconto-val"></span></div>
+                    <div class="resumo-linha total"><span>Total</span><span id="resumo-total">R$ 0,00</span></div>
+                </div>
+
+                <button class="btn-danger" onclick="limparCarrinho()" aria-label="Limpar carrinho">
+                    <i class="fa-solid fa-trash" aria-hidden="true"></i> Limpar sacola
+                </button>
+                <button class="btn-primary" onclick="irStep(2)" style="margin-top:12px">
+                    Continuar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <!-- STEP 2: Dados -->
+            <div id="checkout-step-2" style="display:none">
+                <label class="input-label" for="nome-cliente">Nome completo *</label>
+                <input type="text" id="nome-cliente" class="input-box" placeholder="Seu nome completo" maxlength="100" autocomplete="name" aria-required="true">
+
+                <label class="input-label" for="zap-cliente">WhatsApp *</label>
+                <input type="tel" id="zap-cliente" class="input-box" placeholder="(86) 9 9999-9999" maxlength="16" autocomplete="tel" aria-required="true">
+
+                <label class="input-label" for="email-cliente">E-mail</label>
+                <input type="email" id="email-cliente" class="input-box" placeholder="seu@email.com" maxlength="100" autocomplete="email">
+
+                <label class="input-label" style="margin-top:4px">Entrega *</label>
+                <label class="radio-option">
+                    <input type="radio" name="entrega" value="Retirada UFPI" checked onchange="toggleEndereco()">
+                    <i class="fa-solid fa-building-columns" style="color:var(--texto-suave);" aria-hidden="true"></i> Retirada (UFPI)
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="entrega" value="Entrega" onchange="toggleEndereco()">
+                    <i class="fa-solid fa-motorcycle" style="color:var(--texto-suave);" aria-hidden="true"></i> Entrega (verificar taxa)
+                </label>
+                <div id="box-endereco" style="display:none">
+                    <label class="input-label" for="endereco-cliente">Endereço *</label>
+                    <input type="text" id="endereco-cliente" class="input-box" placeholder="Rua, número, bairro" maxlength="200" autocomplete="street-address">
+                </div>
+
+                <label class="input-label">
+                    <input type="text" id="campo-obs" class="input-box" placeholder="Observações (opcional)" maxlength="300" style="margin-top:4px">
+                </label>
+
+                <label class="check-salvar">
+                    <input type="checkbox" id="check-salvar-dados" checked aria-label="Salvar dados para próximas compras">
+                    Salvar meus dados para próximas compras
+                </label>
+
+                <div style="display:flex;gap:10px;margin-top:4px">
+                    <button class="btn-secondary" onclick="irStep(1)" style="margin-top:0;flex:1">
+                        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Voltar
+                    </button>
+                    <button class="btn-primary" onclick="irStep(3)" style="flex:2">
+                        Continuar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Pagamento -->
+            <div id="checkout-step-3" style="display:none">
+                <label class="input-label" style="margin-bottom:10px">Forma de pagamento *</label>
+
+                <div class="pix-destaque ativo" id="pix-destaque">
+                    <i class="fa-solid fa-bolt" aria-hidden="true"></i> PIX = confirmação mais rápida!
+                </div>
+
+                <label class="radio-option">
+                    <input type="radio" name="pgto" value="PIX" checked onchange="togglePix()"> PIX
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="pgto" value="Dinheiro" onchange="togglePix()"> Dinheiro
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="pgto" value="Cartão" onchange="togglePix()"> Cartão
+                </label>
+
+                <!-- Aviso pagamento presencial -->
+                <div id="aviso-pgto-presencial" style="display:none;background:#f8f9fc;border-radius:12px;padding:12px;font-size:0.85rem;color:var(--texto-suave);margin-bottom:12px;">
+                    <i class="fa-solid fa-circle-info" aria-hidden="true"></i> Pagamento realizado na retirada ou entrega.
+                </div>
+
+                <!-- Seção PIX -->
+                <div class="pix-section ativo" id="pix-section">
+                    <div class="pix-valor" id="pix-valor-texto">R$ 0,00</div>
+                    <div class="pix-qr" id="pix-qr-container">
+                        <canvas id="pix-qr-canvas"></canvas>
+                    </div>
+                    <div class="pix-chave">
+                        <strong>Chave PIX:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3157585f505f525458435e5f444158545441435e71565c50585d1f525e5c">[email&#160;protected]</a>
+                    </div>
+                    <button class="pix-copiar" onclick="copiarChavePix()" aria-label="Copiar chave PIX">
+                        <i class="fa-solid fa-copy" aria-hidden="true"></i> Copiar chave
+                    </button>
+                    <div class="pix-timer" id="pix-timer" aria-live="polite">⏱️ QR code válido por <span id="pix-countdown">30:00</span></div>
+                </div>
+
+                <div style="display:flex;gap:10px;margin-top:8px">
+                    <button class="btn-secondary" onclick="irStep(2)" style="margin-top:0;flex:1">
+                        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Voltar
+                    </button>
+                    <button class="btn-primary" onclick="irStep(4)" style="flex:2">
+                        Continuar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 4: Confirmar -->
+            <div id="checkout-step-4" style="display:none">
+                <div class="checklist-confirmacao ativo">
+                    <h4><i class="fa-solid fa-clipboard-check" aria-hidden="true"></i> Confirme seu pedido</h4>
+                    <div class="check-item"><i class="fa-solid fa-check" aria-hidden="true"></i><span id="confirm-itens"></span></div>
+                    <div class="check-item"><i class="fa-solid fa-check" aria-hidden="true"></i><span id="confirm-cliente"></span></div>
+                    <div class="check-item"><i class="fa-solid fa-check" aria-hidden="true"></i><span id="confirm-entrega"></span></div>
+                    <div class="check-item"><i class="fa-solid fa-check" aria-hidden="true"></i><span id="confirm-pgto"></span></div>
+                    <div class="check-item"><i class="fa-solid fa-check" aria-hidden="true"></i><span id="confirm-total"></span></div>
+                </div>
+
+                <div style="display:flex;gap:10px">
+                    <button class="btn-secondary" onclick="irStep(3)" style="margin-top:0;flex:1">
+                        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Voltar
+                    </button>
+                    <button class="btn-primary" onclick="enviarPedidoZap()" style="flex:2;background:var(--verde-zap)">
+                        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Enviar Pedido
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL — MEUS PEDIDOS
+     ============================================================ -->
+<div class="modal-bg" id="modal-pedidos" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Meus pedidos">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+        <h2 style="color:var(--roxo-brand);margin-bottom:16px;font-size:1.3rem;font-weight:800;">
+            <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Meus Pedidos
+        </h2>
+        <button class="btn-secondary" onclick="abrirCarteirinha()" style="margin-bottom:16px;margin-top:0">
+            <i class="fa-solid fa-id-card" aria-hidden="true"></i> Minha Carteirinha Digital
+        </button>
+        <div id="lista-historico-pedidos"></div>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL — CARTEIRINHA DIGITAL
+     ============================================================ -->
+<div class="modal-bg" id="modal-carteirinha" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Carteirinha digital">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+        <h2 style="color:var(--roxo-brand);margin-bottom:20px;font-size:1.2rem;font-weight:800;">
+            <i class="fa-solid fa-id-card" aria-hidden="true"></i> Minha Carteirinha
+        </h2>
+        <div class="carteirinha">
+            <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo Nupieepro" class="carteirinha-logo">
+            <div class="carteirinha-nome" id="carteirinha-nome">—</div>
+            <div class="carteirinha-sub">Nupilover · NUPIEEPRO Store</div>
+            <div class="carteirinha-qr" id="carteirinha-qr">
+                <img id="carteirinha-qr-img" src="" alt="QR Code pessoal">
+            </div>
+            <div class="carteirinha-num" id="carteirinha-num"></div>
+        </div>
+        <p style="font-size:0.75rem;color:var(--texto-suave);text-align:center;margin-top:16px">
+            Apresente no stand físico do Nupieepro 🧡
+        </p>
+        <button class="btn-primary" onclick="imprimirCarteirinha()" style="margin-top:16px">
+            <i class="fa-solid fa-print" aria-hidden="true"></i> Salvar / Imprimir
+        </button>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL — SOBRE O NUPIEEPRO
+     ============================================================ -->
+<div class="modal-bg" id="modal-sobre" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Sobre o Nupieepro">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo Nupieepro" class="sobre-logo">
+        <div class="sobre-titulo">NUPIEEPRO</div>
+        <div class="sobre-subtitulo">Núcleo Piauiense de Estudantes de Engenharia de Produção</div>
+        <p class="sobre-texto">
+            O Núcleo Piauiense de Estudantes de Engenharia de Produção (NUPIEEPRO), da Universidade Federal do Piauí (UFPI), dedica-se à realização de eventos, treinamentos e projetos, entre outras atividades, com o objetivo de promover experiências na área de Engenharia de Produção, buscando, simultaneamente, ampliar as oportunidades e o reconhecimento do campo no Estado.
+        </p>
+        <p class="sobre-texto">
+            Fundado em 2015, tem se destacado no desenvolvimento de iniciativas voltadas à inovação, sendo duas vezes apontado pela Associação Brasileira de Engenharia de Produção (ABEPRO Jovem) como o <strong>Núcleo Mais Inovador do Brasil</strong> e eleito o <strong>Maior Núcleo do Brasil</strong>.
+        </p>
+        <div class="sobre-badges">
+            <span class="sobre-badge">🏆 Mais Inovador 2x</span>
+            <span class="sobre-badge">🥇 Maior Núcleo do Brasil</span>
+            <span class="sobre-badge">📅 Desde 2015</span>
+        </div>
+        <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer" class="btn-primary" style="text-decoration:none">
+            <i class="fa-brands fa-instagram" aria-hidden="true"></i> Seguir no Instagram
+        </a>
+    </div>
+</div>
+
+<!-- ============================================================
+     BARRA FLUTUANTE CARRINHO
+     ============================================================ -->
+<div class="float-bar" id="barra-carrinho" onclick="abrirCheckout()" role="button" aria-label="Ver sacola" tabindex="0">
+    <div style="line-height:1.2">
+        <div id="barra-qtd" style="font-size:0.75rem;opacity:0.8;font-weight:500">0 itens</div>
+        <div id="barra-total" style="font-weight:800;font-size:1.15rem;color:var(--laranja-brand)">R$ 0,00</div>
+    </div>
+    <div style="font-weight:700;font-size:0.95rem">
+        Ver Sacola <i class="fa-solid fa-bag-shopping" style="margin-left:5px" aria-hidden="true"></i>
+    </div>
+</div>
+
+<!-- Botão voltar ao topo -->
+<button id="btn-topo" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Voltar ao topo">
+    <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+</button>
+
+<!-- Controle de tamanho de fonte -->
+<div id="ctrl-fonte" aria-label="Ajustar tamanho da fonte">
+    <button class="fonte-btn" onclick="ajustarFonte('grande')" aria-label="Fonte grande" title="Fonte grande">A+</button>
+    <button class="fonte-btn" onclick="ajustarFonte('media')" aria-label="Fonte média" title="Fonte normal" style="font-size:0.65rem">A</button>
+    <button class="fonte-btn" onclick="ajustarFonte('pequena')" aria-label="Fonte pequena" title="Fonte pequena" style="font-size:0.55rem">A-</button>
+</div>
+
+<!-- Aviso offline -->
+<div id="aviso-offline" role="alert">
+    📡 Você está offline. Exibindo dados em cache.
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+<script>
+/* ============================================================
+   NUPIEEPRO STORE — JavaScript Principal
+   Versão: 1.1.0
+   ============================================================ */
+
+/* ── URL DA API (Apps Script) ── */
+const API_URL = 'https://script.google.com/macros/s/AKfycbw4Qk03yzsQEXE0qXstLuZlY0lx12aqrrXkdUwkeHykDD4KhVx8Ti4S4fNbLnYtg6uTwA/exec';
+
+/* ============================================================
+   API — CARREGA PRODUTOS, CONFIG E CUPONS DO SHEETS
+   ============================================================ */
+async function carregarDadosAPI(){
+    try {
+        const res = await fetch(`${API_URL}?action=config`);
+        const cfg = await res.json();
+
+        if(cfg.manutencao === 'true' || cfg.manutencao === true){
+            document.getElementById('tela-manutencao').classList.add('ativa');
+            return false;
+        }
+        if(cfg.pausar_checkout === 'true'){
+            window._checkoutPausado = true;
+        }
+        if(cfg.aviso_topo_ativo === 'true' && cfg.aviso_topo_texto){
+            const el = document.getElementById('aviso-topo');
+            el.textContent = cfg.aviso_topo_texto;
+            el.className   = `ativo ${cfg.aviso_topo_tipo || 'info'}`;
+        }
+        if(cfg.mensagem_boas_vindas){
+            const el = document.querySelector('.welcome-msg');
+            if(el) el.textContent = '👋 ' + cfg.mensagem_boas_vindas;
+        }
+        if(cfg.nome_loja) document.title = cfg.nome_loja;
+    } catch(e){}
+
+    try {
+        const res  = await fetch(`${API_URL}?action=produtos`);
+        const data = await res.json();
+        if(Array.isArray(data) && data.length > 0){
+            data.forEach(p => {
+                p.img      = p.imagens || [];
+                p.tipo     = p.tipo    || 'unico';
+                p.tamanhos = p.tamanhos || [];
             });
+            produtos.splice(0, produtos.length, ...data);
+        }
+    } catch(e){}
+
+    try {
+        const res  = await fetch(`${API_URL}?action=cupons`);
+        const data = await res.json();
+        if(data.tem_cupom_ativo){
+            document.getElementById('card-cupom-vitrine').style.display = 'block';
+        }
+    } catch(e){}
+
+    try {
+        const res  = await fetch(`${API_URL}?action=combos`);
+        const data = await res.json();
+        if(Array.isArray(data) && data.length > 0){
+            const btn = document.getElementById('btn-filtro-combos');
+            if(btn) btn.style.display = 'block';
+        }
+    } catch(e){}
+
+    return true;
+}
+
+async function validarCupomAPI(codigo, subtotal){
+    try {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'validar_cupom', codigo, subtotal })
+        });
+        return await res.json();
+    } catch(e){ return null; }
+}
+
+async function registrarPedidoAPI(dados){
+    try {
+        await fetch(API_URL, {
+            method: 'POST',
+            body: JSON.stringify({ action: 'registrar_pedido', ...dados })
+        });
+    } catch(e){}
+}
+
+/* ── SEGURANÇA: detecta DevTools ── */
+(function(){
+    const threshold = 160;
+    setInterval(()=>{
+        if(window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold){
+            document.title = '⚠️ NUPIEEPRO STORE';
+        } else {
+            document.title = 'NUPIEEPRO STORE';
+        }
+    }, 1000);
+})();
+
+/* ── SEGURANÇA: sanitiza texto ── */
+function sanitizar(str){
+    if(typeof str !== 'string') return '';
+    return str.replace(/[<>"'&]/g, c => ({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;','&':'&amp;'}[c]));
+}
+
+/* ── SEGURANÇA: rate limit ── */
+const _rl = { ult: 0, tentativas: 0 };
+function verificarRateLimit(){
+    const agora = Date.now();
+    if(agora - _rl.ult < 30000){
+        _rl.tentativas++;
+        if(_rl.tentativas > 3){
+            const espera = Math.ceil((30000 - (agora - _rl.ult)) / 1000);
+            mostrarToast(`⏳ Aguarde ${espera}s antes de enviar outro pedido.`, true);
+            return false;
+        }
+    } else {
+        _rl.tentativas = 0;
+    }
+    _rl.ult = agora;
+    return true;
+}
+
+/* ── SEGURANÇA: ofusca WhatsApp destino ── */
+const _w = atob('NTU4Njk5OTk3NjIyNg==');
+
+/* ============================================================
+   DADOS — PRODUTOS (hardcoded até Apps Script estar no ar)
+   TODO: substituir por carregarProdutosSheets() futuramente
+   ============================================================ */
+const produtos = [
+    {
+        id: 1, nome: "Camisa PRETA — Eng. Produção",
+        preco: 40.00, tipo: "camisa", categoria: "camisa",
+        img: ["https://i.ibb.co/TDhnM6xW/unnamed.png"],
+        descricao: "Camisa oficial do NUPIEEPRO. 100% algodão, corte regular. Produto feito sob encomenda.",
+        tamanhos: ["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],
+        estoque: 99, destaque: true, novo: false, encomenda: true,
+        prazo_encomenda: "Apenas sob encomenda", badge_extra: ""
+    },
+    {
+        id: 2, nome: "Camisa BRANCA — Eng. Produção",
+        preco: 40.00, tipo: "camisa", categoria: "camisa",
+        img: ["https://i.ibb.co/bM9mqjXS/unnamed-1.png"],
+        descricao: "Camisa oficial do NUPIEEPRO. 100% algodão, corte regular. Produto feito sob encomenda.",
+        tamanhos: ["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],
+        estoque: 99, destaque: false, novo: false, encomenda: true,
+        prazo_encomenda: "Apenas sob encomenda", badge_extra: ""
+    },
+    {
+        id: 3, nome: "Camisa AZUL — Eng. Produção",
+        preco: 40.00, tipo: "camisa", categoria: "camisa",
+        img: ["https://i.ibb.co/qLzdtvkN/unnamed-2.png"],
+        descricao: "Camisa oficial do NUPIEEPRO. 100% algodão, corte regular. Produto feito sob encomenda.",
+        tamanhos: ["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],
+        estoque: 99, destaque: false, novo: false, encomenda: true,
+        prazo_encomenda: "Apenas sob encomenda", badge_extra: ""
+    },
+    {
+        id: 4, nome: "Ecobag Nupieepro",
+        preco: 22.00, tipo: "unico", categoria: "acessorio",
+        img: ["https://i.ibb.co/7dj3kxt0/unnamed-3.png"],
+        descricao: "Ecobag resistente com a identidade visual do NUPIEEPRO.",
+        tamanhos: [], estoque: 20, destaque: false, novo: false, encomenda: false,
+        prazo_encomenda: "", badge_extra: ""
+    },
+    {
+        id: 5, nome: "Bloco de Notas",
+        preco: 15.00, tipo: "unico", categoria: "acessorio",
+        img: ["https://i.ibb.co/hxxnxrbF/unnamed-4.png"],
+        descricao: "Bloco de notas personalizado com a marca do NUPIEEPRO.",
+        tamanhos: [], estoque: 30, destaque: false, novo: false, encomenda: false,
+        prazo_encomenda: "", badge_extra: ""
+    },
+    {
+        id: 6, nome: "Chaveiro Abridor",
+        preco: 4.00, tipo: "unico", categoria: "acessorio",
+        img: ["https://i.ibb.co/Kj00Xbys/unnamed-5.png"],
+        descricao: "Chaveiro abridor personalizado NUPIEEPRO. Prático e estiloso!",
+        tamanhos: [], estoque: 50, destaque: false, novo: false, encomenda: false,
+        prazo_encomenda: "", badge_extra: ""
+    },
+    {
+        id: 7, nome: "Botton Personalizado",
+        preco: 3.00, tipo: "unico", categoria: "acessorio",
+        img: ["https://i.ibb.co/mrsm95Kv/1769766015274.png"],
+        descricao: "Botton personalizado com a identidade do NUPIEEPRO.",
+        tamanhos: [], estoque: 100, destaque: false, novo: false, encomenda: false,
+        prazo_encomenda: "", badge_extra: ""
+    }
+];
+
+/* ============================================================
+   CUPONS (admin define — hardcoded até Apps Script)
+   ============================================================ */
+const cupons = {
+    'CALOUROEP10': {
+        tipo: 'percentual',
+        valor: 10,
+        produtos_ids: [4, 5, 6], /* ecobag, bloco de notas, chaveiro */
+        minimo: 0,
+        limite: 500,
+        usos: 0,
+        ativo: true,
+        descricao: 'Comece sua jornada na Engenharia de Produção com 10% de desconto em produtos como chaveiro, ecobag e bloco de notas.'
+    }
+};
+
+/* ============================================================
+   ESTADO GLOBAL
+   ============================================================ */
+let carrinho        = [];
+let itemSelecionado = null;
+let qtdTemporaria   = 1;
+let filtroAtual     = 'todos';
+let termoBusca      = '';
+let viewAtual       = 'grid';
+let cupomAplicado   = null;
+let carrosselIdx    = 0;
+let stepAtual       = 1;
+let pixTimer        = null;
+let estrelaSelecionada = 0;
+let produtosFiltradosAtual = [];
+
+/* ============================================================
+   INICIALIZAÇÃO
+   ============================================================ */
+window.addEventListener('load', () => {
+    /* Registra service worker */
+    if('serviceWorker' in navigator){
+        navigator.serviceWorker.register('/sw.js').catch(()=>{});
+    }
+
+    /* Monitora conexão */
+    window.addEventListener('offline', () => document.getElementById('aviso-offline').classList.add('ativo'));
+    window.addEventListener('online',  () => document.getElementById('aviso-offline').classList.remove('ativo'));
+    if(!navigator.onLine) document.getElementById('aviso-offline').classList.add('ativo');
+
+    /* Botão topo + controle de fonte */
+    window.addEventListener('scroll', () => {
+        const btn = document.getElementById('btn-topo');
+        const ctrl = document.getElementById('ctrl-fonte');
+        if(window.scrollY > 300){
+            btn.classList.add('visivel');
+            ctrl.classList.add('visivel');
+        } else {
+            btn.classList.remove('visivel');
+            ctrl.classList.remove('visivel');
+        }
+    });
+
+    /* Pull to refresh */
+    let startY = 0;
+    document.addEventListener('touchstart', e => { startY = e.touches[0].clientY; });
+    document.addEventListener('touchend', e => {
+        if(window.scrollY === 0 && e.changedTouches[0].clientY - startY > 80){
+            carregarVitrine();
+            mostrarToast('🔄 Vitrine atualizada!');
+        }
+    });
+
+    /* Atalho ESC fecha modais */
+    document.addEventListener('keydown', e => {
+        if(e.key === 'Escape') fecharModais(null);
+    });
+
+    carregarDadosUsuario();
+    carregarCarrinhoStorage();
+
+    /* Restaura tamanho de fonte salvo */
+    const fonteSalva = localStorage.getItem('nupieepro_fonte');
+    if(fonteSalva) document.body.classList.add('fonte-'+fonteSalva);
+
+    /* Carrega dados da API e depois renderiza a vitrine */
+    carregarDadosAPI().then(() => {
+        carregarVitrine();
+        verificarBannerCupom();
+    });
+
+    /* Deep link por ?id= */
+    const params = new URLSearchParams(window.location.search);
+    const prodId = params.get('id');
+    const acao   = params.get('acao');
+
+    if(prodId){
+        const id = parseInt(prodId);
+        if(produtos.find(p => p.id === id)) setTimeout(() => abrirDetalhes(id), 2300);
+    }
+    if(acao === 'pedidos') setTimeout(() => abrirMeusPedidos(), 2300);
+    if(acao === 'buscar')  setTimeout(() => document.getElementById('campo-busca').focus(), 2300);
+
+    /* Esconde splash */
+    const splash = document.getElementById('splash-screen');
+    setTimeout(() => {
+        splash.classList.add('hidden');
+        setTimeout(() => splash.style.display = 'none', 600);
+    }, 2200);
+});
+
+/* ============================================================
+   BUSCA EM TEMPO REAL
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('campo-busca').addEventListener('input', function(){
+        termoBusca = sanitizar(this.value.trim().toLowerCase());
+        carregarVitrine();
+    });
+});
+
+/* ============================================================
+   VITRINE
+   ============================================================ */
+function carregarVitrine(){
+    const area = document.getElementById('vitrine-area');
+    const vazio = document.getElementById('vitrine-vazia');
+    const contador = document.getElementById('contador-busca');
+    area.innerHTML = '';
+
+    let lista = produtos.filter(p => {
+        /* Filtra por disponibilidade */
+        if(p.estoque === 0 && !p.encomenda) return false; /* remove esgotados sem encomenda */
+
+        /* Filtra favoritos */
+        if(filtroAtual === 'favoritos'){
+            const favs = JSON.parse(localStorage.getItem('nupieepro_favs') || '[]');
+            return favs.includes(p.id);
         }
 
-        function abrirDetalhes(id) {
-            itemSelecionado = produtos.find(p => p.id === id);
-            qtdTemporaria = 1;
+        /* Filtra categoria */
+        if(filtroAtual !== 'todos' && filtroAtual !== 'favoritos'){
+            if(p.categoria !== filtroAtual) return false;
+        }
 
-            document.getElementById('detalhe-nome').innerText = itemSelecionado.nome;
-            document.getElementById('detalhe-preco').innerText = `R$ ${itemSelecionado.preco.toFixed(2).replace('.',',')}`;
-            document.getElementById('detalhe-qtd').innerText = qtdTemporaria;
+        /* Filtra busca */
+        if(termoBusca){
+            return p.nome.toLowerCase().includes(termoBusca) ||
+                   p.categoria.toLowerCase().includes(termoBusca) ||
+                   (p.descricao && p.descricao.toLowerCase().includes(termoBusca));
+        }
 
-            const imgEl = document.getElementById('detalhe-img');
-            const fallbackEl = document.getElementById('detalhe-fallback');
-            
-            if(itemSelecionado.img) {
-                imgEl.src = itemSelecionado.img; imgEl.style.display = 'block'; fallbackEl.style.display = 'none';
-            } else {
-                imgEl.style.display = 'none'; fallbackEl.style.display = 'flex';
-                fallbackEl.querySelector('i').className = itemSelecionado.nome.includes("Botton") ? "fa-solid fa-certificate" : "fa-solid fa-box-open";
+        return true;
+    });
+
+    produtosFiltradosAtual = lista;
+
+    /* Contador de busca */
+    if(termoBusca){
+        contador.textContent = `${lista.length} produto${lista.length !== 1 ? 's' : ''} encontrado${lista.length !== 1 ? 's' : ''}`;
+        contador.classList.add('ativo');
+    } else {
+        contador.classList.remove('ativo');
+    }
+
+    if(lista.length === 0){
+        vazio.classList.add('ativo');
+        return;
+    }
+    vazio.classList.remove('ativo');
+
+    lista.forEach((p, idx) => {
+        const favs = JSON.parse(localStorage.getItem('nupieepro_favs') || '[]');
+        const ehFav = favs.includes(p.id);
+        const reacoes = JSON.parse(localStorage.getItem('nupieepro_reacoes') || '{}');
+        const r = reacoes[p.id] || {fogo:0, coracao:0, uau:0};
+        const esgotado = p.estoque === 0;
+        const ultimas  = p.estoque > 0 && p.estoque < 10;
+
+        /* Badges */
+        let badges = '';
+        if(p.destaque)  badges += `<span class="badge badge-destaque">⭐ Destaque</span>`;
+        if(p.novo)      badges += `<span class="badge badge-novo">✨ Novo</span>`;
+        if(p.badge_extra === 'promocao') badges += `<span class="badge badge-promocao">🔥 Promoção</span>`;
+        if(p.encomenda) badges += `<span class="badge badge-encomenda">📦 Encomenda</span>`;
+        if(esgotado)    badges += `<span class="badge badge-esgotado">Esgotado</span>`;
+        if(ultimas)     badges += `<span class="badge badge-ultimas">⚡ Últimas unidades</span>`;
+
+        /* Imagem */
+        const imgSrc = (p.img && p.img.length > 0) ? p.img[0] : '';
+        const imgHTML = imgSrc
+            ? `<img src="${imgSrc}" class="prod-img" loading="lazy" alt="${sanitizar(p.nome)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+            : '';
+
+        /* Animação entrada em cascata */
+        const delay = idx * 60;
+
+        const card = document.createElement('div');
+        card.className = `card${p.destaque ? ' destaque' : ''}${esgotado ? ' esgotado' : ''}`;
+        card.style.animation = `fadeUp 0.4s ease ${delay}ms both`;
+        card.innerHTML = `
+            <button class="fav-btn${ehFav?' ativo':''}" onclick="toggleFavorito(${p.id},event)" aria-label="${ehFav?'Remover dos favoritos':'Adicionar aos favoritos'}">
+                <i class="fa-${ehFav?'solid':'regular'} fa-heart" aria-hidden="true"></i>
+            </button>
+            <button class="share-btn" onclick="compartilhar(${p.id},event)" aria-label="Compartilhar produto">
+                <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+            </button>
+            <div class="image-wrapper" onclick="abrirDetalhes(${p.id})">
+                ${imgHTML}
+                <div class="no-photo-placeholder" style="${imgSrc?'display:none':''}">
+                    <i class="fa-solid fa-box-open" aria-hidden="true"></i>
+                    <span>${sanitizar(p.nome)}</span>
+                </div>
+                <div class="badge-wrapper">${badges}</div>
+            </div>
+            <div class="card-info" onclick="abrirDetalhes(${p.id})">
+                <div class="card-title">${sanitizar(p.nome)}</div>
+                <div class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
+                ${p.estoque > 0 && p.estoque < 10 ? `<div class="card-desconto">Restam ${p.estoque} unidades</div>` : ''}
+                ${p.encomenda ? `<div class="card-desconto" style="color:var(--laranja-brand);font-weight:700">📦 Apenas sob encomenda</div>` : ''}
+                <div class="tap-hint">Ver Detalhes</div>
+            </div>
+        `;
+        area.appendChild(card);
+    });
+}
+
+/* ============================================================
+   FILTROS E VIEW
+   ============================================================ */
+function filtrarProdutos(cat, btn){
+    filtroAtual = cat;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if(btn) btn.classList.add('active');
+    carregarVitrine();
+}
+
+function alterarView(tipo){
+    viewAtual = tipo;
+    const area = document.getElementById('vitrine-area');
+    const btnGrid = document.getElementById('btn-grid');
+    const btnLista = document.getElementById('btn-lista');
+    if(tipo === 'lista'){
+        area.classList.add('lista');
+        btnLista.classList.add('active');
+        btnGrid.classList.remove('active');
+    } else {
+        area.classList.remove('lista');
+        btnGrid.classList.add('active');
+        btnLista.classList.remove('active');
+    }
+}
+
+/* ============================================================
+   FAVORITOS
+   ============================================================ */
+function toggleFavorito(id, event){
+    if(event) event.stopPropagation();
+    let favs = JSON.parse(localStorage.getItem('nupieepro_favs') || '[]');
+    if(favs.includes(id)){
+        favs = favs.filter(f => f !== id);
+        mostrarToast('💔 Removido dos favoritos');
+    } else {
+        favs.push(id);
+        mostrarToast('❤️ Adicionado aos favoritos!');
+    }
+    localStorage.setItem('nupieepro_favs', JSON.stringify(favs));
+    carregarVitrine();
+}
+
+function toggleFavoritoModal(){
+    if(!itemSelecionado) return;
+    toggleFavorito(itemSelecionado.id, null);
+    atualizarBtnFavModal();
+}
+
+function atualizarBtnFavModal(){
+    if(!itemSelecionado) return;
+    const favs = JSON.parse(localStorage.getItem('nupieepro_favs') || '[]');
+    const btn = document.getElementById('btn-fav-modal');
+    if(favs.includes(itemSelecionado.id)){
+        btn.classList.add('fav-ativo');
+        btn.innerHTML = '<i class="fa-solid fa-heart" aria-hidden="true"></i> Favoritado';
+    } else {
+        btn.classList.remove('fav-ativo');
+        btn.innerHTML = '<i class="fa-regular fa-heart" aria-hidden="true"></i> Favoritar';
+    }
+}
+
+/* ============================================================
+   REAÇÕES
+   ============================================================ */
+function reagir(id, tipo, event){
+    if(event) event.stopPropagation();
+    let reacoes = JSON.parse(localStorage.getItem('nupieepro_reacoes') || '{}');
+    if(!reacoes[id]) reacoes[id] = {fogo:0, coracao:0, uau:0};
+    reacoes[id][tipo] = (reacoes[id][tipo] || 0) + 1;
+    localStorage.setItem('nupieepro_reacoes', JSON.stringify(reacoes));
+    carregarVitrine();
+}
+
+/* ============================================================
+   BANNER CUPOM
+   ============================================================ */
+function verificarBannerCupom(){
+    const temCupomAtivo = Object.values(cupons).some(c => c.ativo);
+    const card = document.getElementById('card-cupom-vitrine');
+    const descEl = document.getElementById('cupom-vitrine-desc');
+    if(temCupomAtivo && card){
+        /* Pega descrição do primeiro cupom ativo */
+        for(const cup of Object.values(cupons)){
+            if(cup.ativo && cup.descricao){
+                descEl.textContent = cup.descricao;
+                break;
             }
-
-            document.getElementById('wrapper-tamanho').style.display = (itemSelecionado.tipo === 'camisa') ? 'block' : 'none';
-            document.getElementById('modal-details').classList.add('active');
         }
+        card.style.display = 'block';
+    }
+}
 
-        function fecharModais(e) {
-            if(e && e.target !== e.currentTarget) return;
-            document.getElementById('modal-details').classList.remove('active');
-            document.getElementById('modal-checkout').classList.remove('active');
-            const baseUrl = window.location.href.split('?')[0];
-            window.history.replaceState({}, document.title, baseUrl);
+/* Abre checkout já rolando pro campo de cupom */
+function abrirCheckoutComCupom(){
+    if(carrinho.length === 0){
+        mostrarToast('🛍️ Adicione produtos à sacola primeiro!', true);
+        return;
+    }
+    abrirCheckout();
+    setTimeout(() => {
+        const campo = document.getElementById('campo-cupom');
+        if(campo){ campo.focus(); campo.scrollIntoView({behavior:'smooth', block:'center'}); }
+    }, 400);
+}
+
+/* ============================================================
+   MODAL PRODUTO
+   ============================================================ */
+function abrirDetalhes(id){
+    itemSelecionado = produtos.find(p => p.id === id);
+    if(!itemSelecionado) return;
+    qtdTemporaria = 1;
+    carrosselIdx  = 0;
+
+    /* Nome e preço */
+    document.getElementById('detalhe-nome').textContent = itemSelecionado.nome;
+    document.getElementById('detalhe-preco').textContent = `R$ ${itemSelecionado.preco.toFixed(2).replace('.',',')}`;
+    document.getElementById('detalhe-preco-riscado').style.display = 'none';
+
+    /* Descrição */
+    const descEl = document.getElementById('detalhe-descricao');
+    if(itemSelecionado.descricao){
+        descEl.textContent = itemSelecionado.descricao;
+        descEl.style.display = 'block';
+    } else {
+        descEl.style.display = 'none';
+    }
+
+    /* Estoque */
+    const estEl = document.getElementById('detalhe-estoque');
+    if(itemSelecionado.estoque > 0 && itemSelecionado.estoque < 10){
+        estEl.textContent = `⚡ Restam apenas ${itemSelecionado.estoque} unidades!`;
+        estEl.style.display = 'block';
+    } else {
+        estEl.style.display = 'none';
+    }
+
+    /* Encomenda */
+    const encEl = document.getElementById('detalhe-encomenda');
+    if(itemSelecionado.encomenda){
+        encEl.textContent = `📦 Produto sob encomenda${itemSelecionado.prazo_encomenda ? ' — ' + itemSelecionado.prazo_encomenda : ''}`;
+        encEl.style.display = 'block';
+    } else {
+        encEl.style.display = 'none';
+    }
+
+    /* Carrossel */
+    construirCarrossel();
+
+    /* Tamanhos */
+    const wrapTam = document.getElementById('wrapper-tamanho');
+    const selTam  = document.getElementById('select-tamanho');
+    if(itemSelecionado.tipo === 'camisa' && itemSelecionado.tamanhos && itemSelecionado.tamanhos.length > 0){
+        selTam.innerHTML = itemSelecionado.tamanhos.map(t => `<option value="${t}">${t}</option>`).join('');
+        wrapTam.style.display = 'block';
+    } else {
+        wrapTam.style.display = 'none';
+    }
+
+    document.getElementById('detalhe-qtd').textContent = '1';
+
+    /* Favorito */
+    atualizarBtnFavModal();
+
+    /* Relacionados */
+    construirRelacionados();
+
+    /* Avaliações */
+    carregarAvaliacoes();
+
+    /* Abre modal */
+    document.getElementById('modal-details').classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    /* URL */
+    window.history.replaceState({}, '', `${window.location.pathname}?id=${id}`);
+}
+
+/* ── Carrossel ── */
+function construirCarrossel(){
+    const track = document.getElementById('carrossel-track');
+    const indicador = document.getElementById('carrossel-indicador');
+    const fotos = itemSelecionado.img || [];
+    track.innerHTML = '';
+
+    if(fotos.length === 0){
+        track.innerHTML = `<div class="carrossel-slide"><div class="no-photo-placeholder" style="position:relative;width:100%;height:100%"><i class="fa-solid fa-box-open" aria-hidden="true"></i><span>${sanitizar(itemSelecionado.nome)}</span></div></div>`;
+        indicador.style.display = 'none';
+        document.querySelector('.carrossel-nav.prev').style.display = 'none';
+        document.querySelector('.carrossel-nav.next').style.display = 'none';
+        return;
+    }
+
+    fotos.forEach(src => {
+        const slide = document.createElement('div');
+        slide.className = 'carrossel-slide';
+        slide.innerHTML = `<img src="${src}" alt="${sanitizar(itemSelecionado.nome)}" loading="lazy" onclick="abrirLightbox('${src}')">`;
+        track.appendChild(slide);
+    });
+
+    indicador.textContent = `1/${fotos.length}`;
+    indicador.style.display = fotos.length > 1 ? 'block' : 'none';
+    document.querySelector('.carrossel-nav.prev').style.display = fotos.length > 1 ? 'flex' : 'none';
+    document.querySelector('.carrossel-nav.next').style.display = fotos.length > 1 ? 'flex' : 'none';
+
+    /* Swipe */
+    let startX = 0;
+    const wrapper = document.getElementById('carrossel-wrapper');
+    wrapper.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+    wrapper.addEventListener('touchend', e => {
+        const diff = startX - e.changedTouches[0].clientX;
+        if(Math.abs(diff) > 40) moverCarrossel(diff > 0 ? 1 : -1);
+    });
+
+    atualizarCarrossel();
+}
+
+function moverCarrossel(dir){
+    if(!itemSelecionado) return;
+    const total = itemSelecionado.img ? itemSelecionado.img.length : 0;
+    carrosselIdx = (carrosselIdx + dir + total) % total;
+    atualizarCarrossel();
+}
+
+function atualizarCarrossel(){
+    const track = document.getElementById('carrossel-track');
+    const indicador = document.getElementById('carrossel-indicador');
+    track.style.transform = `translateX(-${carrosselIdx * 100}%)`;
+    if(itemSelecionado && itemSelecionado.img){
+        indicador.textContent = `${carrosselIdx + 1}/${itemSelecionado.img.length}`;
+    }
+}
+
+/* ── Lightbox ── */
+function abrirLightbox(src){
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('ativo');
+}
+function fecharLightbox(){
+    document.getElementById('lightbox').classList.remove('ativo');
+}
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('lightbox').addEventListener('click', e => {
+        if(e.target === e.currentTarget) fecharLightbox();
+    });
+});
+
+/* ── Relacionados ── */
+function construirRelacionados(){
+    if(!itemSelecionado) return;
+    const lista = document.getElementById('relacionados-lista');
+    const box   = document.getElementById('relacionados-box');
+    const rel = produtos.filter(p => p.categoria === itemSelecionado.categoria && p.id !== itemSelecionado.id).slice(0, 6);
+    if(rel.length === 0){ box.style.display = 'none'; return; }
+    box.style.display = 'block';
+    lista.innerHTML = rel.map(p => `
+        <div class="relacionado-card" onclick="abrirDetalhes(${p.id})" role="button" aria-label="Ver ${sanitizar(p.nome)}">
+            ${p.img && p.img[0] ? `<img src="${p.img[0]}" alt="${sanitizar(p.nome)}" loading="lazy">` : '<div style="height:80px;background:#eee;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-box-open" style="color:#ccc"></i></div>'}
+            <div>${sanitizar(p.nome)}</div>
+            <span>R$ ${p.preco.toFixed(2).replace('.',',')}</span>
+        </div>
+    `).join('');
+}
+
+/* ── Navegação entre produtos ── */
+function navegarProduto(dir){
+    if(!itemSelecionado || produtosFiltradosAtual.length === 0) return;
+    const idx = produtosFiltradosAtual.findIndex(p => p.id === itemSelecionado.id);
+    const novo = produtosFiltradosAtual[(idx + dir + produtosFiltradosAtual.length) % produtosFiltradosAtual.length];
+    abrirDetalhes(novo.id);
+}
+
+/* ── Avaliações ── */
+function carregarAvaliacoes(){
+    if(!itemSelecionado) return;
+    const avaliacoes = JSON.parse(localStorage.getItem(`nupieepro_aval_${itemSelecionado.id}`) || '[]');
+    const lista = document.getElementById('lista-avaliacoes');
+    estrelaSelecionada = 0;
+    document.querySelectorAll('.estrela-btn').forEach(b => b.classList.remove('ativo'));
+
+    if(avaliacoes.length === 0){
+        lista.innerHTML = '<p style="font-size:0.8rem;color:#bbb;text-align:center;padding:10px 0">Seja o primeiro a avaliar!</p>';
+        return;
+    }
+
+    lista.innerHTML = avaliacoes.map(a => `
+        <div class="avaliacao-item">
+            <div class="avaliacao-estrelas">${'★'.repeat(a.estrelas)}${'☆'.repeat(5-a.estrelas)}</div>
+            <div class="avaliacao-texto">${sanitizar(a.texto)}</div>
+            <div class="avaliacao-autor">${sanitizar(a.nome)} · ${a.data}</div>
+        </div>
+    `).join('');
+}
+
+function selecionarEstrela(val){
+    estrelaSelecionada = val;
+    document.querySelectorAll('.estrela-btn').forEach(b => {
+        b.classList.toggle('ativo', parseInt(b.dataset.val) <= val);
+    });
+}
+
+function confirmarAvaliacao(){
+    const texto = sanitizar(document.getElementById('texto-avaliacao').value.trim());
+    const nome  = sanitizar(document.getElementById('nome-avaliacao').value.trim()) || 'Anônimo';
+    if(!estrelaSelecionada){ mostrarToast('⚠️ Selecione as estrelas!', true); return; }
+    if(!texto){ mostrarToast('⚠️ Escreva uma avaliação!', true); return; }
+
+    if(!confirm('Confirma o envio da avaliação?')) return;
+
+    const avaliacoes = JSON.parse(localStorage.getItem(`nupieepro_aval_${itemSelecionado.id}`) || '[]');
+    avaliacoes.unshift({
+        estrelas: estrelaSelecionada,
+        texto,
+        nome,
+        data: new Date().toLocaleDateString('pt-BR')
+    });
+    localStorage.setItem(`nupieepro_aval_${itemSelecionado.id}`, JSON.stringify(avaliacoes));
+
+    document.getElementById('texto-avaliacao').value = '';
+    document.getElementById('nome-avaliacao').value  = '';
+    estrelaSelecionada = 0;
+    document.querySelectorAll('.estrela-btn').forEach(b => b.classList.remove('ativo'));
+
+    carregarAvaliacoes();
+    mostrarToast('⭐ Avaliação enviada!');
+}
+
+/* ── QR Code do produto ── */
+function gerarQrProduto(){
+    if(!itemSelecionado) return;
+    const url = `${window.location.origin}${window.location.pathname}?id=${itemSelecionado.id}`;
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(url)}`;
+    window.open(qrUrl, '_blank', 'noopener');
+}
+
+function copiarLinkProduto(){
+    const url = `${window.location.origin}${window.location.pathname}?id=${itemSelecionado.id}`;
+    if(navigator.clipboard){
+        navigator.clipboard.writeText(url).then(() => mostrarToast('🔗 Link copiado!'));
+    } else {
+        mostrarToast('🔗 ' + url);
+    }
+}
+
+/* ============================================================
+   FECHAR MODAIS
+   ============================================================ */
+function fecharModais(e){
+    if(e && e.target !== e.currentTarget) return;
+    document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('active'));
+    document.getElementById('lightbox').classList.remove('ativo');
+    document.body.style.overflow = '';
+    if(pixTimer){ clearInterval(pixTimer); pixTimer = null; }
+    const base = window.location.pathname;
+    window.history.replaceState({}, '', base);
+}
+
+/* ============================================================
+   QUANTIDADE
+   ============================================================ */
+function alterarQtd(val){
+    qtdTemporaria = Math.max(1, qtdTemporaria + val);
+    document.getElementById('detalhe-qtd').textContent = qtdTemporaria;
+}
+
+/* ============================================================
+   CARRINHO
+   ============================================================ */
+function adicionarAoCarrinho(){
+    let tamanho = 'Único';
+    if(itemSelecionado.tipo === 'camisa'){
+        tamanho = document.getElementById('select-tamanho').value;
+    }
+
+    const idx = carrinho.findIndex(i => i.id === itemSelecionado.id && i.tamanho === tamanho);
+    if(idx >= 0) carrinho[idx].qtd += qtdTemporaria;
+    else carrinho.push({ ...itemSelecionado, tamanho, qtd: qtdTemporaria });
+
+    salvarCarrinhoStorage();
+    atualizarBarraFlutuante();
+    mostrarToast('✅ Adicionado à sacola!');
+
+    /* Vibração haptica */
+    if(navigator.vibrate) navigator.vibrate(50);
+
+    document.getElementById('modal-details').classList.remove('active');
+    document.body.style.overflow = '';
+    window.history.replaceState({}, '', window.location.pathname);
+}
+
+function atualizarBarraFlutuante(){
+    const bar = document.getElementById('barra-carrinho');
+    if(carrinho.length > 0) bar.classList.add('visible');
+    else bar.classList.remove('visible');
+
+    const total = calcularTotal();
+    const totalQtd = carrinho.reduce((acc, i) => acc + i.qtd, 0);
+
+    document.getElementById('barra-total').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
+    document.getElementById('barra-qtd').textContent = `${totalQtd} ${totalQtd === 1 ? 'item' : 'itens'}`;
+
+    /* Favicon badge */
+    document.title = totalQtd > 0 ? `(${totalQtd}) NUPIEEPRO STORE` : 'NUPIEEPRO STORE';
+}
+
+function renderizarListaCarrinho(){
+    const lista = document.getElementById('lista-carrinho');
+    lista.innerHTML = '';
+    if(carrinho.length === 0){ fecharModais(null); return; }
+
+    carrinho.forEach((item, idx) => {
+        const subtotal = (item.preco * item.qtd).toFixed(2).replace('.',',');
+        const li = document.createElement('li');
+        li.className = 'cart-item';
+        li.innerHTML = `
+            <div class="cart-item-info">
+                <strong>${item.qtd}x ${sanitizar(item.nome)}</strong>
+                <span>R$ ${item.preco.toFixed(2).replace('.',',')}${item.tipo==='camisa'?' | '+item.tamanho:''}</span>
+                <span style="font-weight:700;color:var(--roxo-brand)">= R$ ${subtotal}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+                <div class="cart-item-qtd">
+                    <button onclick="alterarQtdCarrinho(${idx},-1)" aria-label="Diminuir">-</button>
+                    <span>${item.qtd}</span>
+                    <button onclick="alterarQtdCarrinho(${idx},1)" aria-label="Aumentar">+</button>
+                </div>
+                <button class="btn-trash" onclick="removerDoCarrinho(${idx})" aria-label="Remover item"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+            </div>
+        `;
+        lista.appendChild(li);
+    });
+
+    atualizarResumoValores();
+}
+
+function alterarQtdCarrinho(idx, dir){
+    carrinho[idx].qtd += dir;
+    if(carrinho[idx].qtd <= 0) carrinho.splice(idx, 1);
+    salvarCarrinhoStorage();
+    atualizarBarraFlutuante();
+    renderizarListaCarrinho();
+}
+
+function removerDoCarrinho(idx){
+    carrinho.splice(idx, 1);
+    salvarCarrinhoStorage();
+    atualizarBarraFlutuante();
+    renderizarListaCarrinho();
+}
+
+function limparCarrinho(){
+    if(carrinho.length === 0) return;
+    if(!confirm('Tem certeza que deseja limpar a sacola?')) return;
+    carrinho = [];
+    cupomAplicado = null;
+    salvarCarrinhoStorage();
+    atualizarBarraFlutuante();
+    fecharModais(null);
+    mostrarToast('🗑️ Sacola esvaziada');
+}
+
+function salvarCarrinhoStorage(){
+    localStorage.setItem('nupieepro_carrinho', JSON.stringify(carrinho));
+}
+
+function carregarCarrinhoStorage(){
+    const saved = localStorage.getItem('nupieepro_carrinho');
+    if(saved) carrinho = JSON.parse(saved);
+    atualizarBarraFlutuante();
+}
+
+/* ============================================================
+   CUPOM
+   ============================================================ */
+async function validarCupom(){
+    const cod = document.getElementById('campo-cupom').value.trim().toUpperCase();
+    if(!cod){ mostrarToast('⚠️ Digite um código de cupom!', true); return; }
+
+    /* Tenta validar na API primeiro */
+    const subtotal = calcularSubtotal();
+    const resultAPI = await validarCupomAPI(cod, subtotal);
+
+    if(resultAPI && resultAPI.valido){
+        /* Cupom válido pela API */
+        cupomAplicado = {
+            cod,
+            tipo:         resultAPI.tipo,
+            valor:        resultAPI.valor,
+            produtos_ids: resultAPI.produtos_ids,
+            descricao:    resultAPI.descricao,
+        };
+    } else if(resultAPI && !resultAPI.valido){
+        mostrarToast(`❌ ${resultAPI.erro || 'Cupom inválido!'}`, true);
+        return;
+    } else {
+        /* Fallback: valida localmente */
+        const cupom = cupons[cod];
+        if(!cupom || !cupom.ativo){
+            mostrarToast('❌ Cupom inválido ou inativo!', true);
+            return;
         }
-
-        function alterarQtd(valor) {
-            qtdTemporaria += valor;
-            if(qtdTemporaria < 1) qtdTemporaria = 1;
-            document.getElementById('detalhe-qtd').innerText = qtdTemporaria;
+        if(cupom.usos >= cupom.limite){
+            mostrarToast('❌ Cupom esgotado!', true);
+            return;
         }
-
-        function adicionarAoCarrinho() {
-            let tamanhoEscolhido = 'Único';
-            if(itemSelecionado.tipo === 'camisa') {
-                tamanhoEscolhido = document.getElementById('select-tamanho').value;
-            }
-
-            const index = carrinho.findIndex(i => i.id === itemSelecionado.id && i.tamanho === tamanhoEscolhido);
-            if(index >= 0) carrinho[index].qtd += qtdTemporaria;
-            else carrinho.push({ ...itemSelecionado, tamanho: tamanhoEscolhido, qtd: qtdTemporaria });
-
-            mostrarToast("Adicionado à sacola!");
-            document.getElementById('modal-details').classList.remove('active');
-            atualizarBarraFlutuante();
-            const baseUrl = window.location.href.split('?')[0];
-            window.history.replaceState({}, document.title, baseUrl);
+        if(subtotal < cupom.minimo){
+            mostrarToast(`❌ Pedido mínimo de R$ ${cupom.minimo.toFixed(2).replace('.',',')}!`, true);
+            return;
         }
+        cupomAplicado = { cod, ...cupom };
+    }
 
-        function atualizarBarraFlutuante() {
-            const bar = document.getElementById('barra-carrinho');
-            if(carrinho.length > 0) bar.classList.add('visible');
-            else bar.classList.remove('visible');
+    /* Verifica se tem produto elegível no carrinho */
+    const itensElegiveis = carrinho.filter(i => cupomAplicado.produtos_ids.includes(i.id));
+    if(itensElegiveis.length === 0){
+        const nomesElegiveis = produtos
+            .filter(p => cupomAplicado.produtos_ids.includes(p.id))
+            .map(p => p.nome).join(', ');
+        mostrarToast(`⚠️ Este cupom só vale para: ${nomesElegiveis}`, true);
+        cupomAplicado = null;
+        return;
+    }
 
-            const total = carrinho.reduce((acc, item) => acc + (item.preco * item.qtd), 0);
-            const totalQtd = carrinho.reduce((acc, item) => acc + item.qtd, 0);
+    const desconto = calcularDesconto();
+    mostrarToast(`🎉 Cupom aplicado! Você economizou R$ ${desconto.toFixed(2).replace('.',',')}!`);
+    document.getElementById('campo-cupom').value = '';
 
-            document.getElementById('barra-total').innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
-            document.getElementById('barra-qtd').innerText = `${totalQtd} item(ns)`;
+    const box = document.getElementById('cupom-aplicado-box');
+    document.getElementById('cupom-aplicado-texto').textContent = `${cod} — ${cupomAplicado.valor}% de desconto aplicado`;
+    box.classList.add('ativo');
+
+    atualizarResumoValores();
+}
+
+function removerCupom(){
+    cupomAplicado = null;
+    document.getElementById('cupom-aplicado-box').classList.remove('ativo');
+    atualizarResumoValores();
+    mostrarToast('Cupom removido');
+}
+
+function calcularDesconto(){
+    if(!cupomAplicado) return 0;
+    const cup = cupomAplicado;
+    if(cup.tipo === 'percentual'){
+        const itensDesc = carrinho.filter(i => cup.produtos_ids.includes(i.id));
+        return itensDesc.reduce((acc, i) => acc + i.preco * i.qtd * cup.valor / 100, 0);
+    }
+    if(cup.tipo === 'fixo'){
+        return Math.min(cup.valor, calcularSubtotal());
+    }
+    return 0;
+}
+
+function calcularSubtotal(){
+    return carrinho.reduce((acc, i) => acc + i.preco * i.qtd, 0);
+}
+
+function calcularTotal(){
+    return Math.max(0, calcularSubtotal() - calcularDesconto());
+}
+
+function atualizarResumoValores(){
+    const sub  = calcularSubtotal();
+    const desc = calcularDesconto();
+    const tot  = calcularTotal();
+
+    document.getElementById('resumo-subtotal').textContent = `R$ ${sub.toFixed(2).replace('.',',')}`;
+    document.getElementById('resumo-total').textContent    = `R$ ${tot.toFixed(2).replace('.',',')}`;
+
+    const descLinha = document.getElementById('resumo-desconto-linha');
+    if(desc > 0 && cupomAplicado){
+        /* Mostra quais itens ganharam desconto */
+        const itensDesc = carrinho
+            .filter(i => cupomAplicado.produtos_ids.includes(i.id))
+            .map(i => i.nome.split('—')[0].trim())
+            .join(', ');
+        document.getElementById('resumo-desconto-val').textContent   = `- R$ ${desc.toFixed(2).replace('.',',')}`;
+        document.getElementById('resumo-desconto-label').textContent = `Cupom (${itensDesc})`;
+        descLinha.style.display = 'flex';
+    } else {
+        descLinha.style.display = 'none';
+    }
+}
+
+/* ============================================================
+   CHECKOUT — STEPS
+   ============================================================ */
+function abrirCheckout(){
+    if(carrinho.length === 0) return;
+    stepAtual = 1;
+    document.getElementById('tela-sucesso').classList.remove('ativo');
+    document.getElementById('checkout-conteudo').style.display = 'block';
+    renderizarListaCarrinho();
+    irStep(1);
+    document.getElementById('modal-checkout').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function irStep(n){
+    /* Validações */
+    if(n === 2){
+        /* nada obrigatório antes dos dados */
+    }
+    if(n === 3){
+        const nome = document.getElementById('nome-cliente').value.trim();
+        const zap  = document.getElementById('zap-cliente').value.replace(/\D/g,'');
+        if(!nome){ mostrarToast('⚠️ Preencha seu nome!', true); return; }
+        if(zap.length < 10){ mostrarToast('⚠️ WhatsApp inválido!', true); return; }
+        if(document.querySelector('input[name="entrega"]:checked').value === 'Entrega' &&
+           !document.getElementById('endereco-cliente').value.trim()){
+            mostrarToast('⚠️ Informe o endereço!', true); return;
         }
+        salvarDadosUsuario();
+    }
+    if(n === 4){
+        preencherChecklist();
+    }
 
-        function abrirCheckout() {
-            if(carrinho.length === 0) return;
-            renderizarListaCarrinho();
-            document.getElementById('modal-checkout').classList.add('active');
+    stepAtual = n;
+    for(let i = 1; i <= 4; i++){
+        document.getElementById(`checkout-step-${i}`).style.display = i === n ? 'block' : 'none';
+        const step = document.getElementById(`step-${i}`);
+        step.className = 'step' + (i < n ? ' concluido' : i === n ? ' ativo' : '');
+        if(i < 4){
+            const linha = document.getElementById(`linha-${i}`);
+            if(linha) linha.className = 'step-linha' + (i < n ? ' ativa' : '');
         }
+    }
 
-        function renderizarListaCarrinho() {
-            const lista = document.getElementById('lista-carrinho');
-            lista.innerHTML = '';
-            if(carrinho.length === 0) { fecharModais(null); return; }
+    if(n === 3) configurarPix();
+}
 
-            carrinho.forEach((item, idx) => {
-                let subtitulo = `R$ ${item.preco.toFixed(2).replace('.',',')}`;
-                if(item.tipo === 'camisa') subtitulo += ` | ${item.tamanho}`;
-                lista.innerHTML += `
-                    <li class="cart-item">
-                        <div class="cart-item-info"><strong>${item.qtd}x ${item.nome}</strong><span>${subtitulo}</span></div>
-                        <button class="btn-trash" onclick="removerDoCarrinho(${idx})"><i class="fa-solid fa-trash"></i></button>
-                    </li>
-                `;
-            });
+function preencherChecklist(){
+    const nome     = document.getElementById('nome-cliente').value.trim();
+    const entrega  = document.querySelector('input[name="entrega"]:checked').value;
+    const pgto     = document.querySelector('input[name="pgto"]:checked').value;
+    const total    = calcularTotal();
+    const qtdTotal = carrinho.reduce((acc, i) => acc + i.qtd, 0);
+
+    document.getElementById('confirm-itens').textContent   = `${qtdTotal} ${qtdTotal===1?'item':'itens'} na sacola`;
+    document.getElementById('confirm-cliente').textContent = `Cliente: ${nome}`;
+    document.getElementById('confirm-entrega').textContent = `Entrega: ${entrega}`;
+    document.getElementById('confirm-pgto').textContent    = `Pagamento: ${pgto}`;
+    document.getElementById('confirm-total').textContent   = `Total: R$ ${total.toFixed(2).replace('.',',')}`;
+}
+
+/* ============================================================
+   ENTREGA
+   ============================================================ */
+function toggleEndereco(){
+    const tipo = document.querySelector('input[name="entrega"]:checked').value;
+    document.getElementById('box-endereco').style.display = tipo === 'Entrega' ? 'block' : 'none';
+}
+
+/* ============================================================
+   PIX
+   ============================================================ */
+function togglePix(){
+    const pgto = document.querySelector('input[name="pgto"]:checked').value;
+    const pixSec  = document.getElementById('pix-section');
+    const avisoPg = document.getElementById('aviso-pgto-presencial');
+    const pixDest = document.getElementById('pix-destaque');
+
+    if(pgto === 'PIX'){
+        pixSec.classList.add('ativo');
+        avisoPg.style.display = 'none';
+        pixDest.classList.add('ativo');
+        configurarPix();
+    } else {
+        pixSec.classList.remove('ativo');
+        avisoPg.style.display = 'block';
+        pixDest.classList.remove('ativo');
+        if(pixTimer){ clearInterval(pixTimer); pixTimer = null; }
+    }
+}
+
+function configurarPix(){
+    const pgto = document.querySelector('input[name="pgto"]:checked').value;
+    if(pgto !== 'PIX') return;
+
+    const total = calcularTotal();
+    document.getElementById('pix-valor-texto').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
+
+    /* Gera QR Code usando API gratuita */
+    const chave = 'financeironupieepro@gmail.com';
+    const pixPayload = gerarPayloadPix(chave, 'NUPIEEPRO', total);
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixPayload)}`;
+
+    const container = document.getElementById('pix-qr-container');
+    container.innerHTML = `<img src="${qrUrl}" alt="QR Code PIX" style="width:100%;height:100%;object-fit:contain" loading="lazy">`;
+
+    /* Timer 30 minutos */
+    if(pixTimer) clearInterval(pixTimer);
+    let segundos = 30 * 60;
+    const timerEl = document.getElementById('pix-countdown');
+    timerEl.textContent = '30:00';
+
+    pixTimer = setInterval(() => {
+        segundos--;
+        if(segundos <= 0){
+            clearInterval(pixTimer);
+            timerEl.textContent = 'Expirado';
+            return;
         }
+        const m = Math.floor(segundos / 60).toString().padStart(2,'0');
+        const s = (segundos % 60).toString().padStart(2,'0');
+        timerEl.textContent = `${m}:${s}`;
+    }, 1000);
+}
 
-        function removerDoCarrinho(index) {
-            carrinho.splice(index, 1);
-            atualizarBarraFlutuante();
-            renderizarListaCarrinho();
+/* Gera payload PIX básico (EMV) */
+function gerarPayloadPix(chave, nome, valor){
+    function campo(id, val){
+        const len = val.length.toString().padStart(2,'0');
+        return `${id}${len}${val}`;
+    }
+    const merchantAccountInfo = campo('00','BR.GOV.BCB.PIX') + campo('01', chave);
+    const payload =
+        campo('00','01') +
+        campo('26', merchantAccountInfo) +
+        campo('52','0000') +
+        campo('53','986') +
+        campo('54', valor.toFixed(2)) +
+        campo('58','BR') +
+        campo('59', nome.substring(0,25)) +
+        campo('60','Teresina') +
+        campo('62', campo('05','***'));
+    const crc = calcularCRC16(payload + '6304');
+    return payload + '6304' + crc;
+}
+
+function calcularCRC16(str){
+    let crc = 0xFFFF;
+    for(let i = 0; i < str.length; i++){
+        crc ^= str.charCodeAt(i) << 8;
+        for(let j = 0; j < 8; j++){
+            crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
         }
+    }
+    return ((crc & 0xFFFF).toString(16).toUpperCase().padStart(4,'0'));
+}
 
-        function toggleEndereco() {
-            const tipoEntrega = document.querySelector('input[name="entrega"]:checked').value;
-            document.getElementById('box-endereco').style.display = (tipoEntrega === 'Entrega') ? 'block' : 'none';
-        }
+function copiarChavePix(){
+    const chave = 'financeironupieepro@gmail.com';
+    if(navigator.clipboard){
+        navigator.clipboard.writeText(chave).then(() => mostrarToast('✅ Chave PIX copiada!'));
+    } else {
+        mostrarToast('Chave: ' + chave);
+    }
+}
 
-        function salvarDadosUsuario(nome, zap, endereco) {
-            localStorage.setItem('nupieepro_nome', nome);
-            localStorage.setItem('nupieepro_zap', zap);
-            localStorage.setItem('nupieepro_endereco', endereco);
-        }
+/* ============================================================
+   DADOS DO USUÁRIO
+   ============================================================ */
+function salvarDadosUsuario(){
+    if(!document.getElementById('check-salvar-dados').checked) return;
+    localStorage.setItem('nupieepro_nome',     document.getElementById('nome-cliente').value);
+    localStorage.setItem('nupieepro_zap',      document.getElementById('zap-cliente').value);
+    localStorage.setItem('nupieepro_email',    document.getElementById('email-cliente').value);
+    localStorage.setItem('nupieepro_endereco', document.getElementById('endereco-cliente').value);
+}
 
-        function carregarDadosUsuario() {
-            const nome = localStorage.getItem('nupieepro_nome');
-            const zap = localStorage.getItem('nupieepro_zap');
-            const endereco = localStorage.getItem('nupieepro_endereco');
+function carregarDadosUsuario(){
+    const nome     = localStorage.getItem('nupieepro_nome');
+    const zap      = localStorage.getItem('nupieepro_zap');
+    const email    = localStorage.getItem('nupieepro_email');
+    const endereco = localStorage.getItem('nupieepro_endereco');
+    if(nome)     document.getElementById('nome-cliente').value     = nome;
+    if(zap)      document.getElementById('zap-cliente').value      = zap;
+    if(email)    document.getElementById('email-cliente').value    = email;
+    if(endereco) document.getElementById('endereco-cliente').value = endereco;
+}
 
-            if(nome) document.getElementById('nome-cliente').value = nome;
-            if(zap) document.getElementById('zap-cliente').value = zap;
-            if(endereco) document.getElementById('endereco-cliente').value = endereco;
-        }
+/* Máscara WhatsApp */
+document.addEventListener('DOMContentLoaded', () => {
+    const zapInput = document.getElementById('zap-cliente');
+    if(zapInput){
+        zapInput.addEventListener('input', function(){
+            let v = this.value.replace(/\D/g,'').substring(0,11);
+            if(v.length >= 11) v = `(${v.substring(0,2)}) ${v.substring(2,3)} ${v.substring(3,7)}-${v.substring(7)}`;
+            else if(v.length >= 7) v = `(${v.substring(0,2)}) ${v.substring(2,6)}-${v.substring(6)}`;
+            else if(v.length >= 3) v = `(${v.substring(0,2)}) ${v.substring(2)}`;
+            this.value = v;
+        });
+    }
+});
 
-        function enviarPedidoZap() {
-            const nome = document.getElementById('nome-cliente').value;
-            const zap = document.getElementById('zap-cliente').value;
-            const tipoEntrega = document.querySelector('input[name="entrega"]:checked').value;
-            const endereco = document.getElementById('endereco-cliente').value;
-            const pgto = document.querySelector('input[name="pgto"]:checked').value;
+/* ============================================================
+   NÚMERO DE PEDIDO
+   ============================================================ */
+function gerarNumeroPedido(){
+    const ano  = new Date().getFullYear();
+    const chave = `nupieepro_pedido_seq_${ano}`;
+    let seq = parseInt(localStorage.getItem(chave) || '0') + 1;
+    localStorage.setItem(chave, seq.toString());
+    return `${ano}-${seq.toString().padStart(3,'0')}`;
+}
 
-            if(!nome || !zap) { alert("Preencha Nome e WhatsApp!"); return; }
-            if(tipoEntrega === 'Entrega' && !endereco) { alert("Informe o endereço!"); return; }
+/* ============================================================
+   ENVIAR PEDIDO VIA WHATSAPP
+   ============================================================ */
+function enviarPedidoZap(){
+    if(!verificarRateLimit()) return;
+    if(document.getElementById('honeypot').value) return; /* anti-bot */
 
-            salvarDadosUsuario(nome, zap, endereco);
+    const nome     = sanitizar(document.getElementById('nome-cliente').value.trim());
+    const zap      = document.getElementById('zap-cliente').value.replace(/\D/g,'');
+    const email    = sanitizar(document.getElementById('email-cliente').value.trim());
+    const entrega  = document.querySelector('input[name="entrega"]:checked').value;
+    const endereco = sanitizar(document.getElementById('endereco-cliente').value.trim());
+    const pgto     = document.querySelector('input[name="pgto"]:checked').value;
+    const obs      = sanitizar(document.getElementById('campo-obs').value.trim());
+    const numPedido = gerarNumeroPedido();
+    const agora    = new Date().toLocaleString('pt-BR');
 
-            let msg = `*LOJINHA OFICIAL NUPIEEPRO* ⚙️\n------------------------------\n`;
-            msg += `👤 *Cliente:* ${nome}\n📱 *WhatsApp:* ${zap}\n`;
-            msg += `🚚 *Método:* ${tipoEntrega}\n`;
-            if(tipoEntrega === 'Entrega') msg += `📍 *Endereço:* ${endereco}\n`;
-            msg += `💳 *Pagamento:* ${pgto}\n\n*ITENS DO PEDIDO:*\n`;
-            
-            carrinho.forEach(item => {
-                msg += `📦 ${item.qtd}x *${item.nome}*\n`;
-                if(item.tipo === 'camisa') msg += `   └ Tam: ${item.tamanho}\n`;
-                msg += `   └ R$ ${(item.preco * item.qtd).toFixed(2).replace('.',',')}\n`;
-            });
+    let msg = `*LOJINHA OFICIAL NUPIEEPRO* ⚙️\n`;
+    msg += `*Pedido:* #${numPedido}\n`;
+    msg += `*Data:* ${agora}\n`;
+    msg += `------------------------------\n`;
+    msg += `👤 *Cliente:* ${nome}\n`;
+    msg += `📱 *WhatsApp:* ${zap}\n`;
+    if(email) msg += `📧 *E-mail:* ${email}\n`;
+    msg += `🚚 *Entrega:* ${entrega}\n`;
+    if(entrega === 'Entrega') msg += `📍 *Endereço:* ${endereco}\n`;
+    msg += `💳 *Pagamento:* ${pgto}\n`;
+    if(obs) msg += `📝 *Obs:* ${obs}\n`;
+    msg += `\n*ITENS DO PEDIDO:*\n`;
 
-            const total = carrinho.reduce((acc, item) => acc + (item.preco * item.qtd), 0);
-            msg += `\n------------------------------\n*💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}*\n------------------------------\n`;
-            if(pgto === 'PIX') msg += `ℹ️ Aguardo a chave PIX.`;
+    carrinho.forEach(item => {
+        msg += `📦 ${item.qtd}x *${item.nome}*\n`;
+        if(item.tipo === 'camisa') msg += `   └ Tam: ${item.tamanho}\n`;
+        msg += `   └ R$ ${(item.preco * item.qtd).toFixed(2).replace('.',',')}\n`;
+    });
 
-            window.open(`https://wa.me/${whatsappDestino}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-    </script>
-</body>
+    const subtotal = calcularSubtotal();
+    const desconto = calcularDesconto();
+    const total    = calcularTotal();
+
+    msg += `\n------------------------------\n`;
+    msg += `💰 *Subtotal:* R$ ${subtotal.toFixed(2).replace('.',',')}\n`;
+    if(desconto > 0 && cupomAplicado){
+        msg += `🎟️ *Cupom (${cupomAplicado.cod}):* - R$ ${desconto.toFixed(2).replace('.',',')}\n`;
+    }
+    msg += `💰 *TOTAL: R$ ${total.toFixed(2).replace('.',',')}*\n`;
+    msg += `------------------------------\n`;
+    if(pgto === 'PIX') msg += `ℹ️ O financeiro enviará a chave PIX em breve.`;
+
+    /* Registra pedido na API (assíncrono, não bloqueia o WhatsApp) */
+    registrarPedidoAPI({
+        numero:     numPedido,
+        nome, whatsapp: zap,
+        email:      document.getElementById('email-cliente').value.trim(),
+        entrega, endereco, pagamento: pgto,
+        observacao: obs,
+        itens:      carrinho,
+        subtotal:   calcularSubtotal(),
+        desconto:   calcularDesconto(),
+        cupom:      cupomAplicado ? cupomAplicado.cod : '',
+        total:      calcularTotal()
+    });
+
+    /* Salva no histórico */
+    salvarPedidoHistorico(numPedido, agora, total);
+
+    /* Incrementa uso do cupom */
+    if(cupomAplicado) cupons[cupomAplicado.cod].usos++;
+
+    /* Limpa carrinho */
+    carrinho = [];
+    cupomAplicado = null;
+    salvarCarrinhoStorage();
+    atualizarBarraFlutuante();
+
+    /* Abre WhatsApp */
+    window.open(`https://wa.me/${_w}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+
+    /* Tela de sucesso */
+    const msgs = [
+        'Boa escolha! O Nupieepro agradece 🧡',
+        'Seu pedido está a caminho! 🚀',
+        'Que venha mais! Nupieepro 💙🧡',
+        'Obrigado por apoiar o núcleo! ⚙️'
+    ];
+    document.getElementById('sucesso-msg-motivacional').textContent = msgs[Math.floor(Math.random()*msgs.length)];
+    document.getElementById('sucesso-pedido-num').textContent = `Pedido #${numPedido}`;
+    document.getElementById('tela-sucesso').classList.add('ativo');
+    document.getElementById('checkout-conteudo').style.display = 'none';
+
+    lancarConfete();
+}
+
+/* ============================================================
+   HISTÓRICO DE PEDIDOS
+   ============================================================ */
+function salvarPedidoHistorico(num, data, total){
+    const hist = JSON.parse(localStorage.getItem('nupieepro_historico') || '[]');
+    hist.unshift({
+        num, data, total,
+        itens: carrinho.map(i => `${i.qtd}x ${i.nome}`)
+    });
+    localStorage.setItem('nupieepro_historico', JSON.stringify(hist.slice(0, 50)));
+}
+
+function abrirMeusPedidos(){
+    const hist  = JSON.parse(localStorage.getItem('nupieepro_historico') || '[]');
+    const lista = document.getElementById('lista-historico-pedidos');
+
+    if(hist.length === 0){
+        lista.innerHTML = '<p style="text-align:center;color:#bbb;padding:20px">Nenhum pedido ainda 🛍️</p>';
+    } else {
+        lista.innerHTML = hist.map(p => `
+            <div class="pedido-historico">
+                <div class="pedido-historico-header">
+                    <span class="pedido-numero">#${p.num}</span>
+                    <span class="pedido-data">${p.data}</span>
+                </div>
+                <div class="pedido-itens">${p.itens.join('<br>')}</div>
+                <div class="pedido-total" style="margin-top:8px">R$ ${p.total.toFixed(2).replace('.',',')}</div>
+            </div>
+        `).join('');
+    }
+
+    document.getElementById('modal-pedidos').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+/* ============================================================
+   COMPARTILHAR
+   ============================================================ */
+function compartilhar(id, event){
+    if(event) event.stopPropagation();
+    const prod = produtos.find(p => p.id === id);
+    const url  = `${window.location.origin}${window.location.pathname}?id=${id}`;
+    const txt  = `Olha o que encontrei na Lojinha Nupieepro: ${prod.nome} por R$ ${prod.preco.toFixed(2).replace('.',',')}!`;
+
+    if(navigator.share){
+        navigator.share({ title: 'NUPIEEPRO STORE', text: txt, url }).catch(()=>{});
+    } else {
+        navigator.clipboard && navigator.clipboard.writeText(url).then(() => mostrarToast('🔗 Link copiado!'));
+    }
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+let toastTimer = null;
+function mostrarToast(msg, erro = false){
+    const toast   = document.getElementById('toast');
+    const msgEl   = document.getElementById('toast-msg');
+    const icon    = toast.querySelector('i');
+    msgEl.textContent = msg;
+    toast.classList.toggle('erro', erro);
+    icon.className = erro ? 'fa-solid fa-circle-exclamation' : 'fa-solid fa-circle-check';
+    toast.classList.add('show');
+    if(toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+/* ============================================================
+   CONFETE
+   ============================================================ */
+function lancarConfete(){
+    const container = document.getElementById('confete-container');
+    container.innerHTML = '';
+    const cores = ['#f85900','#0f0732','#007bff','#27ae60','#f39c12','#e74c3c','#8e44ad'];
+    for(let i = 0; i < 60; i++){
+        const p = document.createElement('div');
+        p.className = 'confete-particle';
+        p.style.left        = Math.random() * 100 + 'vw';
+        p.style.background  = cores[Math.floor(Math.random() * cores.length)];
+        p.style.width       = (Math.random() * 10 + 6) + 'px';
+        p.style.height      = (Math.random() * 10 + 6) + 'px';
+        p.style.animationDuration  = (Math.random() * 2 + 1.5) + 's';
+        p.style.animationDelay     = (Math.random() * 1) + 's';
+        container.appendChild(p);
+    }
+    setTimeout(() => container.innerHTML = '', 4000);
+}
+
+/* ==============================================
+
+/* ============================================================
+   FONTE AJUSTÁVEL
+   ============================================================ */
+function ajustarFonte(tamanho){
+    document.body.classList.remove('fonte-pequena','fonte-media','fonte-grande');
+    document.body.classList.add('fonte-'+tamanho);
+    localStorage.setItem('nupieepro_fonte', tamanho);
+    mostrarToast(`📝 Fonte ${tamanho === 'grande' ? 'aumentada' : tamanho === 'pequena' ? 'reduzida' : 'normal'}`);
+}
+
+/* ============================================================
+   PRINT DO PEDIDO
+   ============================================================ */
+function imprimirPedido(){
+    window.print();
+}
+
+/* ============================================================
+   COMPARTILHAR CARRINHO / PEDIDO
+   ============================================================ */
+function compartilharCarrinho(){
+    const hist = JSON.parse(localStorage.getItem('nupieepro_historico') || '[]');
+    if(hist.length === 0){ mostrarToast('⚠️ Nenhum pedido para compartilhar!', true); return; }
+    const ultimo = hist[0];
+    const txt = `Acabei de fazer um pedido na Lojinha Nupieepro! 🧡\nPedido #${ultimo.num} — R$ ${ultimo.total.toFixed(2).replace('.',',')}\n\nConfira: ${window.location.origin}${window.location.pathname}`;
+    if(navigator.share){
+        navigator.share({ title: 'NUPIEEPRO STORE', text: txt, url: window.location.href }).catch(()=>{});
+    } else {
+        navigator.clipboard && navigator.clipboard.writeText(txt).then(() => mostrarToast('🔗 Link do pedido copiado!'));
+    }
+}
+
+/* ============================================================
+   CARTEIRINHA DIGITAL
+   ============================================================ */
+function abrirCarteirinha(){
+    const nome = localStorage.getItem('nupieepro_nome') || 'Nupilover';
+    const zap  = localStorage.getItem('nupieepro_zap') || '';
+    const num  = zap ? zap.replace(/\D/g,'').slice(-4) : Math.random().toString(36).substring(2,6).toUpperCase();
+    const uid  = `NUPI-${num.toUpperCase()}-${new Date().getFullYear()}`;
+
+    document.getElementById('carteirinha-nome').textContent = nome;
+    document.getElementById('carteirinha-num').textContent  = uid;
+
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(uid+'|'+nome)}`;
+    document.getElementById('carteirinha-qr-img').src = qrUrl;
+
+    document.getElementById('modal-carteirinha').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function imprimirCarteirinha(){
+    window.print();
+}
+
+/* ============================================================
+   SOBRE
+   ============================================================ */
+function abrirSobre(){
+    document.getElementById('modal-sobre').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+</script>
 </html>
-
