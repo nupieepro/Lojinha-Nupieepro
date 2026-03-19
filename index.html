@@ -74,7 +74,7 @@
 
         /* FILTROS */
         .filter-container{margin-top:-50px;position:relative;z-index:20;margin-bottom:16px;}
-        .filter-scroll{display:flex;gap:8px;overflow-x:auto;padding:8px 12px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+        .filter-scroll{display:flex;gap:8px;overflow-x:auto;padding:8px 12px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch;justify-content:center;}
         .filter-scroll::-webkit-scrollbar{display:none;}
         .filter-btn{padding:8px 18px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.1);border-radius:30px;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.9);white-space:nowrap;transition:0.2s;cursor:pointer;flex-shrink:0;}
         .filter-btn.active{background:var(--branco);color:var(--roxo-brand);font-weight:700;border-color:var(--branco);box-shadow:0 4px 12px rgba(0,0,0,0.15);}
@@ -82,7 +82,16 @@
         /* GRID */
         .container{max-width:1100px;margin:0 auto;padding:0 12px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;position:relative;z-index:10;}
         @media(min-width:600px){.container{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}}
-        @media(min-width:1024px){.container{gap:28px;}}
+        @media(min-width:1024px){
+    .container{gap:28px;}
+    header{padding:24px 40px 90px;}
+    .header-row{max-width:1100px;margin:0 auto;}
+    .sub-brand,.welcome-msg,.header-busca{max-width:600px;}
+    .filter-container{padding:0;}
+    .filter-scroll{justify-content:center;padding:8px 20px 14px;}
+    #card-cupom{padding:0 20px;}
+    .cupom-banner{max-width:1100px;margin:0 auto;}
+}
 
         /* CARDS */
         .card{background:var(--card-bg);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;position:relative;border:1px solid rgba(15,7,50,0.05);transition:transform 0.15s;}
@@ -271,7 +280,7 @@
         <div class="cupom-icone"><i class="fa-solid fa-tag"></i></div>
         <div class="cupom-texto">
             <div class="cupom-titulo">Tem cupom? Use antes de finalizar! 🎉</div>
-            <div class="cupom-desc">Comece sua jornada na Engenharia de Produção com 10% de desconto em produtos como chaveiro, ecobag e bloco de notas.</div>
+            <div class="cupom-desc" id="cupom-desc-vitrine" style="display:none"></div>
         </div>
         <button class="cupom-btn-usar" onclick="abrirCheckoutComCupom()">Inserir cupom →</button>
     </div>
@@ -373,7 +382,7 @@
             <div class="pix-box ativo" id="pix-box">
                 <div class="pix-valor" id="pix-valor"></div>
                 <div class="pix-qr"><img id="pix-qr-img" src="" alt="QR PIX" loading="lazy"></div>
-                <div class="pix-chave"><strong>Chave PIX:</strong> financeironupieepro@gmail.com</div>
+                <div class="pix-chave"><strong>Chave PIX:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e086898e818e838589928f8e959089858590928fa0878d81898cce838f8d">[email&#160;protected]</a></div>
                 <button class="pix-copiar" onclick="copiarPix()"><i class="fa-solid fa-copy"></i> Copiar chave</button>
                 <div class="pix-timer">⏱️ Expira em <span id="pix-timer-txt">30:00</span></div>
             </div>
@@ -418,7 +427,7 @@
     <div style="font-weight:700;font-size:0.9rem">Ver Sacola <i class="fa-solid fa-bag-shopping" style="margin-left:4px"></i></div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const API_URL='https://script.google.com/macros/s/AKfycbw4Qk03yzsQEXE0qXstLuZlY0lx12aqrrXkdUwkeHykDD4KhVx8Ti4S4fNbLnYtg6uTwA/exec';
 const _w=atob('NTU4Njk5OTk3NjIyNg==');
 function san(s){return typeof s==='string'?s.replace(/[<>"'&]/g,c=>({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;','&':'&amp;'}[c])):''}
@@ -440,7 +449,16 @@ let carrinho=[],itemSel=null,qtdTemp=1,filtroAtual='todos',busca='',cupomApl=nul
 window.addEventListener('load',()=>{
     if('serviceWorker' in navigator) navigator.serviceWorker.register('/Lojinha-Nupieepro/sw.js').catch(()=>{});
     carregarUser();carregarCarrinho();renderVitrine();
-    if(Object.values(cupons).some(c=>c.ativo)) document.getElementById('card-cupom').style.display='block';
+    /* Mostra card de cupom se tiver cupom ativo localmente */
+    if(Object.values(cupons).some(c=>c.ativo)){
+        document.getElementById('card-cupom').style.display='block';
+        /* Descrição do primeiro cupom ativo */
+        const primeiroCupom=Object.values(cupons).find(c=>c.ativo);
+        if(primeiroCupom&&primeiroCupom.descricao){
+            const el=document.getElementById('cupom-desc-vitrine');
+            el.textContent=primeiroCupom.descricao;el.style.display='block';
+        }
+    }
     carregarAPI();
     const pid=new URLSearchParams(location.search).get('id');
     if(pid&&produtos.find(p=>p.id==pid)) setTimeout(()=>abrirDetalhes(parseInt(pid)),1000);
