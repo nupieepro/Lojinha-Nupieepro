@@ -45,18 +45,20 @@
 
         /* HEADER */
         header{background:linear-gradient(160deg,var(--roxo-brand) 20%,#1a1245 100%);color:var(--branco);padding:16px 16px 80px;border-radius:0 0 40px 40px;text-align:center;box-shadow:var(--shadow-lg);position:relative;}
-        .header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+        /* Header - tudo centralizado */
+        .header-inner{max-width:600px;margin:0 auto;position:relative;}
+        .header-row{display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative;}
         .header-brand{display:flex;align-items:center;gap:12px;}
         .brand-logo{width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);object-fit:cover;flex-shrink:0;}
         .brand-info{text-align:left;}
         .brand{font-size:1.4rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin:0;line-height:1;}
         .brand span{color:var(--laranja-brand);}
         .store-badge{display:inline-block;background:var(--laranja-brand);color:var(--branco);padding:3px 10px;border-radius:12px;font-size:0.65rem;font-weight:700;text-transform:uppercase;margin-top:4px;box-shadow:0 4px 10px var(--laranja-glow);}
-        .header-icons{display:flex;gap:6px;}
+        .header-icons{position:absolute;right:0;top:50%;transform:translateY(-50%);display:flex;gap:6px;}
         .header-icon-btn{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--branco);font-size:0.85rem;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:0.2s;}
-        .sub-brand{font-size:0.68rem;opacity:0.85;line-height:1.3;max-width:90%;margin:0 auto;}
+        .sub-brand{font-size:0.68rem;opacity:0.85;line-height:1.3;text-align:center;}
         .welcome-msg{background:rgba(255,255,255,0.08);display:inline-block;padding:4px 12px;border-radius:15px;font-size:0.7rem;margin-top:8px;border:1px solid rgba(255,255,255,0.1);}
-        .header-busca{margin-top:12px;display:flex;align-items:center;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:30px;padding:9px 16px;max-width:400px;margin-left:auto;margin-right:auto;}
+        .header-busca{margin-top:12px;display:flex;align-items:center;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:30px;padding:9px 16px;}
         .header-busca i{color:rgba(255,255,255,0.6);margin-right:8px;flex-shrink:0;}
         .header-busca input{background:transparent;border:none;outline:none;color:var(--branco);font-family:inherit;font-size:0.85rem;width:100%;}
         .header-busca input::placeholder{color:rgba(255,255,255,0.5);}
@@ -85,8 +87,7 @@
         @media(min-width:1024px){
     .container{gap:28px;}
     header{padding:24px 40px 90px;}
-    .header-row{max-width:1100px;margin:0 auto;}
-    .sub-brand,.welcome-msg,.header-busca{max-width:600px;}
+    .header-inner{max-width:700px;}
     .filter-container{padding:0;}
     .filter-scroll{justify-content:center;padding:8px 20px 14px;}
     #card-cupom{padding:0 20px;}
@@ -244,25 +245,27 @@
 </div>
 
 <header>
-    <div class="header-row">
-        <div class="header-brand">
-            <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="brand-logo">
-            <div class="brand-info">
-                <h1 class="brand">Nupiee<span>Pro</span></h1>
-                <div class="store-badge"><i class="fa-solid fa-store"></i> Store</div>
+    <div class="header-inner">
+        <div class="header-row">
+            <div class="header-brand">
+                <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="brand-logo">
+                <div class="brand-info">
+                    <h1 class="brand">Nupiee<span>Pro</span></h1>
+                    <div class="store-badge"><i class="fa-solid fa-store"></i> Store</div>
+                </div>
+            </div>
+            <div class="header-icons">
+                <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer" class="header-icon-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <button class="header-icon-btn" onclick="abrirSobre()" aria-label="Sobre"><i class="fa-solid fa-circle-info"></i></button>
+                <button class="header-icon-btn" onclick="abrirMeusPedidos()" aria-label="Pedidos"><i class="fa-solid fa-clock-rotate-left"></i></button>
             </div>
         </div>
-        <div class="header-icons">
-            <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer" class="header-icon-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-            <button class="header-icon-btn" onclick="abrirSobre()" aria-label="Sobre"><i class="fa-solid fa-circle-info"></i></button>
-            <button class="header-icon-btn" onclick="abrirMeusPedidos()" aria-label="Pedidos"><i class="fa-solid fa-clock-rotate-left"></i></button>
+        <div class="sub-brand">Núcleo Piauiense de Estudantes de Engenharia de Produção</div>
+        <div class="welcome-msg">👋 Bem-vindo(a), Nupilover!</div>
+        <div class="header-busca">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="search" id="campo-busca" placeholder="Buscar produto..." autocomplete="off" maxlength="60">
         </div>
-    </div>
-    <div class="sub-brand">Núcleo Piauiense de Estudantes de Engenharia de Produção</div>
-    <div class="welcome-msg">👋 Bem-vindo(a), Nupilover!</div>
-    <div class="header-busca">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="search" id="campo-busca" placeholder="Buscar produto..." autocomplete="off" maxlength="60">
     </div>
 </header>
 
@@ -612,6 +615,9 @@ function atualizarResumo(){
     const dl=document.getElementById('res-desc-linha');
     if(d>0&&cupomApl){document.getElementById('res-desc-val').textContent='- R$ '+d.toFixed(2).replace('.',',');document.getElementById('res-desc-label').textContent='Desconto ('+cupomApl.cod+')';dl.style.display='flex';}
     else dl.style.display='none';
+    /* Atualiza QR PIX com o valor correto (com desconto) */
+    const pgtoEl=document.querySelector('input[name="pgto"]:checked');
+    if(pgtoEl&&pgtoEl.value==='PIX'&&document.getElementById('pix-box').classList.contains('ativo')) gerarQRPix();
 }
 
 function abrirCheckout(){
