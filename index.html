@@ -8,14 +8,14 @@
     <!-- SEO -->
     <title>NUPIEEPRO STORE</title>
     <meta name="description" content="Loja oficial do Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI. Camisas, acessórios e muito mais!">
-    <link rel="canonical" href="https://nupieepro.github.io/">
+    <link rel="canonical" href="https://nupieepro.github.io/Lojinha-Nupieepro/">
 
     <!-- Open Graph (preview bonito no WhatsApp e Instagram) -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="NUPIEEPRO STORE">
     <meta property="og:description" content="Loja oficial do Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI.">
     <meta property="og:image" content="https://i.ibb.co/7hcph2F/download.jpg">
-    <meta property="og:url" content="https://nupieepro.github.io/">
+    <meta property="og:url" content="https://nupieepro.github.io/Lojinha-Nupieepro/">
     <meta property="og:locale" content="pt_BR">
 
     <!-- Twitter Card -->
@@ -47,11 +47,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome com SRI -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Font Awesome com fallback -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script>
+    /* Fallback Font Awesome se CDN falhar */
+    (function(){
+        var test = document.createElement('span');
+        test.className = 'fa';
+        test.style.display = 'none';
+        document.head.appendChild(test);
+        setTimeout(function(){
+            if(getComputedStyle(test).fontFamily.indexOf('Font Awesome') === -1){
+                var l = document.createElement('link');
+                l.rel = 'stylesheet';
+                l.href = 'https://use.fontawesome.com/releases/v6.4.0/css/all.css';
+                document.head.appendChild(l);
+            }
+            document.head.removeChild(test);
+        }, 1000);
+    })();
+    </script>
 
     <style>
         /* ============================================================
@@ -136,20 +151,21 @@
         /* ============================================================
            HEADER
            ============================================================ */
-        header { background:linear-gradient(160deg,var(--roxo-brand) 20%,#1a1245 100%); color:var(--branco); padding:20px 20px 90px 20px; border-radius:0 0 45px 45px; text-align:center; box-shadow:var(--shadow-lg); position:relative; overflow:hidden; }
-        .header-compact-row { display:flex; align-items:center; justify-content:center; gap:15px; margin-bottom:12px; }
-        .brand-logo { width:65px; height:65px; border-radius:50%; border:2px solid rgba(255,255,255,0.2); object-fit:cover; box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+        header { background:linear-gradient(160deg,var(--roxo-brand) 20%,#1a1245 100%); color:var(--branco); padding:16px 16px 80px 16px; border-radius:0 0 40px 40px; text-align:center; box-shadow:var(--shadow-lg); position:relative; overflow:hidden; }
+        .header-top-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+        .header-compact-row { display:flex; align-items:center; justify-content:center; gap:12px; flex:1; }
+        .brand-logo { width:56px; height:56px; border-radius:50%; border:2px solid rgba(255,255,255,0.2); object-fit:cover; box-shadow:0 5px 15px rgba(0,0,0,0.2); flex-shrink:0; }
         .brand-info { text-align:left; }
-        .brand { font-size:1.6rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin:0; line-height:1; }
+        .brand { font-size:1.4rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin:0; line-height:1; }
         .brand span { color:var(--laranja-brand); }
         .store-badge { display:inline-block; background:var(--laranja-brand); color:var(--branco); padding:3px 10px; border-radius:12px; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-top:4px; box-shadow:0 4px 10px var(--laranja-glow); }
-        .header-icons { position:absolute; top:18px; right:18px; display:flex; gap:10px; align-items:center; }
-        .header-icon-btn { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:var(--branco); font-size:0.95rem; display:flex; align-items:center; justify-content:center; transition:0.2s; }
+        .header-icons { display:flex; gap:6px; align-items:center; flex-shrink:0; }
+        .header-icon-btn { width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:var(--branco); font-size:0.85rem; display:flex; align-items:center; justify-content:center; transition:0.2s; text-decoration:none; flex-shrink:0; }
         .header-icon-btn:active { background:rgba(255,255,255,0.25); }
-        .sub-brand { font-size:0.7rem; opacity:0.85; font-weight:400; line-height:1.3; max-width:90%; margin:0 auto; }
+        .sub-brand { font-size:0.68rem; opacity:0.85; font-weight:400; line-height:1.3; max-width:90%; margin:0 auto; }
         .welcome-msg { background:rgba(255,255,255,0.08); display:inline-block; padding:4px 12px; border-radius:15px; font-size:0.7rem; margin-top:8px; border:1px solid rgba(255,255,255,0.1); }
-        .header-busca { margin-top:14px; display:flex; align-items:center; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:30px; padding:8px 16px; max-width:380px; margin-left:auto; margin-right:auto; }
-        .header-busca i { color:rgba(255,255,255,0.6); margin-right:10px; }
+        .header-busca { margin-top:12px; display:flex; align-items:center; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); border-radius:30px; padding:10px 16px; max-width:380px; margin-left:auto; margin-right:auto; width:100%; }
+        .header-busca i { color:rgba(255,255,255,0.6); margin-right:10px; flex-shrink:0; }
         .header-busca input { background:transparent; border:none; outline:none; color:var(--branco); font-family:inherit; font-size:0.85rem; width:100%; }
         .header-busca input::placeholder { color:rgba(255,255,255,0.5); }
         .contador-busca { text-align:center; font-size:0.75rem; color:var(--texto-suave); margin:-15px 0 10px; display:none; }
@@ -158,19 +174,20 @@
         /* ============================================================
            FILTROS
            ============================================================ */
-        .filter-container { margin-top:-50px; position:relative; z-index:20; padding:0 20px; margin-bottom:25px; }
-        .filter-scroll { display:flex; gap:10px; overflow-x:auto; padding:5px 5px 15px 5px; scrollbar-width:none; justify-content:center; }
+        .filter-container { margin-top:-50px; position:relative; z-index:20; padding:0; margin-bottom:20px; }
+        .filter-scroll { display:flex; gap:8px; overflow-x:auto; padding:8px 20px 15px 20px; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
         .filter-scroll::-webkit-scrollbar { display:none; }
-        .filter-btn { padding:8px 22px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.1); border-radius:30px; font-size:0.85rem; font-weight:500; color:rgba(255,255,255,0.9); white-space:nowrap; backdrop-filter:blur(5px); transition:all 0.3s ease; cursor:pointer; }
+        .filter-scroll::after { content:''; min-width:20px; display:block; }
+        .filter-btn { padding:8px 18px; background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.1); border-radius:30px; font-size:0.82rem; font-weight:500; color:rgba(255,255,255,0.9); white-space:nowrap; backdrop-filter:blur(5px); transition:all 0.3s ease; cursor:pointer; flex-shrink:0; }
         .filter-btn.active { background:var(--branco); color:var(--roxo-brand); font-weight:700; border-color:var(--branco); box-shadow:0 5px 15px rgba(0,0,0,0.2); transform:translateY(-2px); }
-        .view-controls { display:flex; justify-content:flex-end; align-items:center; gap:8px; padding:0 20px; margin-bottom:12px; margin-top:-10px; position:relative; z-index:10; }
+        .view-controls { display:flex; justify-content:flex-end; align-items:center; gap:8px; padding:0 16px; margin-bottom:8px; margin-top:-8px; position:relative; z-index:10; }
         .view-btn { width:32px; height:32px; border-radius:8px; border:1px solid #ddd; background:var(--card-bg); color:var(--texto-suave); font-size:0.85rem; display:flex; align-items:center; justify-content:center; transition:0.2s; }
         .view-btn.active { background:var(--roxo-brand); color:var(--branco); border-color:var(--roxo-brand); }
 
         /* ============================================================
            GRID & CARDS
            ============================================================ */
-        .container { max-width:1100px; margin:0 auto; padding:0 20px; display:grid; grid-template-columns:repeat(2,1fr); gap:15px; position:relative; z-index:10; }
+        .container { max-width:1100px; margin:0 auto; padding:0 12px; display:grid; grid-template-columns:repeat(2,1fr); gap:10px; position:relative; z-index:10; }
         @media(min-width:768px){ .container { grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:30px; } }
         .container.lista { grid-template-columns:1fr; }
         .container.lista .card { flex-direction:row; height:100px; }
@@ -508,23 +525,24 @@
      HEADER
      ============================================================ -->
 <header>
-    <div class="header-icons">
-        <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer" class="header-icon-btn" aria-label="Instagram Nupieepro">
-            <i class="fa-brands fa-instagram"></i>
-        </a>
-        <button class="header-icon-btn" onclick="abrirSobre()" aria-label="Sobre o Nupieepro">
-            <i class="fa-solid fa-circle-info"></i>
-        </button>
-        <button class="header-icon-btn" onclick="abrirMeusPedidos()" aria-label="Meus pedidos">
-            <i class="fa-solid fa-clock-rotate-left"></i>
-        </button>
-    </div>
-
-    <div class="header-compact-row">
-        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo Nupieepro" class="brand-logo">
-        <div class="brand-info">
-            <h1 class="brand">Nupiee<span>Pro</span></h1>
-            <div class="store-badge"><i class="fa-solid fa-store"></i> Store</div>
+    <div class="header-top-row">
+        <div class="header-compact-row">
+            <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Nupieepro" class="brand-logo">
+            <div class="brand-info">
+                <h1 class="brand">Nupiee<span>Pro</span></h1>
+                <div class="store-badge"><i class="fa-solid fa-store" aria-hidden="true"></i> Store</div>
+            </div>
+        </div>
+        <div class="header-icons">
+            <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer" class="header-icon-btn" aria-label="Instagram Nupieepro">
+                <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+            </a>
+            <button class="header-icon-btn" onclick="abrirSobre()" aria-label="Sobre o Nupieepro">
+                <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            </button>
+            <button class="header-icon-btn" onclick="abrirMeusPedidos()" aria-label="Meus pedidos">
+                <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
+            </button>
         </div>
     </div>
 
@@ -1019,17 +1037,19 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbw4Qk03yzsQEXE0qXstLuZl
    API — CARREGA PRODUTOS, CONFIG E CUPONS DO SHEETS
    ============================================================ */
 async function carregarDadosAPI(){
-    try {
-        const res = await fetch(`${API_URL}?action=config`);
-        const cfg = await res.json();
+    /* Limpa skeletons imediatamente — produtos hardcoded aparecem enquanto API carrega */
+    document.getElementById('vitrine-area').innerHTML = '';
 
+    const timeout = ms => new Promise((_,r) => setTimeout(() => r(new Error('timeout')), ms));
+
+    try {
+        const res = await Promise.race([fetch(`${API_URL}?action=config`), timeout(5000)]);
+        const cfg = await res.json();
         if(cfg.manutencao === 'true' || cfg.manutencao === true){
             document.getElementById('tela-manutencao').classList.add('ativa');
             return false;
         }
-        if(cfg.pausar_checkout === 'true'){
-            window._checkoutPausado = true;
-        }
+        if(cfg.pausar_checkout === 'true') window._checkoutPausado = true;
         if(cfg.aviso_topo_ativo === 'true' && cfg.aviso_topo_texto){
             const el = document.getElementById('aviso-topo');
             el.textContent = cfg.aviso_topo_texto;
@@ -1037,13 +1057,13 @@ async function carregarDadosAPI(){
         }
         if(cfg.mensagem_boas_vindas){
             const el = document.querySelector('.welcome-msg');
-            if(el) el.textContent = '👋 ' + cfg.mensagem_boas_vindas;
+            if(el) el.textContent = '\u{1F44B} ' + cfg.mensagem_boas_vindas;
         }
         if(cfg.nome_loja) document.title = cfg.nome_loja;
     } catch(e){}
 
     try {
-        const res  = await fetch(`${API_URL}?action=produtos`);
+        const res  = await Promise.race([fetch(`${API_URL}?action=produtos`), timeout(6000)]);
         const data = await res.json();
         if(Array.isArray(data) && data.length > 0){
             data.forEach(p => {
@@ -1056,15 +1076,13 @@ async function carregarDadosAPI(){
     } catch(e){}
 
     try {
-        const res  = await fetch(`${API_URL}?action=cupons`);
+        const res  = await Promise.race([fetch(`${API_URL}?action=cupons`), timeout(4000)]);
         const data = await res.json();
-        if(data.tem_cupom_ativo){
-            document.getElementById('card-cupom-vitrine').style.display = 'block';
-        }
+        if(data.tem_cupom_ativo) document.getElementById('card-cupom-vitrine').style.display = 'block';
     } catch(e){}
 
     try {
-        const res  = await fetch(`${API_URL}?action=combos`);
+        const res  = await Promise.race([fetch(`${API_URL}?action=combos`), timeout(4000)]);
         const data = await res.json();
         if(Array.isArray(data) && data.length > 0){
             const btn = document.getElementById('btn-filtro-combos');
@@ -1281,10 +1299,14 @@ window.addEventListener('load', () => {
     if(fonteSalva) document.body.classList.add('fonte-'+fonteSalva);
 
     /* Carrega dados da API e depois renderiza a vitrine */
-    carregarDadosAPI().then(() => {
-        carregarVitrine();
-        verificarBannerCupom();
-    });
+    /* Mostra produtos hardcoded imediatamente */
+    carregarVitrine();
+    verificarBannerCupom();
+
+    /* Depois atualiza com dados da API em background */
+    carregarDadosAPI().then((ok) => {
+        if(ok !== false) carregarVitrine();
+    }).catch(() => { /* API falhou, produtos hardcoded já estão na tela */ });
 
     /* Deep link por ?id= */
     const params = new URLSearchParams(window.location.search);
@@ -1325,9 +1347,25 @@ function carregarVitrine(){
     const contador = document.getElementById('contador-busca');
     area.innerHTML = '';
 
+    /* Segurança: garante que produtos hardcoded estão disponíveis */
+    if(!produtos || produtos.length === 0) return;
+
+    /* Favoritos */
+    if(filtroAtual === 'favoritos'){
+        const favs = JSON.parse(localStorage.getItem('nupieepro_favs') || '[]');
+        if(favs.length === 0){
+            area.innerHTML = '';
+            vazio.classList.add('ativo');
+            vazio.querySelector('h3').textContent = 'Nenhum favorito ainda';
+            vazio.querySelector('p').textContent = 'Toque no ❤️ dos produtos que gostar';
+            contador.classList.remove('ativo');
+            return;
+        }
+    }
+
     let lista = produtos.filter(p => {
         /* Filtra por disponibilidade */
-        if(p.estoque === 0 && !p.encomenda) return false; /* remove esgotados sem encomenda */
+        if(p.estoque === 0 && !p.encomenda) return false;
 
         /* Filtra favoritos */
         if(filtroAtual === 'favoritos'){
