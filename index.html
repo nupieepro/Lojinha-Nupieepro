@@ -1327,7 +1327,9 @@ function carregarVitrine(){
 
     let lista = produtos.filter(p => {
         /* Filtra por disponibilidade */
-        if(p.estoque === 0 && !p.encomenda) return false;
+        /* Normaliza booleanos que podem vir como string da API */
+        const encomenda = p.encomenda === true || p.encomenda === 'true' || p.encomenda === 'TRUE';
+        if(p.estoque === 0 && !encomenda) return false;
 
 
         /* Filtra categoria */
@@ -1362,10 +1364,6 @@ function carregarVitrine(){
     vazio.classList.remove('ativo');
 
     lista.forEach((p, idx) => {
-        const favs = JSON.parse(localStorage.getItem('nupieepro_favs') || '[]');
-        
-        const reacoes = JSON.parse(localStorage.getItem('nupieepro_reacoes') || '{}');
-        const r = reacoes[p.id] || {fogo:0, coracao:0, uau:0};
         const esgotado = p.estoque === 0;
         const ultimas  = p.estoque > 0 && p.estoque < 10;
 
@@ -1388,7 +1386,8 @@ function carregarVitrine(){
         const delay = Math.min(idx * 40, 300);
 
         const card = document.createElement('div');
-        card.className = `card${p.destaque ? ' destaque' : ''}${esgotado ? ' esgotado' : ''}`;
+        const isDestaque = p.destaque === true || p.destaque === 'true' || p.destaque === 'TRUE';
+        card.className = `card${isDestaque ? ' destaque' : ''}${esgotado ? ' esgotado' : ''}`;
         card.style.animation = idx < 6 ? `fadeUp 0.3s ease ${Math.min(idx*30,150)}ms both` : 'none';
         card.innerHTML = `
             <button class="share-btn" onclick="compartilhar(${p.id},event)" aria-label="Compartilhar produto">
@@ -1406,7 +1405,7 @@ function carregarVitrine(){
                 <div class="card-title">${sanitizar(p.nome)}</div>
                 <div class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
                 ${p.estoque > 0 && p.estoque < 10 ? `<div class="card-desconto">Restam ${p.estoque} unidades</div>` : ''}
-                ${p.encomenda ? `<div class="card-desconto" style="color:var(--laranja-brand);font-weight:700">📦 Apenas sob encomenda</div>` : ''}
+                ${(p.encomenda===true||p.encomenda==='true'||p.encomenda==='TRUE') ? `<div class="card-desconto" style="color:var(--laranja-brand);font-weight:700">📦 Apenas sob encomenda</div>` : ''}
                 <div class="tap-hint">Ver Detalhes</div>
             </div>
         `;
@@ -1442,17 +1441,6 @@ function alterarView(tipo){
 
 
 
-/* ============================================================
-   REAÇÕES
-   ============================================================ */
-function reagir(id, tipo, event){
-    if(event) event.stopPropagation();
-    let reacoes = JSON.parse(localStorage.getItem('nupieepro_reacoes') || '{}');
-    if(!reacoes[id]) reacoes[id] = {fogo:0, coracao:0, uau:0};
-    reacoes[id][tipo] = (reacoes[id][tipo] || 0) + 1;
-    localStorage.setItem('nupieepro_reacoes', JSON.stringify(reacoes));
-    carregarVitrine();
-}
 
 /* ============================================================
    BANNER CUPOM
@@ -1520,7 +1508,7 @@ function abrirDetalhes(id){
 
     /* Encomenda */
     const encEl = document.getElementById('detalhe-encomenda');
-    if(itemSelecionado.encomenda){
+    if(itemSelecionado.encomenda === true || itemSelecionado.encomenda === 'true' || itemSelecionado.encomenda === 'TRUE'){
         encEl.textContent = `📦 Produto sob encomenda${itemSelecionado.prazo_encomenda ? ' — ' + itemSelecionado.prazo_encomenda : ''}`;
         encEl.style.display = 'block';
     } else {
@@ -1533,7 +1521,7 @@ function abrirDetalhes(id){
     /* Tamanhos */
     const wrapTam = document.getElementById('wrapper-tamanho');
     const selTam  = document.getElementById('select-tamanho');
-    if(itemSelecionado.tipo === 'camisa' && itemSelecionado.tamanhos && itemSelecionado.tamanhos.length > 0){
+    if((itemSelecionado.tipo === 'camisa' || itemSelecionado.categoria === 'camisa') && itemSelecionado.tamanhos && itemSelecionado.tamanhos.length > 0){
         selTam.innerHTML = itemSelecionado.tamanhos.map(t => `<option value="${t}">${t}</option>`).join('');
         wrapTam.style.display = 'block';
     } else {
@@ -1542,8 +1530,6 @@ function abrirDetalhes(id){
 
     document.getElementById('detalhe-qtd').textContent = '1';
 
-    /* Favorito */
-    atualizarBtnFavModal();
 
     /* Relacionados */
     construirRelacionados();
