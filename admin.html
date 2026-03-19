@@ -271,6 +271,20 @@
         .loading i { animation:spin 1s linear infinite; }
         @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
 
+        /* ── UPLOAD FOTOS ── */
+        .upload-area { border:2px dashed rgba(15,7,50,0.2); border-radius:12px; padding:16px; margin-bottom:8px; text-align:center; cursor:pointer; transition:0.2s; background:#fafafa; }
+        .upload-area:hover { border-color:var(--laranja); background:#fff8f0; }
+        .upload-area.dragover { border-color:var(--laranja); background:#fff3e0; }
+        .upload-area input[type=file] { display:none; }
+        .upload-label { font-size:0.82rem; color:var(--suave); cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:6px; }
+        .upload-label i { font-size:1.5rem; color:var(--laranja); }
+        .fotos-preview { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+        .foto-preview-item { position:relative; width:72px; height:72px; border-radius:10px; overflow:hidden; border:2px solid #eee; flex-shrink:0; }
+        .foto-preview-item img { width:100%; height:100%; object-fit:cover; }
+        .foto-preview-item .foto-remove { position:absolute; top:2px; right:2px; background:rgba(231,76,60,0.9); color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:0.6rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .foto-uploading { opacity:0.5; }
+        .upload-progress { font-size:0.72rem; color:var(--laranja); font-weight:700; text-align:center; margin-bottom:4px; display:none; }
+
         /* ── MOBILE ── */
         @media(max-width:480px){
             .conteudo { padding:12px; }
@@ -616,9 +630,29 @@
             <textarea id="prod-descricao" class="form-textarea" placeholder="Descrição do produto..." maxlength="500"></textarea>
         </div>
         <div>
-            <label class="form-label">Fotos (URLs separadas por vírgula)</label>
-            <textarea id="prod-imagens" class="form-textarea" placeholder="https://..., https://..." rows="2" maxlength="2000"></textarea>
-            <div class="form-hint">Cada URL separada por vírgula. Máximo 100 fotos.</div>
+            <label class="form-label">Fotos do produto</label>
+            <div class="fotos-preview" id="fotos-preview"></div>
+            <div class="upload-progress" id="upload-progress">⏳ Enviando foto...</div>
+            <div class="upload-area" id="upload-area" onclick="document.getElementById('foto-file-input').click()" 
+                ondragover="event.preventDefault();this.classList.add('dragover')" 
+                ondragleave="this.classList.remove('dragover')"
+                ondrop="event.preventDefault();this.classList.remove('dragover');handleFotoDrop(event)">
+                <input type="file" id="foto-file-input" accept="image/*" multiple onchange="handleFotoUpload(this.files)">
+                <label class="upload-label">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Clique ou arraste fotos aqui</span>
+                    <span style="font-size:0.7rem;opacity:0.6">JPG, PNG, WEBP — várias de uma vez</span>
+                </label>
+            </div>
+            <div style="margin-top:6px">
+                <label class="form-label" style="margin-bottom:4px">Ou cole um link de foto:</label>
+                <div style="display:flex;gap:6px">
+                    <input type="url" id="foto-url-input" class="form-input" placeholder="https://..." style="margin-bottom:0">
+                    <button type="button" class="btn btn-sm btn-outline" onclick="adicionarFotoURL()" style="flex-shrink:0;white-space:nowrap">Adicionar</button>
+                </div>
+            </div>
+            <input type="hidden" id="prod-imagens">
+            <div class="form-hint" style="margin-top:6px">Primeira foto = foto principal. Arraste para reordenar. Máximo 100 fotos.</div>
         </div>
         <div id="wrapper-tamanhos-admin">
             <label class="form-label">Tamanhos disponíveis (separados por vírgula)</label>
@@ -1139,7 +1173,7 @@ function abrirModalProduto(id){
     document.getElementById('prod-agendamento').value = p && p.agendamento ? p.agendamento : '';
 
     const imgs = p ? (Array.isArray(p.imagens) ? p.imagens.join(', ') : p.imagens||'') : '';
-    document.getElementById('prod-imagens').value   = imgs;
+    carregarFotosModal(p ? (Array.isArray(p.imagens) ? p.imagens : (p.imagens||'').split(',').map(i=>i.trim()).filter(Boolean)) : []);
 
     const tams = p ? (Array.isArray(p.tamanhos) ? p.tamanhos.join(', ') : p.tamanhos||'') : '';
     document.getElementById('prod-tamanhos').value  = tams;
@@ -1458,6 +1492,80 @@ function fecharModalDireto(id){
 document.addEventListener('keydown', e => {
     if(e.key === 'Escape') document.querySelectorAll('.modal-overlay.ativo').forEach(m => m.classList.remove('ativo'));
 });
+
+/* ============================================================
+   UPLOAD DE FOTOS — ImgBB
+   ============================================================ */
+const IMGBB_KEY = '7dd10f3e634617cf6231fa3b4a3a728e';
+let fotosAtuais = []; /* array de URLs */
+
+function renderFotosPreview(){
+    const container = document.getElementById('fotos-preview');
+    if(!container) return;
+    container.innerHTML = fotosAtuais.map((url, idx) => `
+        <div class="foto-preview-item" id="foto-item-${idx}">
+            <img src="${url}" alt="Foto ${idx+1}" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\'><rect width=\'72\' height=\'72\' fill=\'%23eee\'/></svg>'">
+            <button class="foto-remove" onclick="removerFoto(${idx})" title="Remover foto">✕</button>
+        </div>
+    `).join('');
+    /* Atualiza o hidden input com as URLs */
+    document.getElementById('prod-imagens').value = fotosAtuais.join(',');
+}
+
+function removerFoto(idx){
+    fotosAtuais.splice(idx, 1);
+    renderFotosPreview();
+}
+
+function adicionarFotoURL(){
+    const input = document.getElementById('foto-url-input');
+    const url = input.value.trim();
+    if(!url){ toast('Cole um link válido!', true); return; }
+    fotosAtuais.push(url);
+    input.value = '';
+    renderFotosPreview();
+    toast('✅ Foto adicionada!');
+}
+
+function handleFotoDrop(e){
+    const files = e.dataTransfer.files;
+    if(files.length) handleFotoUpload(files);
+}
+
+async function handleFotoUpload(files){
+    const progress = document.getElementById('upload-progress');
+    progress.style.display = 'block';
+    const arr = Array.from(files);
+    for(let i = 0; i < arr.length; i++){
+        const file = arr[i];
+        if(!file.type.startsWith('image/')){ toast('Só imagens são aceitas!', true); continue; }
+        progress.textContent = `⏳ Enviando ${i+1}/${arr.length}...`;
+        try {
+            const url = await uploadImgBB(file);
+            fotosAtuais.push(url);
+            renderFotosPreview();
+        } catch(err) {
+            toast('Erro ao enviar foto. Tente novamente.', true);
+        }
+    }
+    progress.style.display = 'none';
+    if(arr.length > 0) toast(`✅ ${arr.length} foto(s) enviada(s)!`);
+}
+
+async function uploadImgBB(file){
+    const form = new FormData();
+    form.append('image', file);
+    const res = await fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, { method:'POST', body:form });
+    const data = await res.json();
+    if(!data.success) throw new Error(data.error?.message || 'Erro ImgBB');
+    return data.data.url;
+}
+
+/* Carrega fotos existentes ao abrir modal de produto */
+function carregarFotosModal(urls){
+    fotosAtuais = Array.isArray(urls) ? [...urls] : (typeof urls === 'string' ? urls.split(',').map(u=>u.trim()).filter(Boolean) : []);
+    renderFotosPreview();
+}
 
 /* ============================================================
    TOAST
