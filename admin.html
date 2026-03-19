@@ -175,6 +175,7 @@
         .pedido-item.em_producao{ border-left-color:var(--laranja); }
         .pedido-item.pronto     { border-left-color:#8e44ad; }
         .pedido-item.entregue   { border-left-color:#2980b9; }
+        .pedido-item.cancelado  { border-left-color:#e74c3c; }
         .pedido-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; gap:6px; }
         .pedido-numero { font-size:0.88rem; font-weight:800; color:var(--roxo); }
         .pedido-data   { font-size:0.72rem; color:var(--suave); }
@@ -188,6 +189,7 @@
         .status-pronto     { background:#f3e5f5; color:#6a1b9a; }
         .status-entregue   { background:#e3f2fd; color:#1565c0; }
         .status-pago       { background:#e8f5e9; color:#1b5e20; }
+        .status-cancelado  { background:#ffebee; color:#b71c1c; }
         .pedido-acoes { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
 
         /* ── CUPONS ── */
@@ -399,6 +401,7 @@
                 <option value="pronto">Pronto</option>
                 <option value="entregue">Entregue</option>
                 <option value="pago">Pago</option>
+                <option value="cancelado">Cancelado</option>
             </select>
             <button class="btn btn-outline btn-sm" onclick="exportarCSV()">
                 <i class="fa-solid fa-file-csv"></i> Exportar CSV
@@ -774,7 +777,7 @@ function instalarPWA(){
    CONFIGURAÇÃO
    ============================================================ */
 const API_URL    = 'https://script.google.com/macros/s/AKfycbw4Qk03yzsQEXE0qXstLuZlY0lx12aqrrXkdUwkeHykDD4KhVx8Ti4S4fNbLnYtg6uTwA/exec';
-const LOJA_URL   = 'https://nupieepro.github.io/';
+const LOJA_URL   = 'https://nupieepro.github.io/Lojinha-Nupieepro/';
 
 let chaveAdmin   = '';
 let produtosCache = [];
@@ -922,6 +925,7 @@ async function carregarPedidos(){
     try {
         const dados = { action: 'admin_get_pedidos' };
         if(status) dados.status = status;
+    /* Inclui cancelados na busca geral */
         pedidosCache = await api(dados);
 
         const novos = pedidosCache.filter(p => p.status === 'novo').length;
@@ -957,7 +961,7 @@ async function carregarPedidos(){
 }
 
 function traduzirStatus(s){
-    const t = { novo:'Novo', confirmado:'Confirmado', em_producao:'Em produção', pronto:'Pronto', entregue:'Entregue', pago:'Pago' };
+    const t = { novo:'Novo', confirmado:'Confirmado', em_producao:'Em produção', pronto:'Pronto', entregue:'Entregue', pago:'Pago', cancelado:'Cancelado' };
     return t[s] || s || '—';
 }
 
@@ -1002,8 +1006,8 @@ function abrirPedido(numero){
         <div style="margin-bottom:12px">
             <label class="form-label">Atualizar status</label>
             <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">
-                ${['novo','confirmado','em_producao','pronto','entregue'].map(s =>
-                    `<button class="btn btn-sm ${p.status===s?'btn-primary':'btn-outline'}" onclick="atualizarStatus('${p.numero}','${s}')">${traduzirStatus(s)}</button>`
+                ${['novo','confirmado','em_producao','pronto','entregue','cancelado'].map(s =>
+                    `<button class="btn btn-sm ${p.status===s?'btn-primary':(s==='cancelado'?'btn-vermelho':'btn-outline')}" onclick="atualizarStatus('${p.numero}','${s}')">${traduzirStatus(s)}</button>`
                 ).join('')}
             </div>
         </div>
@@ -1221,10 +1225,20 @@ function duplicarProduto(){
 async function carregarCupons(){
     document.getElementById('lista-cupons').innerHTML = '<div class="loading"><i class="fa-solid fa-circle-notch"></i> Carregando...</div>';
     try {
-        const cupons = await api({ action: 'admin_get_cupons' });
+        const resposta = await api({ action: 'admin_get_cupons' });
+        const cupons = Array.isArray(resposta) ? resposta : [];
+
+        window._cuponsCache = cupons;
 
         if(cupons.length === 0){
-            document.getElementById('lista-cupons').innerHTML = '<div class="empty-state"><i class="fa-solid fa-tag"></i>Nenhum cupom cadastrado</div>';
+            document.getElementById('lista-cupons').innerHTML = `
+                <div class="empty-state">
+                    <i class="fa-solid fa-tag"></i>
+                    <p>Nenhum cupom cadastrado</p>
+                    <button class="btn btn-laranja btn-sm" style="margin-top:12px" onclick="abrirModalCupom(null)">
+                        <i class="fa-solid fa-plus"></i> Criar primeiro cupom
+                    </button>
+                </div>`;
             return;
         }
 
@@ -1252,12 +1266,11 @@ async function carregarCupons(){
             </div>
         `}).join('');
 
-        /* Cache pra modal */
-        window._cuponsCache = cupons;
     } catch(e){ toast('Erro ao carregar cupons', true); }
 }
 
 async function abrirModalCupom(codigo){
+    if(!window._cuponsCache) await carregarCupons();
     const c = codigo && window._cuponsCache ? window._cuponsCache.find(x => x.codigo === codigo) : null;
     document.getElementById('cup-codigo').value    = c ? c.codigo : '';
     document.getElementById('cup-tipo').value      = c ? c.tipo   : 'percentual';
