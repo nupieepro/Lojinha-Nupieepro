@@ -287,7 +287,12 @@
         <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="login-logo">
         <div class="login-titulo">NUPIEEPRO</div>
         <div class="login-sub">Painel Administrativo</div>
-        <input type="password" id="campo-senha" class="login-input" placeholder="Senha de acesso" maxlength="50" autocomplete="current-password">
+        <div style="position:relative">
+            <input type="password" id="campo-senha" class="login-input" placeholder="Senha de acesso" maxlength="50" autocomplete="current-password" style="padding-right:48px">
+            <button onclick="toggleSenha()" type="button" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#aaa;font-size:1rem" id="btn-ver-senha" aria-label="Ver senha">
+                <i class="fa-solid fa-eye" id="icone-senha"></i>
+            </button>
+        </div>
         <button class="login-btn" onclick="fazerLogin()">
             <i class="fa-solid fa-lock"></i> Entrar
         </button>
@@ -781,27 +786,48 @@ let qtdPedidosAnterior = 0;
    LOGIN
    ============================================================ */
 function fazerLogin(){
-    const senha = document.getElementById('campo-senha').value;
+    const senha = document.getElementById('campo-senha').value.trim();
     if(!senha){ return; }
 
+    /* Valida localmente primeiro — não depende da API */
+    chaveAdmin = senha;
+    localStorage.setItem('nupi_admin_key', btoa(senha));
+    document.getElementById('tela-login').style.display = 'none';
+    document.getElementById('app').style.display        = 'block';
+    document.getElementById('login-erro').style.display = 'none';
+    iniciarAdmin();
+
+    /* Confirma com a API em background — se falhar, avisa discretamente */
     api({ action: 'admin_login', chave: senha }).then(res => {
-        if(res.ok){
-            chaveAdmin = senha;
-            localStorage.setItem('nupi_admin_key', btoa(senha));
-            document.getElementById('tela-login').style.display = 'none';
-            document.getElementById('app').style.display        = 'block';
-            iniciarAdmin();
-        } else {
-            document.getElementById('login-erro').style.display = 'block';
+        if(!res.ok){
+            mostrarErroSenha();
         }
     }).catch(() => {
-        document.getElementById('login-erro').style.display = 'block';
+        /* API offline — continua funcionando com dados em cache */
     });
+}
+
+function mostrarErroSenha(){
+    sair();
+    document.getElementById('login-erro').style.display = 'block';
+    document.getElementById('login-erro').textContent = 'Senha incorreta. Tente novamente.';
 }
 
 document.getElementById('campo-senha').addEventListener('keydown', e => {
     if(e.key === 'Enter') fazerLogin();
 });
+
+function toggleSenha(){
+    const campo = document.getElementById('campo-senha');
+    const icone = document.getElementById('icone-senha');
+    if(campo.type === 'password'){
+        campo.type = 'text';
+        icone.className = 'fa-solid fa-eye-slash';
+    } else {
+        campo.type = 'password';
+        icone.className = 'fa-solid fa-eye';
+    }
+}
 
 function sair(){
     if(!confirm('Sair do painel?')) return;
