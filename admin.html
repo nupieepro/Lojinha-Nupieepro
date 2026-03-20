@@ -787,7 +787,20 @@
    PWA — registra service worker do admin
    ============================================================ */
 if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('/admin-sw.js').catch(()=>{});
+    /* Tenta registrar em múltiplos paths (funciona em qualquer subdiretório) */
+    const swPaths = [
+        '/Lojinha-Nupieepro/admin-sw.js',
+        '/admin-sw.js',
+        './admin-sw.js'
+    ];
+    (async () => {
+        for(const path of swPaths){
+            try{
+                await navigator.serviceWorker.register(path);
+                break;
+            }catch(e){}
+        }
+    })();
 }
 
 /* ── Prompt de instalação PWA ── */
@@ -822,32 +835,41 @@ let qtdPedidosAnterior = 0;
 /* ============================================================
    LOGIN
    ============================================================ */
-function fazerLogin(){
+async function fazerLogin(){
     const senha = document.getElementById('campo-senha').value.trim();
     if(!senha){ return; }
 
-    /* Valida localmente primeiro — não depende da API */
-    chaveAdmin = senha;
-    localStorage.setItem('nupi_admin_key', btoa(senha));
-    document.getElementById('tela-login').style.display = 'none';
-    document.getElementById('app').style.display        = 'block';
-    document.getElementById('login-erro').style.display = 'none';
-    iniciarAdmin();
+    /* Mostra loading */
+    const btn = document.querySelector('.login-btn');
+    const erroEl = document.getElementById('login-erro');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Verificando...';
+    erroEl.style.display = 'none';
 
-    /* Confirma com a API em background — se falhar, avisa discretamente */
-    api({ action: 'admin_login', chave: senha }).then(res => {
-        if(!res.ok){
-            mostrarErroSenha();
+    try {
+        const res = await Promise.race([
+            fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'admin_login', chave:senha }) }),
+            new Promise((_,r) => setTimeout(()=>r(new Error('timeout')), 8000))
+        ]);
+        const data = await res.json();
+
+        if(data.ok){
+            chaveAdmin = senha;
+            localStorage.setItem('nupi_admin_key', btoa(senha));
+            document.getElementById('tela-login').style.display = 'none';
+            document.getElementById('app').style.display        = 'block';
+            iniciarAdmin();
+        } else {
+            erroEl.textContent = 'Senha incorreta. Tente novamente.';
+            erroEl.style.display = 'block';
         }
-    }).catch(() => {
-        /* API offline — continua funcionando com dados em cache */
-    });
-}
-
-function mostrarErroSenha(){
-    sair();
-    document.getElementById('login-erro').style.display = 'block';
-    document.getElementById('login-erro').textContent = 'Senha incorreta. Tente novamente.';
+    } catch(e) {
+        erroEl.textContent = 'Erro ao conectar. Verifique sua internet.';
+        erroEl.style.display = 'block';
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-lock"></i> Entrar';
+    }
 }
 
 document.getElementById('campo-senha').addEventListener('keydown', e => {
@@ -867,21 +889,41 @@ function toggleSenha(){
 }
 
 function sair(){
-    if(!confirm('Sair do painel?')) return;
     localStorage.removeItem('nupi_admin_key');
-    location.reload();
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('tela-login').style.display = 'flex';
+    document.getElementById('campo-senha').value = '';
+    chaveAdmin = '';
 }
 
-/* Restaura sessão */
-window.addEventListener('load', () => {
+/* Restaura sessão — re-valida com a API sem mostrar loading */
+window.addEventListener('load', async () => {
     const saved = localStorage.getItem('nupi_admin_key');
-    if(saved){
+    if(!saved) return;
+    try {
+        const k = atob(saved);
+        const res = await Promise.race([
+            fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'admin_login', chave:k }) }),
+            new Promise((_,r) => setTimeout(()=>r(new Error('timeout')), 6000))
+        ]);
+        const data = await res.json();
+        if(data.ok){
+            chaveAdmin = k;
+            document.getElementById('tela-login').style.display = 'none';
+            document.getElementById('app').style.display        = 'block';
+            iniciarAdmin();
+        } else {
+            localStorage.removeItem('nupi_admin_key');
+        }
+    } catch(e) {
+        /* Se API offline, usa sessão salva sem re-validar */
         try {
             const k = atob(saved);
             chaveAdmin = k;
-            document.getElementById('campo-senha').value = k;
-            fazerLogin();
-        } catch(e) {}
+            document.getElementById('tela-login').style.display = 'none';
+            document.getElementById('app').style.display        = 'block';
+            iniciarAdmin();
+        } catch(e2) { localStorage.removeItem('nupi_admin_key'); }
     }
 });
 
@@ -899,11 +941,18 @@ function iniciarAdmin(){
    API
    ============================================================ */
 async function api(dados){
+    if(!chaveAdmin){ throw new Error('Não autenticado'); }
     const res = await fetch(API_URL, {
         method: 'POST',
         body: JSON.stringify({ ...dados, chave: chaveAdmin })
     });
-    return await res.json();
+    const data = await res.json();
+    /* Se a API retornar erro de acesso negado, faz logout */
+    if(data.erro && data.erro.includes('Acesso negado')){
+        sair();
+        throw new Error('Sessão expirada');
+    }
+    return data;
 }
 
 async function apiGet(action){
@@ -1062,21 +1111,29 @@ function abrirPedido(numero){
 }
 
 async function atualizarStatus(numero, status){
+    const isCancelado = status === 'cancelado';
+    if(isCancelado && !confirm('Confirma o cancelamento do pedido #'+numero+'?')) return;
     try {
-        await api({ action: 'admin_atualizar_pedido', numero, status });
-        toast(`Status atualizado: ${traduzirStatus(status)}`);
-        fecharModalDireto('modal-pedido');
-        carregarPedidos();
-    } catch(e){ toast('Erro ao atualizar', true); }
+        const res = await api({ action: 'admin_atualizar_pedido', numero, status });
+        if(res.ok){
+            toast(isCancelado ? '❌ Pedido cancelado' : `✅ Status: ${traduzirStatus(status)}`);
+            fecharModalDireto('modal-pedido');
+            await carregarPedidos();
+        } else {
+            toast('Erro: ' + (res.erro||'tente novamente'), true);
+        }
+    } catch(e){ toast('Erro ao atualizar: ' + e.message, true); }
 }
 
 async function marcarPago(numero, pago){
     try {
-        await api({ action: 'admin_atualizar_pedido', numero, pago });
-        toast(pago ? '✅ Marcado como pago!' : 'Desmarcado');
-        fecharModalDireto('modal-pedido');
-        carregarPedidos();
-    } catch(e){ toast('Erro', true); }
+        const res = await api({ action: 'admin_atualizar_pedido', numero, pago });
+        if(res.ok){
+            toast(pago ? '✅ Marcado como pago!' : 'Pagamento desmarcado');
+            fecharModalDireto('modal-pedido');
+            await carregarPedidos();
+        } else { toast('Erro: ' + (res.erro||'tente novamente'), true); }
+    } catch(e){ toast('Erro: ' + e.message, true); }
 }
 
 async function salvarAnotacao(numero){
@@ -1088,11 +1145,25 @@ async function salvarAnotacao(numero){
 }
 
 async function exportarCSV(){
+    toast('⏳ Gerando CSV...');
     try {
         const res = await api({ action: 'admin_exportar_csv' });
-        if(res.url) window.open(res.url, '_blank', 'noopener');
-        else toast('Erro ao exportar', true);
-    } catch(e){ toast('Erro ao exportar', true); }
+        if(res.url){
+            window.open(res.url, '_blank', 'noopener');
+            toast('✅ CSV gerado! Abrindo download...');
+        } else if(res.csv){
+            /* Fallback: baixa direto pelo browser */
+            const blob = new Blob([res.csv], {type:'text/csv;charset=utf-8;'});
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href = url; a.download = 'pedidos_nupieepro.csv';
+            document.body.appendChild(a); a.click();
+            document.body.removeChild(a); URL.revokeObjectURL(url);
+            toast('✅ CSV baixado!');
+        } else {
+            toast('Erro ao exportar: ' + (res.erro||'sem dados'), true);
+        }
+    } catch(e){ toast('Erro: ' + e.message, true); }
 }
 
 /* ============================================================
@@ -1423,6 +1494,10 @@ async function salvarConfigToggle(chave, valor){
 }
 
 async function salvarConfig(publicar){
+    const btnPublicar = document.querySelector('.btn-laranja');
+    const btnRascunho = document.querySelector('.btn-primary[onclick*="salvarConfig"]');
+    if(btnPublicar) btnPublicar.disabled = true;
+
     const config = {
         nome_loja:            document.getElementById('cfg-nome-loja').value.trim(),
         mensagem_boas_vindas: document.getElementById('cfg-boas-vindas').value.trim(),
@@ -1436,17 +1511,20 @@ async function salvarConfig(publicar){
         aviso_topo_tipo:      document.getElementById('cfg-aviso-tipo').value,
     };
 
-    /* Banners */
     [1,2,3].forEach(n => {
-        config[`banner_${n}_img`]  = document.getElementById(`banner-${n}-img`)?.value  || '';
-        config[`banner_${n}_link`] = document.getElementById(`banner-${n}-link`)?.value || '';
+        config['banner_'+n+'_img']  = document.getElementById('banner-'+n+'-img')?.value  || '';
+        config['banner_'+n+'_link'] = document.getElementById('banner-'+n+'-link')?.value || '';
     });
 
     try {
         const res = await api({ action: 'admin_salvar_config', config });
-        if(res.ok) toast(publicar ? '🚀 Configurações publicadas!' : '💾 Rascunho salvo!');
-        else toast('Erro ao salvar', true);
-    } catch(e){ toast('Erro ao salvar', true); }
+        if(res.ok){
+            toast(publicar ? '🚀 Configurações publicadas na loja!' : '💾 Rascunho salvo!');
+            /* Recarrega config pra confirmar */
+            setTimeout(carregarConfig, 1500);
+        } else { toast('Erro ao salvar: ' + (res.erro||''), true); }
+    } catch(e){ toast('Erro: ' + e.message, true); }
+    finally { if(btnPublicar) btnPublicar.disabled = false; }
 }
 
 /* ============================================================
