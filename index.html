@@ -18,6 +18,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script>
+    /* Fallback Font Awesome se CDN falhar */
+    document.addEventListener('DOMContentLoaded',function(){
+        var ok=false;
+        try{var s=document.createElement('span');s.className='fa fa-check';s.style.cssText='position:absolute;visibility:hidden';document.body.appendChild(s);ok=window.getComputedStyle(s,':before').content!=='none'&&window.getComputedStyle(s,':before').content!=='';document.body.removeChild(s);}catch(e){}
+        if(!ok){var l=document.createElement('link');l.rel='stylesheet';l.href='https://use.fontawesome.com/releases/v6.4.0/css/all.css';document.head.appendChild(l);}
+    });
+    </script>
     <style>
         :root{--roxo-brand:#0f0732;--laranja-brand:#f85900;--azul-coracao:#007bff;--branco:#ffffff;--laranja-glow:rgba(248,89,0,0.3);--fundo:#F5F7FB;--card-bg:#ffffff;--texto:#0f0732;--texto-suave:#5a5575;--verde-zap:#25D366;--vermelho-del:#FF4757;--shadow-sm:0 4px 12px rgba(15,7,50,0.05);--shadow-md:0 10px 30px rgba(15,7,50,0.1);--shadow-lg:0 20px 50px rgba(15,7,50,0.15);}
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -198,6 +206,7 @@
         .pix-copiar{padding:9px 18px;background:var(--roxo-brand);color:#fff;border:none;border-radius:10px;font-size:0.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;margin:0 auto 8px;}
         .pix-timer{font-size:0.72rem;color:var(--vermelho-del);font-weight:700;}
         .pix-destaque{background:#e8f5e9;border-radius:10px;padding:7px 12px;font-size:0.78rem;color:#2e7d32;font-weight:700;margin-bottom:10px;display:none;align-items:center;gap:6px;}
+        #comprovante-label:hover{border-color:var(--laranja-brand);background:#fffbf8;}
         .pix-destaque.ativo{display:flex;}
 
         /* SUCESSO */
@@ -218,6 +227,12 @@
         #toast.erro{color:var(--vermelho-del);}
         #toast i{color:var(--verde-zap);font-size:1rem;}
         #toast.erro i{color:var(--vermelho-del);}
+
+        /* BOTTON SELECTOR */
+        .botton-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px;}
+        .botton-opt{padding:10px 8px;border:2px solid #eee;border-radius:12px;text-align:center;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--roxo-brand);transition:0.15s;}
+        .botton-opt.selected{border-color:var(--laranja-brand);background:#fffbf8;color:var(--laranja-brand);}
+        .botton-opt:active{transform:scale(0.97);}
 
         /* FOOTER */
         footer{text-align:center;color:var(--texto-suave);font-size:0.75rem;margin-top:36px;font-weight:500;padding-bottom:8px;}
@@ -318,6 +333,10 @@
             <label class="input-label">Tamanho:</label>
             <select id="select-tamanho" class="nice-select"></select>
         </div>
+        <div id="wrapper-botton" style="display:none">
+            <label class="input-label">Design do botton:</label>
+            <div class="botton-grid" id="botton-grid"></div>
+        </div>
         <label class="input-label">Quantidade:</label>
         <div class="qty-wrapper">
             <button class="qty-btn" onclick="alterarQtd(-1)">-</button>
@@ -385,9 +404,24 @@
             <div class="pix-box ativo" id="pix-box">
                 <div class="pix-valor" id="pix-valor"></div>
                 <div class="pix-qr"><img id="pix-qr-img" src="" alt="QR PIX" loading="lazy"></div>
-                <div class="pix-chave"><strong>Chave PIX:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e086898e818e838589928f8e959089858590928fa0878d81898cce838f8d">[email&#160;protected]</a></div>
-                <button class="pix-copiar" onclick="copiarPix()"><i class="fa-solid fa-copy"></i> Copiar chave</button>
+                <div class="pix-chave" id="pix-chave-txt"><strong>Chave PIX:</strong> <span id="pix-chave-val"></span></div>
+                <button class="pix-copiar" onclick="copiarPix()"><i class="fa-solid fa-copy"></i> Copiar código PIX</button>
                 <div class="pix-timer">⏱️ Expira em <span id="pix-timer-txt">30:00</span></div>
+                <div id="comprovante-area" style="margin-top:14px;padding-top:14px;border-top:1px solid #e0e0e0">
+                    <div style="font-size:0.8rem;font-weight:700;color:var(--roxo-brand);margin-bottom:8px">
+                        📎 Anexe o comprovante do PIX:
+                    </div>
+                    <label id="comprovante-label" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px;border:2px dashed #ddd;border-radius:12px;cursor:pointer;font-size:0.78rem;color:#aaa;transition:0.2s">
+                        <i class="fa-solid fa-image" style="font-size:1.4rem;color:var(--laranja-brand)"></i>
+                        Toque para anexar o comprovante
+                        <input type="file" id="comprovante-input" accept="image/*" style="display:none" onchange="previewComprovante(this)">
+                    </label>
+                    <div id="comprovante-preview" style="display:none;margin-top:8px;text-align:center">
+                        <img id="comprovante-img" src="" style="max-width:100%;max-height:180px;border-radius:10px;border:2px solid var(--verde-zap)">
+                        <div style="font-size:0.75rem;color:var(--verde-zap);font-weight:700;margin-top:4px">✅ Comprovante anexado!</div>
+                        <button onclick="removerComprovante()" style="font-size:0.72rem;color:var(--vermelho-del);background:none;border:none;cursor:pointer;margin-top:4px">Trocar</button>
+                    </div>
+                </div>
             </div>
 
             <button class="btn-danger" onclick="limparCarrinho()"><i class="fa-solid fa-trash"></i> Limpar sacola</button>
@@ -444,13 +478,21 @@ let produtos=[
     {id:4,nome:"Ecobag Nupieepro",preco:22,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/7dj3kxt0/unnamed-3.png",descricao:"Ecobag resistente com a identidade do NUPIEEPRO.",tamanhos:[],estoque:20,destaque:false,encomenda:false},
     {id:5,nome:"Bloco de Notas",preco:15,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/hxxnxrbF/unnamed-4.png",descricao:"Bloco de notas personalizado NUPIEEPRO.",tamanhos:[],estoque:30,destaque:false,encomenda:false},
     {id:6,nome:"Chaveiro Abridor",preco:4,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/Kj00Xbys/unnamed-5.png",descricao:"Chaveiro abridor personalizado NUPIEEPRO.",tamanhos:[],estoque:50,destaque:false,encomenda:false},
-    {id:7,nome:"Botton Personalizado",preco:3,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/mrsm95Kv/1769766015274.png",descricao:"Botton personalizado NUPIEEPRO.",tamanhos:[],estoque:100,destaque:false,encomenda:false}
+    {id:7,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://i.ibb.co/mrsm95Kv/1769766015274.png",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Frase Eng. Producao","Simbolo Engrenagem","Personalizado"],estoque:100,destaque:false,encomenda:false}
 ];
 const cupons={'CALOUROEP10':{tipo:'percentual',valor:10,produtos_ids:[4,5,6],minimo:0,limite:500,usos:0,ativo:true}};
 let carrinho=[],itemSel=null,qtdTemp=1,filtroAtual='todos',busca='',cupomApl=null,pixT=null;
 
 window.addEventListener('load',()=>{
-    if('serviceWorker' in navigator) navigator.serviceWorker.register('/Lojinha-Nupieepro/sw.js').catch(()=>{});
+    if('serviceWorker' in navigator){
+        navigator.serviceWorker.register('/Lojinha-Nupieepro/sw.js')
+            .then(reg=>{
+                /* Verifica atualizações a cada 5 minutos */
+                setInterval(()=>reg.update(), 5*60*1000);
+            }).catch(()=>{});
+        /* Se SW instalou update, recarrega automaticamente */
+        navigator.serviceWorker.addEventListener('controllerchange',()=>window.location.reload());
+    }
     carregarUser();carregarCarrinho();renderVitrine();
     /* Mostra card de cupom se tiver cupom ativo localmente */
     if(Object.values(cupons).some(c=>c.ativo)){
@@ -539,8 +581,23 @@ function abrirDetalhes(id){
     if(itemSel.encomenda){encEl.textContent='📦 '+(itemSel.prazo_encomenda||'Produto sob encomenda');encEl.style.display='block';}else encEl.style.display='none';
     const wt=document.getElementById('wrapper-tamanho'),st=document.getElementById('select-tamanho');
     const isCamisa=itemSel.tipo==='camisa'||itemSel.categoria==='camisa';
-    if(isCamisa&&itemSel.tamanhos&&itemSel.tamanhos.length){st.innerHTML=itemSel.tamanhos.map(t=>`<option value="${t}">${t}</option>`).join('');wt.style.display='block';}
-    else wt.style.display='none';
+    const isBotton=itemSel.tipo==='botton';
+
+    /* Seletor de tamanho (camisas) */
+    if(isCamisa&&itemSel.tamanhos&&itemSel.tamanhos.length){
+        st.innerHTML=itemSel.tamanhos.map(t=>`<option value="${t}">${t}</option>`).join('');
+        wt.style.display='block';
+    } else wt.style.display='none';
+
+    /* Seletor de tipo (bottons) */
+    const wbEl=document.getElementById('wrapper-botton');
+    if(isBotton&&itemSel.tipos_botton&&itemSel.tipos_botton.length){
+        const grid=document.getElementById('botton-grid');
+        grid.innerHTML=itemSel.tipos_botton.map((t,i)=>
+            `<div class="botton-opt${i===0?' selected':''}" onclick="selecionarBotton(this,'${t}')">${t}</div>`
+        ).join('');
+        wbEl.style.display='block';
+    } else if(wbEl) wbEl.style.display='none';
     document.getElementById('modal-details').classList.add('active');
     document.body.style.overflow='hidden';
     history.replaceState({},'',location.pathname+'?id='+id);
@@ -551,14 +608,33 @@ function fecharModais(e){
     document.querySelectorAll('.modal-bg').forEach(m=>m.classList.remove('active'));
     document.body.style.overflow='';
     if(pixT){clearInterval(pixT);pixT=null;}
+    /* Reseta comprovante ao fechar checkout */
+    window._comprovante=null;
+    const lbl=document.getElementById('comprovante-label');
+    const prv=document.getElementById('comprovante-preview');
+    const inp=document.getElementById('comprovante-input');
+    if(lbl) lbl.style.display='flex';
+    if(prv) prv.style.display='none';
+    if(inp) inp.value='';
     history.replaceState({},'',location.pathname);
 }
 
 function alterarQtd(v){qtdTemp=Math.max(1,qtdTemp+v);document.getElementById('detalhe-qtd').textContent=qtdTemp;}
 
+function selecionarBotton(el, tipo){
+    document.querySelectorAll('.botton-opt').forEach(b=>b.classList.remove('selected'));
+    el.classList.add('selected');
+}
+
 function adicionarAoCarrinho(){
     let tam='Único';
-    if(itemSel.tipo==='camisa'||itemSel.categoria==='camisa') tam=document.getElementById('select-tamanho').value;
+    const isCamisa=itemSel.tipo==='camisa'||itemSel.categoria==='camisa';
+    const isBotton=itemSel.tipo==='botton';
+    if(isCamisa) tam=document.getElementById('select-tamanho').value;
+    if(isBotton){
+        const sel=document.querySelector('.botton-opt.selected');
+        tam=sel?sel.textContent:'Padrão';
+    }
     const i=carrinho.findIndex(x=>x.id===itemSel.id&&x.tamanho===tam);
     if(i>=0) carrinho[i].qtd+=qtdTemp; else carrinho.push({...itemSel,tamanho:tam,qtd:qtdTemp});
     salvarCarrinho();atualizarBarra();toast('✅ Adicionado à sacola!');fecharModais(null);
@@ -579,7 +655,7 @@ function renderCarrinho(){
     if(!carrinho.length){fecharModais(null);return;}
     carrinho.forEach((item,idx)=>{
         const li=document.createElement('li');li.className='cart-item';
-        li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>R$${item.preco.toFixed(2).replace('.',',')}${(item.tipo==='camisa'&&item.tamanho!=='Único')?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})"><i class="fa-solid fa-trash"></i></button>`;
+        li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>R$${item.preco.toFixed(2).replace('.',',')}${item.tamanho&&item.tamanho!=='Único'?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})"><i class="fa-solid fa-trash"></i></button>`;
         lista.appendChild(li);
     });atualizarResumo();
 }
@@ -637,20 +713,101 @@ function togglePix(){
     document.getElementById('pix-destaque').classList.toggle('ativo',p);
     if(p) gerarQRPix();
 }
+/* PIX: chave via JS pra evitar ofuscação do Cloudflare */
+const _pixKey = (()=>{const p=['financeiro','nupieepro','@gmail.com'];return p[0]+p[1]+p[2];})();
+
 function gerarQRPix(){
-    const tot=calcTotal();
-    document.getElementById('pix-valor').textContent='R$ '+tot.toFixed(2).replace('.',',');
-    const chave='financeironupieepro@gmail.com';
-    const f=(id,v)=>id+v.length.toString().padStart(2,'0')+v;
-    const mai=f('00','BR.GOV.BCB.PIX')+f('01',chave);
-    const pl=f('00','01')+f('26',mai)+f('52','0000')+f('53','986')+f('54',tot.toFixed(2))+f('58','BR')+f('59','NUPIEEPRO')+f('60','Teresina')+f('62',f('05','***'));
-    let c=0xFFFF;for(let i=0;i<pl.length+4;i++){const ch=i<pl.length?pl.charCodeAt(i):(i===pl.length?'6'.charCodeAt(0):i===pl.length+1?'3'.charCodeAt(0):i===pl.length+2?'0'.charCodeAt(0):'4'.charCodeAt(0));c^=ch<<8;for(let j=0;j<8;j++)c=(c&0x8000)?(c<<1)^0x1021:c<<1;}
-    const crc=(c&0xFFFF).toString(16).toUpperCase().padStart(4,'0');
-    document.getElementById('pix-qr-img').src='https://api.qrserver.com/v1/create-qr-code/?size=180x180&data='+encodeURIComponent(pl+'6304'+crc);
-    if(pixT)clearInterval(pixT);let s=1800;const el=document.getElementById('pix-timer-txt');
-    pixT=setInterval(()=>{if(--s<=0){clearInterval(pixT);el.textContent='Expirado';return;}el.textContent=Math.floor(s/60).toString().padStart(2,'0')+':'+(s%60).toString().padStart(2,'0');},1000);
+    const tot = calcTotal();
+    document.getElementById('pix-valor').textContent = 'R$ '+tot.toFixed(2).replace('.',',');
+
+    /* Mostra chave via JS (Cloudflare não ofusca JS) */
+    const kvEl = document.getElementById('pix-chave-val');
+    if(kvEl) kvEl.textContent = _pixKey;
+
+    /* Gera payload EMV correto */
+    const payload = gerarPayloadPix(_pixKey, 'NUPIEEPRO', tot);
+    window._pixPayload = payload; /* guarda pra copiar depois */
+
+    document.getElementById('pix-qr-img').src =
+        'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(payload);
+
+    if(pixT) clearInterval(pixT);
+    let s = 1800;
+    const el = document.getElementById('pix-timer-txt');
+    pixT = setInterval(()=>{
+        if(--s<=0){ clearInterval(pixT); el.textContent='Expirado'; return; }
+        el.textContent = Math.floor(s/60).toString().padStart(2,'0')+':'+(s%60).toString().padStart(2,'0');
+    }, 1000);
 }
-function copiarPix(){navigator.clipboard&&navigator.clipboard.writeText('financeironupieepro@gmail.com').then(()=>toast('✅ Chave PIX copiada!'));}
+
+function gerarPayloadPix(chave, nome, valor){
+    /* EMV QRCPS-MPM conforme BACEN */
+    const f = (id, v) => {
+        const s = String(v);
+        return id + s.length.toString().padStart(2,'0') + s;
+    };
+    const merchant = f('00','BR.GOV.BCB.PIX') + f('01', chave);
+    const addData  = f('05','***');
+    let payload =
+        f('00','01') +
+        f('26', merchant) +
+        f('52','0000') +
+        f('53','986') +
+        f('54', valor.toFixed(2)) +
+        f('58','BR') +
+        f('59', nome.substring(0,25).padEnd(1,' ')) +
+        f('60','Teresina') +
+        f('62', addData) +
+        '6304'; /* CRC placeholder */
+
+    /* Calcula CRC-16/CCITT-FALSE */
+    let crc = 0xFFFF;
+    for(let i = 0; i < payload.length; i++){
+        crc ^= payload.charCodeAt(i) << 8;
+        for(let j = 0; j < 8; j++)
+            crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
+        crc &= 0xFFFF;
+    }
+    return payload + crc.toString(16).toUpperCase().padStart(4,'0');
+}
+
+function copiarPix(){
+    const payload = window._pixPayload;
+    if(!payload){ toast('Gere o QR primeiro!', 1); return; }
+    if(navigator.clipboard){
+        navigator.clipboard.writeText(payload)
+            .then(()=>toast('✅ Código PIX copiado! Cole em qualquer banco.'))
+            .catch(()=>{ _copiarFallback(payload); });
+    } else {
+        _copiarFallback(payload);
+    }
+}
+function _copiarFallback(txt){
+    const el = document.createElement('textarea');
+    el.value = txt; el.style.position='fixed'; el.style.opacity='0';
+    document.body.appendChild(el); el.select();
+    try{ document.execCommand('copy'); toast('✅ Código PIX copiado!'); }
+    catch(e){ toast('Copie a chave manualmente: '+_pixKey, 1); }
+    document.body.removeChild(el);
+}
+
+function previewComprovante(input){
+    if(!input.files||!input.files[0]) return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+        document.getElementById('comprovante-img').src=e.target.result;
+        document.getElementById('comprovante-preview').style.display='block';
+        document.getElementById('comprovante-label').style.display='none';
+        window._comprovante=e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+}
+function removerComprovante(){
+    document.getElementById('comprovante-preview').style.display='none';
+    document.getElementById('comprovante-label').style.display='flex';
+    document.getElementById('comprovante-input').value='';
+    window._comprovante=null;
+}
 
 function enviarPedidoZap(){
     if(document.getElementById('honeypot').value||!rlOk()) return;
@@ -663,6 +820,13 @@ function enviarPedidoZap(){
     const obs=document.getElementById('campo-obs').value.trim();
     if(!nome||!zap){toast('⚠️ Preencha Nome e WhatsApp!',1);return;}
     if(entrega==='Entrega'&&!end){toast('⚠️ Informe o endereço!',1);return;}
+    /* Comprovante obrigatório para PIX */
+    if(pgto==='PIX'&&!window._comprovante){
+        toast('⚠️ Anexe o comprovante do PIX antes de enviar!',1);
+        document.getElementById('comprovante-label').style.border='2px dashed var(--vermelho-del)';
+        setTimeout(()=>{if(document.getElementById('comprovante-label'))document.getElementById('comprovante-label').style.border='2px dashed #ddd';},3000);
+        return;
+    }
     salvarUser();
     const num=gerarNum(),now=new Date().toLocaleString('pt-BR');
     let msg=`*LOJINHA OFICIAL NUPIEEPRO* ⚙️\n*Pedido:* #${num}\n*Data:* ${now}\n------------------------------\n👤 *Cliente:* ${nome}\n📱 *WhatsApp:* ${zap}\n`;
@@ -676,11 +840,11 @@ function enviarPedidoZap(){
     if(dc>0&&cupomApl) msg+=`🎟️ *Cupom (${cupomApl.cod}):* - R$ ${dc.toFixed(2).replace('.',',')}\n`;
     msg+=`💰 *TOTAL: R$ ${tt.toFixed(2).replace('.',',')}*\n------------------------------\n`;
     if(obs) msg+=`📝 *Obs:* ${obs}\n`;
-    if(pgto==='PIX') msg+=`ℹ️ O financeiro enviará a chave PIX em breve.`;
+    if(pgto==='PIX') msg+=`✅ PIX enviado! Aguardando confirmação do financeiro.`;
     salvarHist(num,now,tt);
     if(cupomApl) cupons[cupomApl.cod].usos++;
     fetch(API_URL,{method:'POST',body:JSON.stringify({action:'registrar_pedido',numero:num,nome,whatsapp:zap,email,entrega,endereco:end,pagamento:pgto,observacao:obs,itens:carrinho,subtotal:sb,desconto:dc,cupom:cupomApl?cupomApl.cod:'',total:tt})}).catch(()=>{});
-    carrinho=[];cupomApl=null;salvarCarrinho();atualizarBarra();
+    carrinho=[];cupomApl=null;window._comprovante=null;salvarCarrinho();atualizarBarra();
     window.open('https://wa.me/'+_w+'?text='+encodeURIComponent(msg),'_blank','noopener');
     const msgs=['Boa escolha! O Nupieepro agradece 🧡','Que venha mais! 💙🧡','Obrigado por apoiar o núcleo! ⚙️'];
     document.getElementById('sucesso-num').textContent='Pedido #'+num;
