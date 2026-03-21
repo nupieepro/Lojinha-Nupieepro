@@ -11,7 +11,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nupi Admin">
     <link rel="apple-touch-icon" href="https://i.ibb.co/7hcph2F/download.jpg">
-    <link rel="manifest" href="/admin-manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Nupi Admin">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/7hcph2F/download.jpg">
+    <link rel="manifest" href="./admin-manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -655,9 +658,9 @@
             <div class="form-hint" style="margin-top:6px">Primeira foto = foto principal. Arraste para reordenar. Máximo 100 fotos.</div>
         </div>
         <div id="wrapper-tamanhos-admin">
-            <label class="form-label">Tamanhos disponíveis (separados por vírgula)</label>
-            <input type="text" id="prod-tamanhos" class="form-input" placeholder="P - Normal, M - Normal, G - Normal...">
-            <div class="form-hint">Só preencha para camisas.</div>
+            <label class="form-label" id="label-tamanhos">Tamanhos disponíveis (separados por vírgula)</label>
+            <input type="text" id="prod-tamanhos" class="form-input" id="prod-tamanhos" placeholder="P - Normal, M - Normal, G - Normal...">
+            <div class="form-hint" id="hint-tamanhos">Camisas: ex. P - Normal, M - Normal. Bottons: ex. Logo NUPIEEPRO, Frase Eng. Producao.</div>
         </div>
         <div class="form-row cols-2" style="margin-top:12px">
             <div style="display:flex;flex-direction:column;gap:10px">
@@ -787,21 +790,34 @@
    PWA — registra service worker do admin
    ============================================================ */
 if('serviceWorker' in navigator){
-    /* Tenta registrar em múltiplos paths (funciona em qualquer subdiretório) */
-    const swPaths = [
-        '/Lojinha-Nupieepro/admin-sw.js',
-        '/admin-sw.js',
-        './admin-sw.js'
-    ];
-    (async () => {
-        for(const path of swPaths){
-            try{
-                await navigator.serviceWorker.register(path);
-                break;
-            }catch(e){}
-        }
-    })();
+    navigator.serviceWorker.register('./admin-sw.js')
+        .then(reg => { setInterval(()=>reg.update(), 5*60*1000); })
+        .catch(()=>{});
+    navigator.serviceWorker.addEventListener('controllerchange', ()=>{
+        if(!window._swReloading){ window._swReloading=true; window.location.reload(); }
+    });
 }
+
+/* iOS Safari — dica de instalação */
+(function(){
+    var _ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    var _sa  = window.navigator.standalone;
+    if(!_ios || _sa || localStorage.getItem("nupi_admin_ios_dica")) return;
+    setTimeout(function(){
+        var d   = document.createElement("div");
+        var txt = document.createElement("div");
+        var btn = document.createElement("button");
+        d.style.cssText   = "position:fixed;bottom:0;left:0;right:0;background:#0f0732;color:#fff;padding:14px 18px;z-index:9998;display:flex;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(0,0,0,0.3)";
+        txt.style.cssText = "flex:1;font-size:0.82rem;line-height:1.4";
+        txt.innerHTML     = "<strong style='color:#f85900'>Instalar painel no iPhone:</strong><br>Toque em <strong>Compartilhar</strong> e depois <strong>Adicionar a Tela de Inicio</strong>";
+        btn.textContent   = "X";
+        btn.style.cssText = "background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:4px;flex-shrink:0";
+        btn.onclick       = function(){ d.remove(); localStorage.setItem("nupi_admin_ios_dica","1"); };
+        d.appendChild(txt);
+        d.appendChild(btn);
+        document.body.appendChild(d);
+    }, 2000);
+})();
 
 /* ── Prompt de instalação PWA ── */
 let _deferredPrompt = null;
@@ -990,6 +1006,8 @@ async function carregarDashboard(){
         document.getElementById('dash-hoje').textContent        = d.pedidos_hoje  || 0;
         document.getElementById('dash-ticket').textContent      = `R$ ${(d.ticket_medio||0).toFixed(2).replace('.',',')}`;
         document.getElementById('dash-mais-vendido').textContent = d.mais_vendido ? `${d.mais_vendido.nome} (${d.mais_vendido.qtd} vendidos)` : '—';
+        const cancelEl = document.getElementById('dash-cancelados');
+        if(cancelEl) cancelEl.textContent = d.total_cancelados || 0;
         document.getElementById('dash-cupons').textContent      = `Total descontado: R$ ${(d.desconto_cupons||0).toFixed(2).replace('.',',')}`;
 
         const pgtos = d.pagamentos || {};
@@ -1236,6 +1254,7 @@ function abrirModalProduto(id){
     document.getElementById('prod-id').value        = p ? p.id : '';
     document.getElementById('prod-nome').value      = p ? p.nome : '';
     document.getElementById('prod-categoria').value = p ? p.categoria : 'acessorio';
+    atualizarLabelTamanhos(p ? p.categoria : 'acessorio');
     document.getElementById('prod-preco').value     = p ? p.preco : '';
     document.getElementById('prod-custo').value     = p ? p.custo : '';
     document.getElementById('prod-estoque').value   = p ? p.estoque : '';
@@ -1258,6 +1277,26 @@ function abrirModalProduto(id){
     abrirModal('modal-produto');
 }
 
+function atualizarLabelTamanhos(cat){
+    const label = document.getElementById('label-tamanhos');
+    const hint  = document.getElementById('hint-tamanhos');
+    const input = document.getElementById('prod-tamanhos');
+    if(!label) return;
+    if(cat === 'camisa'){
+        label.textContent = 'Tamanhos disponíveis (separados por vírgula)';
+        hint.textContent  = 'Ex: P - Normal, M - Normal, G - Normal, GG - Normal, P - BBL...';
+        input.placeholder = 'P - Normal, M - Normal, G - Normal...';
+    } else if(cat === 'acessorio'){
+        label.textContent = 'Designs / Tipos disponíveis (separados por vírgula)';
+        hint.textContent  = 'Para bottons: ex. Logo NUPIEEPRO, Frase Eng. Producao, Simbolo Engrenagem. Deixe vazio se não tiver variações.';
+        input.placeholder = 'Logo NUPIEEPRO, Frase Eng. Producao, Simbolo Engrenagem...';
+    } else {
+        label.textContent = 'Variações disponíveis (separados por vírgula)';
+        hint.textContent  = 'Deixe vazio se não tiver variações.';
+        input.placeholder = '';
+    }
+}
+
 function calcularMargem(){
     const preco = parseFloat(document.getElementById('prod-preco').value) || 0;
     const custo = parseFloat(document.getElementById('prod-custo').value) || 0;
@@ -1271,6 +1310,7 @@ function calcularMargem(){
 
 document.getElementById('prod-preco').addEventListener('input', calcularMargem);
 document.getElementById('prod-custo').addEventListener('input', calcularMargem);
+document.getElementById('prod-categoria').addEventListener('change', function(){ atualizarLabelTamanhos(this.value); });
 
 async function salvarProduto(publicar){
     const nome = document.getElementById('prod-nome').value.trim();
@@ -1619,15 +1659,68 @@ async function handleFotoUpload(files){
         if(!file.type.startsWith('image/')){ toast('Só imagens são aceitas!', true); continue; }
         progress.textContent = `⏳ Enviando ${i+1}/${arr.length}...`;
         try {
-            const url = await uploadImgBB(file);
+            const url = await uploadComFallback(file);
             fotosAtuais.push(url);
             renderFotosPreview();
         } catch(err) {
-            toast('Erro ao enviar foto. Tente novamente.', true);
+            /* Se todos os serviços falharam, converte pra base64 local */
+            toast('⚠️ Serviços offline. Usando imagem local...', true);
+            try {
+                const b64 = await fileParaBase64(file);
+                fotosAtuais.push(b64);
+                renderFotosPreview();
+                toast('✅ Imagem adicionada localmente!');
+            } catch(e2) {
+                toast('Erro ao processar imagem.', true);
+            }
         }
     }
     progress.style.display = 'none';
-    if(arr.length > 0) toast(`✅ ${arr.length} foto(s) enviada(s)!`);
+    if(arr.length > 0) toast(`✅ ${arr.length} foto(s) processada(s)!`);
+}
+
+/* Tenta ImgBB, depois freeimage.host, depois base64 */
+async function uploadComFallback(file){
+    /* Tenta ImgBB primeiro */
+    try {
+        const form = new FormData();
+        form.append('image', file);
+        const res = await Promise.race([
+            fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, { method:'POST', body:form }),
+            new Promise((_,r) => setTimeout(()=>r(new Error('timeout')), 10000))
+        ]);
+        const data = await res.json();
+        if(data.success) return data.data.url;
+        throw new Error('ImgBB falhou');
+    } catch(e1) {}
+
+    /* Tenta Imgur como fallback */
+    try {
+        const form2 = new FormData();
+        form2.append('image', file);
+        const res2 = await Promise.race([
+            fetch('https://api.imgur.com/3/image', {
+                method: 'POST',
+                headers: { 'Authorization': 'Client-ID 546c25a59c58ad7' },
+                body: form2
+            }),
+            new Promise((_,r) => setTimeout(()=>r(new Error('timeout')), 10000))
+        ]);
+        const data2 = await res2.json();
+        if(data2.success) return data2.data.link;
+        throw new Error('Imgur falhou');
+    } catch(e2) {}
+
+    throw new Error('Todos os serviços falharam');
+}
+
+async function fileParaBase64(file){
+    return new Promise((res, rej) => {
+        const reader = new FileReader();
+        reader.onload  = e => res(e.target.result);
+        reader.onerror = () => rej(new Error('Leitura falhou'));
+        reader.readAsDataURL(file);
+    });
 }
 
 async function uploadImgBB(file){
