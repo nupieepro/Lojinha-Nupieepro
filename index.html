@@ -480,9 +480,9 @@ let produtos=[
     {id:1,nome:"Camisa PRETA — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/3mV7GGgj/SAVE-20260321-143214.jpg",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:true,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
     {id:2,nome:"Camisa BRANCA — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/tk6CjTF/SAVE-20260321-143206.jpg",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:false,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
     {id:3,nome:"Camisa AZUL — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/RTPPqmcj/SAVE-20260321-143223.jpg",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:false,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
-    {id:4,nome:"Ecobag Nupieepro",preco:22,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/7dj3kxt0/unnamed-3.png",descricao:"Ecobag resistente com a identidade do NUPIEEPRO.",tamanhos:[],estoque:20,destaque:false,encomenda:false},
-    {id:5,nome:"Bloco de Notas",preco:15,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/hxxnxrbF/unnamed-4.png",descricao:"Bloco de notas personalizado NUPIEEPRO.",tamanhos:[],estoque:30,destaque:false,encomenda:false},
-    {id:6,nome:"Chaveiro Abridor",preco:4,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/Kj00Xbys/unnamed-5.png",descricao:"Chaveiro abridor personalizado NUPIEEPRO.",tamanhos:[],estoque:50,destaque:false,encomenda:false},
+    {id:4,nome:"Ecobag Nupieepro",preco:22,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg",descricao:"Ecobag resistente com a identidade do NUPIEEPRO.",tamanhos:[],estoque:20,destaque:false,encomenda:false},
+    {id:5,nome:"Bloco de Notas",preco:15,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg",descricao:"Bloco de notas personalizado NUPIEEPRO.",tamanhos:[],estoque:30,destaque:false,encomenda:false},
+    {id:6,nome:"Chaveiro Abridor",preco:4,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg",descricao:"Chaveiro abridor personalizado NUPIEEPRO.",tamanhos:[],estoque:50,destaque:false,encomenda:false},
     {id:7,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Frase Eng. Producao","Simbolo Engrenagem","Personalizado"],estoque:100,destaque:false,encomenda:false}
 ];
 const cupons={'CALOUROEP10':{tipo:'percentual',valor:10,produtos_ids:[4,5,6],minimo:0,limite:500,usos:0,ativo:true}};
@@ -517,12 +517,24 @@ window.addEventListener('load',()=>{
     document.getElementById('campo-busca').addEventListener('input',function(){busca=this.value.trim().toLowerCase();renderVitrine();});
 });
 
+/* Imagens garantidas por produto — usadas se API retornar URL vazia ou quebrada */
+const IMG_FALLBACK = {
+    1: 'https://i.ibb.co/3mV7GGgj/SAVE-20260321-143214.jpg',
+    2: 'https://i.ibb.co/tk6CjTF/SAVE-20260321-143206.jpg',
+    3: 'https://i.ibb.co/RTPPqmcj/SAVE-20260321-143223.jpg',
+    4: 'https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg',
+    5: 'https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg',
+    6: 'https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg',
+    7: 'https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg',
+};
+
 function normalizarProduto(p){
     const imgs = Array.isArray(p.imagens)
         ? p.imagens
         : (p.imagens||'').toString().split(',').map(s=>s.trim()).filter(s=>s&&s.startsWith('http'));
-    p.img      = imgs[0] || p.img || '';
-    p.imagens  = imgs;
+    /* Usa imagem da API se existir, senão usa fallback hardcoded */
+    p.img      = imgs[0] || IMG_FALLBACK[p.id] || '';
+    p.imagens  = imgs.length ? imgs : (IMG_FALLBACK[p.id] ? [IMG_FALLBACK[p.id]] : []);
     p.encomenda= p.encomenda===true||p.encomenda==='true'||p.encomenda==='TRUE';
     p.destaque = p.destaque===true||p.destaque==='true'||p.destaque==='TRUE';
     p.novo     = p.novo===true||p.novo==='true'||p.novo==='TRUE';
