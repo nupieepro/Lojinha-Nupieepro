@@ -107,7 +107,12 @@
         .card:active{transform:scale(0.97);}
         .card.destaque{border:2px solid var(--laranja-brand);box-shadow:0 0 0 2px var(--laranja-glow),var(--shadow-sm);}
         .card.esgotado{opacity:0.5;filter:grayscale(0.5);pointer-events:none;}
-        .image-wrapper{width:100%;aspect-ratio:1/1;background:#f8f9fc;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+        .image-wrapper{width:100%;aspect-ratio:1/1;background:#f0f2f8;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+        .image-wrapper::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#f0f2f8 25%,#e4e7ef 50%,#f0f2f8 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;z-index:1;}
+        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        .image-wrapper.loaded::before{display:none;}
+        .prod-img{opacity:0;transition:opacity 0.3s;}
+        .prod-img.visible{opacity:1;}
         .prod-img{width:100%;height:100%;object-fit:cover;z-index:2;}
         .share-btn{position:absolute;top:10px;right:10px;width:34px;height:34px;background:rgba(255,255,255,0.95);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);z-index:5;color:var(--roxo-brand);font-size:0.85rem;border:none;}
         .share-btn:active{background:var(--roxo-brand);color:#fff;}
@@ -255,7 +260,7 @@
 <div id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-msg">Adicionado!</span></div>
 
 <div id="splash-screen">
-    <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="splash-img">
+    <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="splash-img" onerror="this.style.visibility='hidden'">
     <div class="splash-text">Lojinha Oficial Nupieepro</div>
 </div>
 
@@ -263,7 +268,7 @@
     <div class="header-inner">
         <div class="header-row">
             <div class="header-brand">
-                <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="brand-logo">
+                <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="brand-logo" onerror="this.style.visibility='hidden'">
                 <div class="brand-info">
                     <h1 class="brand">Nupiee<span>Pro</span></h1>
                     <div class="store-badge"><i class="fa-solid fa-store"></i> Store</div>
@@ -472,13 +477,13 @@ const _rl={t:0,n:0};
 function rlOk(){const n=Date.now();if(n-_rl.t<30000){if(++_rl.n>3){toast('Aguarde antes de enviar outro pedido.',1);return false;}}else _rl.n=0;_rl.t=n;return true;}
 
 let produtos=[
-    {id:1,nome:"Camisa PRETA — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/TDhnM6xW/unnamed.png",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:true,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
-    {id:2,nome:"Camisa BRANCA — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/bM9mqjXS/unnamed-1.png",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:false,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
-    {id:3,nome:"Camisa AZUL — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/qLzdtvkN/unnamed-2.png",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:false,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
+    {id:1,nome:"Camisa PRETA — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/3mV7GGgj/SAVE-20260321-143214.jpg",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:true,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
+    {id:2,nome:"Camisa BRANCA — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/tk6CjTF/SAVE-20260321-143206.jpg",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:false,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
+    {id:3,nome:"Camisa AZUL — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/RTPPqmcj/SAVE-20260321-143223.jpg",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:false,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
     {id:4,nome:"Ecobag Nupieepro",preco:22,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/7dj3kxt0/unnamed-3.png",descricao:"Ecobag resistente com a identidade do NUPIEEPRO.",tamanhos:[],estoque:20,destaque:false,encomenda:false},
     {id:5,nome:"Bloco de Notas",preco:15,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/hxxnxrbF/unnamed-4.png",descricao:"Bloco de notas personalizado NUPIEEPRO.",tamanhos:[],estoque:30,destaque:false,encomenda:false},
     {id:6,nome:"Chaveiro Abridor",preco:4,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/Kj00Xbys/unnamed-5.png",descricao:"Chaveiro abridor personalizado NUPIEEPRO.",tamanhos:[],estoque:50,destaque:false,encomenda:false},
-    {id:7,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://i.ibb.co/mrsm95Kv/1769766015274.png",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Frase Eng. Producao","Simbolo Engrenagem","Personalizado"],estoque:100,destaque:false,encomenda:false}
+    {id:7,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Frase Eng. Producao","Simbolo Engrenagem","Personalizado"],estoque:100,destaque:false,encomenda:false}
 ];
 const cupons={'CALOUROEP10':{tipo:'percentual',valor:10,produtos_ids:[4,5,6],minimo:0,limite:500,usos:0,ativo:true}};
 let carrinho=[],itemSel=null,qtdTemp=1,filtroAtual='todos',busca='',cupomApl=null,pixT=null;
@@ -512,14 +517,64 @@ window.addEventListener('load',()=>{
     document.getElementById('campo-busca').addEventListener('input',function(){busca=this.value.trim().toLowerCase();renderVitrine();});
 });
 
+function normalizarProduto(p){
+    const imgs = Array.isArray(p.imagens)
+        ? p.imagens
+        : (p.imagens||'').toString().split(',').map(s=>s.trim()).filter(s=>s&&s.startsWith('http'));
+    p.img      = imgs[0] || p.img || '';
+    p.imagens  = imgs;
+    p.encomenda= p.encomenda===true||p.encomenda==='true'||p.encomenda==='TRUE';
+    p.destaque = p.destaque===true||p.destaque==='true'||p.destaque==='TRUE';
+    p.novo     = p.novo===true||p.novo==='true'||p.novo==='TRUE';
+    p.tipo     = p.tipo||'unico';
+    p.tamanhos = Array.isArray(p.tamanhos)?p.tamanhos:(p.tamanhos||'').toString().split(',').map(s=>s.trim()).filter(Boolean);
+    p.preco    = parseFloat(p.preco)||0;
+    p.estoque  = parseInt(p.estoque)||0;
+    p.id       = parseInt(p.id)||0;
+    return p;
+}
+
+async function buscarAPI(action){
+    /* Apps Script não suporta headers customizados — fetch simples */
+    const url = API_URL+'?action='+action+'&t='+Date.now();
+    const T   = ms => new Promise((_,r)=>setTimeout(r,ms));
+    const res = await Promise.race([fetch(url),T(5000)]);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    return res.json();
+}
+
 async function carregarAPI(){
-    const T=ms=>new Promise((_,r)=>setTimeout(r,ms));
-    try{const r=await Promise.race([fetch(API_URL+'?action=config'),T(3000)]);const c=await r.json();
-        if(c.manutencao==='true'||c.manutencao===true){document.getElementById('tela-manutencao').classList.add('ativa');return;}
-        if(c.mensagem_boas_vindas){const el=document.querySelector('.welcome-msg');if(el)el.textContent='👋 '+c.mensagem_boas_vindas;}
+    /* Config */
+    try{
+        const c = await buscarAPI('config');
+        if(c.manutencao==='true'||c.manutencao===true){
+            document.getElementById('tela-manutencao').classList.add('ativa');
+            return;
+        }
+        if(c.mensagem_boas_vindas){
+            const el=document.querySelector('.welcome-msg');
+            if(el) el.textContent='👋 '+c.mensagem_boas_vindas;
+        }
+        if(c.pausar_checkout==='true') window._checkoutPausado=true;
     }catch(e){}
-    try{const r=await Promise.race([fetch(API_URL+'?action=produtos'),T(4000)]);const d=await r.json();
-        if(Array.isArray(d)&&d.length>0){d.forEach(p=>{p.img=Array.isArray(p.imagens)?p.imagens[0]:(p.imagens||'');p.encomenda=p.encomenda===true||p.encomenda==='true'||p.encomenda==='TRUE';p.destaque=p.destaque===true||p.destaque==='true'||p.destaque==='TRUE';});produtos=d;renderVitrine();}
+
+    /* Produtos */
+    try{
+        const d = await buscarAPI('produtos');
+        if(Array.isArray(d)&&d.length>0){
+            const normalizados = d.map(normalizarProduto);
+            produtos.length=0;
+            produtos.push(...normalizados);
+            renderVitrine();
+        }
+    }catch(e){}
+
+    /* Cupons ativos */
+    try{
+        const c = await buscarAPI('cupons');
+        if(c.tem_cupom_ativo){
+            document.getElementById('card-cupom').style.display='block';
+        }
     }catch(e){}
 }
 
@@ -539,7 +594,11 @@ function renderVitrine(){
     vazio.classList.remove('ativo');
     lista.forEach(p=>{
         const enc=!!p.encomenda,dest=!!p.destaque,esg=p.estoque===0,ult=p.estoque>0&&p.estoque<10;
-        const imgSrc=Array.isArray(p.img)?p.img[0]:(p.img||'');
+        /* Pega imagem: tenta img, depois imagens[0], depois vazio */
+        const imgSrc = p.img
+            || (Array.isArray(p.imagens) && p.imagens[0])
+            || (typeof p.imagens==='string' && p.imagens.split(',')[0].trim())
+            || '';
         let badges='';
         if(dest) badges+=`<span class="badge badge-destaque">⭐ Destaque</span>`;
         if(enc)  badges+=`<span class="badge badge-encomenda">📦 Encomenda</span>`;
@@ -550,7 +609,11 @@ function renderVitrine(){
         el.innerHTML=`
             <button class="share-btn" onclick="compartilhar(${p.id},event)" aria-label="Compartilhar"><i class="fa-solid fa-share-nodes"></i></button>
             <div class="image-wrapper" onclick="abrirDetalhes(${p.id})">
-                ${imgSrc?`<img src="${san(imgSrc)}" class="prod-img" loading="lazy" alt="${san(p.nome)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:''}
+                ${imgSrc
+    ? `<img src="${san(imgSrc)}" class="prod-img" loading="lazy" alt="${san(p.nome)}"
+        onload="this.classList.add('visible');this.closest('.image-wrapper').classList.add('loaded')"
+        onerror="this.remove();this.closest&&this.closest('.image-wrapper')&&this.closest('.image-wrapper').classList.add('loaded');this.nextElementSibling&&(this.nextElementSibling.style.display='flex')">`
+    : ''}
                 <div class="no-photo-placeholder" style="${imgSrc?'display:none':''}"><i class="fa-solid fa-box-open"></i><span>${san(p.nome)}</span></div>
                 ${badges?`<div class="badge-wrap">${badges}</div>`:''}
             </div>
@@ -571,10 +634,23 @@ function abrirDetalhes(id){
     document.getElementById('detalhe-nome').textContent=itemSel.nome;
     document.getElementById('detalhe-preco').textContent='R$ '+itemSel.preco.toFixed(2).replace('.',',');
     document.getElementById('detalhe-qtd').textContent='1';
-    const imgSrc=Array.isArray(itemSel.img)?itemSel.img[0]:(itemSel.img||'');
+    const imgSrc = itemSel.img
+        || (Array.isArray(itemSel.imagens) && itemSel.imagens[0])
+        || (typeof itemSel.imagens==='string' && itemSel.imagens.split(',')[0].trim())
+        || '';
     const imgEl=document.getElementById('detalhe-img'),fbEl=document.getElementById('detalhe-fallback');
-    if(imgSrc){imgEl.src=imgSrc;imgEl.style.display='block';fbEl.style.display='none';}
-    else{imgEl.style.display='none';fbEl.style.display='flex';}
+    if(imgSrc){
+        imgEl.style.opacity='0';
+        imgEl.style.display='block';
+        fbEl.style.display='none';
+        imgEl.src=''; /* limpa src anterior */
+        imgEl.onload=()=>{ imgEl.style.opacity='1'; };
+        imgEl.onerror=()=>{ imgEl.style.display='none'; fbEl.style.display='flex'; };
+        imgEl.src=imgSrc;
+    } else {
+        imgEl.style.display='none';
+        fbEl.style.display='flex';
+    }
     const descEl=document.getElementById('detalhe-desc');
     if(itemSel.descricao){descEl.textContent=itemSel.descricao;descEl.style.display='block';}else descEl.style.display='none';
     const encEl=document.getElementById('detalhe-enc');
