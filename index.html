@@ -12,8 +12,22 @@
     <meta property="og:url" content="https://nupieepro.github.io/Lojinha-Nupieepro/">
     <meta name="theme-color" content="#0f0732">
     <link rel="canonical" href="https://nupieepro.github.io/Lojinha-Nupieepro/">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- iOS Safari PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Nupi Store">
     <link rel="apple-touch-icon" href="https://i.ibb.co/7hcph2F/download.jpg">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://i.ibb.co/7hcph2F/download.jpg">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/7hcph2F/download.jpg">
+    <link rel="apple-touch-startup-image" href="https://i.ibb.co/7hcph2F/download.jpg">
+
+    <!-- Android / outros -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Nupi Store">
+    <meta name="msapplication-TileColor" content="#0f0732">
+    <meta name="msapplication-TileImage" content="https://i.ibb.co/7hcph2F/download.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -252,7 +266,7 @@
     <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="manut-logo">
     <div class="manut-titulo">Estamos em Manutenção ⚙️</div>
     <div class="manut-msg">Fique ligado em novas novidades!</div>
-    <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer" class="manut-insta">
+    <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" class="manut-insta">
         <i class="fa-brands fa-instagram"></i> @nupieepro 💙🧡
     </a>
 </div>
@@ -275,7 +289,7 @@
                 </div>
             </div>
             <div class="header-icons">
-                <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer" class="header-icon-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" class="header-icon-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                 <button class="header-icon-btn" onclick="abrirSobre()" aria-label="Sobre"><i class="fa-solid fa-circle-info"></i></button>
                 <button class="header-icon-btn" onclick="abrirMeusPedidos()" aria-label="Pedidos"><i class="fa-solid fa-clock-rotate-left"></i></button>
             </div>
@@ -319,8 +333,48 @@
 <footer>
     <strong>NUPIEEPRO</strong>
     <i class="fa-solid fa-heart" style="color:var(--azul-coracao);margin:0 3px"></i><i class="fa-solid fa-heart" style="color:var(--laranja-brand);margin-right:6px"></i>·
-    <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i> @nupieepro</a>
+    <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i> @nupieepro</a>
+    <br><br>
+    <button onclick="abrirLGPD()" style="background:none;border:none;color:var(--texto-suave);font-size:0.72rem;cursor:pointer;text-decoration:underline;font-family:inherit">
+        Privacidade e Proteção de Dados (LGPD)
+    </button>
 </footer>
+
+<!-- MODAL LGPD -->
+<div class="modal-bg" id="modal-lgpd" onclick="fecharModais(event)">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <h2 style="color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:14px">Privacidade e Proteção de Dados</h2>
+        <p style="font-size:0.83rem;color:var(--texto);line-height:1.7;margin-bottom:10px">
+            O <strong>NUPIEEPRO</strong> respeita sua privacidade e cumpre a 
+            <strong>Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018)</strong>.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Quais dados coletamos:</strong><br>
+            Nome, WhatsApp, e-mail (opcional) e endereço (quando necessário para entrega).
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Para que usamos:</strong><br>
+            Exclusivamente para processar seu pedido, confirmar pagamento e entrar em contato sobre a compra.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Compartilhamento:</strong><br>
+            Seus dados não são vendidos nem compartilhados com terceiros. São usados apenas internamente pela equipe do NUPIEEPRO.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Armazenamento:</strong><br>
+            Os dados ficam salvos no Google Sheets do NUPIEEPRO, protegido por senha, e no seu próprio dispositivo (localStorage).
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:16px">
+            <strong style="color:var(--roxo-brand)">Seus direitos:</strong><br>
+            Você pode solicitar a exclusão dos seus dados a qualquer momento pelo Instagram <a href="https://www.instagram.com/nupieepro" target="_blank" style="color:var(--laranja-brand)">@nupieepro</a>.
+        </p>
+        <div style="background:#f8f9fc;border-radius:10px;padding:12px;font-size:0.78rem;color:var(--texto-suave);text-align:center">
+            NUPIEEPRO — Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI<br>
+            Contato: <a href="https://www.instagram.com/nupieepro" target="_blank" style="color:var(--laranja-brand)">@nupieepro</a>
+        </div>
+    </div>
+</div>
 
 <!-- MODAL PRODUTO -->
 <div class="modal-bg" id="modal-details" onclick="fecharModais(event)">
@@ -457,7 +511,7 @@
             <span style="background:var(--roxo-brand);color:#fff;padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700">🥇 Maior Núcleo do Brasil</span>
             <span style="background:var(--roxo-brand);color:#fff;padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700">📅 Desde 2015</span>
         </div>
-        <a href="https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==" target="_blank" rel="noopener noreferrer" class="btn-primary" style="text-decoration:none"><i class="fa-brands fa-instagram"></i> Seguir no Instagram</a>
+        <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" class="btn-primary" style="text-decoration:none"><i class="fa-brands fa-instagram"></i> Seguir no Instagram</a>
     </div>
 </div>
 
@@ -490,13 +544,37 @@ let carrinho=[],itemSel=null,qtdTemp=1,filtroAtual='todos',busca='',cupomApl=nul
 
 window.addEventListener('load',()=>{
     if('serviceWorker' in navigator){
-        navigator.serviceWorker.register('/Lojinha-Nupieepro/sw.js')
+        /* Usa sempre caminho relativo — funciona em qualquer subpasta */
+        navigator.serviceWorker.register('./sw.js')
             .then(reg=>{
-                /* Verifica atualizações a cada 5 minutos */
                 setInterval(()=>reg.update(), 5*60*1000);
-            }).catch(()=>{});
-        /* Se SW instalou update, recarrega automaticamente */
-        navigator.serviceWorker.addEventListener('controllerchange',()=>window.location.reload());
+            })
+            .catch(()=>{});
+        /* Recarrega quando SW atualizar */
+        navigator.serviceWorker.addEventListener('controllerchange',()=>{
+            if(!window._swReloading){ window._swReloading=true; window.location.reload(); }
+        });
+    }
+
+    /* iOS Safari — mostra dica de instalação manual */
+    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    var isStandalone = window.navigator.standalone;
+    if(isIOS && !isStandalone && !localStorage.getItem('nupi_ios_dica')){
+        setTimeout(function(){
+            var d = document.createElement('div');
+            d.id = 'ios-install-dica';
+            d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#0f0732;color:#fff;padding:14px 18px;z-index:9998;display:flex;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(0,0,0,0.3);';
+            var btn = document.createElement('button');
+            btn.textContent = 'X';
+            btn.style.cssText = 'background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:4px';
+            btn.onclick = function(){ d.remove(); localStorage.setItem('nupi_ios_dica','1'); };
+            var txt = document.createElement('div');
+            txt.style.cssText = 'flex:1;font-size:0.82rem;line-height:1.4';
+            txt.innerHTML = '<strong style="color:#f85900">Instalar a loja no iPhone:</strong><br>Toque em <strong>Compartilhar</strong> e depois <strong>Adicionar a Tela de Inicio</strong>';
+            d.appendChild(txt);
+            d.appendChild(btn);
+            document.body.appendChild(d);
+        }, 3000);
     }
     carregarUser();carregarCarrinho();renderVitrine();
     /* Mostra card de cupom se tiver cupom ativo localmente */
@@ -535,6 +613,19 @@ function normalizarProduto(p){
     /* Usa imagem da API se existir, senão usa fallback hardcoded */
     p.img      = imgs[0] || IMG_FALLBACK[p.id] || '';
     p.imagens  = imgs.length ? imgs : (IMG_FALLBACK[p.id] ? [IMG_FALLBACK[p.id]] : []);
+    /* Botton — detecta por tipo, nome ou ID e garante as opções */
+    const isBottonProd = p.tipo==='botton'
+        || (p.nome&&p.nome.toLowerCase().includes('botton'))
+        || p.id===7;
+    if(isBottonProd){
+        p.tipo = 'botton';
+        /* Usa tamanhos do Sheets se admin configurou, senão usa padrão */
+        const opcoes = p.tamanhos&&p.tamanhos.length
+            ? p.tamanhos
+            : ['Logo NUPIEEPRO','Frase Eng. Producao','Simbolo Engrenagem','Personalizado'];
+        p.tipos_botton = opcoes;
+        p.tamanhos = []; /* limpa pra não mostrar seletor de tamanho */
+    }
     p.encomenda= p.encomenda===true||p.encomenda==='true'||p.encomenda==='TRUE';
     p.destaque = p.destaque===true||p.destaque==='true'||p.destaque==='TRUE';
     p.novo     = p.novo===true||p.novo==='true'||p.novo==='TRUE';
@@ -642,6 +733,15 @@ function renderVitrine(){
 function abrirDetalhes(id){
     itemSel=produtos.find(p=>p.id===id);
     if(!itemSel) return;
+    /* Garante botton sempre tem tipos — mesmo se API não mandou */
+    if(itemSel.tipo==='botton'||(itemSel.nome&&itemSel.nome.toLowerCase().includes('botton'))||itemSel.id===7){
+        itemSel.tipo='botton';
+        if(!itemSel.tipos_botton||!itemSel.tipos_botton.length){
+            itemSel.tipos_botton=itemSel.tamanhos&&itemSel.tamanhos.length
+                ?itemSel.tamanhos
+                :['Logo NUPIEEPRO','Frase Eng. Producao','Simbolo Engrenagem','Personalizado'];
+        }
+    }
     qtdTemp=1;
     document.getElementById('detalhe-nome').textContent=itemSel.nome;
     document.getElementById('detalhe-preco').textContent='R$ '+itemSel.preco.toFixed(2).replace('.',',');
@@ -907,6 +1007,10 @@ function enviarPedidoZap(){
     const pgto=document.querySelector('input[name="pgto"]:checked').value;
     const obs=document.getElementById('campo-obs').value.trim();
     if(!nome||!zap){toast('⚠️ Preencha Nome e WhatsApp!',1);return;}
+    /* LGPD — aviso de consentimento (salvo após primeira vez) */
+    if(!localStorage.getItem('nupi_lgpd_ok')){
+        localStorage.setItem('nupi_lgpd_ok','1');
+    }
     if(entrega==='Entrega'&&!end){toast('⚠️ Informe o endereço!',1);return;}
     /* Comprovante obrigatório para PIX */
     if(pgto==='PIX'&&!window._comprovante){
@@ -917,23 +1021,36 @@ function enviarPedidoZap(){
     }
     salvarUser();
     const num=gerarNum(),now=new Date().toLocaleString('pt-BR');
-    let msg=`*LOJINHA OFICIAL NUPIEEPRO* ⚙️\n*Pedido:* #${num}\n*Data:* ${now}\n------------------------------\n👤 *Cliente:* ${nome}\n📱 *WhatsApp:* ${zap}\n`;
-    if(email) msg+=`📧 *E-mail:* ${email}\n`;
-    msg+=`🚚 *Entrega:* ${entrega}\n`;
-    if(entrega==='Entrega') msg+=`📍 *Endereço:* ${end}\n`;
-    msg+=`💳 *Pagamento:* ${pgto}\n\n*ITENS:*\n`;
-    carrinho.forEach(i=>{msg+=`📦 ${i.qtd}x *${i.nome}*\n`;if((i.tipo==='camisa'||i.categoria==='camisa')&&i.tamanho!=='Único')msg+=`   └ Tam: ${i.tamanho}\n`;msg+=`   └ R$ ${(i.preco*i.qtd).toFixed(2).replace('.',',')}\n`;});
+    let msg=`*LOJINHA OFICIAL NUPIEEPRO*\n*Pedido:* #${num}\n*Data:* ${now}\n------------------------------\n*Cliente:* ${nome}\n*WhatsApp:* ${zap}\n`;
+    if(email) msg+=`*E-mail:* ${email}\n`;
+    msg+=`*Entrega:* ${entrega}\n`;
+    if(entrega==='Entrega') msg+=`*Endereco:* ${end}\n`;
+    msg+=`*Pagamento:* ${pgto}\n\n*ITENS:*\n`;
+    carrinho.forEach(i=>{msg+=`${i.qtd}x *${i.nome}*\n`;if((i.tipo==='camisa'||i.categoria==='camisa')&&i.tamanho!=='Único')msg+=`   └ Tam: ${i.tamanho}\n`;msg+=`   └ R$ ${(i.preco*i.qtd).toFixed(2).replace('.',',')}\n`;});
     const sb=calcSub(),dc=calcDesc(),tt=calcTotal();
-    msg+=`\n------------------------------\n💰 *Subtotal:* R$ ${sb.toFixed(2).replace('.',',')}\n`;
-    if(dc>0&&cupomApl) msg+=`🎟️ *Cupom (${cupomApl.cod}):* - R$ ${dc.toFixed(2).replace('.',',')}\n`;
-    msg+=`💰 *TOTAL: R$ ${tt.toFixed(2).replace('.',',')}*\n------------------------------\n`;
-    if(obs) msg+=`📝 *Obs:* ${obs}\n`;
-    if(pgto==='PIX') msg+=`✅ PIX enviado! Aguardando confirmação do financeiro.`;
+    msg+=`\n------------------------------\n*Subtotal:* R$ ${sb.toFixed(2).replace('.',',')}\n`;
+    if(dc>0&&cupomApl) msg+=`*Cupom (${cupomApl.cod}):* - R$ ${dc.toFixed(2).replace('.',',')}\n`;
+    msg+=`*TOTAL: R$ ${tt.toFixed(2).replace('.',',')}*\n------------------------------\n`;
+    if(obs) msg+=`*Obs:* ${obs}\n`;
+    if(pgto==='PIX') msg+=`PIX enviado! Aguardando confirmacao do financeiro.`;
     salvarHist(num,now,tt);
     if(cupomApl) cupons[cupomApl.cod].usos++;
-    fetch(API_URL,{method:'POST',body:JSON.stringify({action:'registrar_pedido',numero:num,nome,whatsapp:zap,email,entrega,endereco:end,pagamento:pgto,observacao:obs,itens:carrinho,subtotal:sb,desconto:dc,cupom:cupomApl?cupomApl.cod:'',total:tt})}).catch(()=>{});
+
+    /* Abre WhatsApp PRIMEIRO — síncrono, antes de qualquer async */
+    /* Isso evita bloqueio de popup no iPhone e Android */
+    const zapUrl = 'https://wa.me/'+_w+'?text='+encodeURIComponent(msg);
+    const zapLink = document.createElement('a');
+    zapLink.href = zapUrl;
+    zapLink.target = '_blank';
+    zapLink.rel = 'noopener noreferrer';
+    zapLink.style.display = 'none';
+    document.body.appendChild(zapLink);
+    zapLink.click();
+    setTimeout(()=>document.body.removeChild(zapLink), 1000);
+
+    /* Depois registra na API em background */
     carrinho=[];cupomApl=null;window._comprovante=null;salvarCarrinho();atualizarBarra();
-    window.open('https://wa.me/'+_w+'?text='+encodeURIComponent(msg),'_blank','noopener');
+    fetch(API_URL,{method:'POST',body:JSON.stringify({action:'registrar_pedido',numero:num,nome,whatsapp:zap,email,entrega,endereco:end,pagamento:pgto,observacao:obs,itens:carrinho,subtotal:sb,desconto:dc,cupom:cupomApl?cupomApl.cod:'',total:tt})}).catch(()=>{});
     const msgs=['Boa escolha! O Nupieepro agradece 🧡','Que venha mais! 💙🧡','Obrigado por apoiar o núcleo! ⚙️'];
     document.getElementById('sucesso-num').textContent='Pedido #'+num;
     document.getElementById('sucesso-msg').textContent=msgs[Math.floor(Math.random()*msgs.length)];
@@ -954,6 +1071,7 @@ function salvarUser(){localStorage.setItem('nupieepro_nome',document.getElementB
 function carregarUser(){const n=localStorage.getItem('nupieepro_nome');if(n)document.getElementById('nome-cliente').value=n;const z=localStorage.getItem('nupieepro_zap');if(z)document.getElementById('zap-cliente').value=z;const e=localStorage.getItem('nupieepro_email');if(e)document.getElementById('email-cliente').value=e;const d=localStorage.getItem('nupieepro_end');if(d)document.getElementById('endereco-cliente').value=d;}
 function compartilhar(id,event){event.stopPropagation();const p=produtos.find(x=>x.id===id);const url=location.origin+location.pathname+'?id='+id;const txt='Olha o que encontrei na Lojinha Nupieepro: '+p.nome+' por R$ '+p.preco.toFixed(2).replace('.',',')+'!';if(navigator.share)navigator.share({title:'NUPIEEPRO STORE',text:txt,url}).catch(()=>{});else navigator.clipboard&&navigator.clipboard.writeText(url).then(()=>toast('🔗 Link copiado!'));}
 function abrirSobre(){document.getElementById('modal-sobre').classList.add('active');document.body.style.overflow='hidden';}
+function abrirLGPD(){document.getElementById('modal-lgpd').classList.add('active');document.body.style.overflow='hidden';}
 let _tt;
 function toast(msg,erro=0){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.className='show'+(erro?' erro':'');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
