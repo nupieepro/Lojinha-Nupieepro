@@ -1,8 +1,9 @@
 {
-  "name": "Nupieepro Store",
-  "short_name": "Nupieepro",
-  "description": "Loja oficial do Núcleo Piauiense de Estudantes de Engenharia de Produção",
-  "start_url": "/",
+  "name": "NUPIEEPRO STORE",
+  "short_name": "Nupi Store",
+  "description": "Loja oficial do NUPIEEPRO — UFPI",
+  "start_url": "/Lojinha-Nupieepro/",
+  "scope": "/Lojinha-Nupieepro/",
   "display": "standalone",
   "background_color": "#0f0732",
   "theme_color": "#0f0732",
@@ -12,40 +13,59 @@
   "icons": [
     {
       "src": "https://i.ibb.co/7hcph2F/download.jpg",
+      "sizes": "72x72",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "https://i.ibb.co/7hcph2F/download.jpg",
+      "sizes": "96x96",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "https://i.ibb.co/7hcph2F/download.jpg",
+      "sizes": "128x128",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "https://i.ibb.co/7hcph2F/download.jpg",
+      "sizes": "144x144",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "https://i.ibb.co/7hcph2F/download.jpg",
+      "sizes": "152x152",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "https://i.ibb.co/7hcph2F/download.jpg",
       "sizes": "192x192",
-      "type": "image/png",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co/7hcph2F/download.jpg",
+      "sizes": "384x384",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
       "src": "https://i.ibb.co/7hcph2F/download.jpg",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/jpeg",
       "purpose": "any maskable"
     }
   ],
   "shortcuts": [
     {
-      "name": "Ver Pedidos",
-      "short_name": "Pedidos",
-      "description": "Acompanhe seus pedidos",
-      "url": "/?acao=pedidos",
+      "name": "Ver Produtos",
+      "short_name": "Produtos",
+      "url": "/Lojinha-Nupieepro/",
       "icons": [{ "src": "https://i.ibb.co/7hcph2F/download.jpg", "sizes": "96x96" }]
-    },
-    {
-      "name": "Buscar Produto",
-      "short_name": "Buscar",
-      "description": "Encontre um produto",
-      "url": "/?acao=buscar",
-      "icons": [{ "src": "https://i.ibb.co/7hcph2F/download.jpg", "sizes": "96x96" }]
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "https://i.ibb.co/7hcph2F/download.jpg",
-      "sizes": "540x720",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Lojinha Nupieepro"
     }
   ]
 }
