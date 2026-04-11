@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>NUPIEEPRO STORE</title>
-    <meta name="description" content="Loja oficial do NUPIEEPRO — UFPI. Camisas, acessórios e muito mais!">
+    <meta name="description" content="Loja oficial do NUPIEEPRO — UFPI. Ecobag, bloco de notas, chaveiro, bottons e muito mais!">
     <meta property="og:title" content="NUPIEEPRO STORE">
     <meta property="og:description" content="Loja oficial do NUPIEEPRO — UFPI.">
     <meta property="og:image" content="https://i.ibb.co/7hcph2F/download.jpg">
@@ -18,16 +18,16 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nupi Store">
-    <link rel="apple-touch-icon" href="./Arte_20260411_095716_0000.jpg">
-    <link rel="apple-touch-icon" sizes="152x152" href="./Arte_20260411_095716_0000.jpg">
-    <link rel="apple-touch-icon" sizes="180x180" href="./Arte_20260411_095716_0000.jpg">
-    <link rel="apple-touch-startup-image" href="./Arte_20260411_095716_0000.jpg">
+    <link rel="apple-touch-icon" href="./loja_icon_bg29324F.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./loja_icon_bg29324F.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./loja_icon_bg29324F.png">
+    <link rel="apple-touch-startup-image" href="./loja_icon_bg29324F.png">
 
     <!-- Android / outros -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Nupi Store">
-    <meta name="msapplication-TileColor" content="#0f0732">
-    <meta name="msapplication-TileImage" content="./Arte_20260411_095716_0000.jpg">
+    <meta name="msapplication-TileColor" content="#29324F">
+    <meta name="msapplication-TileImage" content="./loja_icon_bg29324F.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -306,7 +306,6 @@
 <div class="filter-container">
     <div class="filter-scroll">
         <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
-        <button class="filter-btn" onclick="filtrar('camisa',this)">Camisas</button>
         <button class="filter-btn" onclick="filtrar('acessorio',this)">Acessórios</button>
         <button class="filter-btn" id="btn-combos" style="display:none" onclick="filtrar('combo',this)">🎁 Combos</button>
     </div>
@@ -546,15 +545,12 @@ function rlOk(){
 let _bt; function debounceBusca(v){ clearTimeout(_bt); _bt=setTimeout(()=>{busca=v.trim().toLowerCase();renderVitrine();},300); }
 
 let produtos=[
-    {id:1,nome:"Camisa PRETA — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/3mV7GGgj/SAVE-20260321-143214.jpg",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:true,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
-    {id:2,nome:"Camisa BRANCA — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/tk6CjTF/SAVE-20260321-143206.jpg",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:false,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
-    {id:3,nome:"Camisa AZUL — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/RTPPqmcj/SAVE-20260321-143223.jpg",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:false,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
-    {id:4,nome:"Ecobag Nupieepro",preco:22,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg",descricao:"Ecobag resistente com a identidade do NUPIEEPRO.",tamanhos:[],estoque:20,destaque:false,encomenda:false},
-    {id:5,nome:"Bloco de Notas",preco:15,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg",descricao:"Bloco de notas personalizado NUPIEEPRO.",tamanhos:[],estoque:30,destaque:false,encomenda:false},
-    {id:6,nome:"Chaveiro Abridor",preco:4,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg",descricao:"Chaveiro abridor personalizado NUPIEEPRO.",tamanhos:[],estoque:50,destaque:false,encomenda:false},
-    {id:7,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Frase Eng. Producao","Simbolo Engrenagem","Personalizado"],estoque:100,destaque:false,encomenda:false}
+    {id:1,nome:"Ecobag Nupieepro",preco:22,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg",descricao:"Ecobag resistente com a identidade do NUPIEEPRO.",tamanhos:[],estoque:20,destaque:false,encomenda:false},
+    {id:2,nome:"Bloco de Notas",preco:15,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg",descricao:"Bloco de notas personalizado NUPIEEPRO.",tamanhos:[],estoque:30,destaque:false,encomenda:false},
+    {id:3,nome:"Chaveiro Abridor",preco:4,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg",descricao:"Chaveiro abridor personalizado NUPIEEPRO.",tamanhos:[],estoque:50,destaque:false,encomenda:false},
+    {id:4,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Frase Eng. Producao","Simbolo Engrenagem","Personalizado"],estoque:100,destaque:false,encomenda:false}
 ];
-let cupons={'CALOUROEP10':{tipo:'percentual',valor:10,produtos_ids:[4,5,6],minimo:0,limite:500,usos:0,ativo:true}};
+let cupons={};  /* preenchido pela API — não hardcode mais */
 let carrinho=[],itemSel=null,qtdTemp=1,filtroAtual='todos',busca='',cupomApl=null,pixT=null;
 
 window.addEventListener('load',()=>{
@@ -592,16 +588,6 @@ window.addEventListener('load',()=>{
         }, 3000);
     }
     carregarUser();carregarCarrinho();renderVitrine();
-    /* Mostra card de cupom se tiver cupom ativo localmente */
-    if(Object.values(cupons).some(c=>c.ativo)){
-        document.getElementById('card-cupom').style.display='block';
-        /* Descrição do primeiro cupom ativo */
-        const primeiroCupom=Object.values(cupons).find(c=>c.ativo);
-        if(primeiroCupom&&primeiroCupom.descricao){
-            const el=document.getElementById('cupom-desc-vitrine');
-            el.textContent=primeiroCupom.descricao;el.style.display='block';
-        }
-    }
     carregarAPI();
     const pid=new URLSearchParams(location.search).get('id');
     if(pid&&produtos.find(p=>p.id==pid)) setTimeout(()=>abrirDetalhes(parseInt(pid)),1000);
@@ -612,13 +598,10 @@ window.addEventListener('load',()=>{
 
 /* Imagens garantidas por produto — usadas se API retornar URL vazia ou quebrada */
 const IMG_FALLBACK = {
-    1: 'https://i.ibb.co/3mV7GGgj/SAVE-20260321-143214.jpg',
-    2: 'https://i.ibb.co/tk6CjTF/SAVE-20260321-143206.jpg',
-    3: 'https://i.ibb.co/RTPPqmcj/SAVE-20260321-143223.jpg',
-    4: 'https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg',
-    5: 'https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg',
-    6: 'https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg',
-    7: 'https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg',
+    1: 'https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg',
+    2: 'https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg',
+    3: 'https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg',
+    4: 'https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg',
 };
 
 function normalizarProduto(p){
@@ -702,8 +685,22 @@ async function carregarAPI(){
         if(results[2].status === 'fulfilled'){
             const d = results[2].value;
             if(typeof d === 'object'){
-                Object.assign(cupons, d);
-                if(Object.values(cupons).some(c=>c.ativo)) document.getElementById('card-cupom').style.display='block';
+                /* GS agora retorna { tem_cupom_ativo, descricao, cupons: [...] } */
+                if(Array.isArray(d.cupons) && d.cupons.length > 0){
+                    cupons = {};
+                    d.cupons.forEach(c => { if(c.codigo) cupons[c.codigo.toUpperCase()] = c; });
+                }
+                if(d.tem_cupom_ativo){
+                    document.getElementById('card-cupom').style.display='block';
+                    if(d.descricao){
+                        const el=document.getElementById('cupom-desc-vitrine');
+                        if(el){el.textContent=d.descricao;el.style.display='block';}
+                    }
+                } else {
+                    /* Nenhum cupom ativo no Sheets — esconde o card */
+                    document.getElementById('card-cupom').style.display='none';
+                    cupons = {};
+                }
             }
         }
     } catch(e){ console.error('Erro API:', e); }
