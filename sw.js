@@ -1,9 +1,9 @@
 /* ============================================================
-   SERVICE WORKER — NUPIEEPRO STORE v4
+   SERVICE WORKER — NUPIEEPRO STORE v5
    Caminhos relativos — funciona em qualquer subpasta
    ============================================================ */
 
-const CACHE = 'nupieepro-v4';
+const CACHE = 'nupieepro-v5';
 
 const CACHEAR = [
     'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
