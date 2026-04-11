@@ -548,7 +548,7 @@ let produtos=[
     {id:1,nome:"Ecobag Nupieepro",preco:22,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg",descricao:"Ecobag resistente com a identidade do NUPIEEPRO.",tamanhos:[],estoque:20,destaque:false,encomenda:false},
     {id:2,nome:"Bloco de Notas",preco:15,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg",descricao:"Bloco de notas personalizado NUPIEEPRO.",tamanhos:[],estoque:30,destaque:false,encomenda:false},
     {id:3,nome:"Chaveiro Abridor",preco:4,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg",descricao:"Chaveiro abridor personalizado NUPIEEPRO.",tamanhos:[],estoque:50,destaque:false,encomenda:false},
-    {id:4,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Frase Eng. Producao","Simbolo Engrenagem","Personalizado"],estoque:100,destaque:false,encomenda:false}
+    {id:4,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Engenharia de Produção","Símbolo Engrenagem","Just-in-Time","Foco em Resultados"],estoque:100,destaque:false,encomenda:false}
 ];
 let cupons={};  /* preenchido pela API — não hardcode mais */
 let carrinho=[],itemSel=null,qtdTemp=1,filtroAtual='todos',busca='',cupomApl=null,pixT=null;
@@ -620,7 +620,7 @@ function normalizarProduto(p){
         /* Usa tamanhos do Sheets se admin configurou, senão usa padrão */
         const opcoes = p.tamanhos&&p.tamanhos.length
             ? p.tamanhos
-            : ['Logo NUPIEEPRO','Frase Eng. Producao','Simbolo Engrenagem','Personalizado'];
+            : ['Logo NUPIEEPRO','Engenharia de Produção','Símbolo Engrenagem','Just-in-Time','Foco em Resultados'];
         p.tipos_botton = opcoes;
         p.tamanhos = []; /* limpa pra não mostrar seletor de tamanho */
     }
@@ -764,7 +764,7 @@ function abrirDetalhes(id){
         if(!itemSel.tipos_botton||!itemSel.tipos_botton.length){
             itemSel.tipos_botton=itemSel.tamanhos&&itemSel.tamanhos.length
                 ?itemSel.tamanhos
-                :['Logo NUPIEEPRO','Frase Eng. Producao','Simbolo Engrenagem','Personalizado'];
+                :['Logo NUPIEEPRO','Engenharia de Produção','Símbolo Engrenagem','Just-in-Time','Foco em Resultados'];
         }
     }
     qtdTemp=1;
