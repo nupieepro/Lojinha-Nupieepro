@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nupi Admin">
-    <link rel="apple-touch-icon" href="https://i.ibb.co/7hcph2F/download.jpg">
+    <link rel="apple-touch-icon" href="./Arte_20260411_095224_0000.jpg">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Nupi Admin">
     <link rel="apple-touch-icon" href="https://i.ibb.co/7hcph2F/download.jpg">
@@ -303,7 +303,7 @@
      ============================================================ -->
 <div id="tela-login">
     <div class="login-box">
-        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="login-logo">
+        <img src="./Arte_20260411_095224_0000.jpg" alt="Logo" class="login-logo">
         <div class="login-titulo">NUPIEEPRO</div>
         <div class="login-sub">Painel Administrativo</div>
         <div style="position:relative">
@@ -327,7 +327,7 @@
     <!-- Topbar -->
     <div class="topbar">
         <div class="topbar-logo">
-            <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo">
+            <img src="./Arte_20260411_095224_0000.jpg" alt="Logo">
             <div class="topbar-titulo">NUPIEE<span>PRO</span> Admin</div>
         </div>
         <div class="topbar-right">
@@ -912,35 +912,30 @@ function sair(){
     chaveAdmin = '';
 }
 
-/* Restaura sessão — re-valida com a API sem mostrar loading */
-window.addEventListener('load', async () => {
+/* Restaura sessão — mostra o painel IMEDIATAMENTE e valida em background */
+window.addEventListener('load', () => {
     const saved = localStorage.getItem('nupi_admin_key');
     if(!saved) return;
+    
     try {
         const k = atob(saved);
-        const res = await Promise.race([
-            fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'admin_login', chave:k }) }),
-            new Promise((_,r) => setTimeout(()=>r(new Error('timeout')), 6000))
-        ]);
-        const data = await res.json();
-        if(data.ok){
-            chaveAdmin = k;
-            document.getElementById('tela-login').style.display = 'none';
-            document.getElementById('app').style.display        = 'block';
-            iniciarAdmin();
-        } else {
-            localStorage.removeItem('nupi_admin_key');
-        }
-    } catch(e) {
-        /* Se API offline, usa sessão salva sem re-validar */
-        try {
-            const k = atob(saved);
-            chaveAdmin = k;
-            document.getElementById('tela-login').style.display = 'none';
-            document.getElementById('app').style.display        = 'block';
-            iniciarAdmin();
-        } catch(e2) { localStorage.removeItem('nupi_admin_key'); }
-    }
+        chaveAdmin = k;
+        /* Login otimista: mostra o app antes de validar com a API */
+        document.getElementById('tela-login').style.display = 'none';
+        document.getElementById('app').style.display        = 'block';
+        iniciarAdmin();
+
+        /* Valida em background para garantir que a chave ainda é válida */
+        fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'admin_login', chave:k }) })
+            .then(res => res.json())
+            .then(data => {
+                if(!data.ok){
+                    sair();
+                    toast('Sessão expirada. Entre novamente.', true);
+                }
+            })
+            .catch(() => { /* Se offline, mantém o que tem */ });
+    } catch(e) { localStorage.removeItem('nupi_admin_key'); }
 });
 
 /* ============================================================
@@ -949,6 +944,8 @@ window.addEventListener('load', async () => {
 function iniciarAdmin(){
     carregarDashboard();
     carregarConfig();
+    /* Inicializa contador sem notificar o que já existe */
+    api({ action: 'admin_get_pedidos', status: 'novo' }).then(d => { qtdPedidosAnterior = d.length; });
     /* Polling de novos pedidos a cada 60s */
     setInterval(verificarNovoPedido, 60000);
 }
@@ -979,11 +976,17 @@ async function apiGet(action){
 /* ============================================================
    ABAS
    ============================================================ */
+let _cacheAba = {};
 function abrirAba(nome){
     document.querySelectorAll('.conteudo').forEach(el => el.style.display = 'none');
     document.querySelectorAll('.aba-btn').forEach(el => el.classList.remove('ativa'));
     document.getElementById(`aba-${nome}`).style.display = 'block';
     document.getElementById(`tab-${nome}`).classList.add('ativa');
+
+    /* Cache de 30s para evitar requisições repetitivas ao trocar de aba (B15) */
+    const agora = Date.now();
+    if(_cacheAba[nome] && (agora - _cacheAba[nome] < 30000) && nome !== 'preview') return;
+    _cacheAba[nome] = agora;
 
     switch(nome){
         case 'dashboard': carregarDashboard(); break;
@@ -1338,12 +1341,21 @@ async function salvarProduto(publicar){
     };
 
     try {
+        const btn = document.querySelector('#modal-produto .btn-primary');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+
         const res = await api({ action: 'admin_salvar_produto', produto });
         if(res.ok){
             toast(publicar ? '🚀 Produto publicado!' : '💾 Rascunho salvo!');
             fecharModalDireto('modal-produto');
             carregarProdutos();
+            /* Invalida cache da loja (B17) */
+            api({ action: 'admin_salvar_config', config: { _last_update: Date.now().toString() } });
         } else { toast('Erro ao salvar', true); }
+        btn.disabled = false;
+        btn.innerHTML = originalText;
     } catch(e){ toast('Erro ao salvar', true); }
 }
 
@@ -1527,10 +1539,16 @@ async function carregarConfig(){
     } catch(e){ toast('Erro ao carregar config', true); }
 }
 
+let _cfgDebounce;
 async function salvarConfigToggle(chave, valor){
-    try {
-        await api({ action: 'admin_salvar_config', config: { [chave]: valor.toString() } });
-    } catch(e){ toast('Erro ao salvar', true); }
+    /* Debounce de 1s para evitar spam na API (B12) */
+    clearTimeout(_cfgDebounce);
+    _cfgDebounce = setTimeout(async () => {
+        try {
+            await api({ action: 'admin_salvar_config', config: { [chave]: valor.toString() } });
+            toast('✅ Atualizado');
+        } catch(e){ toast('Erro ao salvar', true); }
+    }, 1000);
 }
 
 async function salvarConfig(publicar){

@@ -18,16 +18,16 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nupi Store">
-    <link rel="apple-touch-icon" href="https://i.ibb.co/7hcph2F/download.jpg">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://i.ibb.co/7hcph2F/download.jpg">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://i.ibb.co/7hcph2F/download.jpg">
-    <link rel="apple-touch-startup-image" href="https://i.ibb.co/7hcph2F/download.jpg">
+    <link rel="apple-touch-icon" href="./Arte_20260411_095716_0000.jpg">
+    <link rel="apple-touch-icon" sizes="152x152" href="./Arte_20260411_095716_0000.jpg">
+    <link rel="apple-touch-icon" sizes="180x180" href="./Arte_20260411_095716_0000.jpg">
+    <link rel="apple-touch-startup-image" href="./Arte_20260411_095716_0000.jpg">
 
     <!-- Android / outros -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Nupi Store">
     <meta name="msapplication-TileColor" content="#0f0732">
-    <meta name="msapplication-TileImage" content="https://i.ibb.co/7hcph2F/download.jpg">
+    <meta name="msapplication-TileImage" content="./Arte_20260411_095716_0000.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -298,7 +298,7 @@
         <div class="welcome-msg">👋 Bem-vindo(a), Nupilover!</div>
         <div class="header-busca">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="search" id="campo-busca" placeholder="Buscar produto..." autocomplete="off" maxlength="60">
+            <input type="search" id="campo-busca" placeholder="Buscar produto..." autocomplete="off" maxlength="60" oninput="debounceBusca(this.value)">
         </div>
     </div>
 </header>
@@ -471,9 +471,10 @@
                         📎 Anexe o comprovante do PIX:
                     </div>
                     <label id="comprovante-label" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px;border:2px dashed #ddd;border-radius:12px;cursor:pointer;font-size:0.78rem;color:#aaa;transition:0.2s">
-                        <i class="fa-solid fa-image" style="font-size:1.4rem;color:var(--laranja-brand)"></i>
-                        Toque para anexar o comprovante
-                        <input type="file" id="comprovante-input" accept="image/*" style="display:none" onchange="previewComprovante(this)">
+                        <i class="fa-solid fa-file-pdf" id="comprovante-pdf-icon" style="display:none;font-size:1.4rem;color:var(--vermelho-del)"></i>
+                        <i class="fa-solid fa-image" id="comprovante-img-icon" style="font-size:1.4rem;color:var(--laranja-brand)"></i>
+                        Toque para anexar (Imagem ou PDF)
+                        <input type="file" id="comprovante-input" accept="image/*,.pdf" style="display:none" onchange="previewComprovante(this)">
                     </label>
                     <div id="comprovante-preview" style="display:none;margin-top:8px;text-align:center">
                         <img id="comprovante-img" src="" style="max-width:100%;max-height:180px;border-radius:10px;border:2px solid var(--verde-zap)">
@@ -525,10 +526,24 @@
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const API_URL='https://script.google.com/macros/s/AKfycbw4Qk03yzsQEXE0qXstLuZlY0lx12aqrrXkdUwkeHykDD4KhVx8Ti4S4fNbLnYtg6uTwA/exec';
-const _w=atob('NTU4Njk5OTk3NjIyNg==');
+let _w=atob('NTU4Njk5OTk3NjIyNg==');
+let _pixKey='financeiro.nupieepro@gmail.com';
+let _pixName='NUPIEEPRO';
 function san(s){return typeof s==='string'?s.replace(/[<>"'&]/g,c=>({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;','&':'&amp;'}[c])):''}
-const _rl={t:0,n:0};
-function rlOk(){const n=Date.now();if(n-_rl.t<30000){if(++_rl.n>3){toast('Aguarde antes de enviar outro pedido.',1);return false;}}else _rl.n=0;_rl.t=n;return true;}
+const _rl={t:parseInt(localStorage.getItem('nupi_rl_t')||'0'),n:parseInt(localStorage.getItem('nupi_rl_n')||'0')};
+function rlOk(){
+    const n=Date.now();
+    if(n-_rl.t<600000){ /* Janela de 10 min */
+        if(++_rl.n>5){
+            toast('Limite de pedidos atingido. Tente novamente em alguns minutos.',1);
+            return false;
+        }
+    }else{ _rl.n=1; _rl.t=n; }
+    localStorage.setItem('nupi_rl_t', _rl.t);
+    localStorage.setItem('nupi_rl_n', _rl.n);
+    return true;
+}
+let _bt; function debounceBusca(v){ clearTimeout(_bt); _bt=setTimeout(()=>{busca=v.trim().toLowerCase();renderVitrine();},300); }
 
 let produtos=[
     {id:1,nome:"Camisa PRETA — Eng. Produção",preco:40,tipo:"camisa",categoria:"camisa",img:"https://i.ibb.co/3mV7GGgj/SAVE-20260321-143214.jpg",descricao:"Camisa oficial do NUPIEEPRO. 100% algodão.",tamanhos:["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],estoque:99,destaque:true,encomenda:true,prazo_encomenda:"Apenas sob encomenda"},
@@ -539,7 +554,7 @@ let produtos=[
     {id:6,nome:"Chaveiro Abridor",preco:4,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg",descricao:"Chaveiro abridor personalizado NUPIEEPRO.",tamanhos:[],estoque:50,destaque:false,encomenda:false},
     {id:7,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Frase Eng. Producao","Simbolo Engrenagem","Personalizado"],estoque:100,destaque:false,encomenda:false}
 ];
-const cupons={'CALOUROEP10':{tipo:'percentual',valor:10,produtos_ids:[4,5,6],minimo:0,limite:500,usos:0,ativo:true}};
+let cupons={'CALOUROEP10':{tipo:'percentual',valor:10,produtos_ids:[4,5,6],minimo:0,limite:500,usos:0,ativo:true}};
 let carrinho=[],itemSel=null,qtdTemp=1,filtroAtual='todos',busca='',cupomApl=null,pixT=null;
 
 window.addEventListener('load',()=>{
@@ -647,38 +662,51 @@ async function buscarAPI(action){
 }
 
 async function carregarAPI(){
-    /* Config */
-    try{
-        const c = await buscarAPI('config');
-        if(c.manutencao==='true'||c.manutencao===true){
-            document.getElementById('tela-manutencao').classList.add('ativa');
-            return;
-        }
-        if(c.mensagem_boas_vindas){
-            const el=document.querySelector('.welcome-msg');
-            if(el) el.textContent='👋 '+c.mensagem_boas_vindas;
-        }
-        if(c.pausar_checkout==='true') window._checkoutPausado=true;
-    }catch(e){}
+    try {
+        const results = await Promise.allSettled([
+            buscarAPI('config'),
+            buscarAPI('produtos'),
+            buscarAPI('cupons')
+        ]);
 
-    /* Produtos */
-    try{
-        const d = await buscarAPI('produtos');
-        if(Array.isArray(d)&&d.length>0){
-            const normalizados = d.map(normalizarProduto);
-            produtos.length=0;
-            produtos.push(...normalizados);
-            renderVitrine();
+        /* Processa Config */
+        if(results[0].status === 'fulfilled'){
+            const c = results[0].value;
+            if(c.manutencao==='true'||c.manutencao===true){
+                document.getElementById('tela-manutencao').classList.add('ativa');
+                return;
+            }
+            if(c.mensagem_boas_vindas){
+                document.querySelectorAll('.welcome-msg').forEach(el => el.textContent='👋 '+c.mensagem_boas_vindas);
+            }
+            if(c.whatsapp) _w = c.whatsapp.replace(/\D/g,'');
+            if(c.chave_pix) _pixKey = c.chave_pix;
+            if(c.nome_recebedor) _pixName = c.nome_recebedor;
+            if(c.pausar_checkout==='true') window._checkoutPausado=true;
         }
-    }catch(e){}
 
-    /* Cupons ativos */
-    try{
-        const c = await buscarAPI('cupons');
-        if(c.tem_cupom_ativo){
-            document.getElementById('card-cupom').style.display='block';
+        /* Processa Produtos */
+        if(results[1].status === 'fulfilled'){
+            const d = results[1].value;
+            if(Array.isArray(d)&&d.length>0){
+                const normalizados = d.map(normalizarProduto);
+                produtos.length=0;
+                produtos.push(...normalizados);
+                renderVitrine();
+                /* Cache local para carregamento instantâneo no futuro */
+                localStorage.setItem('nupieepro_cache_produtos', JSON.stringify({t:Date.now(), d:normalizados}));
+            }
         }
-    }catch(e){}
+
+        /* Processa Cupons */
+        if(results[2].status === 'fulfilled'){
+            const d = results[2].value;
+            if(typeof d === 'object'){
+                Object.assign(cupons, d);
+                if(Object.values(cupons).some(c=>c.ativo)) document.getElementById('card-cupom').style.display='block';
+            }
+        }
+    } catch(e){ console.error('Erro API:', e); }
 }
 
 function filtrar(cat,btn){filtroAtual=cat;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderVitrine();}
@@ -901,20 +929,16 @@ function togglePix(){
     document.getElementById('pix-destaque').classList.toggle('ativo',p);
     if(p) gerarQRPix();
 }
-/* PIX: chave via JS pra evitar ofuscação do Cloudflare */
-const _pixKey = (()=>{const p=['financeiro','nupieepro','@gmail.com'];return p[0]+p[1]+p[2];})();
 
 function gerarQRPix(){
     const tot = calcTotal();
     document.getElementById('pix-valor').textContent = 'R$ '+tot.toFixed(2).replace('.',',');
 
-    /* Mostra chave via JS (Cloudflare não ofusca JS) */
     const kvEl = document.getElementById('pix-chave-val');
     if(kvEl) kvEl.textContent = _pixKey;
 
-    /* Gera payload EMV correto */
-    const payload = gerarPayloadPix(_pixKey, 'NUPIEEPRO', tot);
-    window._pixPayload = payload; /* guarda pra copiar depois */
+    const payload = gerarPayloadPix(_pixKey, _pixName || 'NUPIEEPRO', tot);
+    window._pixPayload = payload;
 
     document.getElementById('pix-qr-img').src =
         'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(payload);
@@ -981,6 +1005,18 @@ function _copiarFallback(txt){
 
 function previewComprovante(input){
     if(!input.files||!input.files[0]) return;
+    const file = input.files[0];
+    const isPDF = file.type === 'application/pdf';
+    
+    if(isPDF){
+        document.getElementById('comprovante-img-icon').style.display = 'none';
+        document.getElementById('comprovante-pdf-icon').style.display = 'block';
+        document.getElementById('comprovante-label').style.borderColor = 'var(--vermelho-del)';
+        toast('📄 PDF anexado com sucesso!');
+        window._comprovante = "PDF_ATTACHED"; /* Marcador para validar envio */
+        return;
+    }
+
     const reader=new FileReader();
     reader.onload=e=>{
         document.getElementById('comprovante-img').src=e.target.result;
@@ -988,7 +1024,7 @@ function previewComprovante(input){
         document.getElementById('comprovante-label').style.display='none';
         window._comprovante=e.target.result;
     };
-    reader.readAsDataURL(input.files[0]);
+    reader.readAsDataURL(file);
 }
 function removerComprovante(){
     document.getElementById('comprovante-preview').style.display='none';
@@ -1007,37 +1043,36 @@ function enviarPedidoZap(){
     const pgto=document.querySelector('input[name="pgto"]:checked').value;
     const obs=document.getElementById('campo-obs').value.trim();
     if(!nome||!zap){toast('⚠️ Preencha Nome e WhatsApp!',1);return;}
-    /* LGPD — aviso de consentimento (salvo após primeira vez) */
-    if(!localStorage.getItem('nupi_lgpd_ok')){
-        localStorage.setItem('nupi_lgpd_ok','1');
-    }
     if(entrega==='Entrega'&&!end){toast('⚠️ Informe o endereço!',1);return;}
-    /* Comprovante obrigatório para PIX */
     if(pgto==='PIX'&&!window._comprovante){
         toast('⚠️ Anexe o comprovante do PIX antes de enviar!',1);
         document.getElementById('comprovante-label').style.border='2px dashed var(--vermelho-del)';
         setTimeout(()=>{if(document.getElementById('comprovante-label'))document.getElementById('comprovante-label').style.border='2px dashed #ddd';},3000);
         return;
     }
-    salvarUser();
+
     const num=gerarNum(),now=new Date().toLocaleString('pt-BR');
+    const sb=calcSub(),dc=calcDesc(),tt=calcTotal();
+    const itensParaEnvio = JSON.parse(JSON.stringify(carrinho)); /* Snapshot do carrinho */
+
     let msg=`*LOJINHA OFICIAL NUPIEEPRO*\n*Pedido:* #${num}\n*Data:* ${now}\n------------------------------\n*Cliente:* ${nome}\n*WhatsApp:* ${zap}\n`;
     if(email) msg+=`*E-mail:* ${email}\n`;
     msg+=`*Entrega:* ${entrega}\n`;
     if(entrega==='Entrega') msg+=`*Endereco:* ${end}\n`;
     msg+=`*Pagamento:* ${pgto}\n\n*ITENS:*\n`;
-    carrinho.forEach(i=>{msg+=`${i.qtd}x *${i.nome}*\n`;if((i.tipo==='camisa'||i.categoria==='camisa')&&i.tamanho!=='Único')msg+=`   └ Tam: ${i.tamanho}\n`;msg+=`   └ R$ ${(i.preco*i.qtd).toFixed(2).replace('.',',')}\n`;});
-    const sb=calcSub(),dc=calcDesc(),tt=calcTotal();
+    itensParaEnvio.forEach(i=>{msg+=`${i.qtd}x *${i.nome}*\n`;if((i.tipo==='camisa'||i.categoria==='camisa')&&i.tamanho!=='Único')msg+=`   └ Tam: ${i.tamanho}\n`;msg+=`   └ R$ ${(i.preco*i.qtd).toFixed(2).replace('.',',')}\n`;});
     msg+=`\n------------------------------\n*Subtotal:* R$ ${sb.toFixed(2).replace('.',',')}\n`;
     if(dc>0&&cupomApl) msg+=`*Cupom (${cupomApl.cod}):* - R$ ${dc.toFixed(2).replace('.',',')}\n`;
     msg+=`*TOTAL: R$ ${tt.toFixed(2).replace('.',',')}*\n------------------------------\n`;
     if(obs) msg+=`*Obs:* ${obs}\n`;
-    if(pgto==='PIX') msg+=`PIX enviado! Aguardando confirmacao do financeiro.`;
-    salvarHist(num,now,tt);
+    if(pgto==='PIX') msg+=`PIX enviado! Aguarde a confirmação.`;
+
+    /* Salva Histórico e Limpa Carrinho ANTES do Zap, mas usando o Snapshot */
+    salvarUser();
+    salvarHist(num,now,tt,itensParaEnvio);
     if(cupomApl) cupons[cupomApl.cod].usos++;
 
-    /* Abre WhatsApp PRIMEIRO — síncrono, antes de qualquer async */
-    /* Isso evita bloqueio de popup no iPhone e Android */
+    /* Abre WhatsApp */
     const zapUrl = 'https://wa.me/'+_w+'?text='+encodeURIComponent(msg);
     const zapLink = document.createElement('a');
     zapLink.href = zapUrl;
@@ -1048,18 +1083,34 @@ function enviarPedidoZap(){
     zapLink.click();
     setTimeout(()=>document.body.removeChild(zapLink), 1000);
 
-    /* Depois registra na API em background */
+    /* Registra na API e finaliza UI */
+    fetch(API_URL,{method:'POST',body:JSON.stringify({action:'registrar_pedido',numero:num,nome,whatsapp:zap,email,entrega,endereco:end,pagamento:pgto,observacao:obs,itens:itensParaEnvio,subtotal:sb,desconto:dc,cupom:cupomApl?cupomApl.cod:'',total:tt})}).catch(()=>{});
+
     carrinho=[];cupomApl=null;window._comprovante=null;salvarCarrinho();atualizarBarra();
-    fetch(API_URL,{method:'POST',body:JSON.stringify({action:'registrar_pedido',numero:num,nome,whatsapp:zap,email,entrega,endereco:end,pagamento:pgto,observacao:obs,itens:carrinho,subtotal:sb,desconto:dc,cupom:cupomApl?cupomApl.cod:'',total:tt})}).catch(()=>{});
+    
     const msgs=['Boa escolha! O Nupieepro agradece 🧡','Que venha mais! 💙🧡','Obrigado por apoiar o núcleo! ⚙️'];
     document.getElementById('sucesso-num').textContent='Pedido #'+num;
     document.getElementById('sucesso-msg').textContent=msgs[Math.floor(Math.random()*msgs.length)];
     document.getElementById('tela-sucesso').classList.add('ativo');
     document.getElementById('checkout-corpo').style.display='none';
+    /* Scroll para o topo do modal */
+    document.getElementById('modal-checkout').querySelector('.modal-panel').scrollTop = 0;
 }
 
-function gerarNum(){const a=new Date().getFullYear(),k='nupieepro_seq_'+a,s=parseInt(localStorage.getItem(k)||'0')+1;localStorage.setItem(k,s.toString());return a+'-'+s.toString().padStart(3,'0');}
-function salvarHist(num,data,total){const h=JSON.parse(localStorage.getItem('nupieepro_hist')||'[]');h.unshift({num,data,total,itens:carrinho.map(i=>i.qtd+'x '+i.nome)});localStorage.setItem('nupieepro_hist',JSON.stringify(h.slice(0,30)));}
+function gerarNum(){
+    const a=new Date().getFullYear();
+    const k='nupieepro_seq_'+a;
+    const s=parseInt(localStorage.getItem(k)||'0')+1;
+    localStorage.setItem(k,s.toString());
+    /* Adiciona um sufixo aleatório para evitar colisão entre usuários diferentes se o site for estático */
+    const rand = Math.floor(Math.random()*900)+100;
+    return a+'-'+s.toString().padStart(3,'0')+'-'+rand;
+}
+function salvarHist(num,data,total,itensSnapshot){
+    const h=JSON.parse(localStorage.getItem('nupieepro_hist')||'[]');
+    h.unshift({num,data,total,itens:(itensSnapshot||carrinho).map(i=>i.qtd+'x '+i.nome)});
+    localStorage.setItem('nupieepro_hist',JSON.stringify(h.slice(0,30)));
+}
 function abrirMeusPedidos(){
     const h=JSON.parse(localStorage.getItem('nupieepro_hist')||'[]');
     const el=document.getElementById('lista-pedidos-hist');
