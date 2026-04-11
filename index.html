@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>NUPIEEPRO STORE</title>
+    <meta name="description" content="Loja oficial do NUPIEEPRO — UFPI. Ecobag, bloco de notas, chaveiro, bottons e muito mais!">
+    <meta property="og:title" content="NUPIEEPRO STORE">
+    <meta property="og:description" content="Loja oficial do NUPIEEPRO — UFPI.">
+    <meta property="og:image" content="https://i.ibb.co/7hcph2F/download.jpg">
+    <meta property="og:url" content="https://nupieepro.github.io/Lojinha-Nupieepro/">
+    <meta name="theme-color" content="#0f0732">
+    <link rel="canonical" href="https://nupieepro.github.io/Lojinha-Nupieepro/">
+    <link rel="manifest" href="./manifest.json">
+
+    <!-- iOS Safari PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Nupi Store">
+    <link rel="apple-touch-icon" href="./loja_icon_bg29324F.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./loja_icon_bg29324F.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./loja_icon_bg29324F.png">
+    <link rel="apple-touch-startup-image" href="./loja_icon_bg29324F.png">
+
+    <!-- Android / outros -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Nupi Store">
+    <meta name="msapplication-TileColor" content="#29324F">
+    <meta name="msapplication-TileImage" content="./loja_icon_bg29324F.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script>
+    /* Fallback Font Awesome se CDN falhar */
+    document.addEventListener('DOMContentLoaded',function(){
+        var ok=false;
+        try{var s=document.createElement('span');s.className='fa fa-check';s.style.cssText='position:absolute;visibility:hidden';document.body.appendChild(s);ok=window.getComputedStyle(s,':before').content!=='none'&&window.getComputedStyle(s,':before').content!=='';document.body.removeChild(s);}catch(e){}
+        if(!ok){var l=document.createElement('link');l.rel='stylesheet';l.href='https://use.fontawesome.com/releases/v6.4.0/css/all.css';document.head.appendChild(l);}
+    });
+    </script>
+    <style>
+        :root{--roxo-brand:#0f0732;--laranja-brand:#f85900;--azul-coracao:#007bff;--branco:#ffffff;--laranja-glow:rgba(248,89,0,0.3);--fundo:#F5F7FB;--card-bg:#ffffff;--texto:#0f0732;--texto-suave:#5a5575;--verde-zap:#25D366;--vermelho-del:#FF4757;--shadow-sm:0 4px 12px rgba(15,7,50,0.05);--shadow-md:0 10px 30px rgba(15,7,50,0.1);--shadow-lg:0 20px 50px rgba(15,7,50,0.15);}
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+        body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--fundo);color:var(--texto);padding-bottom:120px;overflow-x:hidden;}
+        img{max-width:100%;display:block;}
+        button{font-family:inherit;cursor:pointer;}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+
+        /* SPLASH */
+        #splash-screen{position:fixed;inset:0;background:var(--roxo-brand);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s,visibility 0.5s;}
+        .splash-img{width:100px;height:100px;border-radius:50%;border:3px solid var(--laranja-brand);box-shadow:0 0 30px var(--laranja-glow);animation:pulseLogo 2s infinite;object-fit:cover;}
+        .splash-text{color:var(--branco);margin-top:20px;font-weight:700;letter-spacing:1.5px;font-size:0.85rem;text-transform:uppercase;opacity:0;animation:fadeUp 0.8s forwards 0.3s;}
+        @keyframes pulseLogo{0%,100%{transform:scale(1)}70%{transform:scale(1.05)}}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .hidden{opacity:0;visibility:hidden;pointer-events:none;}
+
+        /* MANUTENÇÃO */
+        #tela-manutencao{display:none;position:fixed;inset:0;background:var(--roxo-brand);z-index:99999;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;}
+        #tela-manutencao.ativa{display:flex;}
+        .manut-logo{width:90px;height:90px;border-radius:50%;border:3px solid var(--laranja-brand);object-fit:cover;margin-bottom:20px;animation:pulseLogo 2s infinite;}
+        .manut-titulo{color:var(--branco);font-size:1.3rem;font-weight:800;margin-bottom:10px;}
+        .manut-msg{color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:20px;line-height:1.5;}
+        .manut-insta{color:var(--branco);font-weight:700;font-size:0.9rem;background:rgba(255,255,255,0.1);padding:10px 20px;border-radius:30px;border:1px solid rgba(255,255,255,0.2);text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
+        .manut-insta i{color:var(--laranja-brand);}
+
+        /* HEADER */
+        header{background:linear-gradient(160deg,var(--roxo-brand) 20%,#1a1245 100%);color:var(--branco);padding:16px 16px 80px;border-radius:0 0 40px 40px;text-align:center;box-shadow:var(--shadow-lg);position:relative;}
+        /* Header - tudo centralizado */
+        .header-inner{max-width:600px;margin:0 auto;position:relative;}
+        .header-row{display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative;}
+        .header-brand{display:flex;align-items:center;gap:12px;}
+        .brand-logo{width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);object-fit:cover;flex-shrink:0;}
+        .brand-info{text-align:left;}
+        .brand{font-size:1.4rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin:0;line-height:1;}
+        .brand span{color:var(--laranja-brand);}
+        .store-badge{display:inline-block;background:var(--laranja-brand);color:var(--branco);padding:3px 10px;border-radius:12px;font-size:0.65rem;font-weight:700;text-transform:uppercase;margin-top:4px;box-shadow:0 4px 10px var(--laranja-glow);}
+        .header-icons{position:absolute;right:0;top:50%;transform:translateY(-50%);display:flex;gap:6px;}
+        .header-icon-btn{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--branco);font-size:0.85rem;display:flex;align-items:center;justify-content:center;text-decoration:none;transition:0.2s;}
+        .sub-brand{font-size:0.68rem;opacity:0.85;line-height:1.3;text-align:center;}
+        .welcome-msg{background:rgba(255,255,255,0.08);display:inline-block;padding:4px 12px;border-radius:15px;font-size:0.7rem;margin-top:8px;border:1px solid rgba(255,255,255,0.1);}
+        .header-busca{margin-top:12px;display:flex;align-items:center;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:30px;padding:9px 16px;}
+        .header-busca i{color:rgba(255,255,255,0.6);margin-right:8px;flex-shrink:0;}
+        .header-busca input{background:transparent;border:none;outline:none;color:var(--branco);font-family:inherit;font-size:0.85rem;width:100%;}
+        .header-busca input::placeholder{color:rgba(255,255,255,0.5);}
+
+        /* CARD CUPOM */
+        #card-cupom{display:none;max-width:1100px;margin:0 auto 16px;padding:0 12px;position:relative;z-index:10;}
+        .cupom-banner{background:linear-gradient(135deg,var(--roxo-brand),#1a1245);border-radius:16px;padding:16px 20px;border:1px solid rgba(248,89,0,0.3);display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+        .cupom-icone{background:var(--laranja-brand);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .cupom-icone i{color:#fff;font-size:1rem;}
+        .cupom-texto{flex:1;min-width:160px;}
+        .cupom-titulo{color:var(--branco);font-weight:800;font-size:0.88rem;margin-bottom:3px;}
+        .cupom-desc{color:rgba(255,255,255,0.7);font-size:0.75rem;line-height:1.4;}
+        .cupom-btn-usar{background:var(--laranja-brand);color:#fff;border:none;border-radius:10px;padding:9px 16px;font-size:0.8rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:0.15s;}
+        .cupom-btn-usar:active{transform:scale(0.96);}
+
+        /* FILTROS */
+        .filter-container{margin-top:-50px;position:relative;z-index:20;margin-bottom:16px;}
+        .filter-scroll{display:flex;gap:8px;overflow-x:auto;padding:8px 12px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch;justify-content:center;}
+        .filter-scroll::-webkit-scrollbar{display:none;}
+        .filter-btn{padding:8px 18px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.1);border-radius:30px;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.9);white-space:nowrap;transition:0.2s;cursor:pointer;flex-shrink:0;}
+        .filter-btn.active{background:var(--branco);color:var(--roxo-brand);font-weight:700;border-color:var(--branco);box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+
+        /* GRID */
+        .container{max-width:1100px;margin:0 auto;padding:0 12px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;position:relative;z-index:10;}
+        @media(min-width:600px){.container{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}}
+        @media(min-width:1024px){
+    .container{gap:28px;}
+    header{padding:24px 40px 90px;}
+    .header-inner{max-width:700px;}
+    .filter-container{padding:0;}
+    .filter-scroll{justify-content:center;padding:8px 20px 14px;}
+    #card-cupom{padding:0 20px;}
+    .cupom-banner{max-width:1100px;margin:0 auto;}
+}
+
+        /* CARDS */
+        .card{background:var(--card-bg);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;position:relative;border:1px solid rgba(15,7,50,0.05);transition:transform 0.15s;}
+        .card:active{transform:scale(0.97);}
+        .card.destaque{border:2px solid var(--laranja-brand);box-shadow:0 0 0 2px var(--laranja-glow),var(--shadow-sm);}
+        .card.esgotado{opacity:0.5;filter:grayscale(0.5);pointer-events:none;}
+        .image-wrapper{width:100%;aspect-ratio:1/1;background:#f0f2f8;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+        .image-wrapper::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#f0f2f8 25%,#e4e7ef 50%,#f0f2f8 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;z-index:1;}
+        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        .image-wrapper.loaded::before{display:none;}
+        .prod-img{opacity:0;transition:opacity 0.3s;}
+        .prod-img.visible{opacity:1;}
+        .prod-img{width:100%;height:100%;object-fit:cover;z-index:2;}
+        .share-btn{position:absolute;top:10px;right:10px;width:34px;height:34px;background:rgba(255,255,255,0.95);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);z-index:5;color:var(--roxo-brand);font-size:0.85rem;border:none;}
+        .share-btn:active{background:var(--roxo-brand);color:#fff;}
+        .no-photo-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#f5f7fa,#e4e7ec);color:var(--roxo-brand);}
+        .no-photo-placeholder i{font-size:2rem;margin-bottom:8px;opacity:0.35;}
+        .no-photo-placeholder span{font-size:0.7rem;font-weight:700;opacity:0.55;text-transform:uppercase;}
+        .badge-wrap{position:absolute;bottom:8px;left:8px;display:flex;flex-wrap:wrap;gap:3px;z-index:5;}
+        .badge{padding:2px 7px;border-radius:20px;font-size:0.58rem;font-weight:700;text-transform:uppercase;}
+        .badge-destaque{background:var(--laranja-brand);color:#fff;}
+        .badge-encomenda{background:#f39c12;color:#fff;}
+        .badge-esgotado{background:#7f8c8d;color:#fff;}
+        .badge-ultimas{background:var(--vermelho-del);color:#fff;}
+        .card-info{padding:14px;text-align:center;display:flex;flex-direction:column;flex-grow:1;cursor:pointer;}
+        .card-title{font-size:0.82rem;font-weight:700;color:var(--roxo-brand);line-height:1.3;height:34px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+        .card-price{font-size:1.05rem;color:var(--laranja-brand);font-weight:800;margin-top:5px;}
+        .card-enc{font-size:0.68rem;color:var(--laranja-brand);font-weight:700;margin-top:3px;}
+        .tap-hint{font-size:0.62rem;color:#aaa;margin-top:auto;padding-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+
+        /* VITRINE VAZIA */
+        #vitrine-vazia{display:none;text-align:center;padding:50px 20px;grid-column:1/-1;color:var(--texto-suave);}
+        #vitrine-vazia.ativo{display:block;}
+        #vitrine-vazia i{font-size:2.5rem;opacity:0.25;margin-bottom:12px;display:block;}
+
+        /* MODAIS */
+        .modal-bg{position:fixed;inset:0;background:rgba(15,7,50,0.65);z-index:2000;display:flex;justify-content:center;align-items:flex-end;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 0.25s,visibility 0.25s;}
+        .modal-bg.active{opacity:1;visibility:visible;pointer-events:all;}
+        .modal-panel{background:var(--card-bg);width:100%;max-width:500px;border-radius:28px 28px 0 0;padding:28px 22px;box-shadow:var(--shadow-lg);animation:slideUp 0.35s cubic-bezier(0.16,1,0.3,1);max-height:92vh;overflow-y:auto;position:relative;}
+        @media(min-width:600px){.modal-bg{align-items:center}.modal-panel{border-radius:28px}}
+        @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+        .close-btn{position:absolute;top:18px;right:18px;background:#f0f2f5;width:34px;height:34px;border-radius:50%;border:none;font-size:1.1rem;color:var(--roxo-brand);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;}
+        .close-btn:active{background:#e0e2e5;}
+
+        /* MODAL PRODUTO */
+        .detail-img-box{width:100%;height:230px;background:#f4f6f9;border-radius:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border:1px solid #eee;}
+        .detail-img{width:100%;height:100%;object-fit:contain;z-index:2;}
+        .detail-title{font-size:1.3rem;font-weight:800;color:var(--roxo-brand);line-height:1.2;margin-bottom:4px;}
+        .detail-price{font-size:1.7rem;color:var(--laranja-brand);font-weight:800;margin-bottom:4px;display:inline-block;}
+        .detail-desc{font-size:0.84rem;color:var(--texto-suave);line-height:1.6;margin-bottom:14px;background:#f8f9fc;padding:10px 12px;border-radius:10px;}
+        .detail-enc{font-size:0.78rem;background:#fff8e1;color:#f57f17;padding:8px 12px;border-radius:10px;margin-bottom:14px;font-weight:600;}
+        .nice-select{width:100%;padding:14px;border-radius:14px;border:2px solid #eef2f6;background:#fff;font-size:0.9rem;color:var(--texto);font-weight:600;outline:none;margin-bottom:18px;appearance:none;-webkit-appearance:none;}
+        .nice-select:focus{border-color:var(--roxo-brand);}
+        .qty-wrapper{display:flex;align-items:center;justify-content:space-between;background:#f8f9fc;padding:5px;border-radius:14px;border:1px solid #eee;margin-bottom:22px;}
+        .qty-btn{width:46px;height:46px;background:white;border:none;border-radius:10px;font-size:1.1rem;color:var(--roxo-brand);font-weight:700;cursor:pointer;box-shadow:var(--shadow-sm);}
+        .qty-btn:active{transform:scale(0.9);}
+        .qty-num{font-size:1.2rem;font-weight:700;}
+
+        /* BOTÕES */
+        .btn-primary{width:100%;padding:16px;border:none;border-radius:14px;background:var(--roxo-brand);color:var(--branco);font-size:0.95rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:0.15s;box-shadow:0 6px 20px rgba(15,7,50,0.2);}
+        .btn-primary:active{transform:scale(0.98);}
+        .btn-secondary{width:100%;padding:12px;border:2px solid var(--roxo-brand);border-radius:14px;background:transparent;color:var(--roxo-brand);font-size:0.88rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;margin-top:10px;transition:0.15s;}
+        .btn-secondary:active{background:#f0f0f0;}
+        .btn-danger{width:100%;padding:11px;border:1px solid var(--vermelho-del);border-radius:12px;background:#fff0f0;color:var(--vermelho-del);font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:8px;transition:0.15s;}
+
+        /* INPUTS */
+        .input-box{width:100%;padding:14px;border:1px solid #e0e0e0;border-radius:12px;margin-bottom:10px;outline:none;font-size:0.9rem;transition:border-color 0.2s;background:#fbfbfb;font-family:inherit;color:var(--texto);}
+        .input-box:focus{border-color:var(--roxo-brand);background:#fff;}
+        .input-label{font-size:0.78rem;font-weight:700;color:var(--texto-suave);margin-bottom:5px;display:block;}
+        .radio-option{padding:13px 14px;border:1px solid #eee;border-radius:12px;display:flex;align-items:center;gap:12px;cursor:pointer;font-size:0.88rem;font-weight:500;transition:0.15s;margin-bottom:8px;color:var(--texto);}
+        .radio-option:has(input:checked){border-color:var(--laranja-brand);background:#fffbf8;color:var(--laranja-brand);font-weight:700;box-shadow:inset 0 0 0 1px var(--laranja-brand);}
+        .radio-option input{accent-color:var(--laranja-brand);width:17px;height:17px;}
+
+        /* CUPOM CHECKOUT */
+        .cupom-checkout{background:linear-gradient(135deg,var(--roxo-brand),#1a1245);border-radius:14px;padding:14px;margin-bottom:14px;border:1px solid rgba(248,89,0,0.3);}
+        .cupom-checkout-titulo{font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.8);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;}
+        .cupom-row{display:flex;gap:7px;}
+        .cupom-input{flex:1;padding:11px 13px;border:2px solid rgba(248,89,0,0.4);border-radius:10px;font-size:0.82rem;font-family:inherit;text-transform:uppercase;outline:none;background:rgba(255,255,255,0.08);color:#fff;font-weight:700;letter-spacing:1px;}
+        .cupom-input::placeholder{color:rgba(255,255,255,0.4);font-weight:400;text-transform:none;letter-spacing:0;}
+        .cupom-input:focus{border-color:var(--laranja-brand);}
+        .cupom-aplicar{padding:11px 14px;background:var(--laranja-brand);color:#fff;border:none;border-radius:10px;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap;}
+        .cupom-aplicar:active{transform:scale(0.95);}
+        #cupom-ok{display:none;margin-top:8px;background:rgba(39,174,96,0.2);border:1px solid rgba(39,174,96,0.4);border-radius:8px;padding:7px 11px;font-size:0.78rem;color:#a8e6c0;font-weight:600;align-items:center;gap:6px;}
+        #cupom-ok.ativo{display:flex;}
+        .cupom-remover{margin-left:auto;background:none;border:none;color:#ff8a80;cursor:pointer;font-size:0.78rem;font-weight:700;}
+
+        /* CARRINHO */
+        .cart-list{list-style:none;margin:10px 0 14px;max-height:200px;overflow-y:auto;border:1px solid #f0f0f0;border-radius:14px;padding:8px;background:#fafafa;}
+        .cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 8px;border-bottom:1px solid #eee;}
+        .cart-item:last-child{border-bottom:none;}
+        .cart-item-info strong{font-size:0.82rem;color:var(--roxo-brand);display:block;}
+        .cart-item-info span{font-size:0.73rem;color:var(--texto-suave);}
+        .btn-trash{background:#fff0f0;color:var(--vermelho-del);width:32px;height:32px;border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+
+        /* RESUMO */
+        .resumo-box{background:#f8f9fc;border-radius:12px;padding:12px;margin-bottom:14px;}
+        .resumo-linha{display:flex;justify-content:space-between;font-size:0.82rem;color:var(--texto-suave);margin-bottom:5px;}
+        .resumo-linha.total{font-size:0.95rem;font-weight:800;color:var(--roxo-brand);margin-bottom:0;padding-top:7px;border-top:1px solid #eee;}
+        .resumo-linha.desconto{color:#27ae60;font-weight:700;}
+
+        /* PIX */
+        .pix-box{display:none;background:#f8f9fc;border-radius:14px;padding:18px;margin-bottom:14px;text-align:center;}
+        .pix-box.ativo{display:block;}
+        .pix-valor{font-size:1.3rem;font-weight:800;color:var(--laranja-brand);margin-bottom:10px;}
+        .pix-qr{width:170px;height:170px;margin:0 auto 10px;border:3px solid var(--roxo-brand);border-radius:14px;overflow:hidden;background:#fff;padding:6px;}
+        .pix-qr img{width:100%;height:100%;}
+        .pix-chave{font-size:0.78rem;color:var(--texto-suave);background:#fff;border:1px solid #ddd;border-radius:8px;padding:7px 10px;margin-bottom:8px;word-break:break-all;}
+        .pix-copiar{padding:9px 18px;background:var(--roxo-brand);color:#fff;border:none;border-radius:10px;font-size:0.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;margin:0 auto 8px;}
+        .pix-timer{font-size:0.72rem;color:var(--vermelho-del);font-weight:700;}
+        .pix-destaque{background:#e8f5e9;border-radius:10px;padding:7px 12px;font-size:0.78rem;color:#2e7d32;font-weight:700;margin-bottom:10px;display:none;align-items:center;gap:6px;}
+        #comprovante-label:hover{border-color:var(--laranja-brand);background:#fffbf8;}
+        .pix-destaque.ativo{display:flex;}
+
+        /* SUCESSO */
+        #tela-sucesso{display:none;text-align:center;padding:16px 0;}
+        #tela-sucesso.ativo{display:block;}
+        .sucesso-icon{font-size:3.5rem;margin-bottom:12px;}
+        .sucesso-titulo{font-size:1.3rem;font-weight:800;color:var(--roxo-brand);margin-bottom:6px;}
+        .sucesso-num{background:var(--roxo-brand);color:#fff;border-radius:10px;padding:10px 18px;font-size:0.82rem;font-weight:700;margin-bottom:16px;display:inline-block;}
+        .sucesso-msg{font-size:0.86rem;color:var(--texto-suave);margin-bottom:18px;}
+
+        /* BARRA FLUTUANTE */
+        .float-bar{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(150px);width:90%;max-width:440px;background:var(--roxo-brand);color:var(--branco);padding:13px 28px;border-radius:50px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow-lg);z-index:100;transition:transform 0.45s cubic-bezier(0.34,1.56,0.64,1);border:2px solid var(--laranja-brand);cursor:pointer;}
+        .float-bar.visible{transform:translateX(-50%) translateY(0);}
+
+        /* TOAST */
+        #toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-100px);background:white;color:var(--roxo-brand);padding:11px 22px;border-radius:50px;box-shadow:var(--shadow-md);font-weight:600;font-size:0.88rem;z-index:3000;display:flex;align-items:center;gap:8px;transition:transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275);max-width:90vw;}
+        #toast.show{transform:translateX(-50%) translateY(0);}
+        #toast.erro{color:var(--vermelho-del);}
+        #toast i{color:var(--verde-zap);font-size:1rem;}
+        #toast.erro i{color:var(--vermelho-del);}
+
+        /* BOTTON SELECTOR */
+        .botton-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px;}
+        .botton-opt{padding:10px 8px;border:2px solid #eee;border-radius:12px;text-align:center;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--roxo-brand);transition:0.15s;}
+        .botton-opt.selected{border-color:var(--laranja-brand);background:#fffbf8;color:var(--laranja-brand);}
+        .botton-opt:active{transform:scale(0.97);}
+
+        /* FOOTER */
+        footer{text-align:center;color:var(--texto-suave);font-size:0.75rem;margin-top:36px;font-weight:500;padding-bottom:8px;}
+        footer a{color:var(--laranja-brand);text-decoration:none;}
+    </style>
+</head>
+<body>
+
+<input type="text" name="website" id="honeypot" style="display:none!important" tabindex="-1" autocomplete="off">
+
+<div id="tela-manutencao">
+    <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="manut-logo">
+    <div class="manut-titulo">Estamos em Manutenção ⚙️</div>
+    <div class="manut-msg">Fique ligado em novas novidades!</div>
+    <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" class="manut-insta">
+        <i class="fa-brands fa-instagram"></i> @nupieepro 💙🧡
+    </a>
+</div>
+
+<div id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-msg">Adicionado!</span></div>
+
+<div id="splash-screen">
+    <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="splash-img" onerror="this.style.visibility='hidden'">
+    <div class="splash-text">Lojinha Oficial Nupieepro</div>
+</div>
+
+<header>
+    <div class="header-inner">
+        <div class="header-row">
+            <div class="header-brand">
+                <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="brand-logo" onerror="this.style.visibility='hidden'">
+                <div class="brand-info">
+                    <h1 class="brand">Nupiee<span>Pro</span></h1>
+                    <div class="store-badge"><i class="fa-solid fa-store"></i> Store</div>
+                </div>
+            </div>
+            <div class="header-icons">
+                <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" class="header-icon-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                <button class="header-icon-btn" onclick="abrirSobre()" aria-label="Sobre"><i class="fa-solid fa-circle-info"></i></button>
+                <button class="header-icon-btn" onclick="abrirMeusPedidos()" aria-label="Pedidos"><i class="fa-solid fa-clock-rotate-left"></i></button>
+            </div>
+        </div>
+        <div class="sub-brand">Núcleo Piauiense de Estudantes de Engenharia de Produção</div>
+        <div class="welcome-msg">👋 Bem-vindo(a), Nupilover!</div>
+        <div class="header-busca">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="search" id="campo-busca" placeholder="Buscar produto..." autocomplete="off" maxlength="60" oninput="debounceBusca(this.value)">
+        </div>
+    </div>
+</header>
+
+<div class="filter-container">
+    <div class="filter-scroll">
+        <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+        <button class="filter-btn" onclick="filtrar('acessorio',this)">Acessórios</button>
+        <button class="filter-btn" id="btn-combos" style="display:none" onclick="filtrar('combo',this)">🎁 Combos</button>
+    </div>
+</div>
+
+<div id="card-cupom">
+    <div class="cupom-banner">
+        <div class="cupom-icone"><i class="fa-solid fa-tag"></i></div>
+        <div class="cupom-texto">
+            <div class="cupom-titulo">Tem cupom? Use antes de finalizar! 🎉</div>
+            <div class="cupom-desc" id="cupom-desc-vitrine" style="display:none"></div>
+        </div>
+        <button class="cupom-btn-usar" onclick="abrirCheckoutComCupom()">Inserir cupom →</button>
+    </div>
+</div>
+
+<div class="container" id="vitrine-area"></div>
+<div id="vitrine-vazia">
+    <i class="fa-solid fa-box-open"></i>
+    <h3>Nenhum produto encontrado</h3>
+    <p>Tente outro termo ou categoria</p>
+</div>
+
+<footer>
+    <strong>NUPIEEPRO</strong>
+    <i class="fa-solid fa-heart" style="color:var(--azul-coracao);margin:0 3px"></i><i class="fa-solid fa-heart" style="color:var(--laranja-brand);margin-right:6px"></i>·
+    <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i> @nupieepro</a>
+    <br><br>
+    <button onclick="abrirLGPD()" style="background:none;border:none;color:var(--texto-suave);font-size:0.72rem;cursor:pointer;text-decoration:underline;font-family:inherit">
+        Privacidade e Proteção de Dados (LGPD)
+    </button>
+</footer>
+
+<!-- MODAL LGPD -->
+<div class="modal-bg" id="modal-lgpd" onclick="fecharModais(event)">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <h2 style="color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:14px">Privacidade e Proteção de Dados</h2>
+        <p style="font-size:0.83rem;color:var(--texto);line-height:1.7;margin-bottom:10px">
+            O <strong>NUPIEEPRO</strong> respeita sua privacidade e cumpre a 
+            <strong>Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018)</strong>.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Quais dados coletamos:</strong><br>
+            Nome, WhatsApp, e-mail (opcional) e endereço (quando necessário para entrega).
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Para que usamos:</strong><br>
+            Exclusivamente para processar seu pedido, confirmar pagamento e entrar em contato sobre a compra.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Compartilhamento:</strong><br>
+            Seus dados não são vendidos nem compartilhados com terceiros. São usados apenas internamente pela equipe do NUPIEEPRO.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Armazenamento:</strong><br>
+            Os dados ficam salvos no Google Sheets do NUPIEEPRO, protegido por senha, e no seu próprio dispositivo (localStorage).
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:16px">
+            <strong style="color:var(--roxo-brand)">Seus direitos:</strong><br>
+            Você pode solicitar a exclusão dos seus dados a qualquer momento pelo Instagram <a href="https://www.instagram.com/nupieepro" target="_blank" style="color:var(--laranja-brand)">@nupieepro</a>.
+        </p>
+        <div style="background:#f8f9fc;border-radius:10px;padding:12px;font-size:0.78rem;color:var(--texto-suave);text-align:center">
+            NUPIEEPRO — Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI<br>
+            Contato: <a href="https://www.instagram.com/nupieepro" target="_blank" style="color:var(--laranja-brand)">@nupieepro</a>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PRODUTO -->
+<div class="modal-bg" id="modal-details" onclick="fecharModais(event)">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <div class="detail-img-box">
+            <img src="" id="detalhe-img" class="detail-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div id="detalhe-fallback" class="no-photo-placeholder" style="display:none;position:absolute;inset:0;z-index:1"><i class="fa-solid fa-box-open"></i><span>Sem foto</span></div>
+        </div>
+        <h2 id="detalhe-nome" class="detail-title">Nome</h2>
+        <div id="detalhe-preco" class="detail-price">R$ 0,00</div>
+        <div id="detalhe-desc" class="detail-desc" style="display:none"></div>
+        <div id="detalhe-enc" class="detail-enc" style="display:none"></div>
+        <div id="wrapper-tamanho" style="display:none">
+            <label class="input-label">Tamanho:</label>
+            <select id="select-tamanho" class="nice-select"></select>
+        </div>
+        <div id="wrapper-botton" style="display:none">
+            <label class="input-label">Design do botton:</label>
+            <div class="botton-grid" id="botton-grid"></div>
+        </div>
+        <label class="input-label">Quantidade:</label>
+        <div class="qty-wrapper">
+            <button class="qty-btn" onclick="alterarQtd(-1)">-</button>
+            <div class="qty-num" id="detalhe-qtd">1</div>
+            <button class="qty-btn" onclick="alterarQtd(1)">+</button>
+        </div>
+        <button class="btn-primary" onclick="adicionarAoCarrinho()"><i class="fa-solid fa-bag-shopping"></i> Adicionar à Sacola</button>
+    </div>
+</div>
+
+<!-- MODAL CHECKOUT -->
+<div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+
+        <div id="tela-sucesso">
+            <div class="sucesso-icon">🎉</div>
+            <div class="sucesso-titulo">Pedido enviado!</div>
+            <div id="sucesso-num" class="sucesso-num"></div>
+            <div id="sucesso-msg" class="sucesso-msg"></div>
+            <button class="btn-primary" onclick="fecharModais(null)"><i class="fa-solid fa-store"></i> Continuar comprando</button>
+            <button class="btn-secondary" onclick="abrirMeusPedidos()"><i class="fa-solid fa-clock-rotate-left"></i> Meus pedidos</button>
+        </div>
+
+        <div id="checkout-corpo">
+            <h2 style="color:var(--roxo-brand);margin-bottom:14px;font-size:1.2rem;font-weight:800">Finalizar Pedido</h2>
+
+            <div class="cupom-checkout">
+                <div class="cupom-checkout-titulo"><i class="fa-solid fa-tag"></i> Insira seu cupom</div>
+                <div class="cupom-row">
+                    <input type="text" id="campo-cupom" class="cupom-input" placeholder="Digite o código" maxlength="20" autocomplete="off">
+                    <button class="cupom-aplicar" onclick="validarCupom()">Aplicar</button>
+                </div>
+                <div id="cupom-ok"><i class="fa-solid fa-circle-check"></i><span id="cupom-ok-texto"></span><button class="cupom-remover" onclick="removerCupom()">✕</button></div>
+            </div>
+
+            <ul class="cart-list" id="lista-carrinho"></ul>
+
+            <div class="resumo-box">
+                <div class="resumo-linha"><span>Subtotal</span><span id="res-sub">R$ 0,00</span></div>
+                <div class="resumo-linha desconto" id="res-desc-linha" style="display:none"><span id="res-desc-label">Desconto</span><span id="res-desc-val"></span></div>
+                <div class="resumo-linha total"><span>Total</span><span id="res-total">R$ 0,00</span></div>
+            </div>
+
+            <h3 style="color:var(--roxo-brand);font-size:0.9rem;margin:14px 0 8px;font-weight:700">Seus Dados</h3>
+            <input type="text" id="nome-cliente" class="input-box" placeholder="Nome completo" maxlength="100" autocomplete="name">
+            <input type="tel" id="zap-cliente" class="input-box" placeholder="WhatsApp com DDD" maxlength="16" autocomplete="tel">
+            <input type="email" id="email-cliente" class="input-box" placeholder="E-mail (opcional)" maxlength="100" autocomplete="email">
+
+            <h3 style="color:var(--roxo-brand);font-size:0.9rem;margin:14px 0 8px;font-weight:700">Entrega</h3>
+            <label class="radio-option"><input type="radio" name="entrega" value="Retirada UFPI" checked onchange="toggleEndereco()"><i class="fa-solid fa-building-columns" style="color:var(--texto-suave)"></i> Retirada (UFPI)</label>
+            <label class="radio-option"><input type="radio" name="entrega" value="Entrega" onchange="toggleEndereco()"><i class="fa-solid fa-motorcycle" style="color:var(--texto-suave)"></i> Entrega (verificar taxa)</label>
+            <div id="box-endereco" style="display:none">
+                <input type="text" id="endereco-cliente" class="input-box" placeholder="Endereço para entrega" maxlength="200">
+            </div>
+            <input type="text" id="campo-obs" class="input-box" placeholder="Observações (opcional)" maxlength="300" style="margin-top:6px">
+
+            <h3 style="color:var(--roxo-brand);font-size:0.9rem;margin:14px 0 8px;font-weight:700">Pagamento</h3>
+            <div class="pix-destaque ativo" id="pix-destaque"><i class="fa-solid fa-bolt"></i> PIX = confirmação mais rápida!</div>
+            <label class="radio-option"><input type="radio" name="pgto" value="PIX" checked onchange="togglePix()"> PIX</label>
+            <label class="radio-option"><input type="radio" name="pgto" value="Dinheiro" onchange="togglePix()"> Dinheiro</label>
+            <label class="radio-option"><input type="radio" name="pgto" value="Cartão" onchange="togglePix()"> Cartão</label>
+            <div id="aviso-presencial" style="display:none;background:#f8f9fc;border-radius:10px;padding:10px;font-size:0.82rem;color:var(--texto-suave);margin-bottom:10px"><i class="fa-solid fa-circle-info"></i> Pagamento na retirada ou entrega.</div>
+
+            <div class="pix-box ativo" id="pix-box">
+                <div class="pix-valor" id="pix-valor"></div>
+                <div class="pix-qr"><img id="pix-qr-img" src="" alt="QR PIX" loading="lazy"></div>
+                <div class="pix-chave" id="pix-chave-txt"><strong>Chave PIX:</strong> <span id="pix-chave-val"></span></div>
+                <button class="pix-copiar" onclick="copiarPix()"><i class="fa-solid fa-copy"></i> Copiar código PIX</button>
+                <div class="pix-timer">⏱️ Expira em <span id="pix-timer-txt">30:00</span></div>
+                <div id="comprovante-area" style="margin-top:14px;padding-top:14px;border-top:1px solid #e0e0e0">
+                    <div style="font-size:0.8rem;font-weight:700;color:var(--roxo-brand);margin-bottom:8px">
+                        📎 Anexe o comprovante do PIX:
+                    </div>
+                    <label id="comprovante-label" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px;border:2px dashed #ddd;border-radius:12px;cursor:pointer;font-size:0.78rem;color:#aaa;transition:0.2s">
+                        <i class="fa-solid fa-file-pdf" id="comprovante-pdf-icon" style="display:none;font-size:1.4rem;color:var(--vermelho-del)"></i>
+                        <i class="fa-solid fa-image" id="comprovante-img-icon" style="font-size:1.4rem;color:var(--laranja-brand)"></i>
+                        Toque para anexar (Imagem ou PDF)
+                        <input type="file" id="comprovante-input" accept="image/*,.pdf" style="display:none" onchange="previewComprovante(this)">
+                    </label>
+                    <div id="comprovante-preview" style="display:none;margin-top:8px;text-align:center">
+                        <img id="comprovante-img" src="" style="max-width:100%;max-height:180px;border-radius:10px;border:2px solid var(--verde-zap)">
+                        <div style="font-size:0.75rem;color:var(--verde-zap);font-weight:700;margin-top:4px">✅ Comprovante anexado!</div>
+                        <button onclick="removerComprovante()" style="font-size:0.72rem;color:var(--vermelho-del);background:none;border:none;cursor:pointer;margin-top:4px">Trocar</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-danger" onclick="limparCarrinho()"><i class="fa-solid fa-trash"></i> Limpar sacola</button>
+            <button class="btn-primary" onclick="enviarPedidoZap()" style="margin-top:10px;background:var(--verde-zap)"><i class="fa-brands fa-whatsapp"></i> Enviar Pedido</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PEDIDOS -->
+<div class="modal-bg" id="modal-pedidos" onclick="fecharModais(event)">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <h2 style="color:var(--roxo-brand);margin-bottom:16px;font-size:1.2rem;font-weight:800"><i class="fa-solid fa-clock-rotate-left"></i> Meus Pedidos</h2>
+        <div id="lista-pedidos-hist"></div>
+    </div>
+</div>
+
+<!-- MODAL SOBRE -->
+<div class="modal-bg" id="modal-sobre" onclick="fecharModais(event)">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" style="width:70px;height:70px;border-radius:50%;border:3px solid var(--laranja-brand);object-fit:cover;margin:0 auto 14px;display:block">
+        <h2 style="text-align:center;color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:4px">NUPIEEPRO</h2>
+        <p style="text-align:center;font-size:0.75rem;color:var(--texto-suave);margin-bottom:14px">Núcleo Piauiense de Estudantes de Engenharia de Produção</p>
+        <p style="font-size:0.83rem;color:var(--texto);line-height:1.7;margin-bottom:14px">O Núcleo Piauiense de Estudantes de Engenharia de Produção (NUPIEEPRO), da Universidade Federal do Piauí (UFPI), dedica-se à realização de eventos, treinamentos e projetos com o objetivo de promover experiências na área de Engenharia de Produção. Fundado em 2015, sendo duas vezes apontado pela ABEPRO Jovem como o <strong>Núcleo Mais Inovador do Brasil</strong> e eleito o <strong>Maior Núcleo do Brasil</strong>.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">
+            <span style="background:var(--roxo-brand);color:#fff;padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700">🏆 Mais Inovador 2x</span>
+            <span style="background:var(--roxo-brand);color:#fff;padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700">🥇 Maior Núcleo do Brasil</span>
+            <span style="background:var(--roxo-brand);color:#fff;padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700">📅 Desde 2015</span>
+        </div>
+        <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" class="btn-primary" style="text-decoration:none"><i class="fa-brands fa-instagram"></i> Seguir no Instagram</a>
+    </div>
+</div>
+
+<div class="float-bar" id="barra-carrinho" onclick="abrirCheckout()">
+    <div style="line-height:1.2">
+        <div id="barra-qtd" style="font-size:0.72rem;opacity:0.8;font-weight:500">0 itens</div>
+        <div id="barra-total" style="font-weight:800;font-size:1.1rem;color:var(--laranja-brand)">R$ 0,00</div>
+    </div>
+    <div style="font-weight:700;font-size:0.9rem">Ver Sacola <i class="fa-solid fa-bag-shopping" style="margin-left:4px"></i></div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const API_URL='https://script.google.com/macros/s/AKfycbw4Qk03yzsQEXE0qXstLuZlY0lx12aqrrXkdUwkeHykDD4KhVx8Ti4S4fNbLnYtg6uTwA/exec';
+let _w=atob('NTU4Njk5OTk3NjIyNg==');
+let _pixKey='financeiro.nupieepro@gmail.com';
+let _pixName='NUPIEEPRO';
+function san(s){return typeof s==='string'?s.replace(/[<>"'&]/g,c=>({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;','&':'&amp;'}[c])):''}
+const _rl={t:parseInt(localStorage.getItem('nupi_rl_t')||'0'),n:parseInt(localStorage.getItem('nupi_rl_n')||'0')};
+function rlOk(){
+    const n=Date.now();
+    if(n-_rl.t<600000){ /* Janela de 10 min */
+        if(++_rl.n>5){
+            toast('Limite de pedidos atingido. Tente novamente em alguns minutos.',1);
+            return false;
+        }
+    }else{ _rl.n=1; _rl.t=n; }
+    localStorage.setItem('nupi_rl_t', _rl.t);
+    localStorage.setItem('nupi_rl_n', _rl.n);
+    return true;
+}
+let _bt; function debounceBusca(v){ clearTimeout(_bt); _bt=setTimeout(()=>{busca=v.trim().toLowerCase();renderVitrine();},300); }
+
+let produtos=[
+    {id:1,nome:"Ecobag Nupieepro",preco:22,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg",descricao:"Ecobag resistente com a identidade do NUPIEEPRO.",tamanhos:[],estoque:20,destaque:false,encomenda:false},
+    {id:2,nome:"Bloco de Notas",preco:15,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg",descricao:"Bloco de notas personalizado NUPIEEPRO.",tamanhos:[],estoque:30,destaque:false,encomenda:false},
+    {id:3,nome:"Chaveiro Abridor",preco:4,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg",descricao:"Chaveiro abridor personalizado NUPIEEPRO.",tamanhos:[],estoque:50,destaque:false,encomenda:false},
+    {id:4,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Engenharia de Produção","Símbolo Engrenagem","Just-in-Time","Foco em Resultados"],estoque:100,destaque:false,encomenda:false}
+];
+let cupons={};  /* preenchido pela API — não hardcode mais */
+let carrinho=[],itemSel=null,qtdTemp=1,filtroAtual='todos',busca='',cupomApl=null,pixT=null;
+
+window.addEventListener('load',()=>{
+    if('serviceWorker' in navigator){
+        /* Usa sempre caminho relativo — funciona em qualquer subpasta */
+        navigator.serviceWorker.register('./sw.js')
+            .then(reg=>{
+                setInterval(()=>reg.update(), 5*60*1000);
+            })
+            .catch(()=>{});
+        /* Recarrega quando SW atualizar */
+        navigator.serviceWorker.addEventListener('controllerchange',()=>{
+            if(!window._swReloading){ window._swReloading=true; window.location.reload(); }
+        });
+    }
+
+    /* iOS Safari — mostra dica de instalação manual */
+    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    var isStandalone = window.navigator.standalone;
+    if(isIOS && !isStandalone && !localStorage.getItem('nupi_ios_dica')){
+        setTimeout(function(){
+            var d = document.createElement('div');
+            d.id = 'ios-install-dica';
+            d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#0f0732;color:#fff;padding:14px 18px;z-index:9998;display:flex;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(0,0,0,0.3);';
+            var btn = document.createElement('button');
+            btn.textContent = 'X';
+            btn.style.cssText = 'background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:4px';
+            btn.onclick = function(){ d.remove(); localStorage.setItem('nupi_ios_dica','1'); };
+            var txt = document.createElement('div');
+            txt.style.cssText = 'flex:1;font-size:0.82rem;line-height:1.4';
+            txt.innerHTML = '<strong style="color:#f85900">Instalar a loja no iPhone:</strong><br>Toque em <strong>Compartilhar</strong> e depois <strong>Adicionar a Tela de Inicio</strong>';
+            d.appendChild(txt);
+            d.appendChild(btn);
+            document.body.appendChild(d);
+        }, 3000);
+    }
+    carregarUser();carregarCarrinho();renderVitrine();
+    carregarAPI();
+    const pid=new URLSearchParams(location.search).get('id');
+    if(pid&&produtos.find(p=>p.id==pid)) setTimeout(()=>abrirDetalhes(parseInt(pid)),1000);
+    setTimeout(()=>{const s=document.getElementById('splash-screen');s.classList.add('hidden');setTimeout(()=>s.style.display='none',400);},900);
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharModais(null);});
+    document.getElementById('campo-busca').addEventListener('input',function(){busca=this.value.trim().toLowerCase();renderVitrine();});
+});
+
+/* Imagens garantidas por produto — usadas se API retornar URL vazia ou quebrada */
+const IMG_FALLBACK = {
+    1: 'https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg',
+    2: 'https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg',
+    3: 'https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg',
+    4: 'https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg',
+};
+
+function normalizarProduto(p){
+    const imgs = Array.isArray(p.imagens)
+        ? p.imagens
+        : (p.imagens||'').toString().split(',').map(s=>s.trim()).filter(s=>s&&s.startsWith('http'));
+    /* Usa imagem da API se existir, senão usa fallback hardcoded */
+    p.img      = imgs[0] || IMG_FALLBACK[p.id] || '';
+    p.imagens  = imgs.length ? imgs : (IMG_FALLBACK[p.id] ? [IMG_FALLBACK[p.id]] : []);
+    /* Botton — detecta por tipo, nome ou ID e garante as opções */
+    const isBottonProd = p.tipo==='botton'
+        || (p.nome&&p.nome.toLowerCase().includes('botton'))
+        || p.id===7;
+    if(isBottonProd){
+        p.tipo = 'botton';
+        /* Usa tamanhos do Sheets se admin configurou, senão usa padrão */
+        const opcoes = p.tamanhos&&p.tamanhos.length
+            ? p.tamanhos
+            : ['Logo NUPIEEPRO','Engenharia de Produção','Símbolo Engrenagem','Just-in-Time','Foco em Resultados'];
+        p.tipos_botton = opcoes;
+        p.tamanhos = []; /* limpa pra não mostrar seletor de tamanho */
+    }
+    p.encomenda= p.encomenda===true||p.encomenda==='true'||p.encomenda==='TRUE';
+    p.destaque = p.destaque===true||p.destaque==='true'||p.destaque==='TRUE';
+    p.novo     = p.novo===true||p.novo==='true'||p.novo==='TRUE';
+    p.tipo     = p.tipo||'unico';
+    p.tamanhos = Array.isArray(p.tamanhos)?p.tamanhos:(p.tamanhos||'').toString().split(',').map(s=>s.trim()).filter(Boolean);
+    p.preco    = parseFloat(p.preco)||0;
+    p.estoque  = parseInt(p.estoque)||0;
+    p.id       = parseInt(p.id)||0;
+    return p;
+}
+
+async function buscarAPI(action){
+    /* Apps Script não suporta headers customizados — fetch simples */
+    const url = API_URL+'?action='+action+'&t='+Date.now();
+    const T   = ms => new Promise((_,r)=>setTimeout(r,ms));
+    const res = await Promise.race([fetch(url),T(5000)]);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    return res.json();
+}
+
+async function carregarAPI(){
+    try {
+        const results = await Promise.allSettled([
+            buscarAPI('config'),
+            buscarAPI('produtos'),
+            buscarAPI('cupons')
+        ]);
+
+        /* Processa Config */
+        if(results[0].status === 'fulfilled'){
+            const c = results[0].value;
+            if(c.manutencao==='true'||c.manutencao===true){
+                document.getElementById('tela-manutencao').classList.add('ativa');
+                return;
+            }
+            if(c.mensagem_boas_vindas){
+                document.querySelectorAll('.welcome-msg').forEach(el => el.textContent='👋 '+c.mensagem_boas_vindas);
+            }
+            if(c.whatsapp) _w = c.whatsapp.replace(/\D/g,'');
+            if(c.chave_pix) _pixKey = c.chave_pix;
+            if(c.nome_recebedor) _pixName = c.nome_recebedor;
+            if(c.pausar_checkout==='true') window._checkoutPausado=true;
+        }
+
+        /* Processa Produtos */
+        if(results[1].status === 'fulfilled'){
+            const d = results[1].value;
+            if(Array.isArray(d)&&d.length>0){
+                const normalizados = d.map(normalizarProduto);
+                produtos.length=0;
+                produtos.push(...normalizados);
+                renderVitrine();
+                /* Cache local para carregamento instantâneo no futuro */
+                localStorage.setItem('nupieepro_cache_produtos', JSON.stringify({t:Date.now(), d:normalizados}));
+            }
+        }
+
+        /* Processa Cupons */
+        if(results[2].status === 'fulfilled'){
+            const d = results[2].value;
+            if(typeof d === 'object'){
+                /* GS agora retorna { tem_cupom_ativo, descricao, cupons: [...] } */
+                if(Array.isArray(d.cupons) && d.cupons.length > 0){
+                    cupons = {};
+                    d.cupons.forEach(c => { if(c.codigo) cupons[c.codigo.toUpperCase()] = c; });
+                }
+                if(d.tem_cupom_ativo){
+                    document.getElementById('card-cupom').style.display='block';
+                    if(d.descricao){
+                        const el=document.getElementById('cupom-desc-vitrine');
+                        if(el){el.textContent=d.descricao;el.style.display='block';}
+                    }
+                } else {
+                    /* Nenhum cupom ativo no Sheets — esconde o card */
+                    document.getElementById('card-cupom').style.display='none';
+                    cupons = {};
+                }
+            }
+        }
+    } catch(e){ console.error('Erro API:', e); }
+}
+
+function filtrar(cat,btn){filtroAtual=cat;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderVitrine();}
+
+function renderVitrine(){
+    const area=document.getElementById('vitrine-area');
+    const vazio=document.getElementById('vitrine-vazia');
+    area.innerHTML='';
+    const lista=produtos.filter(p=>{
+        if(!p.encomenda&&p.estoque===0) return false;
+        if(filtroAtual!=='todos'&&p.categoria!==filtroAtual) return false;
+        if(busca) return p.nome.toLowerCase().includes(busca)||(p.descricao&&p.descricao.toLowerCase().includes(busca));
+        return true;
+    });
+    if(lista.length===0){vazio.classList.add('ativo');return;}
+    vazio.classList.remove('ativo');
+    lista.forEach(p=>{
+        const enc=!!p.encomenda,dest=!!p.destaque,esg=p.estoque===0,ult=p.estoque>0&&p.estoque<10;
+        /* Pega imagem: tenta img, depois imagens[0], depois vazio */
+        const imgSrc = p.img
+            || (Array.isArray(p.imagens) && p.imagens[0])
+            || (typeof p.imagens==='string' && p.imagens.split(',')[0].trim())
+            || '';
+        let badges='';
+        if(dest) badges+=`<span class="badge badge-destaque">⭐ Destaque</span>`;
+        if(enc)  badges+=`<span class="badge badge-encomenda">📦 Encomenda</span>`;
+        if(esg)  badges+=`<span class="badge badge-esgotado">Esgotado</span>`;
+        if(ult&&!esg) badges+=`<span class="badge badge-ultimas">⚡ Últimas</span>`;
+        const el=document.createElement('div');
+        el.className=`card${dest?' destaque':''}${esg?' esgotado':''}`;
+        el.innerHTML=`
+            <button class="share-btn" onclick="compartilhar(${p.id},event)" aria-label="Compartilhar"><i class="fa-solid fa-share-nodes"></i></button>
+            <div class="image-wrapper" onclick="abrirDetalhes(${p.id})">
+                ${imgSrc
+    ? `<img src="${san(imgSrc)}" class="prod-img" loading="lazy" alt="${san(p.nome)}"
+        onload="this.classList.add('visible');this.closest('.image-wrapper').classList.add('loaded')"
+        onerror="this.remove();this.closest&&this.closest('.image-wrapper')&&this.closest('.image-wrapper').classList.add('loaded');this.nextElementSibling&&(this.nextElementSibling.style.display='flex')">`
+    : ''}
+                <div class="no-photo-placeholder" style="${imgSrc?'display:none':''}"><i class="fa-solid fa-box-open"></i><span>${san(p.nome)}</span></div>
+                ${badges?`<div class="badge-wrap">${badges}</div>`:''}
+            </div>
+            <div class="card-info" onclick="abrirDetalhes(${p.id})">
+                <div class="card-title">${san(p.nome)}</div>
+                <div class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
+                ${enc?`<div class="card-enc">📦 Apenas sob encomenda</div>`:''}
+                <div class="tap-hint">Ver Detalhes</div>
+            </div>`;
+        area.appendChild(el);
+    });
+}
+
+function abrirDetalhes(id){
+    itemSel=produtos.find(p=>p.id===id);
+    if(!itemSel) return;
+    /* Garante botton sempre tem tipos — mesmo se API não mandou */
+    if(itemSel.tipo==='botton'||(itemSel.nome&&itemSel.nome.toLowerCase().includes('botton'))||itemSel.id===7){
+        itemSel.tipo='botton';
+        if(!itemSel.tipos_botton||!itemSel.tipos_botton.length){
+            itemSel.tipos_botton=itemSel.tamanhos&&itemSel.tamanhos.length
+                ?itemSel.tamanhos
+                :['Logo NUPIEEPRO','Engenharia de Produção','Símbolo Engrenagem','Just-in-Time','Foco em Resultados'];
+        }
+    }
+    qtdTemp=1;
+    document.getElementById('detalhe-nome').textContent=itemSel.nome;
+    document.getElementById('detalhe-preco').textContent='R$ '+itemSel.preco.toFixed(2).replace('.',',');
+    document.getElementById('detalhe-qtd').textContent='1';
+    const imgSrc = itemSel.img
+        || (Array.isArray(itemSel.imagens) && itemSel.imagens[0])
+        || (typeof itemSel.imagens==='string' && itemSel.imagens.split(',')[0].trim())
+        || '';
+    const imgEl=document.getElementById('detalhe-img'),fbEl=document.getElementById('detalhe-fallback');
+    if(imgSrc){
+        imgEl.style.opacity='0';
+        imgEl.style.display='block';
+        fbEl.style.display='none';
+        imgEl.src=''; /* limpa src anterior */
+        imgEl.onload=()=>{ imgEl.style.opacity='1'; };
+        imgEl.onerror=()=>{ imgEl.style.display='none'; fbEl.style.display='flex'; };
+        imgEl.src=imgSrc;
+    } else {
+        imgEl.style.display='none';
+        fbEl.style.display='flex';
+    }
+    const descEl=document.getElementById('detalhe-desc');
+    if(itemSel.descricao){descEl.textContent=itemSel.descricao;descEl.style.display='block';}else descEl.style.display='none';
+    const encEl=document.getElementById('detalhe-enc');
+    if(itemSel.encomenda){encEl.textContent='📦 '+(itemSel.prazo_encomenda||'Produto sob encomenda');encEl.style.display='block';}else encEl.style.display='none';
+    const wt=document.getElementById('wrapper-tamanho'),st=document.getElementById('select-tamanho');
+    const isCamisa=itemSel.tipo==='camisa'||itemSel.categoria==='camisa';
+    const isBotton=itemSel.tipo==='botton';
+
+    /* Seletor de tamanho (camisas) */
+    if(isCamisa&&itemSel.tamanhos&&itemSel.tamanhos.length){
+        st.innerHTML=itemSel.tamanhos.map(t=>`<option value="${t}">${t}</option>`).join('');
+        wt.style.display='block';
+    } else wt.style.display='none';
+
+    /* Seletor de tipo (bottons) */
+    const wbEl=document.getElementById('wrapper-botton');
+    if(isBotton&&itemSel.tipos_botton&&itemSel.tipos_botton.length){
+        const grid=document.getElementById('botton-grid');
+        grid.innerHTML=itemSel.tipos_botton.map((t,i)=>
+            `<div class="botton-opt${i===0?' selected':''}" onclick="selecionarBotton(this,'${t}')">${t}</div>`
+        ).join('');
+        wbEl.style.display='block';
+    } else if(wbEl) wbEl.style.display='none';
+    document.getElementById('modal-details').classList.add('active');
+    document.body.style.overflow='hidden';
+    history.replaceState({},'',location.pathname+'?id='+id);
+}
+
+function fecharModais(e){
+    if(e&&e.target!==e.currentTarget) return;
+    document.querySelectorAll('.modal-bg').forEach(m=>m.classList.remove('active'));
+    document.body.style.overflow='';
+    if(pixT){clearInterval(pixT);pixT=null;}
+    /* Reseta comprovante ao fechar checkout */
+    window._comprovante=null;
+    const lbl=document.getElementById('comprovante-label');
+    const prv=document.getElementById('comprovante-preview');
+    const inp=document.getElementById('comprovante-input');
+    if(lbl) lbl.style.display='flex';
+    if(prv) prv.style.display='none';
+    if(inp) inp.value='';
+    history.replaceState({},'',location.pathname);
+}
+
+function alterarQtd(v){qtdTemp=Math.max(1,qtdTemp+v);document.getElementById('detalhe-qtd').textContent=qtdTemp;}
+
+function selecionarBotton(el, tipo){
+    document.querySelectorAll('.botton-opt').forEach(b=>b.classList.remove('selected'));
+    el.classList.add('selected');
+}
+
+function adicionarAoCarrinho(){
+    let tam='Único';
+    const isCamisa=itemSel.tipo==='camisa'||itemSel.categoria==='camisa';
+    const isBotton=itemSel.tipo==='botton';
+    if(isCamisa) tam=document.getElementById('select-tamanho').value;
+    if(isBotton){
+        const sel=document.querySelector('.botton-opt.selected');
+        tam=sel?sel.textContent:'Padrão';
+    }
+    const i=carrinho.findIndex(x=>x.id===itemSel.id&&x.tamanho===tam);
+    if(i>=0) carrinho[i].qtd+=qtdTemp; else carrinho.push({...itemSel,tamanho:tam,qtd:qtdTemp});
+    salvarCarrinho();atualizarBarra();toast('✅ Adicionado à sacola!');fecharModais(null);
+}
+
+function atualizarBarra(){
+    const bar=document.getElementById('barra-carrinho');
+    const tot=calcTotal(),qtd=carrinho.reduce((a,i)=>a+i.qtd,0);
+    if(carrinho.length>0) bar.classList.add('visible'); else bar.classList.remove('visible');
+    document.getElementById('barra-total').textContent='R$ '+tot.toFixed(2).replace('.',',');
+    document.getElementById('barra-qtd').textContent=qtd+' '+(qtd===1?'item':'itens');
+    document.title=qtd>0?`(${qtd}) NUPIEEPRO STORE`:'NUPIEEPRO STORE';
+}
+
+function renderCarrinho(){
+    const lista=document.getElementById('lista-carrinho');
+    lista.innerHTML='';
+    if(!carrinho.length){fecharModais(null);return;}
+    carrinho.forEach((item,idx)=>{
+        const li=document.createElement('li');li.className='cart-item';
+        li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>R$${item.preco.toFixed(2).replace('.',',')}${item.tamanho&&item.tamanho!=='Único'?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})"><i class="fa-solid fa-trash"></i></button>`;
+        lista.appendChild(li);
+    });atualizarResumo();
+}
+function remItem(i){carrinho.splice(i,1);salvarCarrinho();atualizarBarra();renderCarrinho();}
+function limparCarrinho(){if(!confirm('Limpar a sacola?')) return;carrinho=[];cupomApl=null;salvarCarrinho();atualizarBarra();fecharModais(null);toast('Sacola esvaziada');}
+function salvarCarrinho(){localStorage.setItem('nupieepro_carrinho',JSON.stringify(carrinho));}
+function carregarCarrinho(){const s=localStorage.getItem('nupieepro_carrinho');if(s)carrinho=JSON.parse(s);atualizarBarra();}
+
+function validarCupom(){
+    const cod=document.getElementById('campo-cupom').value.trim().toUpperCase();
+    if(!cod){toast('Digite um código!',1);return;}
+    const cup=cupons[cod];
+    if(!cup||!cup.ativo){toast('❌ Cupom inválido!',1);return;}
+    if(cup.usos>=cup.limite){toast('❌ Cupom esgotado!',1);return;}
+    if(calcSub()<cup.minimo){toast('❌ Pedido mínimo de R$'+cup.minimo.toFixed(2)+'!',1);return;}
+    const elig=carrinho.filter(i=>cup.produtos_ids.includes(i.id));
+    if(!elig.length){const ns=produtos.filter(p=>cup.produtos_ids.includes(p.id)).map(p=>p.nome.split('—')[0].trim()).join(', ');toast('⚠️ Cupom válido para: '+ns,1);return;}
+    cupomApl={cod,...cup};
+    document.getElementById('campo-cupom').value='';
+    document.getElementById('cupom-ok-texto').textContent=cod+' — '+cup.valor+'% aplicado';
+    document.getElementById('cupom-ok').classList.add('ativo');
+    atualizarResumo();toast('🎉 Desconto de R$'+calcDesc().toFixed(2).replace('.',',')+'!');
+}
+function removerCupom(){cupomApl=null;document.getElementById('cupom-ok').classList.remove('ativo');atualizarResumo();toast('Cupom removido');}
+
+function calcSub(){return carrinho.reduce((a,i)=>a+i.preco*i.qtd,0);}
+function calcDesc(){if(!cupomApl)return 0;if(cupomApl.tipo==='percentual')return carrinho.filter(i=>cupomApl.produtos_ids.includes(i.id)).reduce((a,i)=>a+i.preco*i.qtd*cupomApl.valor/100,0);return Math.min(cupomApl.valor,calcSub());}
+function calcTotal(){return Math.max(0,calcSub()-calcDesc());}
+function atualizarResumo(){
+    const s=calcSub(),d=calcDesc(),t=calcTotal();
+    document.getElementById('res-sub').textContent='R$ '+s.toFixed(2).replace('.',',');
+    document.getElementById('res-total').textContent='R$ '+t.toFixed(2).replace('.',',');
+    const dl=document.getElementById('res-desc-linha');
+    if(d>0&&cupomApl){document.getElementById('res-desc-val').textContent='- R$ '+d.toFixed(2).replace('.',',');document.getElementById('res-desc-label').textContent='Desconto ('+cupomApl.cod+')';dl.style.display='flex';}
+    else dl.style.display='none';
+    /* Atualiza QR PIX com o valor correto (com desconto) */
+    const pgtoEl=document.querySelector('input[name="pgto"]:checked');
+    if(pgtoEl&&pgtoEl.value==='PIX'&&document.getElementById('pix-box').classList.contains('ativo')) gerarQRPix();
+}
+
+function abrirCheckout(){
+    if(!carrinho.length) return;
+    document.getElementById('tela-sucesso').classList.remove('ativo');
+    document.getElementById('checkout-corpo').style.display='block';
+    renderCarrinho();togglePix();
+    document.getElementById('modal-checkout').classList.add('active');
+    document.body.style.overflow='hidden';
+}
+function abrirCheckoutComCupom(){if(!carrinho.length){toast('Adicione produtos primeiro!',1);return;}abrirCheckout();setTimeout(()=>document.getElementById('campo-cupom').focus(),400);}
+function toggleEndereco(){document.getElementById('box-endereco').style.display=document.querySelector('input[name="entrega"]:checked').value==='Entrega'?'block':'none';}
+function togglePix(){
+    const p=document.querySelector('input[name="pgto"]:checked').value==='PIX';
+    document.getElementById('pix-box').classList.toggle('ativo',p);
+    document.getElementById('aviso-presencial').style.display=p?'none':'block';
+    document.getElementById('pix-destaque').classList.toggle('ativo',p);
+    if(p) gerarQRPix();
+}
+
+function gerarQRPix(){
+    const tot = calcTotal();
+    document.getElementById('pix-valor').textContent = 'R$ '+tot.toFixed(2).replace('.',',');
+
+    const kvEl = document.getElementById('pix-chave-val');
+    if(kvEl) kvEl.textContent = _pixKey;
+
+    const payload = gerarPayloadPix(_pixKey, _pixName || 'NUPIEEPRO', tot);
+    window._pixPayload = payload;
+
+    document.getElementById('pix-qr-img').src =
+        'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(payload);
+
+    if(pixT) clearInterval(pixT);
+    let s = 1800;
+    const el = document.getElementById('pix-timer-txt');
+    pixT = setInterval(()=>{
+        if(--s<=0){ clearInterval(pixT); el.textContent='Expirado'; return; }
+        el.textContent = Math.floor(s/60).toString().padStart(2,'0')+':'+(s%60).toString().padStart(2,'0');
+    }, 1000);
+}
+
+function gerarPayloadPix(chave, nome, valor){
+    /* EMV QRCPS-MPM conforme BACEN */
+    const f = (id, v) => {
+        const s = String(v);
+        return id + s.length.toString().padStart(2,'0') + s;
+    };
+    const merchant = f('00','BR.GOV.BCB.PIX') + f('01', chave);
+    const addData  = f('05','***');
+    let payload =
+        f('00','01') +
+        f('26', merchant) +
+        f('52','0000') +
+        f('53','986') +
+        f('54', valor.toFixed(2)) +
+        f('58','BR') +
+        f('59', nome.substring(0,25).padEnd(1,' ')) +
+        f('60','Teresina') +
+        f('62', addData) +
+        '6304'; /* CRC placeholder */
+
+    /* Calcula CRC-16/CCITT-FALSE */
+    let crc = 0xFFFF;
+    for(let i = 0; i < payload.length; i++){
+        crc ^= payload.charCodeAt(i) << 8;
+        for(let j = 0; j < 8; j++)
+            crc = (crc & 0x8000) ? (crc << 1) ^ 0x1021 : crc << 1;
+        crc &= 0xFFFF;
+    }
+    return payload + crc.toString(16).toUpperCase().padStart(4,'0');
+}
+
+function copiarPix(){
+    const payload = window._pixPayload;
+    if(!payload){ toast('Gere o QR primeiro!', 1); return; }
+    if(navigator.clipboard){
+        navigator.clipboard.writeText(payload)
+            .then(()=>toast('✅ Código PIX copiado! Cole em qualquer banco.'))
+            .catch(()=>{ _copiarFallback(payload); });
+    } else {
+        _copiarFallback(payload);
+    }
+}
+function _copiarFallback(txt){
+    const el = document.createElement('textarea');
+    el.value = txt; el.style.position='fixed'; el.style.opacity='0';
+    document.body.appendChild(el); el.select();
+    try{ document.execCommand('copy'); toast('✅ Código PIX copiado!'); }
+    catch(e){ toast('Copie a chave manualmente: '+_pixKey, 1); }
+    document.body.removeChild(el);
+}
+
+function previewComprovante(input){
+    if(!input.files||!input.files[0]) return;
+    const file = input.files[0];
+    const isPDF = file.type === 'application/pdf';
+    
+    if(isPDF){
+        document.getElementById('comprovante-img-icon').style.display = 'none';
+        document.getElementById('comprovante-pdf-icon').style.display = 'block';
+        document.getElementById('comprovante-label').style.borderColor = 'var(--vermelho-del)';
+        toast('📄 PDF anexado com sucesso!');
+        window._comprovante = "PDF_ATTACHED"; /* Marcador para validar envio */
+        return;
+    }
+
+    const reader=new FileReader();
+    reader.onload=e=>{
+        document.getElementById('comprovante-img').src=e.target.result;
+        document.getElementById('comprovante-preview').style.display='block';
+        document.getElementById('comprovante-label').style.display='none';
+        window._comprovante=e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+function removerComprovante(){
+    document.getElementById('comprovante-preview').style.display='none';
+    document.getElementById('comprovante-label').style.display='flex';
+    document.getElementById('comprovante-input').value='';
+    window._comprovante=null;
+}
+
+function enviarPedidoZap(){
+    if(document.getElementById('honeypot').value||!rlOk()) return;
+    const nome=document.getElementById('nome-cliente').value.trim();
+    const zap=document.getElementById('zap-cliente').value.replace(/\D/g,'');
+    const email=document.getElementById('email-cliente').value.trim();
+    const entrega=document.querySelector('input[name="entrega"]:checked').value;
+    const end=document.getElementById('endereco-cliente').value.trim();
+    const pgto=document.querySelector('input[name="pgto"]:checked').value;
+    const obs=document.getElementById('campo-obs').value.trim();
+    if(!nome||!zap){toast('⚠️ Preencha Nome e WhatsApp!',1);return;}
+    if(entrega==='Entrega'&&!end){toast('⚠️ Informe o endereço!',1);return;}
+    if(pgto==='PIX'&&!window._comprovante){
+        toast('⚠️ Anexe o comprovante do PIX antes de enviar!',1);
+        document.getElementById('comprovante-label').style.border='2px dashed var(--vermelho-del)';
+        setTimeout(()=>{if(document.getElementById('comprovante-label'))document.getElementById('comprovante-label').style.border='2px dashed #ddd';},3000);
+        return;
+    }
+
+    const num=gerarNum(),now=new Date().toLocaleString('pt-BR');
+    const sb=calcSub(),dc=calcDesc(),tt=calcTotal();
+    const itensParaEnvio = JSON.parse(JSON.stringify(carrinho)); /* Snapshot do carrinho */
+
+    let msg=`*LOJINHA OFICIAL NUPIEEPRO*\n*Pedido:* #${num}\n*Data:* ${now}\n------------------------------\n*Cliente:* ${nome}\n*WhatsApp:* ${zap}\n`;
+    if(email) msg+=`*E-mail:* ${email}\n`;
+    msg+=`*Entrega:* ${entrega}\n`;
+    if(entrega==='Entrega') msg+=`*Endereco:* ${end}\n`;
+    msg+=`*Pagamento:* ${pgto}\n\n*ITENS:*\n`;
+    itensParaEnvio.forEach(i=>{msg+=`${i.qtd}x *${i.nome}*\n`;if((i.tipo==='camisa'||i.categoria==='camisa')&&i.tamanho!=='Único')msg+=`   └ Tam: ${i.tamanho}\n`;msg+=`   └ R$ ${(i.preco*i.qtd).toFixed(2).replace('.',',')}\n`;});
+    msg+=`\n------------------------------\n*Subtotal:* R$ ${sb.toFixed(2).replace('.',',')}\n`;
+    if(dc>0&&cupomApl) msg+=`*Cupom (${cupomApl.cod}):* - R$ ${dc.toFixed(2).replace('.',',')}\n`;
+    msg+=`*TOTAL: R$ ${tt.toFixed(2).replace('.',',')}*\n------------------------------\n`;
+    if(obs) msg+=`*Obs:* ${obs}\n`;
+    if(pgto==='PIX') msg+=`PIX enviado! Aguarde a confirmação.`;
+
+    /* Salva Histórico e Limpa Carrinho ANTES do Zap, mas usando o Snapshot */
+    salvarUser();
+    salvarHist(num,now,tt,itensParaEnvio);
+    if(cupomApl) cupons[cupomApl.cod].usos++;
+
+    /* Abre WhatsApp */
+    const zapUrl = 'https://wa.me/'+_w+'?text='+encodeURIComponent(msg);
+    const zapLink = document.createElement('a');
+    zapLink.href = zapUrl;
+    zapLink.target = '_blank';
+    zapLink.rel = 'noopener noreferrer';
+    zapLink.style.display = 'none';
+    document.body.appendChild(zapLink);
+    zapLink.click();
+    setTimeout(()=>document.body.removeChild(zapLink), 1000);
+
+    /* Registra na API e finaliza UI */
+    fetch(API_URL,{method:'POST',body:JSON.stringify({action:'registrar_pedido',numero:num,nome,whatsapp:zap,email,entrega,endereco:end,pagamento:pgto,observacao:obs,itens:itensParaEnvio,subtotal:sb,desconto:dc,cupom:cupomApl?cupomApl.cod:'',total:tt})}).catch(()=>{});
+
+    carrinho=[];cupomApl=null;window._comprovante=null;salvarCarrinho();atualizarBarra();
+    
+    const msgs=['Boa escolha! O Nupieepro agradece 🧡','Que venha mais! 💙🧡','Obrigado por apoiar o núcleo! ⚙️'];
+    document.getElementById('sucesso-num').textContent='Pedido #'+num;
+    document.getElementById('sucesso-msg').textContent=msgs[Math.floor(Math.random()*msgs.length)];
+    document.getElementById('tela-sucesso').classList.add('ativo');
+    document.getElementById('checkout-corpo').style.display='none';
+    /* Scroll para o topo do modal */
+    document.getElementById('modal-checkout').querySelector('.modal-panel').scrollTop = 0;
+}
+
+function gerarNum(){
+    const a=new Date().getFullYear();
+    const k='nupieepro_seq_'+a;
+    const s=parseInt(localStorage.getItem(k)||'0')+1;
+    localStorage.setItem(k,s.toString());
+    /* Adiciona um sufixo aleatório para evitar colisão entre usuários diferentes se o site for estático */
+    const rand = Math.floor(Math.random()*900)+100;
+    return a+'-'+s.toString().padStart(3,'0')+'-'+rand;
+}
+function salvarHist(num,data,total,itensSnapshot){
+    const h=JSON.parse(localStorage.getItem('nupieepro_hist')||'[]');
+    h.unshift({num,data,total,itens:(itensSnapshot||carrinho).map(i=>i.qtd+'x '+i.nome)});
+    localStorage.setItem('nupieepro_hist',JSON.stringify(h.slice(0,30)));
+}
+function abrirMeusPedidos(){
+    const h=JSON.parse(localStorage.getItem('nupieepro_hist')||'[]');
+    const el=document.getElementById('lista-pedidos-hist');
+    el.innerHTML=h.length?h.map(p=>`<div style="background:#f8f9fc;border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid #eee"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong style="color:var(--roxo-brand);font-size:0.82rem">#${p.num}</strong><span style="font-size:0.7rem;color:var(--texto-suave)">${p.data}</span></div><div style="font-size:0.76rem;color:var(--texto-suave);margin-bottom:6px">${p.itens.join(', ')}</div><div style="font-size:0.95rem;font-weight:800;color:var(--laranja-brand)">R$ ${p.total.toFixed(2).replace('.',',')}</div></div>`).join(''):'<p style="text-align:center;color:#bbb;padding:20px">Nenhum pedido ainda 🛍️</p>';
+    document.getElementById('modal-pedidos').classList.add('active');
+    document.body.style.overflow='hidden';
+}
+function salvarUser(){localStorage.setItem('nupieepro_nome',document.getElementById('nome-cliente').value);localStorage.setItem('nupieepro_zap',document.getElementById('zap-cliente').value);localStorage.setItem('nupieepro_email',document.getElementById('email-cliente').value);localStorage.setItem('nupieepro_end',document.getElementById('endereco-cliente').value);}
+function carregarUser(){const n=localStorage.getItem('nupieepro_nome');if(n)document.getElementById('nome-cliente').value=n;const z=localStorage.getItem('nupieepro_zap');if(z)document.getElementById('zap-cliente').value=z;const e=localStorage.getItem('nupieepro_email');if(e)document.getElementById('email-cliente').value=e;const d=localStorage.getItem('nupieepro_end');if(d)document.getElementById('endereco-cliente').value=d;}
+function compartilhar(id,event){event.stopPropagation();const p=produtos.find(x=>x.id===id);const url=location.origin+location.pathname+'?id='+id;const txt='Olha o que encontrei na Lojinha Nupieepro: '+p.nome+' por R$ '+p.preco.toFixed(2).replace('.',',')+'!';if(navigator.share)navigator.share({title:'NUPIEEPRO STORE',text:txt,url}).catch(()=>{});else navigator.clipboard&&navigator.clipboard.writeText(url).then(()=>toast('🔗 Link copiado!'));}
+function abrirSobre(){document.getElementById('modal-sobre').classList.add('active');document.body.style.overflow='hidden';}
+function abrirLGPD(){document.getElementById('modal-lgpd').classList.add('active');document.body.style.overflow='hidden';}
+let _tt;
+function toast(msg,erro=0){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.className='show'+(erro?' erro':'');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);}
+</script>
+</body>
+</html>
