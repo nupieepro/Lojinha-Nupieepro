@@ -532,7 +532,7 @@ $$;
 -- ============================================================
 
 -- IMPORTANTE: Troque 'SUA_SENHA_AQUI' pela senha do admin atual
-INSERT INTO public.config (chave, valor) VALUES ('admin_senha', 'SUA_SENHA_AQUI')
+INSERT INTO public.config (chave, valor) VALUES ('admin_senha', 'nupi@admin2025')
 ON CONFLICT (chave) DO NOTHING;
 
 -- Configurações padrão da loja (ajuste conforme necessário)

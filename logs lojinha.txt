@@ -1,0 +1,410 @@
+codigo	tipo	valor	produtos_ids	minimo	limite	usos	ativo	descricao	criado_em
+CALOUROEP10	percentual	10	4,5,2006	0	42	2	TRUE	Comece sua jornada na Engenharia de Produção com 10% de desconto em produtos como chaveiro, ecobag e bloco de notas.	19/03/2026, 11:09:11
+DESCONTO15NUPI	percentual	15	4,5,6,7,8,9,10,11	0	500	0	TRUE		27/04/2026, 07:40:57
+
+id	nome	descricao	preco	custo	tipo	categoria	tamanhos	imagens	estoque	destaque	novo	encomenda	prazo_encomenda	badge_extra	ativo	criado_em	agendamento
+1	Camisa PRETA — Eng. Produção	Camisa oficial do NUPIEEPRO. 100% algodão, corte regular. Produto feito sob encomenda.	40	30	camisa	camisa	P - Normal,M - Normal,G - Normal,GG - Normal,P - BBL,M - BBL,G - BBL,GG - BBL	https://i.ibb.co/qFjy5phF/53-20260319-104954-0000.png	99	TRUE	TRUE	TRUE	Apenas sob encomenda		FALSE	2026-03-19T15:09:13.000Z
+2	Camisa BRANCA — Eng. Produção	Camisa oficial do NUPIEEPRO. 100% algodão, corte regular. Produto feito sob encomenda.	40	30	camisa	camisa	P - Normal,M - Normal,G - Normal,GG - Normal,P - BBL,M - BBL,G - BBL,GG - BBL	https://i.ibb.co/F4vzJFcQ/55-20260319-104954-0002.png	99	TRUE	TRUE	TRUE	Apenas sob encomenda		FALSE	2026-03-19T14:42:29.000Z
+3	Camisa AZUL — Eng. Produção	Camisa oficial do NUPIEEPRO. 100% algodão, corte regular. Produto feito sob encomenda.	40	30	camisa	camisa	P - Normal,M - Normal,G - Normal,GG - Normal,P - BBL,M - BBL,G - BBL,GG - BBL	https://i.ibb.co/gbsSX7G9/54-20260319-104954-0001.png	99	TRUE	TRUE	TRUE	Apenas sob encomenda		FALSE	2026-03-19T14:40:48.000Z
+4	Ecobag Nupieepro	Ecobag resistente com a identidade visual do NUPIEEPRO.	22	10	unico	acessorio		https://i.ibb.co/LhQ6gTYK/IMG-20260320-WA0034.jpg	20	FALSE	FALSE	FALSE			TRUE	21/03/2026, 14:32:00
+5	Bloco de Notas	Bloco de notas personalizado com a marca do NUPIEEPRO.	15	6	unico	acessorio		https://i.ibb.co/d3xZ9Hz/IMG-20260320-WA0035.jpg	30	FALSE	FALSE	FALSE			TRUE	21/03/2026, 14:32:35
+6	Chaveiro Abridor	Chaveiro abridor personalizado NUPIEEPRO. Prático e estiloso!	4	1	unico	acessorio		https://i.ibb.co/Z6TYmTPT/IMG-20260320-WA0033.jpg	50	FALSE	FALSE	FALSE			TRUE	21/03/2026, 14:33:24
+7	Bottons personalizados	Botton personalizado com a identidade do NUPIEEPRO.	3	2	unico	acessorio	Logo Nupieepro,Engenheiro de planilhas,Just-in-time,Engenharia de Produção,Foco em resultados	https://i.ibb.co/21cJTrk4/Whats-App-Image-2026-03-21-at-18-22-55.jpg	44	TRUE	TRUE	FALSE			TRUE	21/03/2026, 18:28:06
+8	Botton modelo 1 (cópia) (cópia)	Botton personalizado com a identidade do NUPIEEPRO.	3	2	unico	acessorio	Nupieepro,Engenheiro de planilhas,Just-in-time,Foco em resultados,Engenharia de produção		44	TRUE	TRUE	FALSE			FALSE	21/03/2026, 18:19:52
+9	Botton modelo 1 (cópia) (cópia) (cópia)	Botton personalizado com a identidade do NUPIEEPRO.	3	2	unico	acessorio	Nupieepro,Engenheiro de planilhas,Just-in-time,Foco em resultados,Engenharia de produção		44	TRUE	TRUE	FALSE			FALSE	21/03/2026, 18:20:05
+10	Botton modelo 1 (cópia) (cópia) (cópia) (cópia)	Botton personalizado com a identidade do NUPIEEPRO.	3	2	unico	acessorio	Nupieepro,Engenheiro de planilhas,Just-in-time,Foco em resultados,Engenharia de produção		44	TRUE	TRUE	FALSE			FALSE	21/03/2026, 18:29:23
+11	Botton modelo 1 (cópia) (cópia) (cópia) (cópia) (cópia)	Botton personalizado com a identidade do NUPIEEPRO.	3	2	unico	acessorio	Nupieepro,Engenheiro de planilhas,Just-in-time,Foco em resultados,Engenharia de produção	https://i.ibb.co/Kp1d6sTy/fdhdhdhdf.jpg	44	TRUE	TRUE	FALSE			FALSE	2026-03-21T21:12:44.000Z
+
+chave	valor
+nome_loja	NUPIEEPRO STORE
+chave_pix	financeironupieepro@gmail.com
+nome_recebedor	NUPIEEPRO
+whatsapp	5586999976226
+email_financeiro	financeironupieepro@gmail.com
+mensagem_boas_vindas	Bem-vindo(a), Nupilover!
+sub_marca	Núcleo Piauiense de Estudantes de Engenharia de Produção
+link_instagram	https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ==
+rodape_whatsapp	Prazo de confirmação: 24h úteis.
+manutencao	FALSE
+msg_manutencao	Fique ligado em novas novidades!
+horario_inicio
+horario_fim
+pausar_checkout	FALSE
+aviso_topo_texto
+aviso_topo_tipo	info
+aviso_topo_ativo	FALSE
+banner_1_img
+banner_1_link
+banner_1_ativo	FALSE
+banner_2_img
+banner_2_link
+banner_2_ativo	FALSE
+banner_3_img
+banner_3_link
+banner_3_ativo	FALSE
+cor_primaria	#0f0732
+cor_secundaria	#f85900
+tamanho_cards	medio
+
+numero	data	status	pago	nome	whatsapp	email	entrega	endereco	pagamento	itens	subtotal	desconto	cupom	total	observacao	anotacao_interna
+2026-001	19/03/2026, 09:53:34	cancelado	TRUE	Rayan	86999880958		Retirada UFPI	Rua Inês	PIX	[{"id":1,"nome":"Camisa PRETA — Eng. Produção","descricao":"Camisa oficial do NUPIEEPRO. 100% algodão, corte regular. Produto feito sob encomenda.","preco":40,"tipo":"camisa","categoria":"camisa","tamanhos":["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],"imagens":["https://i.ibb.co/TDhnM6xW/unnamed.png"],"estoque":99,"destaque":true,"novo":false,"encomenda":true,"prazo_encomenda":"Apenas sob encomenda","badge_extra":"","img":["https://i.ibb.co/TDhnM6xW/unnamed.png"],"tamanho":"P - Normal","qtd":1}]	40	0		40		
+2026-001	19/03/2026, 10:55:35	novo	FALSE	Rayan	86999880958		Retirada UFPI		PIX	[{"id":6,"nome":"Chaveiro Abridor","descricao":"Chaveiro abridor personalizado NUPIEEPRO. Prático e estiloso!","preco":4,"tipo":"unico","categoria":"acessorio","tamanhos":[],"imagens":["https://i.ibb.co/Kj00Xbys/unnamed-5.png"],"estoque":50,"destaque":false,"novo":false,"encomenda":false,"prazo_encomenda":"","badge_extra":"","img":"https://i.ibb.co/Kj00Xbys/unnamed-5.png","tamanho":"Único","qtd":1}]	4	0,4	CALOUROEP10	3,6		
+2026-001	19/03/2026, 11:14:52	novo	FALSE	Raissa	89999811929		Retirada UFPI		PIX	[{"id":7,"nome":"Botton Personalizado","preco":3,"tipo":"unico","categoria":"acessorio","img":"https://i.ibb.co/mrsm95Kv/1769766015274.png","descricao":"Botton personalizado NUPIEEPRO.","tamanhos":[],"estoque":100,"destaque":false,"encomenda":false,"tamanho":"Único","qtd":1},{"id":6,"nome":"Chaveiro Abridor","preco":4,"tipo":"unico","categoria":"acessorio","img":"https://i.ibb.co/Kj00Xbys/unnamed-5.png","descricao":"Chaveiro abridor personalizado NUPIEEPRO.","tamanhos":[],"estoque":50,"destaque":false,"encomenda":false,"tamanho":"Único","qtd":1}]	7	0,4	CALOUROEP10	6,6		
+2026-002	19/03/2026, 11:18:01	cancelado	FALSE	Raissa	89999811929		Retirada UFPI		PIX	[{"id":1,"nome":"Camisa PRETA — Eng. Produção","preco":40,"tipo":"camisa","categoria":"camisa","img":"https://i.ibb.co/TDhnM6xW/unnamed.png","descricao":"Camisa oficial do NUPIEEPRO. 100% algodão.","tamanhos":["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],"estoque":99,"destaque":true,"encomenda":true,"prazo_encomenda":"Apenas sob encomenda","tamanho":"M - BBL","qtd":1},{"id":2,"nome":"Camisa BRANCA — Eng. Produção","descricao":"Camisa oficial do NUPIEEPRO. 100% algodão, corte regular. Produto feito sob encomenda.","preco":40,"tipo":"camisa","categoria":"camisa","tamanhos":["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],"imagens":["https://i.ibb.co/bM9mqjXS/unnamed-1.png"],"estoque":99,"destaque":false,"novo":false,"encomenda":true,"prazo_encomenda":"Apenas sob encomenda","badge_extra":"","img":"https://i.ibb.co/bM9mqjXS/unnamed-1.png","tamanho":"M - Normal","qtd":1},{"id":3,"nome":"Camisa AZUL — Eng. Produção","descricao":"Camisa oficial do NUPIEEPRO. 100% algodão, corte regular. Produto feito sob encomenda.","preco":40,"tipo":"camisa","categoria":"camisa","tamanhos":["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],"imagens":["https://i.ibb.co/qLzdtvkN/unnamed-2.png"],"estoque":99,"destaque":false,"novo":false,"encomenda":true,"prazo_encomenda":"Apenas sob encomenda","badge_extra":"","img":"https://i.ibb.co/qLzdtvkN/unnamed-2.png","tamanho":"GG - BBL","qtd":1},{"id":4,"nome":"Ecobag Nupieepro","descricao":"Ecobag resistente com a identidade visual do NUPIEEPRO.","preco":22,"tipo":"unico","categoria":"acessorio","tamanhos":[],"imagens":["https://i.ibb.co/7dj3kxt0/unnamed-3.png"],"estoque":20,"destaque":false,"novo":false,"encomenda":false,"prazo_encomenda":"","badge_extra":"","img":"https://i.ibb.co/7dj3kxt0/unnamed-3.png","tamanho":"Único","qtd":1},{"id":5,"nome":"Bloco de Notas","descricao":"Bloco de notas personalizado com a marca do NUPIEEPRO.","preco":15,"tipo":"unico","categoria":"acessorio","tamanhos":[],"imagens":["https://i.ibb.co/hxxnxrbF/unnamed-4.png"],"estoque":30,"destaque":false,"novo":false,"encomenda":false,"prazo_encomenda":"","badge_extra":"","img":"https://i.ibb.co/hxxnxrbF/unnamed-4.png","tamanho":"Único","qtd":1},{"id":6,"nome":"Chaveiro Abridor","descricao":"Chaveiro abridor personalizado NUPIEEPRO. Prático e estiloso!","preco":4,"tipo":"unico","categoria":"acessorio","tamanhos":[],"imagens":["https://i.ibb.co/Kj00Xbys/unnamed-5.png"],"estoque":50,"destaque":false,"novo":false,"encomenda":false,"prazo_encomenda":"","badge_extra":"","img":"https://i.ibb.co/Kj00Xbys/unnamed-5.png","tamanho":"Único","qtd":1},{"id":7,"nome":"Botton Personalizado","descricao":"Botton personalizado com a identidade do NUPIEEPRO.","preco":3,"tipo":"unico","categoria":"acessorio","tamanhos":[],"imagens":["https://drive.google.com/file/d/1bU77pRAONquHB-KkHEhENp9Zor-KzU9j/view?usp=drivesdk"],"estoque":48,"destaque":false,"novo":true,"encomenda":false,"prazo_encomenda":"","badge_extra":"","img":"https://drive.google.com/file/d/1bU77pRAONquHB-KkHEhENp9Zor-KzU9j/view?usp=drivesdk","tamanho":"Único","qtd":1}]	164	0		164		
+2026-001	21/03/2026, 16:28:03	novo	FALSE	Ana Lívia	98970217504		Retirada UFPI		Dinheiro	[{"id":7,"nome":"Botton Personalizado","descricao":"Botton personalizado com a identidade do NUPIEEPRO.","preco":3,"tipo":"unico","categoria":"acessorio","tamanhos":["Nupieepro","Engenheiro de planilhas","Just-in-time","Foco em resultados","Engenharia de produção"],"imagens":["https://i.ibb.co/21jz3XfN/IMG-20260319-WA0049.jpg"],"estoque":44,"destaque":true,"novo":true,"encomenda":false,"prazo_encomenda":"","badge_extra":"","img":"https://i.ibb.co/21jz3XfN/IMG-20260319-WA0049.jpg","tamanho":"Único","qtd":1}]	3	0		3		
+2026-003	21/03/2026, 17:09:16	novo	FALSE	Pedro Lucas	8699906647		Retirada UFPI		Cartão	[{"id":3,"nome":"Camisa AZUL — Eng. Produção","descricao":"Camisa oficial do NUPIEEPRO. 100% algodão, corte regular. Produto feito sob encomenda.","preco":40,"tipo":"camisa","categoria":"camisa","tamanhos":["P - Normal","M - Normal","G - Normal","GG - Normal","P - BBL","M - BBL","G - BBL","GG - BBL"],"imagens":["https://i.ibb.co/gbsSX7G9/54-20260319-104954-0001.png"],"estoque":99,"destaque":true,"novo":true,"encomenda":true,"prazo_encomenda":"Apenas sob encomenda","badge_extra":"","img":"https://i.ibb.co/gbsSX7G9/54-20260319-104954-0001.png","tamanho":"G - BBL","qtd":1}]	40	0		40		
+2026-001	21/03/2026, 17:34:45	novo	FALSE	LUIS HENRIQUE MENDES OLIVEIRA	5586981816467	henrique14luis@outlook.com.br	Retirada UFPI		Cartão	[{"id":7,"nome":"Botton Personalizado","descricao":"Botton personalizado com a identidade do NUPIEEPRO.","preco":3,"tipo":"unico","categoria":"acessorio","tamanhos":["Nupieepro","Engenheiro de planilhas","Just-in-time","Foco em resultados","Engenharia de produção"],"imagens":["https://i.ibb.co/21jz3XfN/IMG-20260319-WA0049.jpg"],"estoque":44,"destaque":true,"novo":true,"encomenda":false,"prazo_encomenda":"","badge_extra":"","img":"https://i.ibb.co/21jz3XfN/IMG-20260319-WA0049.jpg","tamanho":"Único","qtd":1}]	3	0		3		
+2026-002	21/03/2026, 17:37:51	novo	FALSE	LUIS HENRIQUE MENDES OLIVEIRA	5586981816467	henrique14luis@outlook.com.br	Retirada UFPI		Dinheiro	[{"id":5,"nome":"Bloco de Notas","descricao":"Bloco de notas personalizado com a marca do NUPIEEPRO.","preco":15,"tipo":"unico","categoria":"acessorio","tamanhos":[],"imagens":["https://i.ibb.co/d3xZ9Hz/IMG-20260320-WA0035.jpg"],"estoque":30,"destaque":false,"novo":false,"encomenda":false,"prazo_encomenda":"","badge_extra":"","img":"https://i.ibb.co/d3xZ9Hz/IMG-20260320-WA0035.jpg","tamanho":"Único","qtd":1},{"id":4,"nome":"Ecobag Nupieepro","descricao":"Ecobag resistente com a identidade visual do NUPIEEPRO.","preco":22,"tipo":"unico","categoria":"acessorio","tamanhos":[],"imagens":["https://i.ibb.co/LhQ6gTYK/IMG-20260320-WA0034.jpg"],"estoque":20,"destaque":false,"novo":false,"encomenda":false,"prazo_encomenda":"","badge_extra":"","img":"https://i.ibb.co/LhQ6gTYK/IMG-20260320-WA0034.jpg","tamanho":"Único","qtd":1},{"id":6,"nome":"Chaveiro Abridor","descricao":"Chaveiro abridor personalizado NUPIEEPRO. Prático e estiloso!","preco":4,"tipo":"unico","categoria":"acessorio","tamanhos":[],"imagens":["https://i.ibb.co/Z6TYmTPT/IMG-20260320-WA0033.jpg"],"estoque":50,"destaque":false,"novo":false,"encomenda":false,"prazo_encomenda":"","badge_extra":"","img":"https://i.ibb.co/Z6TYmTPT/IMG-20260320-WA0033.jpg","tamanho":"Único","qtd":1}]	41	0		41		
+2026-001	21/03/2026, 17:59:39	novo	FALSE	MARIA LIMA SOUSA	558699414611	Wal3c@yahoo.com.br	Entrega	QUADRA 105 CASA 06	Dinheiro	[]	295	0		295		
+2026-002	21/03/2026, 18:31:56	novo	FALSE	MARIA LIMA SOUSA	558699414611	Wal3c@yahoo.com.br	Retirada UFPI	QUADRA 105 CASA 06	Cartão	[]	21	0		21		
+2026-004	21/03/2026, 19:18:14	novo	FALSE	Luiz Alves	86999597740		Retirada UFPI		Dinheiro	[]	80	0		80		
+2026-001	22/03/2026, 09:23:17	novo	FALSE	Suzane	99984660913		Retirada UFPI		Dinheiro	[]	40	0		40		
+2026-005	22/03/2026, 09:26:12	novo	FALSE	Suzane	5599984660913		Retirada UFPI		Dinheiro	[]	40	0		40		
+2026-001	23/03/2026, 14:14:19	novo	FALSE	Davi Costa Leal	86994362690	davicostaleal@gmail.com	Retirada UFPI		PIX	[]	12	0		12		
+2026-001	23/03/2026, 14:16:40	novo	FALSE	Maria Victoria Alves de Carvalho	8688877139		Retirada UFPI		PIX	[]	3	0		3		
+2026-002	23/03/2026, 15:59:54	novo	FALSE	Rayan	86999880958		Retirada UFPI		PIX	[]	6	0		6		
+2026-001	23/03/2026, 20:08:32	novo	FALSE	José Alves da Silva Neto	5586981397222	joose.neto52@gmail.com	Retirada UFPI		PIX	[]	43	0		43		
+2026-001	23/03/2026, 21:03:12	novo	FALSE	Sérgio Alves Da Silva	86988108118		Retirada UFPI		PIX	[]	40	0		40		
+2026-001	23/03/2026, 21:48:46	novo	FALSE	Marcus Vinicius Pereira Brito	86988211486	10marcusvini123@gmail.com	Retirada UFPI		PIX	[]	68	0		68		
+2026-001	25/03/2026, 09:34:05	novo	FALSE	Açucena Macedo	99984763701	acucenaguimaraesdema@gmail.com	Retirada UFPI		PIX	[]	40	0		40		
+2026-001	25/03/2026, 17:59:33	novo	FALSE	Patrícia Pereira	86999294292	patypm2004@gmail.com	Retirada UFPI		PIX	[]	43	0		43		
+2026-001	28/03/2026, 16:40:48	novo	FALSE	Nicolas Desidério Costa Olivei	86988043610		Retirada UFPI		PIX	[]	22	0		22		
+2026-001	28/03/2026, 22:30:12	novo	FALSE	Sarinne Lima Guimarães	99991918637	sarinnel@gmail.com	Retirada UFPI		PIX	[]	40	0		40		
+2026-006	31/03/2026, 14:58:34	novo	FALSE	Nara Luiza	99984669451		Retirada UFPI		Dinheiro	[]	40	0		40		
+2026-007	31/03/2026, 15:24:24	novo	FALSE	João Pedro Pláci	99988499007		Retirada UFPI		Dinheiro	[]	43	0		43		
+2026-008	31/03/2026, 19:48:48	novo	FALSE	Max	0		Retirada UFPI		Dinheiro	[]	10	0		10	Já foi entregue.	
+2026-001	03/04/2026, 18:48:59	novo	FALSE	Chrislanne Emanuelle da Silva Santos	86988758555	chrislanne.santos@ufpi.edu.br	Retirada UFPI		PIX	[]	40	0		40		
+2026-001	03/04/2026, 20:25:53	novo	FALSE	Chrislanne Emanuelle da Silva Santos	86988758555	chrislanne.santos@ufpi.edu.br	Retirada UFPI		PIX	[]	9	0		9		
+2026-002	05/04/2026, 17:56:08	novo	FALSE	Chrislanne Emanuelle da Silva Santos	86988758555	chrislanne.santos@ufpi.edu.br	Retirada UFPI		PIX	[]	40	0		40		
+2026-001	05/04/2026, 21:08:39	novo	FALSE	Bárbara Moura	86994194071	barbaraamourasantoss@gmail.com	Retirada UFPI		PIX	[]	40	0		40		
+2026-001	06/04/2026, 09:35:48	novo	FALSE	Ronnald Silva	86995831427	ronnaldsilva514@gmail.com	Retirada UFPI		PIX	[]	40	0		40		
+2026-001	08/04/2026, 13:39:36	novo	FALSE	Maria Eduarda Oliveira Silva	86995106695	meduarda.olis13@gmail.com	Retirada UFPI		PIX	[]	40	0		40		
+2026-001-581	17/04/2026, 22:52:47	novo	FALSE	Micaele da Silva Leal	89994156754	lealmicaele4@gmail.com	Retirada UFPI		Dinheiro	[{"id":2,"nome":"Bloco de Notas","preco":15,"tipo":"unico","categoria":"acessorio","img":"https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg","descricao":"Bloco de notas personalizado NUPIEEPRO.","tamanhos":[],"estoque":30,"destaque":false,"encomenda":false,"tamanho":"Único","qtd":1},{"id":4,"nome":"Botton Personalizado","preco":3,"tipo":"botton","categoria":"acessorio","img":"https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg","descricao":"Botton personalizado NUPIEEPRO. Escolha o design desejado.","tamanhos":[],"tipos_botton":["Logo NUPIEEPRO","Engenharia de Produção","Símbolo Engrenagem","Just-in-Time","Foco em Resultados"],"estoque":100,"destaque":false,"encomenda":false,"tamanho":"Foco em Resultados","qtd":2}]	21	0		21		
+2026-009-376	23/04/2026, 15:39:06	novo	FALSE	Maria	89981073467		Retirada UFPI		Dinheiro	[{"id":3,"nome":"Chaveiro Abridor","preco":4,"tipo":"unico","categoria":"acessorio","img":"https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg","descricao":"Chaveiro abridor personalizado NUPIEEPRO.","tamanhos":[],"estoque":50,"destaque":false,"encomenda":false,"tamanho":"Único","qtd":1}]	4	0		4		
+2026-001-360	27/04/2026, 00:48:21	novo	FALSE	mkbn	3189977485		Retirada UFPI		PIX	[{"id":3,"nome":"Chaveiro Abridor","preco":4,"tipo":"unico","categoria":"acessorio","img":"https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg","descricao":"Chaveiro abridor personalizado NUPIEEPRO.","tamanhos":[],"estoque":50,"destaque":false,"encomenda":false,"tamanho":"Único","qtd":1}]	4	0		4
+19/03/2026, 10:11:57	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 10:11:58	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 10:11:58	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 10:22:25	LOGIN_OK	admin	Login realizado
+19/03/2026, 10:31:32	LOGIN_OK	admin	Login realizado
+19/03/2026, 10:31:51	LOGIN_OK	admin	Login realizado
+19/03/2026, 10:37:52	LOGIN_OK	admin	Login realizado
+19/03/2026, 10:42:58	LOGIN_OK	admin	Login realizado
+19/03/2026, 10:43:04	LOGIN_OK	admin	Login realizado
+19/03/2026, 10:43:50	LOGIN_OK	admin	Login realizado
+19/03/2026, 10:52:19	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 10:52:19	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 10:52:20	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 10:52:29	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 10:52:34	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 10:52:41	ERRO_POST	admin_get_cupons	Error: Acesso negado
+19/03/2026, 10:52:46	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 10:52:54	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 10:52:57	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 10:53:18	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 10:54:48	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 10:54:48	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 10:54:49	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 10:55:26	LOGIN_OK	admin	Login realizado
+19/03/2026, 10:55:37	PEDIDO	2026-001	Rayan — R$3.6
+19/03/2026, 10:56:05	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 10:57:13	LOGIN_OK	admin	Login realizado
+19/03/2026, 10:57:14	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 10:57:15	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 10:57:15	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 10:57:16	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 10:57:18	LOGIN_OK	admin	Login realizado
+19/03/2026, 10:58:15	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 10:59:33	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:00:24	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:03:46	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:05:45	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:07:55	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:11:42	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:14:53	PEDIDO	2026-001	Raissa — R$6.6
+19/03/2026, 11:18:01	PEDIDO	2026-002	Raissa — R$164
+19/03/2026, 11:21:09	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:28:28	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:29:31	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:29:35	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:29:40	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:29:59	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:30:24	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:32:06	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:36:23	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:42:09	LOGIN_OK	admin	Login realizado
+19/03/2026, 11:48:00	LOGIN_OK	admin	Login realizado
+19/03/2026, 12:03:14	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 12:03:14	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 12:03:14	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 12:04:17	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:05:24	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 12:05:24	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 12:05:24	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 12:05:29	LOGIN_OK	admin	Login realizado
+19/03/2026, 12:05:29	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:05:31	LOGIN_OK	admin	Login realizado
+19/03/2026, 12:05:50	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 12:05:51	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 12:05:51	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 12:05:53	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:05:54	LOGIN_OK	admin	Login realizado
+19/03/2026, 12:05:54	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:05:55	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 12:06:03	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 12:06:04	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:06:05	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 12:06:05	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 12:06:05	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 12:06:14	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:06:38	ERRO_POST	admin_get_cupons	Error: Acesso negado
+19/03/2026, 12:06:38	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 12:06:40	ERRO_POST	admin_salvar_config	Error: Acesso negado
+19/03/2026, 12:06:41	ERRO_POST	admin_salvar_config	Error: Acesso negado
+19/03/2026, 12:06:42	ERRO_POST	admin_get_cupons	Error: Acesso negado
+19/03/2026, 12:06:43	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 12:06:43	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 12:07:03	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 12:07:05	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:07:05	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 12:07:05	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 12:07:27	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 12:07:27	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 12:07:28	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 12:07:30	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 12:07:30	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 12:07:32	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 12:07:34	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:07:36	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:07:37	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 12:07:39	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 12:07:44	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 12:07:52	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:08:42	LOGIN_OK	admin	Login realizado
+19/03/2026, 12:08:48	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 12:08:48	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 12:08:48	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 12:09:01	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:09:14	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:09:25	LOGIN_OK	admin	Login realizado
+19/03/2026, 12:10:23	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 12:58:41	LOGIN_OK	admin	Login realizado
+19/03/2026, 12:59:33	LOGIN_OK	admin	Login realizado
+19/03/2026, 13:04:34	LOGIN_OK	admin	Login realizado
+19/03/2026, 13:42:19	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 13:42:19	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 13:42:20	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 13:42:27	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 13:42:34	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 13:42:35	ERRO_POST	admin_get_cupons	Error: Acesso negado
+19/03/2026, 13:42:43	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 13:42:43	ERRO_POST	admin_get_cupons	Error: Acesso negado
+19/03/2026, 13:42:44	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 13:43:04	ERRO_POST	admin_salvar_config	Error: Acesso negado
+19/03/2026, 13:43:18	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 13:43:27	ERRO_POST	admin_salvar_config	Error: Acesso negado
+19/03/2026, 13:43:42	ERRO_POST	admin_salvar_config	Error: Acesso negado
+19/03/2026, 13:43:49	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 13:43:50	ERRO_POST	admin_salvar_config	Error: Acesso negado
+19/03/2026, 13:53:18	LOGIN_OK	admin	Login realizado
+19/03/2026, 13:53:59	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 13:54:00	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 13:54:00	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 13:55:42	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 13:55:43	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 13:55:44	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 13:55:48	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 13:55:54	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 13:56:43	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 13:57:40	LOGIN_OK	admin	Login realizado
+19/03/2026, 13:59:01	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 13:59:03	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 13:59:03	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 13:59:04	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 13:59:05	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 13:59:06	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 14:01:15	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 14:01:15	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 14:01:25	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 14:01:28	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 14:04:11	LOGIN_OK	admin	Login realizado
+19/03/2026, 14:06:08	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 14:06:08	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 14:06:09	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 14:06:18	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 14:06:38	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 14:07:00	ERRO_POST	admin_dashboard	Error: Acesso negado
+19/03/2026, 14:13:45	LOGIN_OK	admin	Login realizado
+19/03/2026, 14:15:07	LOGIN_OK	admin	Login realizado
+19/03/2026, 14:17:26	LOGIN_OK	admin	Login realizado
+19/03/2026, 20:05:45	LOGIN_OK	admin	Login realizado
+19/03/2026, 22:11:01	LOGIN_FALHOU	admin	Tentativa inválida
+19/03/2026, 22:11:01	ERRO_POST	admin_get_config	Error: Acesso negado
+19/03/2026, 22:11:08	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 22:11:12	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 22:11:16	ERRO_POST	admin_get_produtos	Error: Acesso negado
+19/03/2026, 22:11:17	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+19/03/2026, 22:11:18	ERRO_POST	admin_get_produtos	Error: Acesso negado
+20/03/2026, 05:56:14	ERRO_POST	admin_get_config	Error: Acesso negado
+20/03/2026, 05:56:14	ERRO_POST	admin_dashboard	Error: Acesso negado
+20/03/2026, 05:56:14	LOGIN_FALHOU	admin	Tentativa inválida
+20/03/2026, 05:56:24	ERRO_POST	admin_dashboard	Error: Acesso negado
+20/03/2026, 05:56:24	ERRO_POST	admin_get_config	Error: Acesso negado
+20/03/2026, 05:56:24	LOGIN_FALHOU	admin	Tentativa inválida
+20/03/2026, 05:57:14	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+20/03/2026, 05:57:22	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+20/03/2026, 05:57:24	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+20/03/2026, 05:57:27	ERRO_POST	admin_dashboard	Error: Acesso negado
+20/03/2026, 05:57:27	ERRO_POST	admin_get_pedidos	Error: Acesso negado
+20/03/2026, 05:57:44	ERRO_POST	admin_get_produtos	Error: Acesso negado
+20/03/2026, 05:57:50	ERRO_POST	admin_get_cupons	Error: Acesso negado
+20/03/2026, 05:58:59	LOGIN_OK	admin	Login realizado
+20/03/2026, 11:30:12	LOGIN_OK	admin	Login realizado
+20/03/2026, 12:01:50	LOGIN_OK	admin	Login realizado
+20/03/2026, 12:02:19	LOGIN_OK	admin	Login realizado
+20/03/2026, 12:02:27	LOGIN_OK	admin	Login realizado
+20/03/2026, 12:02:32	LOGIN_FALHOU	admin	Tentativa inválida
+20/03/2026, 12:02:39	LOGIN_FALHOU	admin	Tentativa inválida
+20/03/2026, 12:02:48	LOGIN_FALHOU	admin	Tentativa inválida
+20/03/2026, 12:03:33	LOGIN_FALHOU	admin	Tentativa inválida
+20/03/2026, 12:04:05	LOGIN_OK	admin	Login realizado
+21/03/2026, 14:25:08	LOGIN_OK	admin	Login realizado
+21/03/2026, 14:30:13	LOGIN_OK	admin	Login realizado
+21/03/2026, 14:34:09	LOGIN_OK	admin	Login realizado
+21/03/2026, 14:52:34	LOGIN_OK	admin	Login realizado
+21/03/2026, 15:42:15	LOGIN_OK	admin	Login realizado
+21/03/2026, 16:28:03	PEDIDO	2026-001	Ana Lívia — R$3
+21/03/2026, 16:31:46	LOGIN_OK	admin	Login realizado
+21/03/2026, 16:34:08	LOGIN_OK	admin	Login realizado
+21/03/2026, 16:39:21	LOGIN_OK	admin	Login realizado
+21/03/2026, 17:07:30	LOGIN_OK	admin	Login realizado
+21/03/2026, 17:09:17	PEDIDO	2026-003	Pedro Lucas — R$40
+21/03/2026, 17:17:48	LOGIN_FALHOU	admin	Tentativa inválida
+21/03/2026, 17:18:01	LOGIN_OK	admin	Login realizado
+21/03/2026, 17:34:47	PEDIDO	2026-001	LUIS HENRIQUE MENDES OLIVEIRA — R$3
+21/03/2026, 17:35:34	LOGIN_FALHOU	admin	Tentativa inválida
+21/03/2026, 17:37:52	PEDIDO	2026-002	LUIS HENRIQUE MENDES OLIVEIRA — R$41
+21/03/2026, 17:59:40	PEDIDO	2026-001	MARIA LIMA SOUSA — R$295
+21/03/2026, 18:01:52	LOGIN_OK	admin	Login realizado
+21/03/2026, 18:02:43	LOGIN_OK	admin	Login realizado
+21/03/2026, 18:31:58	PEDIDO	2026-002	MARIA LIMA SOUSA — R$21
+21/03/2026, 19:16:08	LOGIN_OK	admin	Login realizado
+21/03/2026, 19:18:15	PEDIDO	2026-004	Luiz Alves — R$80
+21/03/2026, 19:18:44	LOGIN_OK	admin	Login realizado
+21/03/2026, 21:39:33	LOGIN_OK	admin	Login realizado
+21/03/2026, 21:39:34	LOGIN_OK	admin	Login realizado
+22/03/2026, 09:23:18	PEDIDO	2026-001	Suzane — R$40
+22/03/2026, 09:24:04	LOGIN_OK	admin	Login realizado
+22/03/2026, 09:26:13	PEDIDO	2026-005	Suzane — R$40
+23/03/2026, 11:48:13	LOGIN_OK	admin	Login realizado
+23/03/2026, 14:14:21	PEDIDO	2026-001	Davi Costa Leal — R$12
+23/03/2026, 14:16:41	PEDIDO	2026-001	Maria Victoria Alves de Carvalho — R$3
+23/03/2026, 14:58:56	LOGIN_OK	admin	Login realizado
+23/03/2026, 15:00:12	LOGIN_OK	admin	Login realizado
+23/03/2026, 15:00:51	LOGIN_OK	admin	Login realizado
+23/03/2026, 15:01:18	LOGIN_OK	admin	Login realizado
+23/03/2026, 15:59:55	PEDIDO	2026-002	Rayan — R$6
+23/03/2026, 17:02:26	LOGIN_OK	admin	Login realizado
+23/03/2026, 17:03:32	LOGIN_OK	admin	Login realizado
+23/03/2026, 20:08:34	PEDIDO	2026-001	José Alves da Silva Neto — R$43
+23/03/2026, 20:48:50	LOGIN_FALHOU	admin	Tentativa inválida
+23/03/2026, 20:49:15	LOGIN_OK	admin	Login realizado
+23/03/2026, 21:02:29	LOGIN_OK	admin	Login realizado
+23/03/2026, 21:03:13	PEDIDO	2026-001	Sérgio Alves Da Silva — R$40
+23/03/2026, 21:48:47	PEDIDO	2026-001	Marcus Vinicius Pereira Brito — R$68
+24/03/2026, 11:53:16	LOGIN_OK	admin	Login realizado
+25/03/2026, 09:34:06	PEDIDO	2026-001	Açucena Macedo — R$40
+25/03/2026, 17:59:35	PEDIDO	2026-001	Patrícia Pereira — R$43
+27/03/2026, 08:32:43	LOGIN_OK	admin	Login realizado
+27/03/2026, 09:30:10	LOGIN_OK	admin	Login realizado
+27/03/2026, 11:12:21	LOGIN_OK	admin	Login realizado
+27/03/2026, 13:03:04	LOGIN_OK	admin	Login realizado
+28/03/2026, 16:40:49	PEDIDO	2026-001	Nicolas Desidério Costa Olivei — R$22
+28/03/2026, 22:30:13	PEDIDO	2026-001	Sarinne Lima Guimarães — R$40
+29/03/2026, 10:33:19	LOGIN_OK	admin	Login realizado
+31/03/2026, 14:58:35	PEDIDO	2026-006	Nara Luiza — R$40
+31/03/2026, 15:24:25	PEDIDO	2026-007	João Pedro Pláci — R$43
+31/03/2026, 19:48:49	PEDIDO	2026-008	Max — R$10
+03/04/2026, 15:38:10	LOGIN_OK	admin	Login realizado
+03/04/2026, 15:41:53	LOGIN_OK	admin	Login realizado
+03/04/2026, 15:41:53	LOGIN_OK	admin	Login realizado
+03/04/2026, 18:49:00	PEDIDO	2026-001	Chrislanne Emanuelle da Silva Santos — R$40
+03/04/2026, 20:25:54	PEDIDO	2026-001	Chrislanne Emanuelle da Silva Santos — R$9
+05/04/2026, 14:21:23	LOGIN_OK	admin	Login realizado
+05/04/2026, 14:22:15	LOGIN_OK	admin	Login realizado
+05/04/2026, 17:56:09	PEDIDO	2026-002	Chrislanne Emanuelle da Silva Santos — R$40
+05/04/2026, 21:08:40	PEDIDO	2026-001	Bárbara Moura — R$40
+06/04/2026, 09:35:49	PEDIDO	2026-001	Ronnald Silva — R$40
+07/04/2026, 19:43:43	LOGIN_OK	admin	Login realizado
+07/04/2026, 20:47:45	LOGIN_OK	admin	Login realizado
+07/04/2026, 20:47:58	LOGIN_OK	admin	Login realizado
+08/04/2026, 13:39:37	PEDIDO	2026-001	Maria Eduarda Oliveira Silva — R$40
+10/04/2026, 22:21:40	LOGIN_OK	admin	Login realizado
+10/04/2026, 22:21:48	LOGIN_FALHOU	admin	Tentativa inválida
+10/04/2026, 22:21:56	LOGIN_FALHOU	admin	Tentativa inválida
+11/04/2026, 08:46:51	LOGIN_OK	admin	Login realizado
+11/04/2026, 08:48:47	LOGIN_OK	admin	Login realizado
+11/04/2026, 10:21:59	LOGIN_OK	admin	Login realizado
+11/04/2026, 10:23:03	LOGIN_OK	admin	Login realizado
+11/04/2026, 11:42:41	LOGIN_OK	admin	Login realizado
+11/04/2026, 11:42:58	LOGIN_OK	admin	Login realizado
+11/04/2026, 11:43:08	LOGIN_OK	admin	Login realizado
+11/04/2026, 11:43:30	LOGIN_OK	admin	Login realizado
+11/04/2026, 11:55:15	LOGIN_OK	admin	Login realizado
+11/04/2026, 12:07:08	LOGIN_OK	admin	Login realizado
+11/04/2026, 12:07:12	LOGIN_OK	admin	Login realizado
+11/04/2026, 12:14:11	LOGIN_OK	admin	Login realizado
+11/04/2026, 12:19:55	LOGIN_OK	admin	Login realizado
+11/04/2026, 12:20:01	LOGIN_OK	admin	Login realizado
+11/04/2026, 12:20:09	LOGIN_OK	admin	Login realizado
+11/04/2026, 12:20:15	LOGIN_OK	admin	Login realizado
+11/04/2026, 12:23:11	LOGIN_OK	admin	Login realizado
+11/04/2026, 12:37:46	LOGIN_OK	admin	Login realizado
+13/04/2026, 16:13:14	LOGIN_OK	admin	Login realizado
+13/04/2026, 16:13:23	LOGIN_OK	admin	Login realizado
+13/04/2026, 16:13:57	LOGIN_OK	admin	Login realizado
+14/04/2026, 12:45:03	LOGIN_OK	admin	Login realizado
+14/04/2026, 12:45:04	LOGIN_OK	admin	Login realizado
+14/04/2026, 12:46:49	LOGIN_OK	admin	Login realizado
+14/04/2026, 12:46:51	LOGIN_OK	admin	Login realizado
+14/04/2026, 12:46:55	LOGIN_OK	admin	Login realizado
+14/04/2026, 12:46:56	LOGIN_OK	admin	Login realizado
+14/04/2026, 12:46:59	LOGIN_OK	admin	Login realizado
+14/04/2026, 12:47:00	LOGIN_OK	admin	Login realizado
+17/04/2026, 22:52:50	PEDIDO	2026-001-581	Micaele da Silva Leal — R$21
+19/04/2026, 21:39:19	LOGIN_OK	admin	Login realizado
+19/04/2026, 21:39:20	LOGIN_OK	admin	Login realizado
+19/04/2026, 21:41:16	LOGIN_OK	admin	Login realizado
+19/04/2026, 21:57:15	LOGIN_OK	admin	Login realizado
+23/04/2026, 15:39:07	PEDIDO	2026-009-376	Maria — R$4
+27/04/2026, 00:48:22	PEDIDO	2026-001-360	mkbn — R$4
+27/04/2026, 07:40:13	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:25	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:27	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:29	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:30	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:31	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:32	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:34	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:36	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:36	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:38	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:41	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:41	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:43	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:45	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:45	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:47	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:49	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:49	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:51	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:53	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:54	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:55	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:55	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:58	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:41:59	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:42:01	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:55:20	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:56:25	LOGIN_OK	admin	Login realizado
+27/04/2026, 07:56:27	LOGIN_OK	admin	Login realizado

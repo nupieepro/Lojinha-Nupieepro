@@ -1,0 +1,919 @@
+/* ============================================================
+   NUPIEEPRO STORE — Google Apps Script Backend
+   Versão: 1.1.0
+   Notificações: financeironupieepro@gmail.com
+   ============================================================ */
+
+/* ── CONFIGURAÇÕES GERAIS ── */
+var CONFIG = {
+  EMAIL_FINANCEIRO:  'financeironupieepro@gmail.com',
+  CHAVE_PIX:         'financeironupieepro@gmail.com',
+  NOME_RECEBEDOR:    'NUPIEEPRO',
+  WHATSAPP:          '5586999976226',
+  NOME_LOJA:         'NUPIEEPRO STORE',
+  CHAVE_ADMIN:       'nupi@admin2025', /* TROQUE ANTES DE PUBLICAR */
+  ORIGEM_PERMITIDA:  'https://nupieepro.github.io',
+};
+
+/* ── IDs DAS ABAS DO SHEETS ── */
+var ABAS = {
+  PRODUTOS:   'produtos',
+  CUPONS:     'cupons',
+  PEDIDOS:    'pedidos',
+  CONFIG:     'config',
+  COMBOS:     'combos',
+  LOGS:       'logs',
+};
+
+/* ============================================================
+   PONTO DE ENTRADA — GET
+   ============================================================ */
+function doGet(e) {
+  e = e || {};
+  e.parameter = e.parameter || {};
+  /* Ignora parâmetro de cache-busting 't' */
+  var acao = e.parameter.action || '';
+
+  try {
+    var resultado;
+    switch(acao) {
+      case 'produtos': resultado = getProdutos(); break;
+      case 'cupons':   resultado = getCuponsPublicos(); break;
+      case 'config':   resultado = getConfigPublica(); break;
+      case 'combos':   resultado = getCombos(); break;
+      case 'ping':     resultado = { ok: true, ts: new Date().toISOString() }; break;
+      default:         resultado = { ok: true, msg: 'NUPIEEPRO API online', ts: new Date().toISOString() };
+    }
+    return ContentService
+      .createTextOutput(JSON.stringify(resultado))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    registrarLog('ERRO_GET', acao, err.toString());
+    return ContentService
+      .createTextOutput(JSON.stringify({ erro: 'Erro interno: ' + err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+/* ============================================================
+   PONTO DE ENTRADA — POST
+   ============================================================ */
+function doPost(e) {
+  var dados;
+  try {
+    dados = JSON.parse(e.postData.contents);
+  } catch(err) {
+    return responder({ erro: 'JSON inválido' }, 400);
+  }
+
+  var acao = dados.action || '';
+
+  try {
+    switch(acao) {
+      /* ── Público ── */
+      case 'validar_cupom':   return responder(validarCupom(dados));
+      case 'registrar_pedido': return responder(registrarPedido(dados));
+      case 'avaliar_produto': return responder(avaliarProduto(dados));
+
+      /* ── Admin (exige chave) ── */
+      case 'admin_login':           return responder(adminLogin(dados));
+      case 'admin_get_produtos':    return responder(adminGetProdutos(dados));
+      case 'admin_salvar_produto':  return responder(adminSalvarProduto(dados));
+      case 'admin_deletar_produto': return responder(adminDeletarProduto(dados));
+      case 'admin_get_cupons':      return responder(adminGetCupons(dados));
+      case 'admin_salvar_cupom':    return responder(adminSalvarCupom(dados));
+      case 'admin_get_pedidos':     return responder(adminGetPedidos(dados));
+      case 'admin_atualizar_pedido':return responder(adminAtualizarPedido(dados));
+      case 'admin_get_config':      return responder(adminGetConfig(dados));
+      case 'admin_salvar_config':   return responder(adminSalvarConfig(dados));
+      case 'admin_dashboard':       return responder(adminDashboard(dados));
+      case 'admin_exportar_csv':    return responder(adminExportarCSV(dados));
+
+      default: return responder({ erro: 'Ação inválida' }, 400);
+    }
+  } catch(err) {
+    registrarLog('ERRO_POST', acao, err.toString());
+    return responder({ erro: 'Erro interno: ' + err.toString() }, 500);
+  }
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function responder(dados, status) {
+  var payload = JSON.stringify(dados);
+  return ContentService
+    .createTextOutput(payload)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function getSheet(nome) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(nome);
+  if (!sheet) sheet = criarAba(ss, nome);
+  return sheet;
+}
+
+function verificarAdmin(dados) {
+  if (dados.chave !== CONFIG.CHAVE_ADMIN) {
+    throw new Error('Acesso negado');
+  }
+}
+
+function registrarLog(tipo, acao, detalhe) {
+  try {
+    var sheet = getSheet(ABAS.LOGS);
+    sheet.appendRow([
+      new Date().toLocaleString('pt-BR'),
+      tipo, acao,
+      detalhe.toString().substring(0, 500)
+    ]);
+  } catch(e) {}
+}
+
+/* ============================================================
+   CRIAÇÃO AUTOMÁTICA DAS ABAS
+   ============================================================ */
+function criarAba(ss, nome) {
+  var sheet = ss.insertSheet(nome);
+
+  switch(nome) {
+    case ABAS.PRODUTOS:
+      sheet.appendRow([
+        'id','nome','descricao','preco','custo','tipo','categoria',
+        'tamanhos','imagens','estoque','destaque','novo','encomenda',
+        'prazo_encomenda','badge_extra','ativo','criado_em','agendamento'
+      ]);
+      /* Produtos iniciais */
+      sheet.appendRow([1,'Ecobag Nupieepro','Ecobag resistente com a identidade visual do NUPIEEPRO.',22,10,'unico','acessorio','','https://i.ibb.co/7dj3kxt0/unnamed-3.png',20,false,false,false,'','',true,new Date().toLocaleString('pt-BR'),'']);
+      sheet.appendRow([2,'Bloco de Notas','Bloco de notas personalizado com a marca do NUPIEEPRO.',15,6,'unico','acessorio','','https://i.ibb.co/hxxnxrbF/unnamed-4.png',30,false,false,false,'','',true,new Date().toLocaleString('pt-BR'),'']);
+      sheet.appendRow([3,'Chaveiro Abridor','Chaveiro abridor personalizado NUPIEEPRO. Prático e estiloso!',4,1,'unico','acessorio','','https://i.ibb.co/Kj00Xbys/unnamed-5.png',50,false,false,false,'','',true,new Date().toLocaleString('pt-BR'),'']);
+      sheet.appendRow([4,'Botton Personalizado','Botton personalizado com a identidade do NUPIEEPRO.',3,0.5,'botton','acessorio','Logo NUPIEEPRO,Engenharia de Produção,Símbolo Engrenagem,Just-in-Time,Foco em Resultados','https://i.ibb.co/mrsm95Kv/1769766015274.png',100,false,false,false,'','',true,new Date().toLocaleString('pt-BR'),'']);
+      break;
+
+    case ABAS.CUPONS:
+      sheet.appendRow(['codigo','tipo','valor','produtos_ids','minimo','limite','usos','ativo','descricao','criado_em']);
+      sheet.appendRow(['CALOUROEP10','percentual',10,'4,5,6',0,500,0,true,'Comece sua jornada na Engenharia de Produção com 10% de desconto em produtos como chaveiro, ecobag e bloco de notas.',new Date().toLocaleString('pt-BR')]);
+      break;
+
+    case ABAS.PEDIDOS:
+      sheet.appendRow([
+        'numero','data','status','pago',
+        'nome','whatsapp','email','entrega','endereco','pagamento',
+        'itens','subtotal','desconto','cupom','total','observacao','anotacao_interna'
+      ]);
+      break;
+
+    case ABAS.CONFIG:
+      sheet.appendRow(['chave','valor']);
+      var configInicial = [
+        ['nome_loja',        'NUPIEEPRO STORE'],
+        ['chave_pix',        'financeironupieepro@gmail.com'],
+        ['nome_recebedor',   'NUPIEEPRO'],
+        ['whatsapp',         '5586999976226'],
+        ['email_financeiro', 'financeironupieepro@gmail.com'],
+        ['mensagem_boas_vindas', 'Bem-vindo(a), Nupilover!'],
+        ['sub_marca',        'Núcleo Piauiense de Estudantes de Engenharia de Produção'],
+        ['link_instagram',   'https://www.instagram.com/nupieepro?igsh=MWg3dGtkeG1hOTZyYQ=='],
+        ['rodape_whatsapp',  'Prazo de confirmação: 24h úteis.'],
+        ['manutencao',       'false'],
+        ['msg_manutencao',   'Fique ligado em novas novidades!'],
+        ['horario_inicio',   ''],
+        ['horario_fim',      ''],
+        ['pausar_checkout',  'false'],
+        ['aviso_topo_texto', ''],
+        ['aviso_topo_tipo',  'info'],
+        ['aviso_topo_ativo', 'false'],
+        ['banner_1_img',     ''],
+        ['banner_1_link',    ''],
+        ['banner_1_ativo',   'false'],
+        ['banner_2_img',     ''],
+        ['banner_2_link',    ''],
+        ['banner_2_ativo',   'false'],
+        ['banner_3_img',     ''],
+        ['banner_3_link',    ''],
+        ['banner_3_ativo',   'false'],
+        ['cor_primaria',     '#0f0732'],
+        ['cor_secundaria',   '#f85900'],
+        ['tamanho_cards',    'medio'],
+      ];
+      configInicial.forEach(row => sheet.appendRow(row));
+      break;
+
+    case ABAS.COMBOS:
+      sheet.appendRow(['id','nome','descricao','produtos_ids','preco_cheio','preco_combo','ativo','criado_em']);
+      break;
+
+    case ABAS.LOGS:
+      sheet.appendRow(['data','tipo','acao','detalhe']);
+      break;
+  }
+
+  return sheet;
+}
+
+/* ============================================================
+   INICIALIZAÇÃO — roda uma vez pra criar todas as abas
+   ============================================================ */
+function inicializarPlanilha() {
+  Object.values(ABAS).forEach(nome => getSheet(nome));
+  Logger.log('✅ Planilha inicializada com sucesso!');
+}
+
+/* ============================================================
+   ATUALIZA IMAGENS DOS PRODUTOS NO SHEETS
+   Execute esta função UMA VEZ no Apps Script para corrigir as imagens
+   ============================================================ */
+function atualizarImagensProdutos() {
+  var imagens = {
+    1: 'https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg',   /* Ecobag */
+    2: 'https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg',    /* Bloco de Notas */
+    3: 'https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg',   /* Chaveiro */
+    4: 'https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg',   /* Botton */
+  };
+
+  var sheet   = getSheet(ABAS.PRODUTOS);
+  var linhas  = sheet.getDataRange().getValues();
+  var headers = linhas[0];
+  var colId       = headers.indexOf('id') + 1;
+  var colImagens  = headers.indexOf('imagens') + 1;
+
+  var atualizados = 0;
+  for (var i = 1; i < linhas.length; i++) {
+    var id = parseInt(linhas[i][colId - 1]);
+    if (imagens[id]) {
+      sheet.getRange(i + 1, colImagens).setValue(imagens[id]);
+      atualizados++;
+      Logger.log('✅ Produto ' + id + ' atualizado: ' + imagens[id]);
+    }
+  }
+  Logger.log('Total atualizado: ' + atualizados + ' produtos');
+  SpreadsheetApp.getActiveSpreadsheet().toast(
+    atualizados + ' produtos com imagens atualizadas!',
+    'NUPIEEPRO ✅', 5
+  );
+}
+
+/* ============================================================
+   PRODUTOS — GET PÚBLICO
+   ============================================================ */
+function getProdutos() {
+  var sheet = getSheet(ABAS.PRODUTOS);
+  var dados = sheet.getDataRange().getValues();
+  var headers = dados[0];
+  var agora = new Date();
+
+  return dados.slice(1)
+    .filter(row => {
+      /* Só retorna ativos */
+      var ativo = row[headers.indexOf('ativo')];
+      if (!ativo) return false;
+
+      /* Verifica agendamento */
+      var agendamento = row[headers.indexOf('agendamento')];
+      if (agendamento) {
+        var dataAgend = new Date(agendamento);
+        if (!isNaN(dataAgend) && dataAgend > agora) return false;
+      }
+
+      return true;
+    })
+    .map(row => {
+      var p = {};
+      headers.forEach((h, i) => p[h] = row[i]);
+
+      /* Processa campos especiais */
+      p.tamanhos = p.tamanhos ? p.tamanhos.toString().split(',').map(t => t.trim()).filter(Boolean) : [];
+      p.imagens  = p.imagens  ? p.imagens.toString().split(',').map(i => i.trim()).filter(Boolean) : [];
+      p.preco    = parseFloat(p.preco)  || 0;
+      p.custo    = parseFloat(p.custo)  || 0;
+      p.estoque  = parseInt(p.estoque)  || 0;
+      p.id       = parseInt(p.id)       || 0;
+      p.destaque  = p.destaque  === true || p.destaque  === 'TRUE';
+      p.novo      = p.novo      === true || p.novo      === 'TRUE';
+      p.encomenda = p.encomenda === true || p.encomenda === 'TRUE';
+
+      /* Remove campos internos */
+      delete p.custo;
+      delete p.ativo;
+      delete p.agendamento;
+      delete p.criado_em;
+
+      return p;
+    });
+}
+
+/* ============================================================
+   CUPONS — GET PÚBLICO (sem revelar o código)
+   ============================================================ */
+function getCuponsPublicos() {
+  var sheet = getSheet(ABAS.CUPONS);
+  var dados = sheet.getDataRange().getValues();
+  var headers = dados[0];
+
+  var cuponsAtivos = dados.slice(1)
+    .filter(row => row[headers.indexOf('ativo')] === true || row[headers.indexOf('ativo')] === 'TRUE')
+    .map(row => {
+      var c = {};
+      headers.forEach((h, i) => c[h] = row[i]);
+      c.valor        = parseFloat(c.valor)  || 0;
+      c.limite       = parseInt(c.limite)   || 0;
+      c.usos         = parseInt(c.usos)     || 0;
+      c.minimo       = parseFloat(c.minimo) || 0;
+      c.produtos_ids = c.produtos_ids ? c.produtos_ids.toString().split(',').map(Number) : [];
+      c.ativo        = true;
+      return c;
+    });
+
+  var descricao = cuponsAtivos.length > 0 ? (cuponsAtivos[0].descricao || '') : '';
+  return { tem_cupom_ativo: cuponsAtivos.length > 0, descricao: descricao, cupons: cuponsAtivos };
+}
+
+/* ============================================================
+   CONFIGURAÇÕES — GET PÚBLICO
+   ============================================================ */
+function getConfigPublica() {
+  var sheet = getSheet(ABAS.CONFIG);
+  var dados = sheet.getDataRange().getValues();
+  var config = {};
+
+  dados.slice(1).forEach(row => {
+    if (row[0]) config[row[0]] = row[1];
+  });
+
+  /* Remove campos verdadeiramente sensíveis (email interno apenas) */
+  var camposPrivados = ['email_financeiro'];
+  camposPrivados.forEach(c => delete config[c]);
+
+  return config;
+}
+
+/* ============================================================
+   COMBOS — GET PÚBLICO
+   ============================================================ */
+function getCombos() {
+  var sheet = getSheet(ABAS.COMBOS);
+  var dados = sheet.getDataRange().getValues();
+  if (dados.length <= 1) return [];
+
+  var headers = dados[0];
+  return dados.slice(1)
+    .filter(row => row[headers.indexOf('ativo')] === true || row[headers.indexOf('ativo')] === 'TRUE')
+    .map(row => {
+      var c = {};
+      headers.forEach((h, i) => c[h] = row[i]);
+      c.produtos_ids = c.produtos_ids ? c.produtos_ids.toString().split(',').map(Number) : [];
+      c.preco_cheio  = parseFloat(c.preco_cheio)  || 0;
+      c.preco_combo  = parseFloat(c.preco_combo)  || 0;
+      return c;
+    });
+}
+
+/* ============================================================
+   VALIDAR CUPOM — POST PÚBLICO
+   ============================================================ */
+function validarCupom(dados) {
+  var codigo = (dados.codigo || '').toString().trim().toUpperCase();
+  if (!codigo) return { valido: false, erro: 'Código inválido' };
+
+  var sheet   = getSheet(ABAS.CUPONS);
+  var linhas  = sheet.getDataRange().getValues();
+  var headers = linhas[0];
+
+  var idx = linhas.findIndex((row, i) => i > 0 && row[headers.indexOf('codigo')].toString().toUpperCase() === codigo);
+  if (idx < 0) return { valido: false, erro: 'Cupom não encontrado' };
+
+  var row  = linhas[idx];
+  var ativo = row[headers.indexOf('ativo')];
+  if (!ativo || ativo === 'FALSE') return { valido: false, erro: 'Cupom inativo' };
+
+  var limite = parseInt(row[headers.indexOf('limite')]) || 0;
+  var usos   = parseInt(row[headers.indexOf('usos')])   || 0;
+  if (usos >= limite) return { valido: false, erro: 'Cupom esgotado' };
+
+  var minimo = parseFloat(row[headers.indexOf('minimo')]) || 0;
+  var subtotal = parseFloat(dados.subtotal) || 0;
+  if (subtotal < minimo) return { valido: false, erro: `Pedido mínimo de R$ ${minimo.toFixed(2).replace('.',',')}` };
+
+  /* Retorna dados do cupom sem revelar informações internas */
+  return {
+    valido: true,
+    tipo:         row[headers.indexOf('tipo')],
+    valor:        parseFloat(row[headers.indexOf('valor')]) || 0,
+    produtos_ids: row[headers.indexOf('produtos_ids')].toString().split(',').map(Number),
+    descricao:    row[headers.indexOf('descricao')],
+    usos_restantes: limite - usos,
+  };
+}
+
+/* ============================================================
+   REGISTRAR PEDIDO — POST PÚBLICO
+   ============================================================ */
+function registrarPedido(dados) {
+  /* Validações básicas */
+  if (!dados.nome || !dados.whatsapp) {
+    return { ok: false, erro: 'Dados incompletos' };
+  }
+
+  /* Sanitização básica */
+  var nome     = dados.nome.toString().replace(/[<>"']/g,'').substring(0, 100);
+  var zap      = dados.whatsapp.toString().replace(/\D/g,'').substring(0, 15);
+  var email    = dados.email ? dados.email.toString().substring(0, 100) : '';
+  var entrega  = dados.entrega || 'Retirada UFPI';
+  var endereco = dados.endereco ? dados.endereco.toString().substring(0, 200) : '';
+  var pgto     = dados.pagamento || 'PIX';
+  var obs      = dados.observacao ? dados.observacao.toString().substring(0, 300) : '';
+  var numero   = dados.numero || gerarNumeroPedido();
+  var cupom    = dados.cupom || '';
+  var subtotal = parseFloat(dados.subtotal) || 0;
+  var desconto = parseFloat(dados.desconto) || 0;
+  var total    = parseFloat(dados.total)    || 0;
+  var itens    = JSON.stringify(dados.itens || []);
+
+  /* Salva no Sheets */
+  var sheet = getSheet(ABAS.PEDIDOS);
+  sheet.appendRow([
+    numero,
+    new Date().toLocaleString('pt-BR'),
+    'novo', /* status */
+    false,  /* pago */
+    nome, zap, email,
+    entrega, endereco, pgto,
+    itens, subtotal, desconto, cupom, total, obs,
+    '' /* anotacao_interna */
+  ]);
+
+  /* Incrementa uso do cupom se houver */
+  if (cupom) incrementarUsoCupom(cupom);
+
+  /* Envia e-mail pro financeiro */
+  enviarEmailFinanceiro(numero, nome, zap, email, entrega, endereco, pgto, dados.itens || [], subtotal, desconto, cupom, total, obs);
+
+  /* Envia e-mail de confirmação pro cliente se tiver e-mail */
+  if (email) enviarEmailCliente(email, nome, numero, dados.itens || [], total, pgto);
+
+  registrarLog('PEDIDO', numero, `${nome} — R$${total}`);
+
+  return { ok: true, numero };
+}
+
+/* ── Gera número de pedido ── */
+function gerarNumeroPedido() {
+  var ano   = new Date().getFullYear();
+  var sheet = getSheet(ABAS.PEDIDOS);
+  var total = Math.max(0, sheet.getLastRow() - 1);
+  var seq   = (total + 1).toString().padStart(3, '0');
+  return `${ano}-${seq}`;
+}
+
+/* ── Incrementa uso do cupom ── */
+function incrementarUsoCupom(codigo) {
+  var sheet   = getSheet(ABAS.CUPONS);
+  var linhas  = sheet.getDataRange().getValues();
+  var headers = linhas[0];
+  var idx = linhas.findIndex((row, i) => i > 0 && row[headers.indexOf('codigo')].toString().toUpperCase() === codigo.toUpperCase());
+  if (idx < 0) return;
+  var colUsos = headers.indexOf('usos') + 1;
+  var usos    = parseInt(linhas[idx][headers.indexOf('usos')]) || 0;
+  sheet.getRange(idx + 1, colUsos).setValue(usos + 1);
+}
+
+/* ============================================================
+   AVALIAÇÃO DE PRODUTO
+   ============================================================ */
+function avaliarProduto(dados) {
+  if (!dados.produto_id || !dados.estrelas || !dados.texto) {
+    return { ok: false, erro: 'Dados incompletos' };
+  }
+
+  /* Salva numa aba de avaliações (cria se não existir) */
+  var sheet = getSheet('avaliacoes');
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(['produto_id','estrelas','texto','nome','data','aprovada']);
+  }
+
+  sheet.appendRow([
+    parseInt(dados.produto_id),
+    parseInt(dados.estrelas),
+    dados.texto.toString().substring(0, 300),
+    dados.nome ? dados.nome.toString().substring(0, 50) : 'Anônimo',
+    new Date().toLocaleString('pt-BR'),
+    false /* aguarda aprovação do admin */
+  ]);
+
+  return { ok: true };
+}
+
+/* ============================================================
+   E-MAILS
+   ============================================================ */
+function enviarEmailFinanceiro(numero, nome, zap, email, entrega, endereco, pgto, itens, subtotal, desconto, cupom, total, obs) {
+  try {
+    var itensTxt = itens.map(i => `${i.qtd}x ${i.nome}${i.tamanho && i.tamanho !== 'Único' ? ' (' + i.tamanho + ')' : ''} — R$ ${(i.preco * i.qtd).toFixed(2).replace('.',',')}`).join('\n');
+
+    var corpo = `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
+        <div style="background:#0f0732;padding:24px;text-align:center;border-radius:12px 12px 0 0">
+          <h1 style="color:#f85900;margin:0;font-size:1.4rem">NOVO PEDIDO</h1>
+          <p style="color:rgba(255,255,255,0.8);margin:8px 0 0;font-size:0.9rem">${CONFIG.NOME_LOJA}</p>
+        </div>
+        <div style="background:#fff;padding:24px;border:1px solid #eee;border-top:none">
+          <table style="width:100%;border-collapse:collapse;font-size:0.9rem">
+            <tr><td style="padding:8px 0;color:#666;width:140px"><b>Pedido</b></td><td style="padding:8px 0"><b style="color:#0f0732">#${numero}</b></td></tr>
+            <tr><td style="padding:8px 0;color:#666"><b>Cliente</b></td><td style="padding:8px 0">${nome}</td></tr>
+            <tr><td style="padding:8px 0;color:#666"><b>WhatsApp</b></td><td style="padding:8px 0">${zap}</td></tr>
+            ${email ? `<tr><td style="padding:8px 0;color:#666"><b>E-mail</b></td><td style="padding:8px 0">${email}</td></tr>` : ''}
+            <tr><td style="padding:8px 0;color:#666"><b>Entrega</b></td><td style="padding:8px 0">${entrega}${endereco ? ' — ' + endereco : ''}</td></tr>
+            <tr><td style="padding:8px 0;color:#666"><b>Pagamento</b></td><td style="padding:8px 0">${pgto}</td></tr>
+          </table>
+          <hr style="border:none;border-top:1px solid #eee;margin:16px 0">
+          <h3 style="color:#0f0732;margin:0 0 12px">Itens do pedido:</h3>
+          <pre style="background:#f8f9fc;padding:12px;border-radius:8px;font-size:0.85rem;white-space:pre-wrap">${itensTxt}</pre>
+          <hr style="border:none;border-top:1px solid #eee;margin:16px 0">
+          <table style="width:100%;font-size:0.9rem">
+            <tr><td style="padding:4px 0;color:#666">Subtotal</td><td style="text-align:right">R$ ${subtotal.toFixed(2).replace('.',',')}</td></tr>
+            ${desconto > 0 ? `<tr><td style="padding:4px 0;color:#27ae60">Desconto (${cupom})</td><td style="text-align:right;color:#27ae60">- R$ ${desconto.toFixed(2).replace('.',',')}</td></tr>` : ''}
+            <tr><td style="padding:8px 0;font-weight:700;font-size:1rem;color:#0f0732">TOTAL</td><td style="text-align:right;font-weight:700;font-size:1rem;color:#f85900">R$ ${total.toFixed(2).replace('.',',')}</td></tr>
+          </table>
+          ${obs ? `<div style="background:#fff8e1;padding:12px;border-radius:8px;margin-top:12px;font-size:0.85rem"><b>Obs:</b> ${obs}</div>` : ''}
+          ${pgto === 'PIX' ? `<div style="background:#e8f5e9;padding:12px;border-radius:8px;margin-top:12px;font-size:0.85rem"><b>PIX:</b> ${CONFIG.CHAVE_PIX}</div>` : ''}
+        </div>
+        <div style="background:#f8f9fc;padding:16px;text-align:center;border-radius:0 0 12px 12px;font-size:0.75rem;color:#999">
+          ${CONFIG.NOME_LOJA} · Gerado automaticamente
+        </div>
+      </div>
+    `;
+
+    GmailApp.sendEmail(
+      CONFIG.EMAIL_FINANCEIRO,
+      `Novo pedido #${numero} — ${nome}`,
+      `Novo pedido #${numero} de ${nome}. Total: R$ ${total.toFixed(2).replace('.',',')}`,
+      { htmlBody: corpo, name: CONFIG.NOME_LOJA }
+    );
+  } catch(err) {
+    registrarLog('ERRO_EMAIL_FINANCEIRO', numero, err.toString());
+  }
+}
+
+function enviarEmailCliente(emailCliente, nome, numero, itens, total, pgto) {
+  try {
+    var itensTxt = itens.map(i => `<tr><td style="padding:6px 0">${i.qtd}x ${i.nome}${i.tamanho && i.tamanho !== 'Único' ? ' (' + i.tamanho + ')' : ''}</td><td style="text-align:right;padding:6px 0">R$ ${(i.preco * i.qtd).toFixed(2).replace('.',',')}</td></tr>`).join('');
+
+    var corpo = `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
+        <div style="background:#0f0732;padding:24px;text-align:center;border-radius:12px 12px 0 0">
+          <h1 style="color:#f85900;margin:0;font-size:1.4rem">Pedido Recebido!</h1>
+          <p style="color:rgba(255,255,255,0.8);margin:8px 0 0;font-size:0.9rem">${CONFIG.NOME_LOJA}</p>
+        </div>
+        <div style="background:#fff;padding:24px;border:1px solid #eee;border-top:none">
+          <p style="color:#333;font-size:0.95rem">Ola, <b>${nome}</b>!</p>
+          <p style="color:#666;font-size:0.9rem">Seu pedido foi recebido com sucesso e já está sendo processado pelo Nupieepro.</p>
+          <div style="background:#f8f9fc;padding:16px;border-radius:10px;margin:16px 0;text-align:center">
+            <div style="font-size:0.8rem;color:#666;margin-bottom:4px">Número do pedido</div>
+            <div style="font-size:1.4rem;font-weight:700;color:#0f0732">#${numero}</div>
+          </div>
+          <h3 style="color:#0f0732;margin:0 0 12px">Resumo:</h3>
+          <table style="width:100%;font-size:0.9rem">
+            ${itensTxt}
+            <tr><td colspan="2"><hr style="border:none;border-top:1px solid #eee;margin:8px 0"></td></tr>
+            <tr><td style="font-weight:700;color:#0f0732">Total</td><td style="text-align:right;font-weight:700;color:#f85900">R$ ${total.toFixed(2).replace('.',',')}</td></tr>
+          </table>
+          ${pgto === 'PIX' ? `<div style="background:#e8f5e9;padding:12px;border-radius:8px;margin-top:16px;font-size:0.85rem;text-align:center"><b>Aguarde: o financeiro enviara a chave PIX pelo WhatsApp!</b></div>` : `<div style="background:#fff8e1;padding:12px;border-radius:8px;margin-top:16px;font-size:0.85rem;text-align:center">Pagamento <b>${pgto}</b> na retirada/entrega.</div>`}
+          <p style="color:#999;font-size:0.8rem;margin-top:20px">Dúvidas? Fale com a gente no Instagram: <a href="https://www.instagram.com/nupieepro" style="color:#f85900">@nupieepro</a></p>
+        </div>
+        <div style="background:#f8f9fc;padding:16px;text-align:center;border-radius:0 0 12px 12px;font-size:0.75rem;color:#999">
+          ${CONFIG.NOME_LOJA} · Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI
+        </div>
+      </div>
+    `;
+
+    GmailApp.sendEmail(
+      emailCliente,
+      `Pedido #${numero} confirmado — ${CONFIG.NOME_LOJA}`,
+      `Pedido #${numero} recebido! Total: R$ ${total.toFixed(2).replace('.',',')}`,
+      { htmlBody: corpo, name: CONFIG.NOME_LOJA }
+    );
+  } catch(err) {
+    registrarLog('ERRO_EMAIL_CLIENTE', numero, err.toString());
+  }
+}
+
+/* ============================================================
+   ADMIN — LOGIN
+   ============================================================ */
+function adminLogin(dados) {
+  if (dados.chave !== CONFIG.CHAVE_ADMIN) {
+    registrarLog('LOGIN_FALHOU', 'admin', 'Tentativa inválida');
+    return { ok: false, erro: 'Senha incorreta' };
+  }
+  registrarLog('LOGIN_OK', 'admin', 'Login realizado');
+  return { ok: true, token: CONFIG.CHAVE_ADMIN };
+}
+
+/* ============================================================
+   ADMIN — PRODUTOS
+   ============================================================ */
+function adminGetProdutos(dados) {
+  verificarAdmin(dados);
+  var sheet   = getSheet(ABAS.PRODUTOS);
+  var linhas  = sheet.getDataRange().getValues();
+  var headers = linhas[0];
+  return linhas.slice(1).map(row => {
+    var p = {};
+    headers.forEach((h, i) => p[h] = row[i]);
+    p.tamanhos = p.tamanhos ? p.tamanhos.toString().split(',').map(t => t.trim()).filter(Boolean) : [];
+    p.imagens  = p.imagens  ? p.imagens.toString().split(',').map(i => i.trim()).filter(Boolean)  : [];
+    p.preco    = parseFloat(p.preco) || 0;
+    p.custo    = parseFloat(p.custo) || 0;
+    p.estoque  = parseInt(p.estoque) || 0;
+    return p;
+  });
+}
+
+function adminSalvarProduto(dados) {
+  verificarAdmin(dados);
+  var p     = dados.produto;
+  var sheet = getSheet(ABAS.PRODUTOS);
+  var linhas = sheet.getDataRange().getValues();
+  var headers = linhas[0];
+
+  var row = [
+    p.id, p.nome, p.descricao, p.preco, p.custo, p.tipo, p.categoria,
+    Array.isArray(p.tamanhos) ? p.tamanhos.join(',') : p.tamanhos,
+    Array.isArray(p.imagens)  ? p.imagens.join(',')  : p.imagens,
+    p.estoque, p.destaque, p.novo, p.encomenda,
+    p.prazo_encomenda, p.badge_extra, p.ativo,
+    p.criado_em || new Date().toLocaleString('pt-BR'),
+    p.agendamento || ''
+  ];
+
+  /* Atualiza se existir, senão adiciona */
+  var idxExist = linhas.findIndex((r, i) => i > 0 && parseInt(r[0]) === parseInt(p.id));
+  if (idxExist > 0) {
+    sheet.getRange(idxExist + 1, 1, 1, row.length).setValues([row]);
+  } else {
+    /* Novo produto — gera ID */
+    var maxId = Math.max(...linhas.slice(1).map(r => parseInt(r[0]) || 0), 0);
+    row[0] = maxId + 1;
+    sheet.appendRow(row);
+  }
+
+  return { ok: true, id: row[0] };
+}
+
+function adminDeletarProduto(dados) {
+  verificarAdmin(dados);
+  var sheet  = getSheet(ABAS.PRODUTOS);
+  var linhas = sheet.getDataRange().getValues();
+  var idx    = linhas.findIndex((r, i) => i > 0 && parseInt(r[0]) === parseInt(dados.id));
+  if (idx < 0) return { ok: false, erro: 'Produto não encontrado' };
+  /* Desativa em vez de deletar */
+  var colAtivo = linhas[0].indexOf('ativo') + 1;
+  sheet.getRange(idx + 1, colAtivo).setValue(false);
+  return { ok: true };
+}
+
+/* ============================================================
+   ADMIN — CUPONS
+   ============================================================ */
+function adminGetCupons(dados) {
+  verificarAdmin(dados);
+  var sheet   = getSheet(ABAS.CUPONS);
+  var linhas  = sheet.getDataRange().getValues();
+  var headers = linhas[0];
+  return linhas.slice(1).map(row => {
+    var c = {};
+    headers.forEach((h, i) => c[h] = row[i]);
+    c.valor   = parseFloat(c.valor) || 0;
+    c.limite  = parseInt(c.limite)  || 0;
+    c.usos    = parseInt(c.usos)    || 0;
+    c.minimo  = parseFloat(c.minimo) || 0;
+    c.produtos_ids = c.produtos_ids ? c.produtos_ids.toString().split(',').map(Number) : [];
+    return c;
+  });
+}
+
+function adminSalvarCupom(dados) {
+  verificarAdmin(dados);
+  var c     = dados.cupom;
+  var sheet = getSheet(ABAS.CUPONS);
+  var linhas = sheet.getDataRange().getValues();
+  var headers = linhas[0];
+
+  var row = [
+    c.codigo.toUpperCase(), c.tipo, c.valor,
+    Array.isArray(c.produtos_ids) ? c.produtos_ids.join(',') : c.produtos_ids,
+    c.minimo, c.limite, c.usos || 0,
+    c.ativo, c.descricao,
+    c.criado_em || new Date().toLocaleString('pt-BR')
+  ];
+
+  var idxExist = linhas.findIndex((r, i) => i > 0 && r[0].toString().toUpperCase() === c.codigo.toUpperCase());
+  if (idxExist > 0) {
+    sheet.getRange(idxExist + 1, 1, 1, row.length).setValues([row]);
+  } else {
+    sheet.appendRow(row);
+  }
+
+  return { ok: true };
+}
+
+/* ============================================================
+   ADMIN — PEDIDOS
+   ============================================================ */
+function adminGetPedidos(dados) {
+  verificarAdmin(dados);
+  var sheet   = getSheet(ABAS.PEDIDOS);
+  var linhas  = sheet.getDataRange().getValues();
+  var headers = linhas[0];
+
+  var pedidos = linhas.slice(1).map(row => {
+    var p = {};
+    headers.forEach((h, i) => p[h] = row[i]);
+    try { p.itens = JSON.parse(p.itens); } catch(e) { p.itens = []; }
+    p.subtotal = parseFloat(p.subtotal) || 0;
+    p.desconto = parseFloat(p.desconto) || 0;
+    p.total    = parseFloat(p.total)    || 0;
+    return p;
+  });
+
+  /* Filtros opcionais */
+  if (dados.status)    pedidos = pedidos.filter(p => p.status === dados.status);
+  if (dados.pagamento) pedidos = pedidos.filter(p => p.pagamento === dados.pagamento);
+  if (dados.pago !== undefined) pedidos = pedidos.filter(p => String(p.pago) === String(dados.pago));
+
+  /* Ordenação: mais recente primeiro */
+  pedidos.reverse();
+
+  return pedidos;
+}
+
+function adminAtualizarPedido(dados) {
+  verificarAdmin(dados);
+  var sheet   = getSheet(ABAS.PEDIDOS);
+  var linhas  = sheet.getDataRange().getValues();
+  var headers = linhas[0];
+
+  var idx = linhas.findIndex((r, i) => i > 0 && r[0].toString() === dados.numero.toString());
+  if (idx < 0) return { ok: false, erro: 'Pedido não encontrado' };
+
+  var pedido = linhas[idx];
+  if (dados.status) {
+    sheet.getRange(idx + 1, headers.indexOf('status') + 1).setValue(dados.status);
+    /* Envia e-mail ao cliente se tiver e-mail */
+    var emailCliente = pedido[headers.indexOf('email')];
+    if (emailCliente) {
+      enviarEmailStatusPedido(emailCliente, pedido[headers.indexOf('nome')], dados.numero, dados.status);
+    }
+  }
+  if (dados.pago !== undefined) {
+    sheet.getRange(idx + 1, headers.indexOf('pago') + 1).setValue(dados.pago);
+  }
+  if (dados.anotacao !== undefined) {
+    sheet.getRange(idx + 1, headers.indexOf('anotacao_interna') + 1).setValue(dados.anotacao);
+  }
+
+  return { ok: true };
+}
+
+function enviarEmailStatusPedido(emailCliente, nome, numero, status) {
+  var msgs = {
+    'confirmado':     'Seu pedido foi confirmado! Em breve estará pronto.',
+    'em_producao':    'Seu pedido está sendo preparado com carinho 🧡',
+    'pronto':         'Seu pedido esta pronto para retirada/entrega!',
+    'entregue':       'Pedido entregue! Obrigado por comprar no Nupieepro!',
+    'pago':           'Pagamento confirmado! Obrigado!'
+  };
+
+  var msg = msgs[status];
+  if (!msg) return;
+
+  try {
+    GmailApp.sendEmail(
+      emailCliente,
+      `Pedido #${numero} — ${status.replace('_',' ')} | ${CONFIG.NOME_LOJA}`,
+      msg,
+      {
+        htmlBody: `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto;padding:24px;background:#f8f9fc;border-radius:12px"><div style="background:#0f0732;padding:20px;text-align:center;border-radius:8px;margin-bottom:20px"><h2 style="color:#f85900;margin:0">${CONFIG.NOME_LOJA}</h2></div><p style="color:#333">Olá, <b>${nome}</b>!</p><p style="color:#666;font-size:1.1rem">${msg}</p><p style="color:#999;font-size:0.85rem;margin-top:16px">Pedido: <b>#${numero}</b></p></div>`,
+        name: CONFIG.NOME_LOJA
+      }
+    );
+  } catch(err) {
+    registrarLog('ERRO_EMAIL_STATUS', numero, err.toString());
+  }
+}
+
+/* ============================================================
+   ADMIN — CONFIGURAÇÕES
+   ============================================================ */
+function adminGetConfig(dados) {
+  verificarAdmin(dados);
+  var sheet = getSheet(ABAS.CONFIG);
+  var linhas = sheet.getDataRange().getValues();
+  var config = {};
+  linhas.slice(1).forEach(row => { if(row[0]) config[row[0]] = row[1]; });
+  return config;
+}
+
+function adminSalvarConfig(dados) {
+  verificarAdmin(dados);
+  var sheet  = getSheet(ABAS.CONFIG);
+  var linhas = sheet.getDataRange().getValues();
+
+  Object.entries(dados.config).forEach(([chave, valor]) => {
+    var idx = linhas.findIndex((r, i) => i > 0 && r[0] === chave);
+    if (idx > 0) {
+      sheet.getRange(idx + 1, 2).setValue(valor);
+    } else {
+      sheet.appendRow([chave, valor]);
+      linhas.push([chave, valor]);
+    }
+  });
+
+  return { ok: true };
+}
+
+/* ============================================================
+   ADMIN — DASHBOARD
+   ============================================================ */
+function adminDashboard(dados) {
+  verificarAdmin(dados);
+
+  var sheetPed = getSheet(ABAS.PEDIDOS);
+  var linhasPed = sheetPed.getDataRange().getValues();
+  var headersPed = linhasPed[0];
+
+  var pedidos = linhasPed.slice(1);
+  /* Exclui cancelados do faturamento */
+  var totalFaturado  = pedidos
+    .filter(r => r[headersPed.indexOf('status')] !== 'cancelado')
+    .reduce((acc, r) => acc + (parseFloat(r[headersPed.indexOf('total')]) || 0), 0);
+  var totalPedidos   = pedidos.length;
+  var pedidosHoje    = pedidos.filter(r => {
+    var d = r[headersPed.indexOf('data')].toString();
+    return d.startsWith(new Date().toLocaleDateString('pt-BR'));
+  }).length;
+
+  /* Produto mais vendido — excluir cancelados */
+  var contagem = {};
+  pedidos.filter(r => r[headersPed.indexOf('status')] !== 'cancelado').forEach(r => {
+    try {
+      var itens = JSON.parse(r[headersPed.indexOf('itens')]);
+      itens.forEach(i => { contagem[i.nome] = (contagem[i.nome] || 0) + i.qtd; });
+    } catch(e) {}
+  });
+  var maisVendido = Object.entries(contagem).sort((a,b) => b[1]-a[1])[0] || ['—', 0];
+
+  /* Ticket médio */
+  /* Ticket médio só conta pedidos não cancelados */
+  var totalAtivos = pedidos.filter(r => r[headersPed.indexOf('status')] !== 'cancelado').length;
+  var ticketMedio = totalAtivos > 0 ? totalFaturado / totalAtivos : 0;
+
+  /* Forma de pagamento */
+  var pgtos = {};
+  pedidos.forEach(r => {
+    var pg = r[headersPed.indexOf('pagamento')] || 'PIX';
+    pgtos[pg] = (pgtos[pg] || 0) + 1;
+  });
+
+  /* Cupons */
+  var sheetCup = getSheet(ABAS.CUPONS);
+  var linhasCup = sheetCup.getDataRange().getValues();
+  var headersCup = linhasCup[0];
+  var totalDescontoCupons = pedidos.reduce((acc, r) => acc + (parseFloat(r[headersPed.indexOf('desconto')]) || 0), 0);
+
+  return {
+    total_faturado:    totalFaturado,
+    total_pedidos:     totalAtivos,
+    total_cancelados:  pedidos.filter(r => r[headersPed.indexOf('status')] === 'cancelado').length,
+    pedidos_hoje:      pedidosHoje,
+    ticket_medio:      ticketMedio,
+    mais_vendido:      { nome: maisVendido[0], qtd: maisVendido[1] },
+    pagamentos:        pgtos,
+    desconto_cupons:   totalDescontoCupons,
+  };
+}
+
+/* ============================================================
+   ADMIN — EXPORTAR CSV
+   ============================================================ */
+function adminExportarCSV(dados) {
+  verificarAdmin(dados);
+  var sheet  = getSheet(ABAS.PEDIDOS);
+  var linhas = sheet.getDataRange().getValues();
+
+  var csv = linhas.map(row =>
+    row.map(cell => `"${cell.toString().replace(/"/g,'""')}"`).join(',')
+  ).join('\n');
+
+  /* Tenta salvar no Drive e retornar URL */
+  try {
+    var nome    = 'pedidos_nupieepro_' + new Date().toISOString().slice(0,10) + '.csv';
+    var arquivo = DriveApp.createFile(nome, csv, MimeType.CSV);
+    arquivo.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    return { ok: true, url: arquivo.getDownloadUrl(), csv: csv };
+  } catch(err) {
+    /* Fallback: retorna CSV direto no JSON */
+    return { ok: true, csv: csv };
+  }
+}

@@ -718,7 +718,12 @@ async function carregarAPI(){
                 /* GS agora retorna { tem_cupom_ativo, descricao, cupons: [...] } */
                 if(Array.isArray(d.cupons) && d.cupons.length > 0){
                     cupons = {};
-                    d.cupons.forEach(c => { if(c.codigo) cupons[c.codigo.toUpperCase()] = c; });
+                    d.cupons.forEach(c => { 
+                        if(c.codigo) {
+                            c.produtos_ids = c.produtos_restringidos ? c.produtos_restringidos.split(',').map(id => parseInt(id.trim())) : [];
+                            cupons[c.codigo.toUpperCase()] = c; 
+                        }
+                    });
                 }
                 if(d.tem_cupom_ativo){
                     document.getElementById('card-cupom').style.display='block';
@@ -914,8 +919,13 @@ function validarCupom(){
     if(!cup||!cup.ativo){toast('❌ Cupom inválido!',1);return;}
     if(cup.usos>=cup.limite){toast('❌ Cupom esgotado!',1);return;}
     if(calcSub()<cup.minimo){toast('❌ Pedido mínimo de R$'+cup.minimo.toFixed(2)+'!',1);return;}
-    const elig=carrinho.filter(i=>cup.produtos_ids.includes(i.id));
-    if(!elig.length){const ns=produtos.filter(p=>cup.produtos_ids.includes(p.id)).map(p=>p.nome.split('—')[0].trim()).join(', ');toast('⚠️ Cupom válido para: '+ns,1);return;}
+    const isRestrito = cup.produtos_ids && cup.produtos_ids.length > 0;
+    const elig = isRestrito ? carrinho.filter(i=>cup.produtos_ids.includes(i.id)) : carrinho;
+    if(isRestrito && !elig.length){
+        const ns=produtos.filter(p=>cup.produtos_ids.includes(p.id)).map(p=>p.nome.split('—')[0].trim()).join(', ');
+        toast('⚠️ Cupom válido para: '+ns,1);
+        return;
+    }
     cupomApl={cod,...cup};
     document.getElementById('campo-cupom').value='';
     document.getElementById('cupom-ok-texto').textContent=cod+' — '+cup.valor+'% aplicado';
@@ -925,7 +935,7 @@ function validarCupom(){
 function removerCupom(){cupomApl=null;document.getElementById('cupom-ok').classList.remove('ativo');atualizarResumo();toast('Cupom removido');}
 
 function calcSub(){return carrinho.reduce((a,i)=>a+i.preco*i.qtd,0);}
-function calcDesc(){if(!cupomApl)return 0;if(cupomApl.tipo==='percentual')return carrinho.filter(i=>cupomApl.produtos_ids.includes(i.id)).reduce((a,i)=>a+i.preco*i.qtd*cupomApl.valor/100,0);return Math.min(cupomApl.valor,calcSub());}
+function calcDesc(){if(!cupomApl)return 0;const isRestrito = cupomApl.produtos_ids && cupomApl.produtos_ids.length > 0;const itensDesc = isRestrito ? carrinho.filter(i=>cupomApl.produtos_ids.includes(i.id)) : carrinho;if(cupomApl.tipo==='percentual')return itensDesc.reduce((a,i)=>a+i.preco*i.qtd*cupomApl.valor/100,0);return Math.min(cupomApl.valor,itensDesc.reduce((a,i)=>a+i.preco*i.qtd,0));}
 function calcTotal(){return Math.max(0,calcSub()-calcDesc());}
 function atualizarResumo(){
     const s=calcSub(),d=calcDesc(),t=calcTotal();
