@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --roxo:   #0f0732;
@@ -839,8 +840,11 @@ function instalarPWA(){
 /* ============================================================
    CONFIGURAÇÃO
    ============================================================ */
-const API_URL    = 'https://script.google.com/macros/s/AKfycbw4Qk03yzsQEXE0qXstLuZlY0lx12aqrrXkdUwkeHykDD4KhVx8Ti4S4fNbLnYtg6uTwA/exec';
-const LOJA_URL   = 'https://nupieepro.github.io/Lojinha-Nupieepro/';
+/* ── Supabase ── Preencha com os valores do seu projeto (Settings → API) */
+const SUPABASE_URL      = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const _sb      = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const LOJA_URL = 'https://nupieepro.github.io/Lojinha-Nupieepro/';
 
 let chaveAdmin   = '';
 let produtosCache = [];
@@ -863,13 +867,10 @@ async function fazerLogin(){
     erroEl.style.display = 'none';
 
     try {
-        const res = await Promise.race([
-            fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'admin_login', chave:senha }) }),
-            new Promise((_,r) => setTimeout(()=>r(new Error('timeout')), 8000))
-        ]);
-        const data = await res.json();
+        const { data, error } = await _sb.rpc('admin_login', { chave: senha });
+        if(error) throw new Error(error.message);
 
-        if(data.ok){
+        if(data === true){
             chaveAdmin = senha;
             localStorage.setItem('nupi_admin_key', btoa(senha));
             document.getElementById('tela-login').style.display = 'none';
@@ -926,10 +927,9 @@ window.addEventListener('load', () => {
         iniciarAdmin();
 
         /* Valida em background para garantir que a chave ainda é válida */
-        fetch(API_URL, { method:'POST', body: JSON.stringify({ action:'admin_login', chave:k }) })
-            .then(res => res.json())
-            .then(data => {
-                if(!data.ok){
+        _sb.rpc('admin_login', { chave: k })
+            .then(({ data }) => {
+                if(data !== true){
                     sair();
                     toast('Sessão expirada. Entre novamente.', true);
                 }
@@ -945,9 +945,18 @@ function iniciarAdmin(){
     carregarDashboard();
     carregarConfig();
     /* Inicializa contador sem notificar o que já existe */
-    api({ action: 'admin_get_pedidos', status: 'novo' }).then(d => { qtdPedidosAnterior = d.length; });
-    /* Polling de novos pedidos a cada 60s */
-    setInterval(verificarNovoPedido, 60000);
+    api({ action: 'admin_get_pedidos', status: 'novo' }).then(d => { qtdPedidosAnterior = Array.isArray(d) ? d.length : 0; });
+    /* Realtime: notificação instantânea de novos pedidos (sem polling) */
+    _sb.channel('admin-pedidos')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'pedidos' }, (payload) => {
+            const p = payload.new;
+            qtdPedidosAnterior++;
+            document.getElementById('notif-msg').textContent = `#${p.numero} — ${p.nome}`;
+            document.getElementById('notif-pedido').classList.add('ativo');
+            try { new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=').play(); } catch(e){}
+            setTimeout(() => fecharNotif(), 8000);
+        })
+        .subscribe();
 }
 
 /* ============================================================
@@ -955,23 +964,16 @@ function iniciarAdmin(){
    ============================================================ */
 async function api(dados){
     if(!chaveAdmin){ throw new Error('Não autenticado'); }
-    const res = await fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify({ ...dados, chave: chaveAdmin })
-    });
-    const data = await res.json();
-    /* Se a API retornar erro de acesso negado, faz logout */
-    if(data.erro && data.erro.includes('Acesso negado')){
-        sair();
-        throw new Error('Sessão expirada');
+    const { action, ...params } = dados;
+    const { data, error } = await _sb.rpc(action, { ...params, chave: chaveAdmin });
+    if(error){
+        if(error.message && error.message.includes('Acesso negado')){ sair(); throw new Error('Sessão expirada'); }
+        throw new Error(error.message || 'Erro na API');
     }
     return data;
 }
 
-async function apiGet(action){
-    const res = await fetch(`${API_URL}?action=${action}`);
-    return await res.json();
-}
+async function apiGet(action){ return api({ action }); }
 
 /* ============================================================
    ABAS
