@@ -1,0 +1,31 @@
+# Arquivos de log e dados sensíveis
+logs lojinha.txt
+gs da lojinha.txt
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+.DS_Store
+
+# Dados do Supabase (não subir chaves de API)
+.env
+.env.local
+.env.production
+
+# Arquivos do Excel (já temos os dados no SQL)
+*.xlsx
+*.xls
+
+# PDFs de pedidos
+*.pdf
+
+# Arquivos de backup
+*.bak
+*.backup
+
+# Node modules (se houver)
+node_modules/
+
+# Arquivos de configuração local
+.vscode/settings.json
