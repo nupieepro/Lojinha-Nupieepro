@@ -76,10 +76,21 @@ CREATE TABLE IF NOT EXISTS public.pedidos (
 -- 2. HABILITAR REALTIME (mudanças propagadas instantaneamente)
 -- ============================================================
 
-ALTER PUBLICATION supabase_realtime ADD TABLE public.produtos;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.cupons;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.config;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.pedidos;
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'produtos') THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.produtos;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'cupons') THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.cupons;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'config') THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.config;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'pedidos') THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.pedidos;
+    END IF;
+END $$;
 
 -- ============================================================
 -- 3. ROW LEVEL SECURITY
@@ -90,21 +101,25 @@ ALTER TABLE public.cupons   ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.config   ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.pedidos  ENABLE ROW LEVEL SECURITY;
 
--- Loja pública: qualquer visitante pode ler produtos ativos
-CREATE POLICY "produtos_publico_select" ON public.produtos
-    FOR SELECT TO anon USING (ativo = TRUE);
-
--- Loja pública: qualquer visitante pode ler cupons ativos
-CREATE POLICY "cupons_publico_select" ON public.cupons
-    FOR SELECT TO anon USING (ativo = TRUE);
-
--- Loja pública: qualquer visitante pode ler configurações
-CREATE POLICY "config_publico_select" ON public.config
-    FOR SELECT TO anon USING (chave != 'admin_senha');
-
--- Loja pública: qualquer visitante pode registrar pedido
-CREATE POLICY "pedidos_publico_insert" ON public.pedidos
-    FOR INSERT TO anon WITH CHECK (TRUE);
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'produtos' AND policyname = 'produtos_publico_select') THEN
+        CREATE POLICY "produtos_publico_select" ON public.produtos
+            FOR SELECT TO anon USING (ativo = TRUE);
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'cupons' AND policyname = 'cupons_publico_select') THEN
+        CREATE POLICY "cupons_publico_select" ON public.cupons
+            FOR SELECT TO anon USING (ativo = TRUE);
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'config' AND policyname = 'config_publico_select') THEN
+        CREATE POLICY "config_publico_select" ON public.config
+            FOR SELECT TO anon USING (chave != 'admin_senha');
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'pedidos' AND policyname = 'pedidos_publico_insert') THEN
+        CREATE POLICY "pedidos_publico_insert" ON public.pedidos
+            FOR INSERT TO anon WITH CHECK (TRUE);
+    END IF;
+END $$;
 
 -- ============================================================
 -- 4. HELPER: VALIDAÇÃO DA SENHA DO ADMIN
