@@ -32,6 +32,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
     /* Fallback Font Awesome se CDN falhar */
     document.addEventListener('DOMContentLoaded',function(){
@@ -524,7 +525,10 @@
 </div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const API_URL='https://script.google.com/macros/s/AKfycbw4Qk03yzsQEXE0qXstLuZlY0lx12aqrrXkdUwkeHykDD4KhVx8Ti4S4fNbLnYtg6uTwA/exec';
+/* ── Supabase ── Preencha com os valores do seu projeto (Settings → API) */
+const SUPABASE_URL      = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let _w=atob('NTU4Njk5OTk3NjIyNg==');
 let _pixKey='financeiro.nupieepro@gmail.com';
 let _pixName='NUPIEEPRO';
@@ -589,6 +593,12 @@ window.addEventListener('load',()=>{
     }
     carregarUser();carregarCarrinho();renderVitrine();
     carregarAPI();
+    /* Realtime: qualquer alteração do admin reflete instantaneamente na loja */
+    _sb.channel('store-live')
+        .on('postgres_changes',{event:'*',schema:'public',table:'produtos'},carregarAPI)
+        .on('postgres_changes',{event:'*',schema:'public',table:'cupons'},carregarAPI)
+        .on('postgres_changes',{event:'*',schema:'public',table:'config'},carregarAPI)
+        .subscribe();
     const pid=new URLSearchParams(location.search).get('id');
     if(pid&&produtos.find(p=>p.id==pid)) setTimeout(()=>abrirDetalhes(parseInt(pid)),1000);
     setTimeout(()=>{const s=document.getElementById('splash-screen');s.classList.add('hidden');setTimeout(()=>s.style.display='none',400);},900);
@@ -636,12 +646,23 @@ function normalizarProduto(p){
 }
 
 async function buscarAPI(action){
-    /* Apps Script não suporta headers customizados — fetch simples */
-    const url = API_URL+'?action='+action+'&t='+Date.now();
-    const T   = ms => new Promise((_,r)=>setTimeout(r,ms));
-    const res = await Promise.race([fetch(url),T(5000)]);
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    return res.json();
+    if(action==='config'){
+        const {data,error}=await _sb.from('config').select('chave,valor');
+        if(error) throw new Error(error.message);
+        return Object.fromEntries((data||[]).map(r=>[r.chave,r.valor]));
+    }
+    if(action==='produtos'){
+        const {data,error}=await _sb.from('produtos').select('*').eq('ativo',true);
+        if(error) throw new Error(error.message);
+        return data||[];
+    }
+    if(action==='cupons'){
+        const {data,error}=await _sb.from('cupons').select('*').eq('ativo',true);
+        if(error) throw new Error(error.message);
+        if(!data||!data.length) return {tem_cupom_ativo:false,cupons:[]};
+        return {tem_cupom_ativo:true,descricao:data[0]?.descricao||'',cupons:data};
+    }
+    return null;
 }
 
 async function carregarAPI(){
@@ -1081,7 +1102,7 @@ function enviarPedidoZap(){
     setTimeout(()=>document.body.removeChild(zapLink), 1000);
 
     /* Registra na API e finaliza UI */
-    fetch(API_URL,{method:'POST',body:JSON.stringify({action:'registrar_pedido',numero:num,nome,whatsapp:zap,email,entrega,endereco:end,pagamento:pgto,observacao:obs,itens:itensParaEnvio,subtotal:sb,desconto:dc,cupom:cupomApl?cupomApl.cod:'',total:tt})}).catch(()=>{});
+    _sb.from('pedidos').insert({numero:num,nome,whatsapp:zap,email,entrega,endereco:end,pagamento:pgto,observacao:obs,itens:itensParaEnvio,subtotal:sb,desconto:dc,cupom:cupomApl?cupomApl.cod:'',total:tt}).then(()=>{}).catch(()=>{});
 
     carrinho=[];cupomApl=null;window._comprovante=null;salvarCarrinho();atualizarBarra();
     
