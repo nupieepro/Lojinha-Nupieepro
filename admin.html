@@ -790,14 +790,7 @@
 /* ============================================================
    PWA — registra service worker do admin
    ============================================================ */
-if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('./admin-sw.js')
-        .then(reg => { setInterval(()=>reg.update(), 5*60*1000); })
-        .catch(()=>{});
-    navigator.serviceWorker.addEventListener('controllerchange', ()=>{
-        if(!window._swReloading){ window._swReloading=true; window.location.reload(); }
-    });
-}
+/* Admin não usa service worker — arquivo admin-sw.js foi removido */
 
 /* iOS Safari — dica de instalação */
 (function(){

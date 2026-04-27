@@ -565,9 +565,10 @@ window.addEventListener('load',()=>{
                 setInterval(()=>reg.update(), 5*60*1000);
             })
             .catch(()=>{});
-        /* Recarrega quando SW atualizar */
+        /* Recarrega quando SW atualizar — sessionStorage persiste no reload, evita loop infinito */
         navigator.serviceWorker.addEventListener('controllerchange',()=>{
-            if(!window._swReloading){ window._swReloading=true; window.location.reload(); }
+            if(!sessionStorage.getItem('_swReloading')){ sessionStorage.setItem('_swReloading','1'); window.location.reload(); }
+            else { sessionStorage.removeItem('_swReloading'); }
         });
     }
 

@@ -14,7 +14,7 @@ self.addEventListener('install', e => {
     e.waitUntil(
         caches.open(CACHE).then(c => c.addAll(CACHEAR)).catch(() => {})
     );
-    self.skipWaiting();
+    /* Não força ativação imediata — evita loop de reload causado por controllerchange */
 });
 
 self.addEventListener('activate', e => {
