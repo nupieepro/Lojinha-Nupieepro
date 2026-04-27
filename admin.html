@@ -1438,7 +1438,7 @@ async function abrirModalCupom(codigo){
     /* Checkboxes de produtos */
     const container = document.getElementById('cup-produtos-check');
     const prods     = produtosCache.length ? produtosCache : await api({ action: 'admin_get_produtos' });
-    const selecionados = c && c.produtos_ids ? c.produtos_ids.map(Number) : [];
+    const selecionados = c && c.produtos_restringidos ? c.produtos_restringidos.split(',').map(id => parseInt(id.trim())) : [];
     container.innerHTML = prods.map(p => `
         <label style="display:flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:600;cursor:pointer;background:#f8f9fc;padding:6px 10px;border-radius:8px">
             <input type="checkbox" value="${p.id}" ${selecionados.includes(parseInt(p.id))?'checked':''}> ${p.nome}
@@ -1461,7 +1461,7 @@ async function salvarCupom(){
         minimo:      parseFloat(document.getElementById('cup-minimo').value) || 0,
         limite:      parseInt(document.getElementById('cup-limite').value)   || 500,
         usos:        parseInt(document.getElementById('cup-usos').value)     || 0,
-        produtos_ids: prods_ids,
+        produtos_restringidos: prods_ids.length ? prods_ids.join(',') : '',
         descricao:   document.getElementById('cup-descricao').value.trim(),
         ativo:       document.getElementById('cup-ativo').checked,
     };
