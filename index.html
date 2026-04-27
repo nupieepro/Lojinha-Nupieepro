@@ -526,8 +526,8 @@
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ── Supabase ── Preencha com os valores do seu projeto (Settings → API) */
-const SUPABASE_URL      = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL      = 'https://scacjsosvlllapbgetos.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_JgsW4RbPk2HwYgkvVnaEug_NE79JOxX';
 const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let _w=atob('NTU4Njk5OTk3NjIyNg==');
 let _pixKey='financeiro.nupieepro@gmail.com';
@@ -591,13 +591,21 @@ window.addEventListener('load',()=>{
             document.body.appendChild(d);
         }, 3000);
     }
-    carregarUser();carregarCarrinho();renderVitrine();
+    carregarUser();carregarCarrinho();
+    /* Exibe cache do localStorage imediatamente enquanto a API carrega */
+    try {
+        const _c=JSON.parse(localStorage.getItem('nupieepro_cache_produtos')||'null');
+        if(_c&&Array.isArray(_c.d)&&_c.d.length){produtos.length=0;produtos.push(..._c.d);}
+    } catch(e){}
+    renderVitrine();
     carregarAPI();
     /* Realtime: qualquer alteração do admin reflete instantaneamente na loja */
+    let _apiDebounce;
+    function agendarCarregarAPI(){ clearTimeout(_apiDebounce); _apiDebounce=setTimeout(carregarAPI,150); }
     _sb.channel('store-live')
-        .on('postgres_changes',{event:'*',schema:'public',table:'produtos'},carregarAPI)
-        .on('postgres_changes',{event:'*',schema:'public',table:'cupons'},carregarAPI)
-        .on('postgres_changes',{event:'*',schema:'public',table:'config'},carregarAPI)
+        .on('postgres_changes',{event:'*',schema:'public',table:'produtos'},agendarCarregarAPI)
+        .on('postgres_changes',{event:'*',schema:'public',table:'cupons'},agendarCarregarAPI)
+        .on('postgres_changes',{event:'*',schema:'public',table:'config'},agendarCarregarAPI)
         .subscribe();
     const pid=new URLSearchParams(location.search).get('id');
     if(pid&&produtos.find(p=>p.id==pid)) setTimeout(()=>abrirDetalhes(parseInt(pid)),1000);

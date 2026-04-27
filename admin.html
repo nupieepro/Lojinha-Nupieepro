@@ -841,8 +841,8 @@ function instalarPWA(){
    CONFIGURAÇÃO
    ============================================================ */
 /* ── Supabase ── Preencha com os valores do seu projeto (Settings → API) */
-const SUPABASE_URL      = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL      = 'https://scacjsosvlllapbgetos.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_JgsW4RbPk2HwYgkvVnaEug_NE79JOxX';
 const _sb      = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const LOJA_URL = 'https://nupieepro.github.io/Lojinha-Nupieepro/';
 
@@ -1353,7 +1353,7 @@ async function salvarProduto(publicar){
             toast(publicar ? '🚀 Produto publicado!' : '💾 Rascunho salvo!');
             fecharModalDireto('modal-produto');
             carregarProdutos();
-            /* Invalida cache da loja (B17) */
+            /* Garante que a loja receba o evento mesmo quando ativo muda para false (RLS filtra o evento direto) */
             api({ action: 'admin_salvar_config', config: { _last_update: Date.now().toString() } });
         } else { toast('Erro ao salvar', true); }
         btn.disabled = false;
@@ -1369,6 +1369,8 @@ async function toggleAtivoProduto(id, ativar){
         await api({ action: 'admin_salvar_produto', produto: p });
         toast(ativar ? '✅ Produto ativado!' : 'Produto desativado');
         carregarProdutos();
+        /* Garante propagação para a loja quando produto é desativado (RLS bloqueia evento direto) */
+        api({ action: 'admin_salvar_config', config: { _last_update: Date.now().toString() } });
     } catch(e){ toast('Erro', true); }
 }
 
@@ -1543,14 +1545,14 @@ async function carregarConfig(){
 
 let _cfgDebounce;
 async function salvarConfigToggle(chave, valor){
-    /* Debounce de 1s para evitar spam na API (B12) */
+    /* Debounce de 300ms para evitar spam na API */
     clearTimeout(_cfgDebounce);
     _cfgDebounce = setTimeout(async () => {
         try {
             await api({ action: 'admin_salvar_config', config: { [chave]: valor.toString() } });
             toast('✅ Atualizado');
         } catch(e){ toast('Erro ao salvar', true); }
-    }, 1000);
+    }, 300);
 }
 
 async function salvarConfig(publicar){
