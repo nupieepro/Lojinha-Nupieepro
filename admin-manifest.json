@@ -1,0 +1,30 @@
+{
+  "name": "Nupieepro Admin",
+  "short_name": "Nupi Admin",
+  "description": "Painel administrativo da Lojinha Nupieepro",
+  "start_url": "/Lojinha-Nupieepro/admin.html",
+  "scope": "/Lojinha-Nupieepro/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f0732",
+  "orientation": "portrait-primary",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "./admin_icon_bgFFFFFF.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./admin_icon_bgFFFFFF.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Ver Pedidos",
+      "short_name": "Pedidos",
+      "url": "/Lojinha-Nupieepro/admin.html#pedidos",
+      "icons": [{ "src": "./admin_icon_bgFFFFFF.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "url": "/Lojinha-Nupieepro/admin.html#dashboard",
+      "icons": [{ "src": "./admin_icon_bgFFFFFF.png", "sizes": "96x96", "type": "image/png" }]
+    }
+  ]
+}
