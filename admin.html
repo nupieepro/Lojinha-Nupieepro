@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.__sbScriptFailed=true"></script>
     <style>
         :root {
             --roxo:   #0f0732;
@@ -529,6 +529,98 @@
             </div>
         </div>
 
+        <!-- Categorias / Filtros da vitrine -->
+        <div class="form-section">
+            <div class="form-titulo"><i class="fa-solid fa-filter"></i> Categorias / Filtros da Vitrine</div>
+            <div class="form-hint" style="margin-bottom:12px">Essas categorias aparecem como botões de filtro na loja e na lista de categorias ao cadastrar um produto.</div>
+            <div id="categorias-lista"></div>
+            <div class="form-row cols-3" style="margin-top:10px;align-items:end">
+                <div>
+                    <label class="form-label">Emoji</label>
+                    <input type="text" id="cat-novo-emoji" class="form-input" placeholder="🎒" maxlength="4">
+                </div>
+                <div>
+                    <label class="form-label">Nome da categoria</label>
+                    <input type="text" id="cat-novo-nome" class="form-input" placeholder="Ex: Canecas" maxlength="30">
+                </div>
+                <button type="button" class="btn btn-laranja" onclick="adicionarCategoria()"><i class="fa-solid fa-plus"></i> Adicionar</button>
+            </div>
+        </div>
+
+        <!-- Vitrine Temática -->
+        <div class="form-section">
+            <div class="form-titulo"><i class="fa-solid fa-palette"></i> Vitrine Temática</div>
+            <div class="form-hint" style="margin-bottom:12px">Personalize as cores da loja e destaque uma campanha ou coleção especial na vitrine.</div>
+            <div class="form-row cols-2">
+                <div>
+                    <label class="form-label">Tema de cores</label>
+                    <select id="cfg-tema-preset" class="form-select" onchange="aoMudarTemaPreset()">
+                        <option value="padrao">🟣 Padrão (roxo/laranja)</option>
+                        <option value="natal">🎄 Natal</option>
+                        <option value="calourada">🎓 Calourada</option>
+                        <option value="verao">☀️ Verão</option>
+                        <option value="volta_aulas">📚 Volta às Aulas</option>
+                        <option value="custom">🎨 Personalizado</option>
+                    </select>
+                </div>
+                <div id="cfg-tema-cores-custom" style="display:none">
+                    <label class="form-label">Cores personalizadas</label>
+                    <div style="display:flex;gap:8px">
+                        <input type="color" id="cfg-tema-cor1" class="form-input" style="padding:4px;height:44px" value="#0f0732" onchange="salvarConfigToggle('tema_cor1', this.value)">
+                        <input type="color" id="cfg-tema-cor2" class="form-input" style="padding:4px;height:44px" value="#f85900" onchange="salvarConfigToggle('tema_cor2', this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="toggle-row" style="margin-top:8px">
+                <div class="toggle-info">
+                    <div class="toggle-label">Banner de campanha em destaque</div>
+                    <div class="toggle-desc">Aparece no topo da vitrine, acima dos filtros</div>
+                </div>
+                <label class="toggle">
+                    <input type="checkbox" id="toggle-hero" onchange="salvarConfigToggle('hero_ativo', this.checked)">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="form-row cols-2" style="margin-top:8px">
+                <div>
+                    <label class="form-label">Título do banner</label>
+                    <input type="text" id="cfg-hero-titulo" class="form-input" placeholder="Ex: Edição Calourada 2026" maxlength="60">
+                </div>
+                <div>
+                    <label class="form-label">Subtítulo</label>
+                    <input type="text" id="cfg-hero-subtitulo" class="form-input" placeholder="Ex: Produtos exclusivos por tempo limitado" maxlength="100">
+                </div>
+            </div>
+            <div class="form-row cols-2">
+                <div>
+                    <label class="form-label">Imagem de fundo (opcional)</label>
+                    <input type="url" id="cfg-hero-img" class="form-input" placeholder="https://...">
+                </div>
+                <div>
+                    <label class="form-label">Link ao clicar (opcional)</label>
+                    <input type="url" id="cfg-hero-link" class="form-input" placeholder="https://...">
+                </div>
+            </div>
+
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid #f0f0f0">
+                <div class="form-titulo" style="font-size:0.9rem;margin-bottom:10px"><i class="fa-solid fa-tags"></i> Coleções temáticas</div>
+                <div class="form-hint" style="margin-bottom:10px">Agrupe produtos numa coleção (ex: "Kit Calouro") para exibi-los juntos, com destaque, na vitrine.</div>
+                <div id="colecoes-lista"></div>
+                <div class="form-row cols-3" style="margin-top:10px;align-items:end">
+                    <div>
+                        <label class="form-label">Emoji</label>
+                        <input type="text" id="col-novo-emoji" class="form-input" placeholder="🎓" maxlength="4">
+                    </div>
+                    <div>
+                        <label class="form-label">Nome da coleção</label>
+                        <input type="text" id="col-novo-nome" class="form-input" placeholder="Ex: Kit Calouro" maxlength="30">
+                    </div>
+                    <button type="button" class="btn btn-outline" onclick="adicionarColecao()"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Aviso topo -->
         <div class="form-section">
             <div class="form-titulo"><i class="fa-solid fa-bullhorn"></i> Aviso Fixo no Topo</div>
@@ -609,11 +701,16 @@
             </div>
             <div>
                 <label class="form-label">Categoria *</label>
-                <select id="prod-categoria" class="form-select">
-                    <option value="camisa">Camisa</option>
-                    <option value="acessorio">Acessório</option>
-                    <option value="combo">Combo</option>
+                <select id="prod-categoria" class="form-select"></select>
+            </div>
+        </div>
+        <div class="form-row cols-2">
+            <div>
+                <label class="form-label">Coleção temática (opcional)</label>
+                <select id="prod-colecao" class="form-select">
+                    <option value="">Nenhuma</option>
                 </select>
+                <div class="form-hint">Agrupa o produto numa seção especial na vitrine</div>
             </div>
         </div>
         <div class="form-row cols-3">
@@ -852,7 +949,11 @@ function instalarPWA(){
 /* ── Supabase ── Preencha com os valores do seu projeto (Settings → API) */
 const SUPABASE_URL      = 'https://scacjsosvlllapbgetos.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_JgsW4RbPk2HwYgkvVnaEug_NE79JOxX';
-const _sb      = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let _sb = null;
+try{
+    if(typeof supabase === 'undefined') throw new Error('Supabase indisponível');
+    _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}catch(e){ mostrarErroConexaoAdmin(); }
 const LOJA_URL = 'https://nupieepro.github.io/Lojinha-Nupieepro/';
 
 let chaveAdmin   = '';
@@ -860,6 +961,32 @@ let produtosCache = [];
 let pedidosCache  = [];
 let configCache   = {};
 let qtdPedidosAnterior = 0;
+
+/* ============================================================
+   ERRO DE CONEXÃO — evita ficar "travado" quando o script do
+   Supabase não carrega ou quando a API cai por instabilidade de rede
+   ============================================================ */
+window.__erroConexaoAtivo = false;
+function mostrarErroConexaoAdmin(){
+    if(window.__erroConexaoAtivo) return;
+    window.__erroConexaoAtivo = true;
+    const erroEl = document.getElementById('login-erro');
+    if(erroEl){
+        erroEl.textContent = 'Sem conexão com o servidor. Verifique sua internet.';
+        erroEl.style.display = 'block';
+    }
+    const banner = document.createElement('div');
+    banner.id = 'banner-erro-conexao';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#e74c3c;color:#fff;text-align:center;padding:10px 16px;font-size:0.82rem;font-weight:700;z-index:99999;cursor:pointer';
+    banner.innerHTML = '📡 Sem conexão com o servidor — toque para tentar novamente';
+    banner.onclick = () => location.reload();
+    document.body.appendChild(banner);
+}
+setTimeout(function(){
+    if(window.__sbScriptFailed || typeof supabase === 'undefined') mostrarErroConexaoAdmin();
+}, 4500);
+window.addEventListener('online', () => { if(_sb){ toast('🌐 Conexão restabelecida!'); } });
+window.addEventListener('offline', () => { toast('📡 Sem conexão com a internet.', true); });
 
 /* ============================================================
    LOGIN
@@ -935,16 +1062,20 @@ window.addEventListener('load', () => {
         document.getElementById('app').style.display        = 'block';
         iniciarAdmin();
 
-        /* Valida em background para garantir que a chave ainda é válida */
-        _sb.rpc('admin_login', { chave: k })
-            .then(({ data }) => {
-                if(data !== true){
-                    sair();
-                    toast('Sessão expirada. Entre novamente.', true);
-                }
-            })
-            .catch(() => { /* Se offline, mantém o que tem */ });
-    } catch(e) { localStorage.removeItem('nupi_admin_key'); }
+        /* Valida em background para garantir que a chave ainda é válida.
+           Se o servidor estiver inacessível (instabilidade de rede), NÃO desloga —
+           mantém a sessão otimista e só invalida se a API responder explicitamente que é inválida. */
+        if(_sb){
+            _sb.rpc('admin_login', { chave: k })
+                .then(({ data, error }) => {
+                    if(!error && data !== true){
+                        sair();
+                        toast('Sessão expirada. Entre novamente.', true);
+                    }
+                })
+                .catch(() => { /* Se offline, mantém o que tem */ });
+        }
+    } catch(e) { localStorage.removeItem('nupi_admin_key'); /* Chave corrompida no localStorage */ }
 });
 
 /* ============================================================
@@ -954,29 +1085,42 @@ function iniciarAdmin(){
     carregarDashboard();
     carregarConfig();
     /* Inicializa contador sem notificar o que já existe */
-    api({ action: 'admin_get_pedidos', status: 'novo' }).then(d => { qtdPedidosAnterior = Array.isArray(d) ? d.length : 0; });
+    api({ action: 'admin_get_pedidos', status: 'novo' }).then(d => { qtdPedidosAnterior = Array.isArray(d) ? d.length : 0; }).catch(()=>{});
     /* Realtime: notificação instantânea de novos pedidos (sem polling) */
-    _sb.channel('admin-pedidos')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'pedidos' }, (payload) => {
-            const p = payload.new;
-            qtdPedidosAnterior++;
-            document.getElementById('notif-msg').textContent = `#${p.numero} — ${p.nome}`;
-            document.getElementById('notif-pedido').classList.add('ativo');
-            try { new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=').play(); } catch(e){}
-            setTimeout(() => fecharNotif(), 8000);
-        })
-        .subscribe();
+    if(_sb){
+        _sb.channel('admin-pedidos')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'pedidos' }, (payload) => {
+                const p = payload.new;
+                qtdPedidosAnterior++;
+                document.getElementById('notif-msg').textContent = `#${p.numero} — ${p.nome}`;
+                document.getElementById('notif-pedido').classList.add('ativo');
+                try { new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=').play(); } catch(e){}
+                setTimeout(() => fecharNotif(), 8000);
+            })
+            .subscribe();
+    }
 }
 
 /* ============================================================
    API
    ============================================================ */
-async function api(dados){
+async function api(dados, tentativa){
+    tentativa = tentativa || 0;
     if(!chaveAdmin){ throw new Error('Não autenticado'); }
+    if(!_sb){ throw new Error('Sem conexão com o servidor. Verifique sua internet.'); }
     const { action, ...params } = dados;
-    const { data, error } = await _sb.rpc(action, { ...params, chave: chaveAdmin });
+    let data, error;
+    try {
+        ({ data, error } = await _sb.rpc(action, { ...params, chave: chaveAdmin }));
+    } catch(e){
+        /* Falha de rede (timeout, DNS, etc) — tenta novamente antes de desistir */
+        if(tentativa < 2) return api(dados, tentativa + 1);
+        throw new Error('Falha de conexão. Verifique sua internet e tente novamente.');
+    }
     if(error){
         if(error.message && error.message.includes('Acesso negado')){ sair(); throw new Error('Sessão expirada'); }
+        /* Erros transitórios de rede também podem vir como `error` em vez de exceção — tenta de novo */
+        if(tentativa < 2 && /fetch|network|timeout/i.test(error.message||'')) return api(dados, tentativa + 1);
         throw new Error(error.message || 'Erro na API');
     }
     return data;
@@ -1271,7 +1415,9 @@ function abrirModalProduto(id){
     document.getElementById('modal-produto-titulo').textContent = p ? 'Editar Produto' : 'Novo Produto';
     document.getElementById('prod-id').value        = p ? p.id : '';
     document.getElementById('prod-nome').value      = p ? p.nome : '';
-    document.getElementById('prod-categoria').value = p ? p.categoria : 'acessorio';
+    popularSelectsCategoriaColecao();
+    document.getElementById('prod-categoria').value = (p ? p.categoria : 'acessorio') || 'acessorio';
+    document.getElementById('prod-colecao').value   = p ? (p.colecao||'') : '';
     atualizarLabelTamanhos(p ? p.categoria : 'acessorio');
     document.getElementById('prod-preco').value     = p ? p.preco : '';
     document.getElementById('prod-custo').value     = p ? p.custo : '';
@@ -1343,6 +1489,7 @@ async function salvarProduto(publicar){
         custo:          parseFloat(document.getElementById('prod-custo').value) || 0,
         tipo:           document.getElementById('prod-categoria').value === 'camisa' ? 'camisa' : 'unico',
         categoria:      document.getElementById('prod-categoria').value,
+        colecao:        document.getElementById('prod-colecao').value,
         tamanhos:       document.getElementById('prod-tamanhos').value.split(',').map(t=>t.trim()).filter(Boolean),
         imagens:        document.getElementById('prod-imagens').value.split(',').map(i=>i.trim()).filter(Boolean),
         estoque:        parseInt(document.getElementById('prod-estoque').value) || 0,
@@ -1507,6 +1654,123 @@ async function toggleCupom(codigo, ativo){
 }
 
 /* ============================================================
+   CATEGORIAS (filtros da vitrine) E COLEÇÕES TEMÁTICAS
+   ============================================================ */
+const CATEGORIAS_PADRAO = [
+    { id:'acessorio', nome:'Acessórios', emoji:'🎒' },
+    { id:'camisa',     nome:'Camisas',    emoji:'👕' },
+    { id:'combo',      nome:'Combos',     emoji:'🎁' },
+];
+let categoriasAtuais = CATEGORIAS_PADRAO.slice();
+let colecoesAtuais   = [];
+
+function slugify(txt){
+    return (txt||'').toString().normalize('NFD').replace(/[̀-ͯ]/g,'')
+        .toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'') || ('cat_'+Date.now());
+}
+
+function parseListaJSON(txt, fallback){
+    if(!txt) return fallback;
+    try{ const v = JSON.parse(txt); return Array.isArray(v) ? v : fallback; }catch(e){ return fallback; }
+}
+
+function renderCategoriasAdmin(){
+    const el = document.getElementById('categorias-lista');
+    if(!el) return;
+    el.innerHTML = categoriasAtuais.map(c => `
+        <div style="display:flex;align-items:center;gap:10px;background:#f8f9fc;border-radius:10px;padding:8px 12px;margin-bottom:6px">
+            <span style="font-size:1.1rem">${c.emoji||'🏷️'}</span>
+            <span style="flex:1;font-size:0.85rem;font-weight:600">${c.nome}</span>
+            <button type="button" class="btn btn-sm btn-vermelho" onclick="removerCategoria('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+        </div>
+    `).join('') || '<div class="form-hint">Nenhuma categoria — a loja usará as categorias padrão.</div>';
+}
+
+function renderColecoesAdmin(){
+    const el = document.getElementById('colecoes-lista');
+    if(!el) return;
+    el.innerHTML = colecoesAtuais.map(c => `
+        <div style="display:flex;align-items:center;gap:10px;background:#f8f9fc;border-radius:10px;padding:8px 12px;margin-bottom:6px">
+            <span style="font-size:1.1rem">${c.emoji||'🏷️'}</span>
+            <span style="flex:1;font-size:0.85rem;font-weight:600">${c.nome}</span>
+            <button type="button" class="btn btn-sm btn-vermelho" onclick="removerColecao('${c.id}')"><i class="fa-solid fa-trash"></i></button>
+        </div>
+    `).join('') || '<div class="form-hint">Nenhuma coleção criada ainda.</div>';
+}
+
+function popularSelectsCategoriaColecao(){
+    const selCat = document.getElementById('prod-categoria');
+    if(selCat){
+        const atual = selCat.value;
+        selCat.innerHTML = categoriasAtuais.map(c => `<option value="${c.id}">${c.emoji?c.emoji+' ':''}${c.nome}</option>`).join('');
+        if(categoriasAtuais.some(c => c.id === atual)) selCat.value = atual;
+    }
+    const selCol = document.getElementById('prod-colecao');
+    if(selCol){
+        const atual = selCol.value;
+        selCol.innerHTML = '<option value="">Nenhuma</option>' + colecoesAtuais.map(c => `<option value="${c.id}">${c.emoji?c.emoji+' ':''}${c.nome}</option>`).join('');
+        if(colecoesAtuais.some(c => c.id === atual)) selCol.value = atual;
+    }
+}
+
+async function adicionarCategoria(){
+    const nome  = document.getElementById('cat-novo-nome').value.trim();
+    const emoji = document.getElementById('cat-novo-emoji').value.trim();
+    if(!nome){ toast('Digite o nome da categoria!', true); return; }
+    const id = slugify(nome);
+    if(categoriasAtuais.some(c => c.id === id)){ toast('Essa categoria já existe!', true); return; }
+    categoriasAtuais.push({ id, nome, emoji });
+    document.getElementById('cat-novo-nome').value = '';
+    document.getElementById('cat-novo-emoji').value = '';
+    renderCategoriasAdmin();
+    popularSelectsCategoriaColecao();
+    await salvarListaConfig('categorias_produtos', categoriasAtuais);
+}
+
+async function removerCategoria(id){
+    if(!confirm('Remover esta categoria dos filtros da vitrine?')) return;
+    categoriasAtuais = categoriasAtuais.filter(c => c.id !== id);
+    renderCategoriasAdmin();
+    popularSelectsCategoriaColecao();
+    await salvarListaConfig('categorias_produtos', categoriasAtuais);
+}
+
+async function adicionarColecao(){
+    const nome  = document.getElementById('col-novo-nome').value.trim();
+    const emoji = document.getElementById('col-novo-emoji').value.trim();
+    if(!nome){ toast('Digite o nome da coleção!', true); return; }
+    const id = slugify(nome);
+    if(colecoesAtuais.some(c => c.id === id)){ toast('Essa coleção já existe!', true); return; }
+    colecoesAtuais.push({ id, nome, emoji });
+    document.getElementById('col-novo-nome').value = '';
+    document.getElementById('col-novo-emoji').value = '';
+    renderColecoesAdmin();
+    popularSelectsCategoriaColecao();
+    await salvarListaConfig('colecoes', colecoesAtuais);
+}
+
+async function removerColecao(id){
+    if(!confirm('Remover esta coleção temática?')) return;
+    colecoesAtuais = colecoesAtuais.filter(c => c.id !== id);
+    renderColecoesAdmin();
+    popularSelectsCategoriaColecao();
+    await salvarListaConfig('colecoes', colecoesAtuais);
+}
+
+async function salvarListaConfig(chave, lista){
+    try {
+        await api({ action: 'admin_salvar_config', config: { [chave]: JSON.stringify(lista) } });
+        toast('✅ Atualizado');
+    } catch(e){ toast('Erro ao salvar', true); }
+}
+
+function aoMudarTemaPreset(){
+    const preset = document.getElementById('cfg-tema-preset').value;
+    document.getElementById('cfg-tema-cores-custom').style.display = preset === 'custom' ? 'block' : 'none';
+    salvarConfigToggle('tema_preset', preset);
+}
+
+/* ============================================================
    CONFIGURAÇÕES
    ============================================================ */
 async function carregarConfig(){
@@ -1528,6 +1792,24 @@ async function carregarConfig(){
         document.getElementById('toggle-manutencao').checked = c.manutencao === 'true';
         document.getElementById('toggle-pausar').checked     = c.pausar_checkout === 'true';
         document.getElementById('toggle-aviso').checked      = c.aviso_topo_ativo === 'true';
+
+        /* Categorias / filtros da vitrine */
+        categoriasAtuais = parseListaJSON(c.categorias_produtos, CATEGORIAS_PADRAO.slice());
+        colecoesAtuais   = parseListaJSON(c.colecoes, []);
+        renderCategoriasAdmin();
+        renderColecoesAdmin();
+        popularSelectsCategoriaColecao();
+
+        /* Vitrine temática */
+        document.getElementById('cfg-tema-preset').value    = c.tema_preset || 'padrao';
+        document.getElementById('cfg-tema-cores-custom').style.display = (c.tema_preset === 'custom') ? 'block' : 'none';
+        document.getElementById('cfg-tema-cor1').value       = c.tema_cor1 || '#0f0732';
+        document.getElementById('cfg-tema-cor2').value       = c.tema_cor2 || '#f85900';
+        document.getElementById('toggle-hero').checked       = c.hero_ativo === 'true';
+        document.getElementById('cfg-hero-titulo').value     = c.hero_titulo || '';
+        document.getElementById('cfg-hero-subtitulo').value  = c.hero_subtitulo || '';
+        document.getElementById('cfg-hero-img').value        = c.hero_img || '';
+        document.getElementById('cfg-hero-link').value       = c.hero_link || '';
 
         /* Banners */
         const bannersEl = document.getElementById('banners-config');
@@ -1584,6 +1866,10 @@ async function salvarConfig(publicar){
         link_instagram:       document.getElementById('cfg-instagram').value.trim(),
         aviso_topo_texto:     document.getElementById('cfg-aviso-texto').value.trim(),
         aviso_topo_tipo:      document.getElementById('cfg-aviso-tipo').value,
+        hero_titulo:          document.getElementById('cfg-hero-titulo').value.trim(),
+        hero_subtitulo:       document.getElementById('cfg-hero-subtitulo').value.trim(),
+        hero_img:             document.getElementById('cfg-hero-img').value.trim(),
+        hero_link:            document.getElementById('cfg-hero-link').value.trim(),
     };
 
     [1,2,3].forEach(n => {
@@ -1629,21 +1915,45 @@ function abrirLoja(){
 /* ============================================================
    MODAIS
    ============================================================ */
+/* Trava de scroll segura para iOS Safari — evita que o conteúdo por trás role/"vaze"
+   enquanto um modal (produto, cupom, pedido) está aberto no admin no celular. */
+let _scrollYTravadoAdmin=0;
+function travarScrollAdmin(){
+    _scrollYTravadoAdmin=window.scrollY||window.pageYOffset||0;
+    document.body.style.position='fixed';
+    document.body.style.top=(-_scrollYTravadoAdmin)+'px';
+    document.body.style.left='0';
+    document.body.style.right='0';
+}
+function destravarScrollAdmin(){
+    document.body.style.position='';
+    document.body.style.top='';
+    document.body.style.left='';
+    document.body.style.right='';
+    window.scrollTo(0,_scrollYTravadoAdmin);
+}
+
 function abrirModal(id){
     document.getElementById(id).classList.add('ativo');
+    travarScrollAdmin();
 }
 
 function fecharModal(id, e){
     if(e && e.target !== e.currentTarget) return;
     document.getElementById(id).classList.remove('ativo');
+    destravarScrollAdmin();
 }
 
 function fecharModalDireto(id){
     document.getElementById(id).classList.remove('ativo');
+    destravarScrollAdmin();
 }
 
 document.addEventListener('keydown', e => {
-    if(e.key === 'Escape') document.querySelectorAll('.modal-overlay.ativo').forEach(m => m.classList.remove('ativo'));
+    if(e.key === 'Escape'){
+        document.querySelectorAll('.modal-overlay.ativo').forEach(m => m.classList.remove('ativo'));
+        destravarScrollAdmin();
+    }
 });
 
 /* ============================================================
