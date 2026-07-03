@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS public.produtos (
     custo          DECIMAL(10,2) DEFAULT 0,
     tipo           TEXT DEFAULT 'unico',
     categoria      TEXT DEFAULT 'acessorio',
+    colecao        TEXT DEFAULT '',
     tamanhos       TEXT DEFAULT '',
     imagens        TEXT DEFAULT '',
     estoque        INT DEFAULT 0,
@@ -71,6 +72,10 @@ CREATE TABLE IF NOT EXISTS public.pedidos (
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Migração idempotente: adiciona a coluna "colecao" (vitrine temática) em bancos já existentes,
+-- já que CREATE TABLE IF NOT EXISTS acima não altera uma tabela que já foi criada antes.
+ALTER TABLE public.produtos ADD COLUMN IF NOT EXISTS colecao TEXT DEFAULT '';
 
 -- ============================================================
 -- 2. HABILITAR REALTIME (mudanças propagadas instantaneamente)
@@ -343,6 +348,7 @@ BEGIN
             'custo',          p.custo,
             'tipo',           p.tipo,
             'categoria',      p.categoria,
+            'colecao',        p.colecao,
             'tamanhos',       p.tamanhos,
             'imagens',        p.imagens,
             'estoque',        p.estoque,
@@ -393,7 +399,7 @@ BEGIN
 
     IF v_id IS NULL THEN
         INSERT INTO public.produtos (
-            nome, descricao, preco, custo, tipo, categoria,
+            nome, descricao, preco, custo, tipo, categoria, colecao,
             tamanhos, imagens, estoque, destaque, novo, encomenda,
             prazo_encomenda, badge_extra, ativo, agendamento, updated_at
         ) VALUES (
@@ -403,6 +409,7 @@ BEGIN
             COALESCE((produto->>'custo')::DECIMAL, 0),
             COALESCE(produto->>'tipo', 'unico'),
             COALESCE(produto->>'categoria', 'acessorio'),
+            COALESCE(produto->>'colecao', ''),
             v_tams,
             v_imgs,
             COALESCE((produto->>'estoque')::INT, 0),
@@ -423,6 +430,7 @@ BEGIN
             custo            = COALESCE((produto->>'custo')::DECIMAL, custo),
             tipo             = COALESCE(produto->>'tipo',           tipo),
             categoria        = COALESCE(produto->>'categoria',      categoria),
+            colecao          = COALESCE(produto->>'colecao',        colecao),
             tamanhos         = v_tams,
             imagens          = v_imgs,
             estoque          = COALESCE((produto->>'estoque')::INT, estoque),
