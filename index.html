@@ -32,14 +32,36 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.__sbScriptFailed=true"></script>
     <script>
     /* Fallback Font Awesome se CDN falhar */
     document.addEventListener('DOMContentLoaded',function(){
         var ok=false;
         try{var s=document.createElement('span');s.className='fa fa-check';s.style.cssText='position:absolute;visibility:hidden';document.body.appendChild(s);ok=window.getComputedStyle(s,':before').content!=='none'&&window.getComputedStyle(s,':before').content!=='';document.body.removeChild(s);}catch(e){}
         if(!ok){var l=document.createElement('link');l.rel='stylesheet';l.href='https://use.fontawesome.com/releases/v6.4.0/css/all.css';document.head.appendChild(l);}
+        /* Rede lenta/instável: se a lib essencial (Supabase) não carregou a tempo, mostra tela de erro
+           em vez de deixar a splash travada para sempre (era o principal motivo de "a loja não abre"). */
+        setTimeout(function(){
+            if(window.__sbScriptFailed || typeof supabase === 'undefined') mostrarErroConexao();
+        }, 4500);
     });
+    /* Substitui a splash por uma tela de erro com botão de retentativa. Usada tanto quando o script
+       do Supabase falha ao carregar quanto quando a API fica inacessível por instabilidade de rede. */
+    window.__erroConexaoAtivo = false;
+    function mostrarErroConexao(){
+        var s = document.getElementById('splash-screen');
+        if(!s || window.__erroConexaoAtivo) return;
+        window.__erroConexaoAtivo = true;
+        s.innerHTML =
+            '<img src="https://i.ibb.co/7hcph2F/download.jpg" alt="Logo" class="splash-img" onerror="this.style.visibility=\'hidden\'">'+
+            '<div class="splash-text" style="opacity:1;margin-top:20px">Sem conexão com a internet 📡</div>'+
+            '<div style="color:rgba(255,255,255,0.7);font-size:0.78rem;margin-top:10px;max-width:280px;text-align:center;line-height:1.5">Verifique sua internet e toque para tentar de novo.</div>'+
+            '<button onclick="location.reload()" style="margin-top:20px;padding:12px 26px;border-radius:30px;border:none;background:#f85900;color:#fff;font-weight:700;font-size:0.85rem;cursor:pointer">Tentar novamente</button>';
+        s.classList.remove('hidden');
+        s.style.display='flex';
+        s.style.opacity='1';
+        s.style.visibility='visible';
+    }
     </script>
     <style>
         :root{--roxo-brand:#0f0732;--laranja-brand:#f85900;--azul-coracao:#007bff;--branco:#ffffff;--laranja-glow:rgba(248,89,0,0.3);--fundo:#F5F7FB;--card-bg:#ffffff;--texto:#0f0732;--texto-suave:#5a5575;--verde-zap:#25D366;--vermelho-del:#FF4757;--shadow-sm:0 4px 12px rgba(15,7,50,0.05);--shadow-md:0 10px 30px rgba(15,7,50,0.1);--shadow-lg:0 20px 50px rgba(15,7,50,0.15);}
@@ -97,25 +119,50 @@
         .cupom-btn-usar{background:var(--laranja-brand);color:#fff;border:none;border-radius:10px;padding:9px 16px;font-size:0.8rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:0.15s;}
         .cupom-btn-usar:active{transform:scale(0.96);}
 
+        /* HERO / BANNER TEMÁTICO */
+        #hero-banner{max-width:1100px;margin:0 auto 16px;padding:0 12px;position:relative;z-index:15;}
+        /* O header tem padding-bottom extra para o próximo bloco "encaixar" na curva —
+           normalmente é o filter-container, mas quando o hero banner está ativo é ele quem encaixa. */
+        body.tem-hero #hero-banner{margin-top:-50px;}
+        body.tem-hero .filter-container{margin-top:12px;}
+        .hero-inner{display:block;border-radius:20px;padding:26px 24px;background:linear-gradient(135deg,var(--roxo-brand),#1a1245);text-decoration:none;box-shadow:var(--shadow-md);}
+        .hero-titulo{color:var(--branco);font-size:1.2rem;font-weight:800;line-height:1.25;}
+        .hero-subtitulo{color:rgba(255,255,255,0.8);font-size:0.85rem;margin-top:6px;}
+        @media(min-width:1024px){#hero-banner{padding:0 20px;margin-bottom:20px;max-width:1300px}.hero-inner{padding:40px 44px}.hero-titulo{font-size:1.6rem}.hero-subtitulo{font-size:0.95rem;max-width:60%}}
+        @media(min-width:1440px){#hero-banner{max-width:1500px}}
+
+        /* SEÇÕES TEMÁTICAS (coleções) */
+        .secao-tematica{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:6px 0 -2px;padding:0 2px;}
+        .secao-tematica-titulo{font-size:1rem;font-weight:800;color:var(--roxo-brand);display:flex;align-items:center;gap:8px;}
+        .secao-tematica-linha{flex:1;height:1px;background:rgba(15,7,50,0.1);}
+        .secao-outros{grid-column:1/-1;font-size:0.85rem;font-weight:700;color:var(--texto-suave);margin:10px 0 -2px;padding:0 2px;text-transform:uppercase;letter-spacing:0.5px;}
+
         /* FILTROS */
         .filter-container{margin-top:-50px;position:relative;z-index:20;margin-bottom:16px;}
-        .filter-scroll{display:flex;gap:8px;overflow-x:auto;padding:8px 12px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch;justify-content:center;}
+        /* justify-content:flex-start por padrão — com scroll horizontal + centralização, o conteúdo que
+           ultrapassa a largura fica cortado à esquerda sem forma de rolar até ele. Centraliza via JS
+           (classe .centralizado) só quando os botões cabem inteiros na tela. */
+        .filter-scroll{display:flex;gap:8px;overflow-x:auto;padding:8px 12px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch;justify-content:flex-start;}
+        .filter-scroll.centralizado{justify-content:center;}
         .filter-scroll::-webkit-scrollbar{display:none;}
         .filter-btn{padding:8px 18px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.1);border-radius:30px;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.9);white-space:nowrap;transition:0.2s;cursor:pointer;flex-shrink:0;}
         .filter-btn.active{background:var(--branco);color:var(--roxo-brand);font-weight:700;border-color:var(--branco);box-shadow:0 4px 12px rgba(0,0,0,0.15);}
 
-        /* GRID */
-        .container{max-width:1100px;margin:0 auto;padding:0 12px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;position:relative;z-index:10;}
-        @media(min-width:600px){.container{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}}
+        /* GRID — "auto-fit" (não "auto-fill") colapsa colunas vazias a 0, e com um teto de
+           largura por coluna + justify-content:center, poucos produtos ficam com cards num
+           tamanho confortável e CENTRALIZADOS em vez de esticados ocupando a tela toda vazia. */
+        .container{max-width:1100px;margin:0 auto;padding:0 12px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;position:relative;z-index:10;justify-content:center;}
+        @media(min-width:600px){.container{grid-template-columns:repeat(auto-fit,minmax(200px,260px));gap:20px;}}
         @media(min-width:1024px){
-    .container{gap:28px;}
+    .container{grid-template-columns:repeat(auto-fit,minmax(230px,270px));gap:28px;max-width:1300px;}
     header{padding:24px 40px 90px;}
     .header-inner{max-width:700px;}
     .filter-container{padding:0;}
-    .filter-scroll{justify-content:center;padding:8px 20px 14px;}
+    .filter-scroll{padding:8px 20px 14px;}
     #card-cupom{padding:0 20px;}
     .cupom-banner{max-width:1100px;margin:0 auto;}
 }
+@media(min-width:1440px){.container{max-width:1500px;grid-template-columns:repeat(auto-fit,minmax(240px,280px));}}
 
         /* CARDS */
         .card{background:var(--card-bg);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;position:relative;border:1px solid rgba(15,7,50,0.05);transition:transform 0.15s;}
@@ -304,11 +351,11 @@
     </div>
 </header>
 
+<div id="hero-banner" style="display:none"></div>
+
 <div class="filter-container">
-    <div class="filter-scroll">
+    <div class="filter-scroll" id="filter-scroll">
         <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
-        <button class="filter-btn" onclick="filtrar('acessorio',this)">Acessórios</button>
-        <button class="filter-btn" id="btn-combos" style="display:none" onclick="filtrar('combo',this)">🎁 Combos</button>
     </div>
 </div>
 
@@ -528,7 +575,11 @@
 /* ── Supabase ── Preencha com os valores do seu projeto (Settings → API) */
 const SUPABASE_URL      = 'https://scacjsosvlllapbgetos.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_JgsW4RbPk2HwYgkvVnaEug_NE79JOxX';
-const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let _sb = null;
+try{
+    if(typeof supabase === 'undefined') throw new Error('Supabase indisponível');
+    _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}catch(e){ mostrarErroConexao(); }
 let _w=atob('NTU4Njk5OTk3NjIyNg==');
 let _pixKey='financeiro.nupieepro@gmail.com';
 let _pixName='NUPIEEPRO';
@@ -556,6 +607,71 @@ let produtos=[
 ];
 let cupons={};  /* preenchido pela API — não hardcode mais */
 let carrinho=[],itemSel=null,qtdTemp=1,filtroAtual='todos',busca='',cupomApl=null,pixT=null;
+
+/* Categorias/filtros da vitrine — configuráveis pelo admin, com fallback padrão */
+const CATEGORIAS_PADRAO=[{id:'acessorio',nome:'Acessórios',emoji:''},{id:'camisa',nome:'Camisas',emoji:'👕'},{id:'combo',nome:'Combos',emoji:'🎁'}];
+let categoriasVitrine=CATEGORIAS_PADRAO;
+let colecoesVitrine=[];
+
+function renderFiltros(){
+    const scroll=document.getElementById('filter-scroll');
+    if(!scroll) return;
+    const presentes=new Set(produtos.map(p=>p.categoria));
+    const usadas=categoriasVitrine.filter(c=>presentes.has(c.id));
+    let html=`<button class="filter-btn${filtroAtual==='todos'?' active':''}" onclick="filtrar('todos',this)">Todos</button>`;
+    usadas.forEach(c=>{
+        html+=`<button class="filter-btn${filtroAtual===c.id?' active':''}" onclick="filtrar('${c.id}',this)">${c.emoji?san(c.emoji)+' ':''}${san(c.nome)}</button>`;
+    });
+    scroll.innerHTML=html;
+    /* Só centraliza se os botões couberem inteiros — senão fica cortado à esquerda sem dar pra rolar até lá */
+    scroll.classList.toggle('centralizado', scroll.scrollWidth<=scroll.clientWidth);
+}
+let _resizeFiltrosT;
+window.addEventListener('resize',()=>{
+    clearTimeout(_resizeFiltrosT);
+    _resizeFiltrosT=setTimeout(()=>{
+        const scroll=document.getElementById('filter-scroll');
+        if(scroll) scroll.classList.toggle('centralizado', scroll.scrollWidth<=scroll.clientWidth);
+    },200);
+});
+
+/* Tema visual (vitrine temática) — troca as cores de marca conforme escolhido no admin */
+const TEMA_PRESETS={
+    padrao:      {cor1:'#0f0732',cor2:'#f85900'},
+    natal:       {cor1:'#7f0000',cor2:'#1b5e20'},
+    calourada:   {cor1:'#0d1b4c',cor2:'#ffab00'},
+    verao:       {cor1:'#004d61',cor2:'#ff6f00'},
+    volta_aulas: {cor1:'#132a13',cor2:'#f9a825'},
+};
+function hexToRgba(hex,alpha){
+    const h=(hex||'#f85900').replace('#','');
+    const r=parseInt(h.substring(0,2),16)||0,g=parseInt(h.substring(2,4),16)||0,b=parseInt(h.substring(4,6),16)||0;
+    return `rgba(${r},${g},${b},${alpha})`;
+}
+function aplicarTema(c){
+    const preset=c.tema_preset||'padrao';
+    let cor1,cor2;
+    if(preset==='custom'){ cor1=c.tema_cor1||'#0f0732'; cor2=c.tema_cor2||'#f85900'; }
+    else { const p=TEMA_PRESETS[preset]||TEMA_PRESETS.padrao; cor1=p.cor1; cor2=p.cor2; }
+    const root=document.documentElement.style;
+    root.setProperty('--roxo-brand',cor1);
+    root.setProperty('--laranja-brand',cor2);
+    root.setProperty('--laranja-glow',hexToRgba(cor2,0.3));
+}
+
+/* Banner de campanha em destaque, configurado pelo admin */
+function renderHeroBanner(c){
+    const el=document.getElementById('hero-banner');
+    if(!el) return;
+    if(c.hero_ativo!=='true'||!c.hero_titulo){ el.style.display='none'; el.innerHTML=''; document.body.classList.remove('tem-hero'); return; }
+    const bg=c.hero_img?`background-image:linear-gradient(135deg,rgba(15,7,50,0.75),rgba(15,7,50,0.5)),url('${san(c.hero_img)}');background-size:cover;background-position:center;`:'';
+    const conteudo=`<div class="hero-titulo">${san(c.hero_titulo)}</div>${c.hero_subtitulo?`<div class="hero-subtitulo">${san(c.hero_subtitulo)}</div>`:''}`;
+    el.innerHTML = c.hero_link
+        ? `<a href="${san(c.hero_link)}" target="_blank" rel="noopener noreferrer" class="hero-inner" style="${bg}">${conteudo}</a>`
+        : `<div class="hero-inner" style="${bg}">${conteudo}</div>`;
+    el.style.display='block';
+    document.body.classList.add('tem-hero');
+}
 
 window.addEventListener('load',()=>{
     if('serviceWorker' in navigator){
@@ -599,20 +715,29 @@ window.addEventListener('load',()=>{
         if(_c&&Array.isArray(_c.d)&&_c.d.length){produtos.length=0;produtos.push(..._c.d);}
     } catch(e){}
     renderVitrine();
-    carregarAPI();
-    /* Realtime: qualquer alteração do admin reflete instantaneamente na loja */
-    let _apiDebounce;
-    function agendarCarregarAPI(){ clearTimeout(_apiDebounce); _apiDebounce=setTimeout(carregarAPI,150); }
-    _sb.channel('store-live')
-        .on('postgres_changes',{event:'*',schema:'public',table:'produtos'},agendarCarregarAPI)
-        .on('postgres_changes',{event:'*',schema:'public',table:'cupons'},agendarCarregarAPI)
-        .on('postgres_changes',{event:'*',schema:'public',table:'config'},agendarCarregarAPI)
-        .subscribe();
+    renderFiltros();
+    if(_sb){
+        carregarAPI();
+        /* Realtime: qualquer alteração do admin reflete instantaneamente na loja */
+        let _apiDebounce;
+        function agendarCarregarAPI(){ clearTimeout(_apiDebounce); _apiDebounce=setTimeout(carregarAPI,150); }
+        _sb.channel('store-live')
+            .on('postgres_changes',{event:'*',schema:'public',table:'produtos'},agendarCarregarAPI)
+            .on('postgres_changes',{event:'*',schema:'public',table:'cupons'},agendarCarregarAPI)
+            .on('postgres_changes',{event:'*',schema:'public',table:'config'},agendarCarregarAPI)
+            .subscribe();
+    }
     const pid=new URLSearchParams(location.search).get('id');
     if(pid&&produtos.find(p=>p.id==pid)) setTimeout(()=>abrirDetalhes(parseInt(pid)),1000);
-    setTimeout(()=>{const s=document.getElementById('splash-screen');s.classList.add('hidden');setTimeout(()=>s.style.display='none',400);},900);
+    /* Se a tela de erro de conexão já assumiu a splash, não mexe nela */
+    setTimeout(()=>{
+        if(window.__erroConexaoAtivo) return;
+        const s=document.getElementById('splash-screen');s.classList.add('hidden');setTimeout(()=>s.style.display='none',400);
+    },900);
     document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharModais(null);});
     document.getElementById('campo-busca').addEventListener('input',function(){busca=this.value.trim().toLowerCase();renderVitrine();});
+    window.addEventListener('online',()=>{ if(_sb){ toast('🌐 Conexão restabelecida! Atualizando...'); carregarAPI(); } });
+    window.addEventListener('offline',()=>{ toast('📡 Sem conexão com a internet. Mostrando dados salvos.',1); });
 });
 
 /* Imagens garantidas por produto — usadas se API retornar URL vazia ou quebrada */
@@ -624,6 +749,7 @@ const IMG_FALLBACK = {
 };
 
 function normalizarProduto(p){
+    p.colecao = p.colecao || '';
     const imgs = Array.isArray(p.imagens)
         ? p.imagens
         : (p.imagens||'').toString().split(',').map(s=>s.trim()).filter(s=>s&&s.startsWith('http'));
@@ -680,13 +806,25 @@ async function buscarAPI(action){
     return null;
 }
 
-async function carregarAPI(){
+async function carregarAPI(tentativa){
+    tentativa = tentativa || 0;
     try {
         const results = await Promise.allSettled([
             buscarAPI('config'),
             buscarAPI('produtos'),
             buscarAPI('cupons')
         ]);
+
+        /* Instabilidade de rede: as 3 chamadas falharam — tenta de novo com backoff
+           antes de desistir, em vez de deixar a vitrine com dados desatualizados sem avisar. */
+        if(results.every(r => r.status === 'rejected')){
+            if(tentativa < 2){ setTimeout(()=>carregarAPI(tentativa+1), 1500*(tentativa+1)); return; }
+            if(!window.__avisoOfflineMostrado){
+                window.__avisoOfflineMostrado = true;
+                toast('📡 Não foi possível atualizar a vitrine. Verifique sua internet.', 1);
+            }
+            return;
+        }
 
         /* Processa Config */
         if(results[0].status === 'fulfilled'){
@@ -702,6 +840,14 @@ async function carregarAPI(){
             if(c.chave_pix) _pixKey = c.chave_pix;
             if(c.nome_recebedor) _pixName = c.nome_recebedor;
             if(c.pausar_checkout==='true') window._checkoutPausado=true;
+            if(c.categorias_produtos){
+                try{ const parsed=JSON.parse(c.categorias_produtos); if(Array.isArray(parsed)&&parsed.length) categoriasVitrine=parsed; }catch(e){}
+            }
+            if(c.colecoes){
+                try{ const parsed=JSON.parse(c.colecoes); if(Array.isArray(parsed)) colecoesVitrine=parsed; }catch(e){}
+            }
+            aplicarTema(c);
+            renderHeroBanner(c);
         }
 
         /* Processa Produtos */
@@ -716,6 +862,7 @@ async function carregarAPI(){
                 localStorage.setItem('nupieepro_cache_produtos', JSON.stringify({t:Date.now(), d:normalizados}));
             }
         }
+        renderFiltros();
 
         /* Processa Cupons */
         if(results[2].status === 'fulfilled'){
@@ -749,6 +896,40 @@ async function carregarAPI(){
 
 function filtrar(cat,btn){filtroAtual=cat;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderVitrine();}
 
+function criarCardProduto(p){
+    const enc=!!p.encomenda,dest=!!p.destaque,esg=p.estoque===0,ult=p.estoque>0&&p.estoque<10;
+    /* Pega imagem: tenta img, depois imagens[0], depois vazio */
+    const imgSrc = p.img
+        || (Array.isArray(p.imagens) && p.imagens[0])
+        || (typeof p.imagens==='string' && p.imagens.split(',')[0].trim())
+        || '';
+    let badges='';
+    if(dest) badges+=`<span class="badge badge-destaque">⭐ Destaque</span>`;
+    if(enc)  badges+=`<span class="badge badge-encomenda">📦 Encomenda</span>`;
+    if(esg)  badges+=`<span class="badge badge-esgotado">Esgotado</span>`;
+    if(ult&&!esg) badges+=`<span class="badge badge-ultimas">⚡ Últimas</span>`;
+    const el=document.createElement('div');
+    el.className=`card${dest?' destaque':''}${esg?' esgotado':''}`;
+    el.innerHTML=`
+        <button class="share-btn" onclick="compartilhar(${p.id},event)" aria-label="Compartilhar"><i class="fa-solid fa-share-nodes"></i></button>
+        <div class="image-wrapper" onclick="abrirDetalhes(${p.id})">
+            ${imgSrc
+? `<img src="${san(imgSrc)}" class="prod-img" loading="lazy" alt="${san(p.nome)}"
+    onload="this.classList.add('visible');this.closest('.image-wrapper').classList.add('loaded')"
+    onerror="this.remove();this.closest&&this.closest('.image-wrapper')&&this.closest('.image-wrapper').classList.add('loaded');this.nextElementSibling&&(this.nextElementSibling.style.display='flex')">`
+: ''}
+            <div class="no-photo-placeholder" style="${imgSrc?'display:none':''}"><i class="fa-solid fa-box-open"></i><span>${san(p.nome)}</span></div>
+            ${badges?`<div class="badge-wrap">${badges}</div>`:''}
+        </div>
+        <div class="card-info" onclick="abrirDetalhes(${p.id})">
+            <div class="card-title">${san(p.nome)}</div>
+            <div class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
+            ${enc?`<div class="card-enc">📦 Apenas sob encomenda</div>`:''}
+            <div class="tap-hint">Ver Detalhes</div>
+        </div>`;
+    return el;
+}
+
 function renderVitrine(){
     const area=document.getElementById('vitrine-area');
     const vazio=document.getElementById('vitrine-vazia');
@@ -761,39 +942,29 @@ function renderVitrine(){
     });
     if(lista.length===0){vazio.classList.add('ativo');return;}
     vazio.classList.remove('ativo');
-    lista.forEach(p=>{
-        const enc=!!p.encomenda,dest=!!p.destaque,esg=p.estoque===0,ult=p.estoque>0&&p.estoque<10;
-        /* Pega imagem: tenta img, depois imagens[0], depois vazio */
-        const imgSrc = p.img
-            || (Array.isArray(p.imagens) && p.imagens[0])
-            || (typeof p.imagens==='string' && p.imagens.split(',')[0].trim())
-            || '';
-        let badges='';
-        if(dest) badges+=`<span class="badge badge-destaque">⭐ Destaque</span>`;
-        if(enc)  badges+=`<span class="badge badge-encomenda">📦 Encomenda</span>`;
-        if(esg)  badges+=`<span class="badge badge-esgotado">Esgotado</span>`;
-        if(ult&&!esg) badges+=`<span class="badge badge-ultimas">⚡ Últimas</span>`;
-        const el=document.createElement('div');
-        el.className=`card${dest?' destaque':''}${esg?' esgotado':''}`;
-        el.innerHTML=`
-            <button class="share-btn" onclick="compartilhar(${p.id},event)" aria-label="Compartilhar"><i class="fa-solid fa-share-nodes"></i></button>
-            <div class="image-wrapper" onclick="abrirDetalhes(${p.id})">
-                ${imgSrc
-    ? `<img src="${san(imgSrc)}" class="prod-img" loading="lazy" alt="${san(p.nome)}"
-        onload="this.classList.add('visible');this.closest('.image-wrapper').classList.add('loaded')"
-        onerror="this.remove();this.closest&&this.closest('.image-wrapper')&&this.closest('.image-wrapper').classList.add('loaded');this.nextElementSibling&&(this.nextElementSibling.style.display='flex')">`
-    : ''}
-                <div class="no-photo-placeholder" style="${imgSrc?'display:none':''}"><i class="fa-solid fa-box-open"></i><span>${san(p.nome)}</span></div>
-                ${badges?`<div class="badge-wrap">${badges}</div>`:''}
-            </div>
-            <div class="card-info" onclick="abrirDetalhes(${p.id})">
-                <div class="card-title">${san(p.nome)}</div>
-                <div class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
-                ${enc?`<div class="card-enc">📦 Apenas sob encomenda</div>`:''}
-                <div class="tap-hint">Ver Detalhes</div>
-            </div>`;
-        area.appendChild(el);
-    });
+
+    /* Na vitrine completa (sem filtro/busca), agrupa produtos em seções por coleção temática */
+    const agrupar = filtroAtual==='todos' && !busca && colecoesVitrine.length>0 && lista.some(p=>p.colecao);
+    if(agrupar){
+        const usadas = colecoesVitrine.filter(col=>lista.some(p=>p.colecao===col.id));
+        usadas.forEach(col=>{
+            const header=document.createElement('div');
+            header.className='secao-tematica';
+            header.innerHTML=`<div class="secao-tematica-titulo">${col.emoji?san(col.emoji)+' ':''}${san(col.nome)}</div><div class="secao-tematica-linha"></div>`;
+            area.appendChild(header);
+            lista.filter(p=>p.colecao===col.id).forEach(p=>area.appendChild(criarCardProduto(p)));
+        });
+        const outros = lista.filter(p=>!p.colecao || !usadas.some(c=>c.id===p.colecao));
+        if(outros.length){
+            const h=document.createElement('div');
+            h.className='secao-outros';
+            h.textContent='Outros produtos';
+            area.appendChild(h);
+            outros.forEach(p=>area.appendChild(criarCardProduto(p)));
+        }
+    } else {
+        lista.forEach(p=>area.appendChild(criarCardProduto(p)));
+    }
 }
 
 function abrirDetalhes(id){
@@ -857,14 +1028,33 @@ function abrirDetalhes(id){
         wbEl.style.display='block';
     } else if(wbEl) wbEl.style.display='none';
     document.getElementById('modal-details').classList.add('active');
-    document.body.style.overflow='hidden';
+    travarScroll();
     history.replaceState({},'',location.pathname+'?id='+id);
+}
+
+/* Trava de scroll segura para iOS Safari — "overflow:hidden" sozinho não impede o
+   scroll "elástico" do fundo por trás do modal em iPhones, o que fazia o conteúdo
+   da vitrine "vazar"/deslizar atrás do modal aberto. */
+let _scrollYTravado=0;
+function travarScroll(){
+    _scrollYTravado=window.scrollY||window.pageYOffset||0;
+    document.body.style.position='fixed';
+    document.body.style.top=(-_scrollYTravado)+'px';
+    document.body.style.left='0';
+    document.body.style.right='0';
+}
+function destravarScroll(){
+    document.body.style.position='';
+    document.body.style.top='';
+    document.body.style.left='';
+    document.body.style.right='';
+    window.scrollTo(0,_scrollYTravado);
 }
 
 function fecharModais(e){
     if(e&&e.target!==e.currentTarget) return;
     document.querySelectorAll('.modal-bg').forEach(m=>m.classList.remove('active'));
-    document.body.style.overflow='';
+    destravarScroll();
     if(pixT){clearInterval(pixT);pixT=null;}
     /* Reseta comprovante ao fechar checkout */
     window._comprovante=null;
@@ -965,7 +1155,7 @@ function abrirCheckout(){
     document.getElementById('checkout-corpo').style.display='block';
     renderCarrinho();togglePix();
     document.getElementById('modal-checkout').classList.add('active');
-    document.body.style.overflow='hidden';
+    travarScroll();
 }
 function abrirCheckoutComCupom(){if(!carrinho.length){toast('Adicione produtos primeiro!',1);return;}abrirCheckout();setTimeout(()=>document.getElementById('campo-cupom').focus(),400);}
 function toggleEndereco(){document.getElementById('box-endereco').style.display=document.querySelector('input[name="entrega"]:checked').value==='Entrega'?'block':'none';}
@@ -1170,13 +1360,13 @@ function abrirMeusPedidos(){
     const el=document.getElementById('lista-pedidos-hist');
     el.innerHTML=h.length?h.map(p=>`<div style="background:#f8f9fc;border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid #eee"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong style="color:var(--roxo-brand);font-size:0.82rem">#${p.num}</strong><span style="font-size:0.7rem;color:var(--texto-suave)">${p.data}</span></div><div style="font-size:0.76rem;color:var(--texto-suave);margin-bottom:6px">${p.itens.join(', ')}</div><div style="font-size:0.95rem;font-weight:800;color:var(--laranja-brand)">R$ ${p.total.toFixed(2).replace('.',',')}</div></div>`).join(''):'<p style="text-align:center;color:#bbb;padding:20px">Nenhum pedido ainda 🛍️</p>';
     document.getElementById('modal-pedidos').classList.add('active');
-    document.body.style.overflow='hidden';
+    travarScroll();
 }
 function salvarUser(){localStorage.setItem('nupieepro_nome',document.getElementById('nome-cliente').value);localStorage.setItem('nupieepro_zap',document.getElementById('zap-cliente').value);localStorage.setItem('nupieepro_email',document.getElementById('email-cliente').value);localStorage.setItem('nupieepro_end',document.getElementById('endereco-cliente').value);}
 function carregarUser(){const n=localStorage.getItem('nupieepro_nome');if(n)document.getElementById('nome-cliente').value=n;const z=localStorage.getItem('nupieepro_zap');if(z)document.getElementById('zap-cliente').value=z;const e=localStorage.getItem('nupieepro_email');if(e)document.getElementById('email-cliente').value=e;const d=localStorage.getItem('nupieepro_end');if(d)document.getElementById('endereco-cliente').value=d;}
 function compartilhar(id,event){event.stopPropagation();const p=produtos.find(x=>x.id===id);const url=location.origin+location.pathname+'?id='+id;const txt='Olha o que encontrei na Lojinha Nupieepro: '+p.nome+' por R$ '+p.preco.toFixed(2).replace('.',',')+'!';if(navigator.share)navigator.share({title:'NUPIEEPRO STORE',text:txt,url}).catch(()=>{});else navigator.clipboard&&navigator.clipboard.writeText(url).then(()=>toast('🔗 Link copiado!'));}
-function abrirSobre(){document.getElementById('modal-sobre').classList.add('active');document.body.style.overflow='hidden';}
-function abrirLGPD(){document.getElementById('modal-lgpd').classList.add('active');document.body.style.overflow='hidden';}
+function abrirSobre(){document.getElementById('modal-sobre').classList.add('active');travarScroll();}
+function abrirLGPD(){document.getElementById('modal-lgpd').classList.add('active');travarScroll();}
 let _tt;
 function toast(msg,erro=0){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.className='show'+(erro?' erro':'');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
