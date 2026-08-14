@@ -890,12 +890,16 @@
    ============================================================ */
 /* ── Service Worker do Admin (auto-update) ── */
 if ('serviceWorker' in navigator) {
+    /* Só recarrega se já existia um SW controlando a aba — na 1ª visita não há
+       nada em cache ainda pra "atualizar" (evita carregar o painel 2x sempre). */
+    const _tinhaControllerAntes = !!navigator.serviceWorker.controller;
     navigator.serviceWorker.register('./admin-sw.js')
         .then(reg => {
             setInterval(() => reg.update(), 60 * 1000);
         })
         .catch(() => {});
     navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!_tinhaControllerAntes) return;
         if (!sessionStorage.getItem('_adminSwReload')) {
             sessionStorage.setItem('_adminSwReload', '1');
             window.location.reload();
