@@ -4,6 +4,10 @@
 // admin (mesma lógica de public._validar_admin) e sobe o arquivo
 // pro Storage usando a service role — assim o bucket "produtos"
 // não precisa liberar INSERT pra ninguém além desta function.
+//
+// verify_jwt=false: a autorização real é a checagem de `chave`
+// abaixo (mesmo padrão das RPCs admin_* do banco, que também são
+// chamadas pelo anon key e se protegem via senha, não via JWT).
 // ============================================================
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 
