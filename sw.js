@@ -3,13 +3,13 @@
    Caminhos relativos — funciona em qualquer subpasta
    ============================================================ */
 
-const CACHE = 'nupieepro-v11';
+const CACHE = 'nupieepro-v12';
 
 const CACHEAR = [
     'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
     './loja_icon_marca.png',
-    './loja_logo_transparente.png',
+    './loja_icon_emblema.png',
     './loja_icon_pwa.png',
 ];
 

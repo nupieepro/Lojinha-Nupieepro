@@ -314,7 +314,9 @@
         footer{margin-top:44px;background:linear-gradient(160deg,var(--roxo-brand) 20%,#1a1245 100%);border-radius:40px 40px 0 0;padding:44px 20px 120px;text-align:center;color:var(--branco);box-shadow:0 -10px 30px rgba(15,7,50,0.15);}
         .footer-inner{max-width:600px;margin:0 auto;}
         /* PNG com fundo transparente — assenta direto no gradiente, sem "caixa" atrás */
-        .footer-logo{width:min(180px,58%);height:auto;display:block;margin:0 auto;}
+        /* Só o emblema: o nome da marca já aparece logo abaixo, no "Feito com ... pelo
+           NUPIEEPRO" — repetir o logotipo escrito aqui era redundante e pesava demais. */
+        .footer-logo{width:84px;height:auto;display:block;margin:0 auto 4px;}
         /* nowrap + flex:1 mantém os 3 numa fileira só até nas telas de 360px */
         .footer-actions{display:flex;justify-content:center;gap:8px;margin-top:26px;}
         .footer-action-btn{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:var(--branco);padding:11px 10px;border-radius:30px;font-family:inherit;font-size:0.75rem;font-weight:700;text-decoration:none;white-space:nowrap;cursor:pointer;transition:0.2s;}
@@ -395,7 +397,7 @@
 
 <footer>
     <div class="footer-inner">
-        <img src="./loja_logo_transparente.png" alt="NupieePro — Núcleo Piauiense de Estudantes de Engenharia de Produção" class="footer-logo" onerror="this.style.visibility='hidden'">
+        <img src="./loja_icon_emblema.png" alt="NupieePro" class="footer-logo" onerror="this.style.visibility='hidden'">
         <div class="footer-actions">
             <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" class="footer-action-btn"><i class="fa-brands fa-instagram"></i> Instagram</a>
             <button class="footer-action-btn" onclick="abrirSobre()"><i class="fa-solid fa-circle-info"></i> Sobre</button>
