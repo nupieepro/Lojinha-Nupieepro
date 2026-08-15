@@ -191,6 +191,7 @@
         .card-title{font-size:0.82rem;font-weight:700;color:var(--roxo-brand);line-height:1.3;height:34px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
         .card-price{font-size:1.05rem;color:var(--laranja-brand);font-weight:800;margin-top:5px;}
         .card-enc{font-size:0.68rem;color:var(--laranja-brand);font-weight:700;margin-top:3px;}
+        .card-estoque{font-size:0.68rem;color:var(--texto-suave);margin-top:3px;}
         .tap-hint{font-size:0.62rem;color:#aaa;margin-top:auto;padding-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
 
         /* VITRINE VAZIA */
@@ -214,6 +215,7 @@
         .detail-price{font-size:1.7rem;color:var(--laranja-brand);font-weight:800;margin-bottom:4px;display:inline-block;}
         .detail-desc{font-size:0.84rem;color:var(--texto-suave);line-height:1.6;margin-bottom:14px;background:#f8f9fc;padding:10px 12px;border-radius:10px;}
         .detail-enc{font-size:0.78rem;background:#fff8e1;color:#f57f17;padding:8px 12px;border-radius:10px;margin-bottom:14px;font-weight:600;}
+        .detail-estoque{font-size:0.78rem;color:var(--texto-suave);margin-top:-6px;margin-bottom:10px;}
         .nice-select{width:100%;padding:14px;border-radius:14px;border:2px solid #eef2f6;background:#fff;font-size:0.9rem;color:var(--texto);font-weight:600;outline:none;margin-bottom:18px;appearance:none;-webkit-appearance:none;}
         .nice-select:focus{border-color:var(--roxo-brand);}
         .qty-wrapper{display:flex;align-items:center;justify-content:space-between;background:#f8f9fc;padding:5px;border-radius:14px;border:1px solid #eee;margin-bottom:22px;}
@@ -433,6 +435,7 @@
         </div>
         <h2 id="detalhe-nome" class="detail-title">Nome</h2>
         <div id="detalhe-preco" class="detail-price">R$ 0,00</div>
+        <div id="detalhe-estoque" class="detail-estoque" style="display:none"></div>
         <div id="detalhe-desc" class="detail-desc" style="display:none"></div>
         <div id="detalhe-enc" class="detail-enc" style="display:none"></div>
         <div id="wrapper-tamanho" style="display:none">
@@ -930,6 +933,7 @@ function criarCardProduto(p){
             <div class="card-title">${san(p.nome)}</div>
             <div class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
             ${enc?`<div class="card-enc">📦 Apenas sob encomenda</div>`:''}
+            ${!esg?`<div class="card-estoque">${p.estoque} em estoque</div>`:''}
             <div class="tap-hint">Ver Detalhes</div>
         </div>`;
     return el;
@@ -1009,6 +1013,8 @@ function abrirDetalhes(id){
         imgEl.style.display='none';
         fbEl.style.display='flex';
     }
+    const estEl=document.getElementById('detalhe-estoque');
+    if(itemSel.estoque>0){estEl.textContent=itemSel.estoque+' em estoque';estEl.style.display='block';}else estEl.style.display='none';
     const descEl=document.getElementById('detalhe-desc');
     if(itemSel.descricao){descEl.textContent=itemSel.descricao;descEl.style.display='block';}else descEl.style.display='none';
     const encEl=document.getElementById('detalhe-enc');
