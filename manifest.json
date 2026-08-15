@@ -18,7 +18,7 @@
     { "src": "./loja_icon_pwa.png", "sizes": "152x152", "type": "image/png", "purpose": "any" },
     { "src": "./loja_icon_pwa.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "./loja_icon_pwa.png", "sizes": "384x384", "type": "image/png", "purpose": "any" },
-    { "src": "./loja_icon_pwa.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "./loja_icon_pwa.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
   ],
   "shortcuts": [
     {
