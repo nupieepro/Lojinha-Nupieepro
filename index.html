@@ -8,7 +8,7 @@
     <meta name="description" content="Loja oficial do NUPIEEPRO — UFPI. Ecobag, bloco de notas, chaveiro, bottons e muito mais!">
     <meta property="og:title" content="NUPIEEPRO STORE">
     <meta property="og:description" content="Loja oficial do NUPIEEPRO — UFPI.">
-    <meta property="og:image" content="https://nupieepro.github.io/Lojinha-Nupieepro/loja_icon_bg29324F.png">
+    <meta property="og:image" content="https://nupieepro.github.io/Lojinha-Nupieepro/loja_icon_pwa.png">
     <meta property="og:url" content="https://nupieepro.github.io/Lojinha-Nupieepro/">
     <meta name="theme-color" content="#0f0732">
     <link rel="canonical" href="https://nupieepro.github.io/Lojinha-Nupieepro/">
@@ -53,7 +53,7 @@
         if(!s || window.__erroConexaoAtivo) return;
         window.__erroConexaoAtivo = true;
         s.innerHTML =
-            '<img src="./loja_icon_bg29324F.png" alt="Logo" class="splash-img" onerror="this.style.visibility=\'hidden\'">'+
+            '<img src="./loja_icon_marca.png" alt="Logo" class="splash-img" onerror="this.style.visibility=\'hidden\'">'+
             '<div class="splash-text" style="opacity:1;margin-top:20px">Sem conexão com a internet 📡</div>'+
             '<div style="color:rgba(255,255,255,0.7);font-size:0.78rem;margin-top:10px;max-width:280px;text-align:center;line-height:1.5">Verifique sua internet e toque para tentar de novo.</div>'+
             '<button onclick="location.reload()" style="margin-top:20px;padding:12px 26px;border-radius:30px;border:none;background:#f85900;color:#fff;font-weight:700;font-size:0.85rem;cursor:pointer">Tentar novamente</button>';
@@ -310,9 +310,12 @@
         /* FOOTER */
         footer{margin-top:44px;background:linear-gradient(160deg,var(--roxo-brand) 20%,#1a1245 100%);border-radius:40px 40px 0 0;padding:44px 20px 28px;text-align:center;color:var(--branco);box-shadow:0 -10px 30px rgba(15,7,50,0.15);}
         .footer-inner{max-width:600px;margin:0 auto;}
-        .footer-logo{width:150px;height:150px;border-radius:28px;object-fit:contain;box-shadow:0 10px 30px rgba(0,0,0,0.3);}
-        .footer-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:26px;}
-        .footer-action-btn{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:var(--branco);padding:11px 18px;border-radius:30px;font-family:inherit;font-size:0.78rem;font-weight:700;text-decoration:none;cursor:pointer;transition:0.2s;}
+        /* PNG com fundo transparente — assenta direto no gradiente, sem "caixa" atrás */
+        .footer-logo{width:min(230px,72%);height:auto;display:block;margin:0 auto;}
+        /* nowrap + flex:1 mantém os 3 numa fileira só até nas telas de 360px */
+        .footer-actions{display:flex;justify-content:center;gap:8px;margin-top:26px;}
+        .footer-action-btn{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:var(--branco);padding:11px 10px;border-radius:30px;font-family:inherit;font-size:0.75rem;font-weight:700;text-decoration:none;white-space:nowrap;cursor:pointer;transition:0.2s;}
+        @media(min-width:600px){.footer-actions{gap:12px;}.footer-action-btn{flex:0 0 auto;padding:12px 22px;font-size:0.8rem;}}
         .footer-action-btn:active{background:var(--laranja-brand);border-color:var(--laranja-brand);transform:scale(0.96);}
         .footer-action-btn i{font-size:0.85rem;color:var(--laranja-brand);}
         .footer-action-btn:active i{color:var(--branco);}
@@ -326,7 +329,7 @@
 <input type="text" name="website" id="honeypot" style="display:none!important" tabindex="-1" autocomplete="off">
 
 <div id="tela-manutencao">
-    <img src="./loja_icon_bg29324F.png" alt="Logo" class="manut-logo">
+    <img src="./loja_icon_marca.png" alt="Logo" class="manut-logo">
     <div class="manut-titulo">Estamos em Manutenção ⚙️</div>
     <div class="manut-msg">Fique ligado em novas novidades!</div>
     <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" class="manut-insta">
@@ -337,7 +340,7 @@
 <div id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-msg">Adicionado!</span></div>
 
 <div id="splash-screen">
-    <img src="./loja_icon_bg29324F.png" alt="Logo" class="splash-img" onerror="this.style.visibility='hidden'">
+    <img src="./loja_icon_marca.png" alt="Logo" class="splash-img" onerror="this.style.visibility='hidden'">
     <div class="splash-text">Lojinha Oficial Nupieepro</div>
 </div>
 
@@ -345,7 +348,7 @@
     <div class="header-inner">
         <div class="header-row">
             <div class="header-brand">
-                <img src="./loja_icon_bg29324F.png" alt="Logo" class="brand-logo" onerror="this.style.visibility='hidden'">
+                <img src="./loja_icon_marca.png" alt="Logo" class="brand-logo" onerror="this.style.visibility='hidden'">
                 <div class="brand-info">
                     <h1 class="brand">Nupiee<span>Pro</span></h1>
                     <div class="store-badge"><i class="fa-solid fa-store"></i> Store</div>
@@ -389,11 +392,11 @@
 
 <footer>
     <div class="footer-inner">
-        <img src="./loja_icon_pwa.png" alt="NupieePro — Núcleo Piauiense de Estudantes de Engenharia de Produção" class="footer-logo" onerror="this.style.visibility='hidden'">
+        <img src="./loja_logo_transparente.png" alt="NupieePro — Núcleo Piauiense de Estudantes de Engenharia de Produção" class="footer-logo" onerror="this.style.visibility='hidden'">
         <div class="footer-actions">
             <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" class="footer-action-btn"><i class="fa-brands fa-instagram"></i> Instagram</a>
             <button class="footer-action-btn" onclick="abrirSobre()"><i class="fa-solid fa-circle-info"></i> Sobre</button>
-            <button class="footer-action-btn" onclick="abrirMeusPedidos()"><i class="fa-solid fa-clock-rotate-left"></i> Meus Pedidos</button>
+            <button class="footer-action-btn" onclick="abrirMeusPedidos()"><i class="fa-solid fa-clock-rotate-left"></i> Pedidos</button>
         </div>
         <div class="footer-divider"></div>
         <div class="footer-credit">Feito com <i class="fa-solid fa-heart" style="color:var(--azul-coracao)"></i> <i class="fa-solid fa-heart" style="color:var(--laranja-brand)"></i> pelo NUPIEEPRO</div>
@@ -565,7 +568,7 @@
 <div class="modal-bg" id="modal-sobre" onclick="fecharModais(event)">
     <div class="modal-panel">
         <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
-        <img src="./loja_icon_bg29324F.png" alt="Logo" style="width:70px;height:70px;border-radius:50%;border:3px solid var(--laranja-brand);object-fit:cover;margin:0 auto 14px;display:block">
+        <img src="./loja_icon_marca.png" alt="Logo" style="width:70px;height:70px;border-radius:50%;border:3px solid var(--laranja-brand);object-fit:cover;margin:0 auto 14px;display:block">
         <h2 style="text-align:center;color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:4px">NUPIEEPRO</h2>
         <p style="text-align:center;font-size:0.75rem;color:var(--texto-suave);margin-bottom:14px">Núcleo Piauiense de Estudantes de Engenharia de Produção</p>
         <p style="font-size:0.83rem;color:var(--texto);line-height:1.7;margin-bottom:14px">O Núcleo Piauiense de Estudantes de Engenharia de Produção (NUPIEEPRO), da Universidade Federal do Piauí (UFPI), dedica-se à realização de eventos, treinamentos e projetos com o objetivo de promover experiências na área de Engenharia de Produção. Fundado em 2015, sendo duas vezes apontado pela ABEPRO Jovem como o <strong>Núcleo Mais Inovador do Brasil</strong> e eleito o <strong>Maior Núcleo do Brasil</strong>.</p>
@@ -586,7 +589,7 @@
     <div style="font-weight:700;font-size:0.9rem">Ver Sacola <i class="fa-solid fa-bag-shopping" style="margin-left:4px"></i></div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ── Supabase ── Preencha com os valores do seu projeto (Settings → API) */
 const SUPABASE_URL      = 'https://scacjsosvlllapbgetos.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_JgsW4RbPk2HwYgkvVnaEug_NE79JOxX';
