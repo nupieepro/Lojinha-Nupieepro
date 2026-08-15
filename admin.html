@@ -895,6 +895,7 @@ if ('serviceWorker' in navigator) {
     const _tinhaControllerAntes = !!navigator.serviceWorker.controller;
     navigator.serviceWorker.register('./admin-sw.js')
         .then(reg => {
+            reg.update(); /* checa na hora, não só depois do 1º minuto */
             setInterval(() => reg.update(), 60 * 1000);
         })
         .catch(() => {});

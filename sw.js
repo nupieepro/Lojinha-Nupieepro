@@ -3,7 +3,7 @@
    Caminhos relativos — funciona em qualquer subpasta
    ============================================================ */
 
-const CACHE = 'nupieepro-v10';
+const CACHE = 'nupieepro-v11';
 
 const CACHEAR = [
     'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
@@ -59,7 +59,26 @@ self.addEventListener('fetch', e => {
         return;
     }
 
-    /* HTML — rede primeiro, cache como fallback offline */
+    /* A PÁGINA em si: busca ignorando o cache HTTP do navegador.
+       O GitHub Pages manda Cache-Control: max-age=600, então um "rede primeiro"
+       comum ainda podia devolver um HTML de até 10 min atrás — quem já tinha o
+       site aberto/instalado ficava vendo a versão velha mesmo online. */
+    if (e.request.destination === 'document') {
+        e.respondWith(
+            fetch(e.request.url, { cache: 'no-store' })
+                .then(res => {
+                    /* resposta redirecionada não pode ser devolvida a uma navegação */
+                    if (!res || !res.ok || res.redirected) throw new Error('recorrer ao fetch normal');
+                    const clone = res.clone();
+                    caches.open(CACHE).then(c => c.put(e.request, clone));
+                    return res;
+                })
+                .catch(() => fetch(e.request).catch(() => caches.match(e.request)))
+        );
+        return;
+    }
+
+    /* Demais arquivos — rede primeiro, cache como fallback offline */
     e.respondWith(
         fetch(e.request)
             .then(res => {

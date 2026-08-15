@@ -3,7 +3,7 @@
    Versão: 3.0.0 — Auto-update ativo
    ============================================================ */
 
-const CACHE = 'nupi-admin-v3';
+const CACHE = 'nupi-admin-v4';
 
 const ESSENCIAIS = [
   '/Lojinha-Nupieepro/admin.html',

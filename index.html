@@ -703,6 +703,9 @@ window.addEventListener('load',()=>{
         /* Usa sempre caminho relativo — funciona em qualquer subpasta */
         navigator.serviceWorker.register('./sw.js')
             .then(reg=>{
+                /* Checa NA HORA: só o setInterval deixava a 1ª verificação pra 5 min
+                   depois, então quem abria e fechava rápido nunca pegava a atualização. */
+                reg.update();
                 setInterval(()=>reg.update(), 5*60*1000);
             })
             .catch(()=>{});
