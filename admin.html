@@ -10,10 +10,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Nupi Admin">
-    <link rel="apple-touch-icon" href="https://nupieepro.github.io/Lojinha-Nupieepro/admin_icon_bgFFFFFF.png">
+    <link rel="apple-touch-icon" href="./admin_icon_bgFFFFFF.png">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Nupi Admin">
-    <link rel="apple-touch-icon" sizes="192x192" href="https://nupieepro.github.io/Lojinha-Nupieepro/admin_icon_bgFFFFFF.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="./admin_icon_bgFFFFFF.png">
     <link rel="manifest" href="./admin-manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -304,7 +304,7 @@
      ============================================================ -->
 <div id="tela-login">
     <div class="login-box">
-        <img src="https://nupieepro.github.io/Lojinha-Nupieepro/admin_icon_bgFFFFFF.png" alt="Logo" class="login-logo">
+        <img src="./admin_icon_bgFFFFFF.png" alt="Logo" class="login-logo">
         <div class="login-titulo">NUPIEEPRO</div>
         <div class="login-sub">Painel Administrativo</div>
         <div style="position:relative">
@@ -328,7 +328,7 @@
     <!-- Topbar -->
     <div class="topbar">
         <div class="topbar-logo">
-            <img src="https://nupieepro.github.io/Lojinha-Nupieepro/admin_icon_bgFFFFFF.png" alt="Logo">
+            <img src="./admin_icon_bgFFFFFF.png" alt="Logo">
             <div class="topbar-titulo">NUPIEE<span>PRO</span> Admin</div>
         </div>
         <div class="topbar-right">
@@ -890,12 +890,16 @@
    ============================================================ */
 /* ── Service Worker do Admin (auto-update) ── */
 if ('serviceWorker' in navigator) {
+    /* Só recarrega se já existia um SW controlando a aba — na 1ª visita não há
+       nada em cache ainda pra "atualizar" (evita carregar o painel 2x sempre). */
+    const _tinhaControllerAntes = !!navigator.serviceWorker.controller;
     navigator.serviceWorker.register('./admin-sw.js')
         .then(reg => {
             setInterval(() => reg.update(), 60 * 1000);
         })
         .catch(() => {});
     navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!_tinhaControllerAntes) return;
         if (!sessionStorage.getItem('_adminSwReload')) {
             sessionStorage.setItem('_adminSwReload', '1');
             window.location.reload();
@@ -1957,9 +1961,8 @@ document.addEventListener('keydown', e => {
 });
 
 /* ============================================================
-   UPLOAD DE FOTOS — ImgBB
+   UPLOAD DE FOTOS — Supabase Storage
    ============================================================ */
-const IMGBB_KEY = '7dd10f3e634617cf6231fa3b4a3a728e';
 let fotosAtuais = []; /* array de URLs */
 
 function renderFotosPreview(){
@@ -2004,12 +2007,12 @@ async function handleFotoUpload(files){
         if(!file.type.startsWith('image/')){ toast('Só imagens são aceitas!', true); continue; }
         progress.textContent = `⏳ Enviando ${i+1}/${arr.length}...`;
         try {
-            const url = await uploadComFallback(file);
+            const url = await uploadParaStorage(file);
             fotosAtuais.push(url);
             renderFotosPreview();
         } catch(err) {
-            /* Se todos os serviços falharam, converte pra base64 local */
-            toast('⚠️ Serviços offline. Usando imagem local...', true);
+            /* Se o Storage falhou (ex: sem internet), converte pra base64 local */
+            toast('⚠️ Upload falhou. Usando imagem local...', true);
             try {
                 const b64 = await fileParaBase64(file);
                 fotosAtuais.push(b64);
@@ -2024,39 +2027,23 @@ async function handleFotoUpload(files){
     if(arr.length > 0) toast(`✅ ${arr.length} foto(s) processada(s)!`);
 }
 
-/* Tenta ImgBB, depois freeimage.host, depois base64 */
-async function uploadComFallback(file){
-    /* Tenta ImgBB primeiro */
-    try {
-        const form = new FormData();
-        form.append('image', file);
-        const res = await Promise.race([
-            fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, { method:'POST', body:form }),
-            new Promise((_,r) => setTimeout(()=>r(new Error('timeout')), 10000))
-        ]);
-        const data = await res.json();
-        if(data.success) return data.data.url;
-        throw new Error('ImgBB falhou');
-    } catch(e1) {}
-
-    /* Tenta Imgur como fallback */
-    try {
-        const form2 = new FormData();
-        form2.append('image', file);
-        const res2 = await Promise.race([
-            fetch('https://api.imgur.com/3/image', {
-                method: 'POST',
-                headers: { 'Authorization': 'Client-ID 546c25a59c58ad7' },
-                body: form2
-            }),
-            new Promise((_,r) => setTimeout(()=>r(new Error('timeout')), 10000))
-        ]);
-        const data2 = await res2.json();
-        if(data2.success) return data2.data.link;
-        throw new Error('Imgur falhou');
-    } catch(e2) {}
-
-    throw new Error('Todos os serviços falharam');
+/* Sobe a foto pra Edge Function "upload-imagem", que confere a senha admin
+   e grava no bucket "produtos" do Storage usando a service role. */
+async function uploadParaStorage(file){
+    const form = new FormData();
+    form.append('chave', chaveAdmin);
+    form.append('arquivo', file);
+    const res = await Promise.race([
+        fetch(SUPABASE_URL+'/functions/v1/upload-imagem', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer '+SUPABASE_ANON_KEY, 'apikey': SUPABASE_ANON_KEY },
+            body: form
+        }),
+        new Promise((_,r) => setTimeout(()=>r(new Error('timeout')), 15000))
+    ]);
+    const data = await res.json();
+    if(!res.ok || !data.url) throw new Error(data.error || 'Falha no upload');
+    return data.url;
 }
 
 async function fileParaBase64(file){
@@ -2066,15 +2053,6 @@ async function fileParaBase64(file){
         reader.onerror = () => rej(new Error('Leitura falhou'));
         reader.readAsDataURL(file);
     });
-}
-
-async function uploadImgBB(file){
-    const form = new FormData();
-    form.append('image', file);
-    const res = await fetch('https://api.imgbb.com/1/upload?key='+IMGBB_KEY, { method:'POST', body:form });
-    const data = await res.json();
-    if(!data.success) throw new Error(data.error?.message || 'Erro ImgBB');
-    return data.data.url;
 }
 
 /* Carrega fotos existentes ao abrir modal de produto */

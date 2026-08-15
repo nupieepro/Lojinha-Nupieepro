@@ -1,0 +1,4 @@
+project_id = "scacjsosvlllapbgetos"
+
+[functions.upload-imagem]
+verify_jwt = false
