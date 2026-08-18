@@ -6,13 +6,44 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>NUPIEEPRO STORE</title>
     <meta name="description" content="Loja oficial do NUPIEEPRO — UFPI. Ecobag, bloco de notas, chaveiro, bottons e muito mais!">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NUPIEEPRO STORE">
+    <meta property="og:locale" content="pt_BR">
     <meta property="og:title" content="NUPIEEPRO STORE">
-    <meta property="og:description" content="Loja oficial do NUPIEEPRO — UFPI.">
+    <meta property="og:description" content="Loja oficial do NUPIEEPRO — UFPI. Ecobag, bloco de notas, chaveiro, bottons e muito mais!">
     <meta property="og:image" content="https://nupieepro.github.io/Lojinha-Nupieepro/loja_icon_pwa.png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:alt" content="Logo NUPIEEPRO Store">
     <meta property="og:url" content="https://nupieepro.github.io/Lojinha-Nupieepro/">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="NUPIEEPRO STORE">
+    <meta name="twitter:description" content="Loja oficial do NUPIEEPRO — UFPI. Ecobag, bloco de notas, chaveiro, bottons e muito mais!">
+    <meta name="twitter:image" content="https://nupieepro.github.io/Lojinha-Nupieepro/loja_icon_pwa.png">
     <meta name="theme-color" content="#0f0732">
     <link rel="canonical" href="https://nupieepro.github.io/Lojinha-Nupieepro/">
     <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/png" sizes="512x512" href="./loja_icon_pwa.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="./loja_icon_marca.png">
+    <link rel="shortcut icon" href="./loja_icon_pwa.png">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "NUPIEEPRO STORE",
+        "description": "Loja oficial do NUPIEEPRO — UFPI. Ecobag, bloco de notas, chaveiro, bottons e muito mais!",
+        "url": "https://nupieepro.github.io/Lojinha-Nupieepro/",
+        "image": "https://nupieepro.github.io/Lojinha-Nupieepro/loja_icon_pwa.png",
+        "logo": "https://nupieepro.github.io/Lojinha-Nupieepro/loja_icon_pwa.png",
+        "telephone": "+55 86 99997-6226",
+        "priceRange": "$",
+        "sameAs": ["https://www.instagram.com/nupieepro"],
+        "parentOrganization": {
+            "@type": "CollegeOrUniversity",
+            "name": "Universidade Federal do Piauí"
+        }
+    }
+    </script>
 
     <!-- iOS Safari PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -73,6 +104,11 @@
         img{max-width:100%;display:block;}
         button{font-family:inherit;cursor:pointer;}
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+
+        /* Acessibilidade: link "pular para o conteúdo" e foco visível pra navegação por teclado */
+        .skip-link{position:absolute;top:-50px;left:12px;z-index:100000;background:var(--laranja-brand);color:#fff;padding:10px 18px;border-radius:10px;font-weight:700;font-size:0.85rem;text-decoration:none;transition:top 0.2s;}
+        .skip-link:focus{top:12px;}
+        button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--laranja-brand);outline-offset:2px;border-radius:4px;}
 
         /* SPLASH */
         #splash-screen{position:fixed;inset:0;background:var(--roxo-brand);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s,visibility 0.5s;}
@@ -331,6 +367,8 @@
 </head>
 <body>
 
+<a href="#conteudo-principal" class="skip-link">Pular para o conteúdo</a>
+
 <input type="text" name="website" id="honeypot" style="display:none!important" tabindex="-1" autocomplete="off">
 
 <div id="tela-manutencao">
@@ -364,13 +402,14 @@
         <div class="welcome-msg">👋 Bem-vindo(a), Nupilover!</div>
         <div class="header-busca">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="search" id="campo-busca" placeholder="Buscar produto..." autocomplete="off" maxlength="60" oninput="debounceBusca(this.value)">
+            <input type="search" id="campo-busca" placeholder="Buscar produto..." aria-label="Buscar produto" autocomplete="off" maxlength="60" oninput="debounceBusca(this.value)">
         </div>
     </div>
 </header>
 
 <div id="hero-banner" style="display:none"></div>
 
+<main id="conteudo-principal">
 <div class="filter-container">
     <div class="filter-scroll" id="filter-scroll">
         <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
@@ -394,6 +433,7 @@
     <h3>Nenhum produto encontrado</h3>
     <p>Tente outro termo ou categoria</p>
 </div>
+</main>
 
 <footer>
     <div class="footer-inner">
@@ -412,7 +452,7 @@
 <!-- MODAL LGPD -->
 <div class="modal-bg" id="modal-lgpd" onclick="fecharModais(event)">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <h2 style="color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:14px">Privacidade e Proteção de Dados</h2>
         <p style="font-size:0.83rem;color:var(--texto);line-height:1.7;margin-bottom:10px">
             O <strong>NUPIEEPRO</strong> respeita sua privacidade e cumpre a 
@@ -432,7 +472,7 @@
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
             <strong style="color:var(--roxo-brand)">Armazenamento:</strong><br>
-            Os dados ficam salvos no Google Sheets do NUPIEEPRO, protegido por senha, e no seu próprio dispositivo (localStorage).
+            Os dados ficam salvos em um banco de dados seguro do NUPIEEPRO (protegido por senha e acesso restrito à equipe), e no seu próprio dispositivo (localStorage).
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:16px">
             <strong style="color:var(--roxo-brand)">Seus direitos:</strong><br>
@@ -448,7 +488,7 @@
 <!-- MODAL PRODUTO -->
 <div class="modal-bg" id="modal-details" onclick="fecharModais(event)">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <div class="detail-img-box">
             <img src="" id="detalhe-img" class="detail-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
             <div id="detalhe-fallback" class="no-photo-placeholder" style="display:none;position:absolute;inset:0;z-index:1"><i class="fa-solid fa-box-open"></i><span>Sem foto</span></div>
@@ -468,9 +508,9 @@
         </div>
         <label class="input-label">Quantidade:</label>
         <div class="qty-wrapper">
-            <button class="qty-btn" onclick="alterarQtd(-1)">-</button>
+            <button class="qty-btn" onclick="alterarQtd(-1)" aria-label="Diminuir quantidade">-</button>
             <div class="qty-num" id="detalhe-qtd">1</div>
-            <button class="qty-btn" onclick="alterarQtd(1)">+</button>
+            <button class="qty-btn" onclick="alterarQtd(1)" aria-label="Aumentar quantidade">+</button>
         </div>
         <button class="btn-primary" onclick="adicionarAoCarrinho()"><i class="fa-solid fa-bag-shopping"></i> Adicionar à Sacola</button>
     </div>
@@ -479,7 +519,7 @@
 <!-- MODAL CHECKOUT -->
 <div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
 
         <div id="tela-sucesso">
             <div class="sucesso-icon">🎉</div>
@@ -499,7 +539,7 @@
                     <input type="text" id="campo-cupom" class="cupom-input" placeholder="Digite o código" maxlength="20" autocomplete="off">
                     <button class="cupom-aplicar" onclick="validarCupom()">Aplicar</button>
                 </div>
-                <div id="cupom-ok"><i class="fa-solid fa-circle-check"></i><span id="cupom-ok-texto"></span><button class="cupom-remover" onclick="removerCupom()">✕</button></div>
+                <div id="cupom-ok"><i class="fa-solid fa-circle-check"></i><span id="cupom-ok-texto"></span><button class="cupom-remover" onclick="removerCupom()" aria-label="Remover cupom">✕</button></div>
             </div>
 
             <ul class="cart-list" id="lista-carrinho"></ul>
@@ -563,7 +603,7 @@
 <!-- MODAL PEDIDOS -->
 <div class="modal-bg" id="modal-pedidos" onclick="fecharModais(event)">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <h2 style="color:var(--roxo-brand);margin-bottom:16px;font-size:1.2rem;font-weight:800"><i class="fa-solid fa-clock-rotate-left"></i> Meus Pedidos</h2>
         <div id="lista-pedidos-hist"></div>
     </div>
@@ -572,7 +612,7 @@
 <!-- MODAL SOBRE -->
 <div class="modal-bg" id="modal-sobre" onclick="fecharModais(event)">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <img src="./loja_icon_marca.png" alt="Logo" style="width:70px;height:70px;border-radius:50%;border:3px solid var(--laranja-brand);object-fit:cover;margin:0 auto 14px;display:block">
         <h2 style="text-align:center;color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:4px">NUPIEEPRO</h2>
         <p style="text-align:center;font-size:0.75rem;color:var(--texto-suave);margin-bottom:14px">Núcleo Piauiense de Estudantes de Engenharia de Produção</p>
@@ -586,7 +626,7 @@
     </div>
 </div>
 
-<div class="float-bar" id="barra-carrinho" onclick="abrirCheckout()">
+<div class="float-bar" id="barra-carrinho" onclick="abrirCheckout()" role="button" tabindex="0" aria-label="Ver sacola e finalizar pedido" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirCheckout();}">
     <div style="line-height:1.2">
         <div id="barra-qtd" style="font-size:0.72rem;opacity:0.8;font-weight:500">0 itens</div>
         <div id="barra-total" style="font-weight:800;font-size:1.1rem;color:var(--laranja-brand)">R$ 0,00</div>
@@ -952,7 +992,7 @@ function criarCardProduto(p){
             <div class="no-photo-placeholder" style="${imgSrc?'display:none':''}"><i class="fa-solid fa-box-open"></i><span>${san(p.nome)}</span></div>
             ${badges?`<div class="badge-wrap">${badges}</div>`:''}
         </div>
-        <div class="card-info" onclick="abrirDetalhes(${p.id})">
+        <div class="card-info" onclick="abrirDetalhes(${p.id})" role="button" tabindex="0" aria-label="Ver detalhes de ${san(p.nome)}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirDetalhes(${p.id});}">
             <div class="card-title">${san(p.nome)}</div>
             <div class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
             ${enc?`<div class="card-enc">📦 Apenas sob encomenda</div>`:''}
@@ -1137,7 +1177,7 @@ function renderCarrinho(){
     if(!carrinho.length){fecharModais(null);return;}
     carrinho.forEach((item,idx)=>{
         const li=document.createElement('li');li.className='cart-item';
-        li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>R$${item.preco.toFixed(2).replace('.',',')}${item.tamanho&&item.tamanho!=='Único'?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})"><i class="fa-solid fa-trash"></i></button>`;
+        li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>R$${item.preco.toFixed(2).replace('.',',')}${item.tamanho&&item.tamanho!=='Único'?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})" aria-label="Remover item da sacola"><i class="fa-solid fa-trash"></i></button>`;
         lista.appendChild(li);
     });atualizarResumo();
 }

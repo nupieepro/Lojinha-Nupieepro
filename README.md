@@ -16,7 +16,7 @@ Fundado em 2015, o NUPIEEPRO dedica-se à realização de eventos, treinamentos 
 
 ## Nossa loja
 
-Acesse: [nupieepro.github.io](https://nupieepro.github.io)
+Acesse: [nupieepro.github.io/Lojinha-Nupieepro](https://nupieepro.github.io/Lojinha-Nupieepro/)
 
 Camisas, acessórios e muito mais com a identidade oficial do NUPIEEPRO.
 
