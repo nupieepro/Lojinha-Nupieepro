@@ -1308,10 +1308,27 @@ function abrirPedido(numero){
             <a href="https://wa.me/${p.whatsapp||''}" target="_blank" rel="noopener" class="btn btn-sm" style="background:#25D366;color:#fff">
                 <i class="fa-brands fa-whatsapp"></i> WhatsApp
             </a>
+            ${p.comprovante_path?`<button class="btn btn-outline btn-sm" onclick="verComprovante('${p.comprovante_path}')">
+                <i class="fa-solid fa-receipt"></i> Ver comprovante
+            </button>`:''}
         </div>
     `;
 
     abrirModal('modal-pedido');
+}
+
+/* Comprovante de PIX fica num bucket privado — só quem está autenticado como
+   admin consegue gerar uma URL assinada temporária pra visualizar (a policy
+   de leitura do bucket exige is_admin()). */
+async function verComprovante(path){
+    if(!_sb) return;
+    try {
+        const { data, error } = await _sb.storage.from('comprovantes').createSignedUrl(path, 3600);
+        if(error || !data?.signedUrl) throw new Error(error?.message || 'Falha ao gerar link');
+        window.open(data.signedUrl, '_blank', 'noopener');
+    } catch(e) {
+        toast('Não foi possível abrir o comprovante: ' + e.message, true);
+    }
 }
 
 async function atualizarStatus(numero, status){
