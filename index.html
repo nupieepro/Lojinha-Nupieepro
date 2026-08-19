@@ -194,11 +194,11 @@
         .badge-encomenda{background:#f39c12;color:#fff;}
         .badge-esgotado{background:#7f8c8d;color:#fff;}
         .badge-ultimas{background:var(--vermelho-del);color:#fff;}
+        .badge-estoque{background:#27ae60;color:#fff;}
         .card-info{padding:14px;text-align:center;display:flex;flex-direction:column;flex-grow:1;cursor:pointer;}
         .card-title{font-size:0.82rem;font-weight:700;color:var(--roxo-brand);line-height:1.3;height:34px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
         .card-price{font-size:1.05rem;color:var(--laranja-brand);font-weight:800;margin-top:5px;}
         .card-enc{font-size:0.68rem;color:var(--laranja-brand);font-weight:700;margin-top:3px;}
-        .card-estoque{font-size:0.68rem;color:var(--texto-suave);margin-top:3px;}
         .tap-hint{font-size:0.62rem;color:#aaa;margin-top:auto;padding-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
 
         /* VITRINE VAZIA */
@@ -928,7 +928,12 @@ async function carregarAPI(tentativa){
 function filtrar(cat,btn){filtroAtual=cat;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderVitrine();}
 
 function criarCardProduto(p){
-    const enc=!!p.encomenda,dest=!!p.destaque,esg=p.estoque===0,ult=p.estoque>0&&p.estoque<10;
+    const enc=!!p.encomenda,dest=!!p.destaque;
+    /* Produto sob encomenda não tem controle de estoque de verdade — estoque=0
+       nele é o normal (feito na hora), não "esgotado". Por isso todo o destaque
+       de estoque (esgotado / últimas / em estoque) só se aplica a quem NÃO é
+       encomenda; do contrário o card ficava travado (.esgotado desliga o clique). */
+    const esg=!enc&&p.estoque===0, ult=!enc&&p.estoque>0&&p.estoque<10;
     /* Pega imagem: tenta img, depois imagens[0], depois vazio */
     const imgSrc = p.img
         || (Array.isArray(p.imagens) && p.imagens[0])
@@ -936,9 +941,15 @@ function criarCardProduto(p){
         || '';
     let badges='';
     if(dest) badges+=`<span class="badge badge-destaque">⭐ Destaque</span>`;
-    if(enc)  badges+=`<span class="badge badge-encomenda">📦 Encomenda</span>`;
-    if(esg)  badges+=`<span class="badge badge-esgotado">Esgotado</span>`;
-    if(ult&&!esg) badges+=`<span class="badge badge-ultimas">⚡ Últimas</span>`;
+    if(enc){
+        badges+=`<span class="badge badge-encomenda">📦 Encomenda</span>`;
+    } else if(esg){
+        badges+=`<span class="badge badge-esgotado">Esgotado</span>`;
+    } else if(ult){
+        badges+=`<span class="badge badge-ultimas">⚡ Últimas ${p.estoque}</span>`;
+    } else {
+        badges+=`<span class="badge badge-estoque">✅ Em estoque</span>`;
+    }
     const el=document.createElement('div');
     el.className=`card${dest?' destaque':''}${esg?' esgotado':''}`;
     el.innerHTML=`
@@ -956,7 +967,6 @@ function criarCardProduto(p){
             <div class="card-title">${san(p.nome)}</div>
             <div class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
             ${enc?`<div class="card-enc">📦 Apenas sob encomenda</div>`:''}
-            ${!esg?`<div class="card-estoque">${p.estoque} em estoque</div>`:''}
             <div class="tap-hint">Ver Detalhes</div>
         </div>`;
     return el;
@@ -1037,7 +1047,8 @@ function abrirDetalhes(id){
         fbEl.style.display='flex';
     }
     const estEl=document.getElementById('detalhe-estoque');
-    if(itemSel.estoque>0){estEl.textContent=itemSel.estoque+' em estoque';estEl.style.display='block';}else estEl.style.display='none';
+    /* Sob encomenda não tem estoque de verdade — o badge/aviso de encomenda logo abaixo já cobre isso */
+    if(!itemSel.encomenda&&itemSel.estoque>0){estEl.textContent=itemSel.estoque+' em estoque';estEl.style.display='block';}else estEl.style.display='none';
     const descEl=document.getElementById('detalhe-desc');
     if(itemSel.descricao){descEl.textContent=itemSel.descricao;descEl.style.display='block';}else descEl.style.display='none';
     const encEl=document.getElementById('detalhe-enc');
