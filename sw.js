@@ -3,7 +3,7 @@
    Caminhos relativos — funciona em qualquer subpasta
    ============================================================ */
 
-const CACHE = 'nupieepro-v16';
+const CACHE = 'nupieepro-v17';
 
 const CACHEAR = [
     './fontawesome-subset.css',
@@ -11,6 +11,7 @@ const CACHEAR = [
     './fonts/fa-brands-subset.woff2',
     './fonts/adumu-regular-subset.woff2',
     './fonts/leaguespartan-bold-subset.woff2',
+    './vendor/supabase-js-2.112.2.min.js',
     './loja_icon_marca.png',
     './loja_icon_emblema.png',
     './loja_icon_pwa.png',

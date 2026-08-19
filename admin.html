@@ -6,6 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Admin — NUPIEEPRO STORE</title>
     <meta name="theme-color" content="#0f0732">
+    <!-- Mesma CSP e mesma ressalva do index.html (ver comentário lá): frame-ancestors
+         não funciona via <meta>, e 'unsafe-inline' é necessário enquanto o painel
+         inteiro rodar em script inline + onclick="". -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.supabase.co; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,7 +21,7 @@
     <link rel="preload" href="./fonts/leaguespartan-bold-subset.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/adumu-regular-subset.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="./fontawesome-subset.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.__sbScriptFailed=true"></script>
+    <script src="./vendor/supabase-js-2.112.2.min.js" onerror="window.__sbScriptFailed=true"></script>
     <style>
         /* Fontes self-hosted, subsetadas — mesmas do storefront, mesmo raciocínio
            (ver index.html): só existe o peso Bold do League Spartan, então o

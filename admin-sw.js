@@ -3,7 +3,7 @@
    Versão: 3.0.0 — Auto-update ativo
    ============================================================ */
 
-const CACHE = 'nupi-admin-v7';
+const CACHE = 'nupi-admin-v8';
 
 const ESSENCIAIS = [
   './admin.html',
@@ -14,7 +14,8 @@ const ESSENCIAIS = [
   './fonts/fa-solid-subset.woff2',
   './fonts/fa-brands-subset.woff2',
   './fonts/adumu-regular-subset.woff2',
-  './fonts/leaguespartan-bold-subset.woff2'
+  './fonts/leaguespartan-bold-subset.woff2',
+  './vendor/supabase-js-2.112.2.min.js'
 ];
 
 self.addEventListener('install', e => {

@@ -11,6 +11,15 @@
     <meta property="og:image" content="https://nupieepro.github.io/Lojinha-Nupieepro/loja_icon_pwa.png">
     <meta property="og:url" content="https://nupieepro.github.io/Lojinha-Nupieepro/">
     <meta name="theme-color" content="#0f0732">
+    <!-- CSP via <meta> — é o máximo que dá pra fazer sem controle de header HTTP (GitHub
+         Pages não interpreta _headers). frame-ancestors NÃO funciona em <meta> (só em
+         header real), então clickjacking continua sem mitigação enquanto a hospedagem
+         não migrar. 'unsafe-inline' em script-src/style-src é necessário: o app inteiro
+         usa tags de script inline e onclick="" nos elementos — travar isso exigiria reescrever
+         todo evento pra addEventListener antes, um refactor à parte, não desta rodada.
+         Quando o C4 (reCAPTCHA) ligar no client, script-src/connect-src/frame-src
+         precisam ganhar https://www.google.com e https://www.gstatic.com. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.supabase.co; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'">
     <link rel="canonical" href="https://nupieepro.github.io/Lojinha-Nupieepro/">
     <link rel="manifest" href="./manifest.json">
 
@@ -31,7 +40,7 @@
     <link rel="preload" href="./fonts/leaguespartan-bold-subset.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/adumu-regular-subset.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="./fontawesome-subset.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.__sbScriptFailed=true"></script>
+    <script src="./vendor/supabase-js-2.112.2.min.js" onerror="window.__sbScriptFailed=true"></script>
     <script src="./qrcode.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded',function(){
