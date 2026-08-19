@@ -432,7 +432,7 @@
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
             <strong style="color:var(--roxo-brand)">Armazenamento:</strong><br>
-            Os dados ficam salvos no Google Sheets do NUPIEEPRO, protegido por senha, e no seu próprio dispositivo (localStorage).
+            Os dados ficam salvos no banco de dados do NUPIEEPRO (Supabase), com acesso restrito à equipe autenticada, e alguns dados de preenchimento (nome, WhatsApp) ficam salvos no seu próprio dispositivo (localStorage) só para agilizar seu próximo pedido.
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:16px">
             <strong style="color:var(--roxo-brand)">Seus direitos:</strong><br>
@@ -623,10 +623,10 @@ function rlOk(){
 let _bt; function debounceBusca(v){ clearTimeout(_bt); _bt=setTimeout(()=>{busca=v.trim().toLowerCase();renderVitrine();},300); }
 
 let produtos=[
-    {id:1,nome:"Ecobag Nupieepro",preco:22,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg",descricao:"Ecobag resistente com a identidade do NUPIEEPRO.",tamanhos:[],estoque:20,destaque:false,encomenda:false},
-    {id:2,nome:"Bloco de Notas",preco:15,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg",descricao:"Bloco de notas personalizado NUPIEEPRO.",tamanhos:[],estoque:30,destaque:false,encomenda:false},
-    {id:3,nome:"Chaveiro Abridor",preco:4,tipo:"unico",categoria:"acessorio",img:"https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg",descricao:"Chaveiro abridor personalizado NUPIEEPRO.",tamanhos:[],estoque:50,destaque:false,encomenda:false},
-    {id:4,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Engenharia de Produção","Símbolo Engrenagem","Just-in-Time","Foco em Resultados"],estoque:100,destaque:false,encomenda:false}
+    {id:1,nome:"Ecobag Nupieepro",preco:22,tipo:"unico",categoria:"acessorio",img:"https://scacjsosvlllapbgetos.supabase.co/storage/v1/object/public/produtos/7f0e0501-ed37-426b-b9ed-c24a21ccd868.jpg",descricao:"Ecobag resistente com a identidade do NUPIEEPRO.",tamanhos:[],estoque:20,destaque:false,encomenda:false},
+    {id:2,nome:"Bloco de Notas",preco:15,tipo:"unico",categoria:"acessorio",img:"https://scacjsosvlllapbgetos.supabase.co/storage/v1/object/public/produtos/114aec3a-17e6-4c77-aa1e-25260477f9cf.jpg",descricao:"Bloco de notas personalizado NUPIEEPRO.",tamanhos:[],estoque:30,destaque:false,encomenda:false},
+    {id:3,nome:"Chaveiro Abridor",preco:4,tipo:"unico",categoria:"acessorio",img:"https://scacjsosvlllapbgetos.supabase.co/storage/v1/object/public/produtos/b6959faa-823b-413b-bc13-94763164f09a.jpg",descricao:"Chaveiro abridor personalizado NUPIEEPRO.",tamanhos:[],estoque:50,destaque:false,encomenda:false},
+    {id:4,nome:"Botton Personalizado",preco:3,tipo:"botton",categoria:"acessorio",img:"https://scacjsosvlllapbgetos.supabase.co/storage/v1/object/public/produtos/5e338609-0214-42fa-a832-7a3da6d59dd7.png",descricao:"Botton personalizado NUPIEEPRO. Escolha o design desejado.",tamanhos:[],tipos_botton:["Logo NUPIEEPRO","Engenharia de Produção","Símbolo Engrenagem","Just-in-Time","Foco em Resultados"],estoque:100,destaque:false,encomenda:false}
 ];
 let cupons={};  /* preenchido pela API — não hardcode mais */
 let carrinho=[],itemSel=null,qtdTemp=1,filtroAtual='todos',busca='',cupomApl=null,pixT=null;
@@ -773,10 +773,10 @@ window.addEventListener('load',()=>{
 
 /* Imagens garantidas por produto — usadas se API retornar URL vazia ou quebrada */
 const IMG_FALLBACK = {
-    1: 'https://i.ibb.co/WWLTTXWh/IMG-20260321-WA0025.jpg',
-    2: 'https://i.ibb.co/bxrKScQ/IMG-20260321-WA0026.jpg',
-    3: 'https://i.ibb.co/7JVsZwxg/IMG-20260321-WA0027.jpg',
-    4: 'https://i.ibb.co/8ggFsfXq/IMG-20260319-WA0050.jpg',
+    1: 'https://scacjsosvlllapbgetos.supabase.co/storage/v1/object/public/produtos/7f0e0501-ed37-426b-b9ed-c24a21ccd868.jpg',
+    2: 'https://scacjsosvlllapbgetos.supabase.co/storage/v1/object/public/produtos/114aec3a-17e6-4c77-aa1e-25260477f9cf.jpg',
+    3: 'https://scacjsosvlllapbgetos.supabase.co/storage/v1/object/public/produtos/b6959faa-823b-413b-bc13-94763164f09a.jpg',
+    4: 'https://scacjsosvlllapbgetos.supabase.co/storage/v1/object/public/produtos/5e338609-0214-42fa-a832-7a3da6d59dd7.png',
 };
 
 function normalizarProduto(p){

@@ -35,13 +35,9 @@ self.addEventListener('fetch', e => {
     if (e.request.method !== 'GET') return;
     if (url.startsWith('chrome-extension')) return;
 
-    /* Nunca cacheia: API Supabase, ImgBB, QR code, analytics */
+    /* Nunca cacheia: API Supabase, QR code, analytics */
     if (
         url.includes('supabase.co') ||
-        url.includes('script.google.com') ||
-        url.includes('ibb.co') ||
-        url.includes('imgbb.com') ||
-        url.includes('imgur.com') ||
         url.includes('api.qrserver.com') ||
         url.includes('google-analytics') ||
         url.includes('googletagmanager')

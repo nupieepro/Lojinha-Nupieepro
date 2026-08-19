@@ -307,8 +307,9 @@
         <img src="./admin_icon_bgFFFFFF.png" alt="Logo" class="login-logo">
         <div class="login-titulo">NUPIEEPRO</div>
         <div class="login-sub">Painel Administrativo</div>
+        <input type="email" id="campo-email" class="login-input" placeholder="E-mail" maxlength="120" autocomplete="username">
         <div style="position:relative">
-            <input type="password" id="campo-senha" class="login-input" placeholder="Senha de acesso" maxlength="50" autocomplete="current-password" style="padding-right:48px">
+            <input type="password" id="campo-senha" class="login-input" placeholder="Senha de acesso" maxlength="72" autocomplete="current-password" style="padding-right:48px">
             <button onclick="toggleSenha()" type="button" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#aaa;font-size:1rem" id="btn-ver-senha" aria-label="Ver senha">
                 <i class="fa-solid fa-eye" id="icone-senha"></i>
             </button>
@@ -316,7 +317,7 @@
         <button class="login-btn" onclick="fazerLogin()">
             <i class="fa-solid fa-lock"></i> Entrar
         </button>
-        <div class="login-erro" id="login-erro">Senha incorreta. Tente novamente.</div>
+        <div class="login-erro" id="login-erro">E-mail ou senha incorretos.</div>
     </div>
 </div>
 
@@ -961,7 +962,7 @@ try{
 }catch(e){ mostrarErroConexaoAdmin(); }
 const LOJA_URL = 'https://nupieepro.github.io/Lojinha-Nupieepro/';
 
-let chaveAdmin   = '';
+let sessaoAdmin   = null;  // sessão atual do Supabase Auth (null = não logado)
 let produtosCache = [];
 let pedidosCache  = [];
 let configCache   = {};
@@ -994,13 +995,13 @@ window.addEventListener('online', () => { if(_sb){ toast('🌐 Conexão restabel
 window.addEventListener('offline', () => { toast('📡 Sem conexão com a internet.', true); });
 
 /* ============================================================
-   LOGIN
+   LOGIN — Supabase Auth (e-mail + senha, JWT com expiração real)
    ============================================================ */
 async function fazerLogin(){
-    const senha = document.getElementById('campo-senha').value.trim();
-    if(!senha){ return; }
+    const email = document.getElementById('campo-email').value.trim();
+    const senha = document.getElementById('campo-senha').value;
+    if(!email || !senha){ return; }
 
-    /* Mostra loading */
     const btn = document.querySelector('.login-btn');
     const erroEl = document.getElementById('login-erro');
     btn.disabled = true;
@@ -1008,21 +1009,26 @@ async function fazerLogin(){
     erroEl.style.display = 'none';
 
     try {
-        const { data, error } = await _sb.rpc('admin_login', { chave: senha });
-        if(error) throw new Error(error.message);
+        const { data, error } = await _sb.auth.signInWithPassword({ email, password: senha });
+        if(error || !data.session) throw new Error(error?.message || 'Falha no login');
 
-        if(data === true){
-            chaveAdmin = senha;
-            localStorage.setItem('nupi_admin_key', btoa(senha));
-            document.getElementById('tela-login').style.display = 'none';
-            document.getElementById('app').style.display        = 'block';
-            iniciarAdmin();
-        } else {
-            erroEl.textContent = 'Senha incorreta. Tente novamente.';
-            erroEl.style.display = 'block';
+        /* Confirma que a conta autenticada tem permissão de admin (existe em admin_users) —
+           login com e-mail/senha válidos não basta: só quem está em admin_users passa daqui. */
+        const { data: ehAdmin, error: erroAdmin } = await _sb.rpc('admin_verificar_sessao');
+        if(erroAdmin || ehAdmin !== true){
+            await _sb.auth.signOut();
+            throw new Error('Esta conta não tem permissão de administrador.');
         }
+
+        sessaoAdmin = data.session;
+        document.getElementById('campo-senha').value = '';
+        document.getElementById('tela-login').style.display = 'none';
+        document.getElementById('app').style.display        = 'block';
+        iniciarAdmin();
     } catch(e) {
-        erroEl.textContent = 'Erro ao conectar. Verifique sua internet.';
+        erroEl.textContent = e.message && /admin|permiss/i.test(e.message)
+            ? e.message
+            : 'E-mail ou senha incorretos.';
         erroEl.style.display = 'block';
     } finally {
         btn.disabled = false;
@@ -1032,6 +1038,9 @@ async function fazerLogin(){
 
 document.getElementById('campo-senha').addEventListener('keydown', e => {
     if(e.key === 'Enter') fazerLogin();
+});
+document.getElementById('campo-email').addEventListener('keydown', e => {
+    if(e.key === 'Enter') document.getElementById('campo-senha').focus();
 });
 
 function toggleSenha(){
@@ -1046,42 +1055,50 @@ function toggleSenha(){
     }
 }
 
-function sair(){
-    localStorage.removeItem('nupi_admin_key');
+async function sair(){
+    if(_sb) await _sb.auth.signOut().catch(()=>{});
+    sessaoAdmin = null;
     document.getElementById('app').style.display = 'none';
     document.getElementById('tela-login').style.display = 'flex';
     document.getElementById('campo-senha').value = '';
-    chaveAdmin = '';
 }
 
-/* Restaura sessão — mostra o painel IMEDIATAMENTE e valida em background */
-window.addEventListener('load', () => {
-    const saved = localStorage.getItem('nupi_admin_key');
-    if(!saved) return;
-    
-    try {
-        const k = atob(saved);
-        chaveAdmin = k;
-        /* Login otimista: mostra o app antes de validar com a API */
-        document.getElementById('tela-login').style.display = 'none';
-        document.getElementById('app').style.display        = 'block';
-        iniciarAdmin();
+/* Restaura sessão — o supabase-js já persiste o JWT sozinho (localStorage interno do SDK,
+   com expiração e renovação automática via refresh token, nada de senha guardada). Só
+   precisamos perguntar pra ele se existe uma sessão válida ao carregar a página. */
+window.addEventListener('load', async () => {
+    if(!_sb) return;
+    const { data } = await _sb.auth.getSession();
+    if(!data.session) return;
 
-        /* Valida em background para garantir que a chave ainda é válida.
-           Se o servidor estiver inacessível (instabilidade de rede), NÃO desloga —
-           mantém a sessão otimista e só invalida se a API responder explicitamente que é inválida. */
-        if(_sb){
-            _sb.rpc('admin_login', { chave: k })
-                .then(({ data, error }) => {
-                    if(!error && data !== true){
-                        sair();
-                        toast('Sessão expirada. Entre novamente.', true);
-                    }
-                })
-                .catch(() => { /* Se offline, mantém o que tem */ });
-        }
-    } catch(e) { localStorage.removeItem('nupi_admin_key'); /* Chave corrompida no localStorage */ }
+    sessaoAdmin = data.session;
+    document.getElementById('tela-login').style.display = 'none';
+    document.getElementById('app').style.display        = 'block';
+    iniciarAdmin();
+
+    /* Confirma em background que a sessão restaurada ainda é de um admin válido
+       (ex.: se o acesso foi revogado, admin_users perdeu a linha). Se a API estiver
+       fora do ar, mantém a sessão otimista — só desloga em recusa explícita. */
+    _sb.rpc('admin_verificar_sessao')
+        .then(({ data: ehAdmin, error }) => {
+            if(!error && ehAdmin !== true){
+                sair();
+                toast('Sessão expirada. Entre novamente.', true);
+            }
+        })
+        .catch(() => { /* Se offline, mantém o que tem */ });
 });
+
+/* Se o token expirar e o SDK não conseguir renovar (ex.: revogado), volta pra tela de login */
+if(_sb){
+    _sb.auth.onAuthStateChange((event, session) => {
+        sessaoAdmin = session;
+        if(event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESHED' && !session)){
+            document.getElementById('app').style.display = 'none';
+            document.getElementById('tela-login').style.display = 'flex';
+        }
+    });
+}
 
 /* ============================================================
    INICIALIZAÇÃO
@@ -1111,12 +1128,14 @@ function iniciarAdmin(){
    ============================================================ */
 async function api(dados, tentativa){
     tentativa = tentativa || 0;
-    if(!chaveAdmin){ throw new Error('Não autenticado'); }
+    if(!sessaoAdmin){ throw new Error('Não autenticado'); }
     if(!_sb){ throw new Error('Sem conexão com o servidor. Verifique sua internet.'); }
     const { action, ...params } = dados;
     let data, error;
     try {
-        ({ data, error } = await _sb.rpc(action, { ...params, chave: chaveAdmin }));
+        /* O supabase-js anexa o JWT da sessão atual automaticamente — não precisa
+           (e não deve) mandar nenhuma credencial junto dos parâmetros da RPC. */
+        ({ data, error } = await _sb.rpc(action, params));
     } catch(e){
         /* Falha de rede (timeout, DNS, etc) — tenta novamente antes de desistir */
         if(tentativa < 2) return api(dados, tentativa + 1);
@@ -2028,16 +2047,17 @@ async function handleFotoUpload(files){
     if(arr.length > 0) toast(`✅ ${arr.length} foto(s) processada(s)!`);
 }
 
-/* Sobe a foto pra Edge Function "upload-imagem", que confere a senha admin
-   e grava no bucket "produtos" do Storage usando a service role. */
+/* Sobe a foto pra Edge Function "upload-imagem", que confere o JWT da sessão
+   (é admin de verdade, via admin_users) e grava no bucket "produtos" do
+   Storage usando a service role. */
 async function uploadParaStorage(file){
+    if(!sessaoAdmin) throw new Error('Não autenticado');
     const form = new FormData();
-    form.append('chave', chaveAdmin);
     form.append('arquivo', file);
     const res = await Promise.race([
         fetch(SUPABASE_URL+'/functions/v1/upload-imagem', {
             method: 'POST',
-            headers: { 'Authorization': 'Bearer '+SUPABASE_ANON_KEY, 'apikey': SUPABASE_ANON_KEY },
+            headers: { 'Authorization': 'Bearer '+sessaoAdmin.access_token, 'apikey': SUPABASE_ANON_KEY },
             body: form
         }),
         new Promise((_,r) => setTimeout(()=>r(new Error('timeout')), 15000))
