@@ -3,7 +3,7 @@
    Versão: 3.0.0 — Auto-update ativo
    ============================================================ */
 
-const CACHE = 'nupi-admin-v6';
+const CACHE = 'nupi-admin-v7';
 
 const ESSENCIAIS = [
   './admin.html',
@@ -13,7 +13,8 @@ const ESSENCIAIS = [
   './fontawesome-subset.css',
   './fonts/fa-solid-subset.woff2',
   './fonts/fa-brands-subset.woff2',
-  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap'
+  './fonts/adumu-regular-subset.woff2',
+  './fonts/leaguespartan-bold-subset.woff2'
 ];
 
 self.addEventListener('install', e => {
@@ -48,20 +49,6 @@ self.addEventListener('fetch', e => {
     url.includes('google-analytics') ||
     url.includes('googletagmanager')
   ) return;
-
-  /* Fontes do Google — cache-first (raramente mudam) */
-  if (url.includes('fonts.g')) {
-    e.respondWith(
-      caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
-        if (res && res.status === 200) {
-          const clone = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
-        }
-        return res;
-      }))
-    );
-    return;
-  }
 
   /* admin.html e demais — rede primeiro, cache só se offline */
   e.respondWith(

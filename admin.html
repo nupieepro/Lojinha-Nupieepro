@@ -14,13 +14,20 @@
     <link rel="apple-touch-icon" href="./icons/admin-icon-180.png">
     <link rel="apple-touch-icon" sizes="192x192" href="./icons/admin-icon-192.png">
     <link rel="manifest" href="./admin-manifest.json">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="./fonts/leaguespartan-bold-subset.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./fonts/adumu-regular-subset.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="./fontawesome-subset.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.__sbScriptFailed=true"></script>
     <style>
+        /* Fontes self-hosted, subsetadas — mesmas do storefront, mesmo raciocínio
+           (ver index.html): só existe o peso Bold do League Spartan, então o
+           font-face declara a faixa inteira 100-900 pra não sair sintetizando
+           negrito em cima de negrito nem caindo pro fallback por não achar o peso. */
+        @font-face{font-family:'Adumu';src:url('./fonts/adumu-regular-subset.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+        @font-face{font-family:'League Spartan';src:url('./fonts/leaguespartan-bold-subset.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap;}
         :root {
+            --font-titulo: 'Adumu', Impact, 'Arial Narrow Bold', sans-serif;
+            --font-corpo: 'League Spartan', -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
             --roxo:   #0f0732;
             --laranja: #f85900;
             --laranja-glow: rgba(248,89,0,0.3);
@@ -35,7 +42,7 @@
             --shadow: 0 4px 20px rgba(15,7,50,0.10);
         }
         *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Plus Jakarta Sans',Arial,sans-serif; background:var(--fundo); color:var(--texto); min-height:100vh; }
+        body { font-family:var(--font-corpo); font-weight:700; background:var(--fundo); color:var(--texto); min-height:100vh; }
         button { font-family:inherit; cursor:pointer; }
         input, select, textarea { font-family:inherit; }
         a { color:inherit; text-decoration:none; }
@@ -53,7 +60,7 @@
             text-align:center;
         }
         .login-logo { width:80px; height:80px; border-radius:50%; border:3px solid var(--laranja); object-fit:cover; margin:0 auto 16px; display:block; box-shadow:0 0 20px var(--laranja-glow); }
-        .login-titulo { font-size:1.3rem; font-weight:800; color:var(--roxo); margin-bottom:4px; }
+        .login-titulo { font-family:var(--font-titulo); font-size:1.3rem; font-weight:400; color:var(--roxo); margin-bottom:4px; }
         .login-sub { font-size:0.8rem; color:var(--suave); margin-bottom:28px; }
         .login-input { width:100%; padding:14px 16px; border:2px solid #eee; border-radius:12px; font-size:0.95rem; outline:none; transition:0.2s; margin-bottom:12px; }
         .login-input:focus { border-color:var(--roxo); }
@@ -73,7 +80,7 @@
         }
         .topbar-logo { display:flex; align-items:center; gap:10px; }
         .topbar-logo img { width:36px; height:36px; border-radius:50%; border:2px solid var(--laranja); object-fit:cover; }
-        .topbar-titulo { font-weight:800; font-size:0.95rem; }
+        .topbar-titulo { font-family:var(--font-titulo); font-weight:400; font-size:0.95rem; }
         .topbar-titulo span { color:var(--laranja); }
         .topbar-right { display:flex; align-items:center; gap:12px; }
         .topbar-badge { background:var(--laranja); color:#fff; border-radius:20px; padding:3px 10px; font-size:0.7rem; font-weight:700; display:none; }
@@ -110,7 +117,7 @@
 
         /* ── FORMULÁRIOS ── */
         .form-section { background:var(--card); border-radius:16px; padding:20px; box-shadow:var(--shadow); margin-bottom:16px; }
-        .form-titulo { font-size:1rem; font-weight:800; color:var(--roxo); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+        .form-titulo { font-family:var(--font-titulo); font-size:1rem; font-weight:400; color:var(--roxo); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
         .form-titulo i { color:var(--laranja); }
         .form-row { display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:12px; }
         @media(min-width:600px){ .form-row.cols-2 { grid-template-columns:1fr 1fr; } }
@@ -247,7 +254,7 @@
         }
         @media(min-width:600px){ .modal-overlay{align-items:center} .modal-box{border-radius:24px} }
         @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
-        .modal-titulo { font-size:1.1rem; font-weight:800; color:var(--roxo); margin-bottom:20px; }
+        .modal-titulo { font-family:var(--font-titulo); font-size:1.1rem; font-weight:400; color:var(--roxo); margin-bottom:20px; }
         .modal-close { position:absolute; top:20px; right:20px; background:#f0f2f5; border:none; width:32px; height:32px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--roxo); }
 
         /* ── PREVIEW ── */

@@ -3,13 +3,14 @@
    Caminhos relativos — funciona em qualquer subpasta
    ============================================================ */
 
-const CACHE = 'nupieepro-v15';
+const CACHE = 'nupieepro-v16';
 
 const CACHEAR = [
-    'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
     './fontawesome-subset.css',
     './fonts/fa-solid-subset.woff2',
     './fonts/fa-brands-subset.woff2',
+    './fonts/adumu-regular-subset.woff2',
+    './fonts/leaguespartan-bold-subset.woff2',
     './loja_icon_marca.png',
     './loja_icon_emblema.png',
     './loja_icon_pwa.png',
@@ -47,18 +48,6 @@ self.addEventListener('fetch', e => {
         url.includes('google-analytics') ||
         url.includes('googletagmanager')
     ) return;
-
-    /* Fontes do Google — cache-first (raramente mudam) */
-    if (url.includes('fonts.g')) {
-        e.respondWith(
-            caches.match(e.request).then(c => c || fetch(e.request).then(res => {
-                const clone = res.clone();
-                caches.open(CACHE).then(cache => cache.put(e.request, clone));
-                return res;
-            }))
-        );
-        return;
-    }
 
     /* A PÁGINA em si: busca ignorando o cache HTTP do navegador.
        O GitHub Pages manda Cache-Control: max-age=600, então um "rede primeiro"

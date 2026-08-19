@@ -28,9 +28,8 @@
     <meta name="application-name" content="Nupi Store">
     <meta name="msapplication-TileColor" content="#0f0732">
     <meta name="msapplication-TileImage" content="./icons/loja-icon-144.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="./fonts/leaguespartan-bold-subset.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./fonts/adumu-regular-subset.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="./fontawesome-subset.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.__sbScriptFailed=true"></script>
     <script src="./qrcode.min.js"></script>
@@ -61,12 +60,22 @@
     }
     </script>
     <style>
-        :root{--roxo-brand:#0f0732;--laranja-brand:#f85900;--azul-coracao:#007bff;--branco:#ffffff;--laranja-glow:rgba(248,89,0,0.3);--fundo:#F5F7FB;--card-bg:#ffffff;--texto:#0f0732;--texto-suave:#5a5575;--verde-zap:#25D366;--vermelho-del:#FF4757;--shadow-sm:0 4px 12px rgba(15,7,50,0.05);--shadow-md:0 10px 30px rgba(15,7,50,0.1);--shadow-lg:0 20px 50px rgba(15,7,50,0.15);}
+        /* Fontes self-hosted, subsetadas pro alfabeto latino que o site usa —
+           nada de Google Fonts carregado em runtime. font-weight:400 700 no
+           League Spartan: só existe o arquivo Bold, então qualquer peso pedido
+           nessa faixa usa esse arquivo direto, sem o navegador "negritar
+           sinteticamente" um negrito que já é negrito. */
+        @font-face{font-family:'Adumu';src:url('./fonts/adumu-regular-subset.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+        @font-face{font-family:'League Spartan';src:url('./fonts/leaguespartan-bold-subset.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap;}
+        :root{
+            --font-titulo:'Adumu',Impact,'Arial Narrow Bold',sans-serif;
+            --font-corpo:'League Spartan',-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+            --roxo-brand:#0f0732;--laranja-brand:#f85900;--azul-coracao:#007bff;--branco:#ffffff;--laranja-glow:rgba(248,89,0,0.3);--fundo:#F5F7FB;--card-bg:#ffffff;--texto:#0f0732;--texto-suave:#5a5575;--verde-zap:#25D366;--vermelho-del:#FF4757;--shadow-sm:0 4px 12px rgba(15,7,50,0.05);--shadow-md:0 10px 30px rgba(15,7,50,0.1);--shadow-lg:0 20px 50px rgba(15,7,50,0.15);}
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
         /* A folga para a barra flutuante do carrinho fica no <footer> (padding-bottom),
            não no body — no body ela sobrava DEPOIS do rodapé e aparecia como uma
            faixa clara no fim da página. */
-        body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--fundo);color:var(--texto);overflow-x:hidden;}
+        body{font-family:var(--font-corpo);font-weight:700;background:var(--fundo);color:var(--texto);overflow-x:hidden;}
         img{max-width:100%;display:block;}
         button{font-family:inherit;cursor:pointer;}
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
@@ -83,7 +92,7 @@
         #tela-manutencao{display:none;position:fixed;inset:0;background:var(--roxo-brand);z-index:99999;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;}
         #tela-manutencao.ativa{display:flex;}
         .manut-logo{width:90px;height:90px;border-radius:50%;border:3px solid var(--laranja-brand);object-fit:cover;margin-bottom:20px;animation:pulseLogo 2s infinite;}
-        .manut-titulo{color:var(--branco);font-size:1.3rem;font-weight:800;margin-bottom:10px;}
+        .manut-titulo{font-family:var(--font-titulo);color:var(--branco);font-size:1.3rem;font-weight:400;margin-bottom:10px;}
         .manut-msg{color:rgba(255,255,255,0.8);font-size:0.9rem;margin-bottom:20px;line-height:1.5;}
         .manut-insta{color:var(--branco);font-weight:700;font-size:0.9rem;background:rgba(255,255,255,0.1);padding:10px 20px;border-radius:30px;border:1px solid rgba(255,255,255,0.2);text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
         .manut-insta i{color:var(--laranja-brand);}
@@ -96,7 +105,7 @@
         .header-brand{display:flex;align-items:center;gap:12px;}
         .brand-logo{width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);object-fit:cover;flex-shrink:0;}
         .brand-info{text-align:left;}
-        .brand{font-size:1.4rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin:0;line-height:1;}
+        .brand{font-family:var(--font-titulo);font-size:1.4rem;font-weight:400;text-transform:uppercase;letter-spacing:1px;margin:0;line-height:1;}
         .brand span{color:var(--laranja-brand);}
         .store-badge{display:inline-block;background:var(--laranja-brand);color:var(--branco);padding:3px 10px;border-radius:12px;font-size:0.65rem;font-weight:700;text-transform:uppercase;margin-top:4px;box-shadow:0 4px 10px var(--laranja-glow);}
         .sub-brand{font-size:0.68rem;opacity:0.85;line-height:1.3;text-align:center;}
@@ -113,7 +122,7 @@
         .cupom-icone{background:var(--laranja-brand);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
         .cupom-icone i{color:#fff;font-size:1rem;}
         .cupom-texto{flex:1;min-width:160px;}
-        .cupom-titulo{color:var(--branco);font-weight:800;font-size:0.88rem;margin-bottom:3px;}
+        .cupom-titulo{font-family:var(--font-titulo);color:var(--branco);font-weight:400;font-size:0.88rem;margin-bottom:3px;}
         .cupom-desc{color:rgba(255,255,255,0.7);font-size:0.75rem;line-height:1.4;}
         .cupom-btn-usar{background:var(--laranja-brand);color:#fff;border:none;border-radius:10px;padding:9px 16px;font-size:0.8rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:0.15s;}
         .cupom-btn-usar:active{transform:scale(0.96);}
@@ -125,14 +134,14 @@
         body.tem-hero #hero-banner{margin-top:-50px;}
         body.tem-hero .filter-container{margin-top:12px;}
         .hero-inner{display:block;border-radius:20px;padding:26px 24px;background:linear-gradient(135deg,var(--roxo-brand),#1a1245);text-decoration:none;box-shadow:var(--shadow-md);}
-        .hero-titulo{color:var(--branco);font-size:1.2rem;font-weight:800;line-height:1.25;}
+        .hero-titulo{font-family:var(--font-titulo);color:var(--branco);font-size:1.2rem;font-weight:400;line-height:1.25;}
         .hero-subtitulo{color:rgba(255,255,255,0.8);font-size:0.85rem;margin-top:6px;}
         @media(min-width:1024px){#hero-banner{padding:0 20px;margin-bottom:20px;max-width:1300px}.hero-inner{padding:40px 44px}.hero-titulo{font-size:1.6rem}.hero-subtitulo{font-size:0.95rem;max-width:60%}}
         @media(min-width:1440px){#hero-banner{max-width:1500px}}
 
         /* SEÇÕES TEMÁTICAS (coleções) */
         .secao-tematica{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:6px 0 -2px;padding:0 2px;}
-        .secao-tematica-titulo{font-size:1rem;font-weight:800;color:var(--roxo-brand);display:flex;align-items:center;gap:8px;}
+        .secao-tematica-titulo{font-family:var(--font-titulo);font-size:1rem;font-weight:400;color:var(--roxo-brand);display:flex;align-items:center;gap:8px;}
         .secao-tematica-linha{flex:1;height:1px;background:rgba(15,7,50,0.1);}
         .secao-outros{grid-column:1/-1;font-size:0.85rem;font-weight:700;color:var(--texto-suave);margin:10px 0 -2px;padding:0 2px;text-transform:uppercase;letter-spacing:0.5px;}
 
@@ -193,7 +202,7 @@
         .badge-ultimas{background:var(--vermelho-del);color:#fff;}
         .badge-estoque{background:#27ae60;color:#fff;}
         .card-info{padding:14px;text-align:center;display:flex;flex-direction:column;flex-grow:1;cursor:pointer;}
-        .card-title{font-size:0.82rem;font-weight:700;color:var(--roxo-brand);line-height:1.3;height:34px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+        .card-title{font-family:var(--font-titulo);font-size:0.82rem;font-weight:400;color:var(--roxo-brand);line-height:1.3;height:34px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
         .card-price{font-size:1.05rem;color:var(--laranja-brand);font-weight:800;margin-top:5px;}
         .card-enc{font-size:0.68rem;color:var(--laranja-brand);font-weight:700;margin-top:3px;}
         .tap-hint{font-size:0.62rem;color:#aaa;margin-top:auto;padding-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
@@ -215,7 +224,7 @@
         /* MODAL PRODUTO */
         .detail-img-box{width:100%;height:230px;background:#f4f6f9;border-radius:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border:1px solid #eee;}
         .detail-img{width:100%;height:100%;object-fit:contain;z-index:2;}
-        .detail-title{font-size:1.3rem;font-weight:800;color:var(--roxo-brand);line-height:1.2;margin-bottom:4px;}
+        .detail-title{font-family:var(--font-titulo);font-size:1.3rem;font-weight:400;color:var(--roxo-brand);line-height:1.2;margin-bottom:4px;}
         .detail-price{font-size:1.7rem;color:var(--laranja-brand);font-weight:800;margin-bottom:4px;display:inline-block;}
         .detail-desc{font-size:0.84rem;color:var(--texto-suave);line-height:1.6;margin-bottom:14px;background:#f8f9fc;padding:10px 12px;border-radius:10px;}
         .detail-enc{font-size:0.78rem;background:#fff8e1;color:#f57f17;padding:8px 12px;border-radius:10px;margin-bottom:14px;font-weight:600;}
@@ -286,7 +295,7 @@
         #tela-sucesso{display:none;text-align:center;padding:16px 0;}
         #tela-sucesso.ativo{display:block;}
         .sucesso-icon{font-size:3.5rem;margin-bottom:12px;}
-        .sucesso-titulo{font-size:1.3rem;font-weight:800;color:var(--roxo-brand);margin-bottom:6px;}
+        .sucesso-titulo{font-family:var(--font-titulo);font-size:1.3rem;font-weight:400;color:var(--roxo-brand);margin-bottom:6px;}
         .sucesso-num{background:var(--roxo-brand);color:#fff;border-radius:10px;padding:10px 18px;font-size:0.82rem;font-weight:700;margin-bottom:16px;display:inline-block;}
         .sucesso-msg{font-size:0.86rem;color:var(--texto-suave);margin-bottom:18px;}
 
