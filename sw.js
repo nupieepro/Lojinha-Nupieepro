@@ -3,7 +3,7 @@
    Caminhos relativos — funciona em qualquer subpasta
    ============================================================ */
 
-const CACHE = 'nupieepro-v12';
+const CACHE = 'nupieepro-v13';
 
 const CACHEAR = [
     'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
@@ -11,6 +11,7 @@ const CACHEAR = [
     './loja_icon_marca.png',
     './loja_icon_emblema.png',
     './loja_icon_pwa.png',
+    './qrcode.min.js',
 ];
 
 self.addEventListener('install', e => {
@@ -35,10 +36,9 @@ self.addEventListener('fetch', e => {
     if (e.request.method !== 'GET') return;
     if (url.startsWith('chrome-extension')) return;
 
-    /* Nunca cacheia: API Supabase, QR code, analytics */
+    /* Nunca cacheia: API Supabase, analytics */
     if (
         url.includes('supabase.co') ||
-        url.includes('api.qrserver.com') ||
         url.includes('google-analytics') ||
         url.includes('googletagmanager')
     ) return;

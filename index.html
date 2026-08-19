@@ -33,6 +33,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.__sbScriptFailed=true"></script>
+    <script src="./qrcode.min.js"></script>
     <script>
     /* Fallback Font Awesome se CDN falhar */
     document.addEventListener('DOMContentLoaded',function(){
@@ -1209,8 +1210,19 @@ function gerarQRPix(){
     const payload = gerarPayloadPix(_pixKey, _pixName || 'NUPIEEPRO', tot);
     window._pixPayload = payload;
 
-    document.getElementById('pix-qr-img').src =
-        'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(payload);
+    /* QR gerado 100% local (biblioteca self-hosted em qrcode.min.js) — o valor
+       da compra e a chave Pix do lojista nunca saem do navegador do cliente
+       rumo a um terceiro só pra virar imagem. */
+    const qrImgEl = document.getElementById('pix-qr-img');
+    try{
+        const qr = qrcode(0, 'M');
+        qr.addData(payload);
+        qr.make();
+        qrImgEl.src = qr.createDataURL(6, 4);
+    }catch(e){
+        qrImgEl.src = '';
+        toast('Não foi possível gerar o QR do Pix. Use o código "Copia e Cola" abaixo.', 1);
+    }
 
     if(pixT) clearInterval(pixT);
     let s = 1800;
