@@ -3,7 +3,7 @@
    Caminhos relativos — funciona em qualquer subpasta
    ============================================================ */
 
-const CACHE = 'nupieepro-v13';
+const CACHE = 'nupieepro-v14';
 
 const CACHEAR = [
     'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
@@ -12,6 +12,9 @@ const CACHEAR = [
     './loja_icon_emblema.png',
     './loja_icon_pwa.png',
     './qrcode.min.js',
+    './icons/loja-icon-180.png',
+    './icons/loja-icon-152.png',
+    './icons/loja-icon-192.png',
 ];
 
 self.addEventListener('install', e => {

@@ -3,11 +3,13 @@
    Versão: 3.0.0 — Auto-update ativo
    ============================================================ */
 
-const CACHE = 'nupi-admin-v4';
+const CACHE = 'nupi-admin-v5';
 
 const ESSENCIAIS = [
-  '/Lojinha-Nupieepro/admin.html',
-  '/Lojinha-Nupieepro/admin-manifest.json',
+  './admin.html',
+  './admin-manifest.json',
+  './icons/admin-icon-180.png',
+  './icons/admin-icon-192.png',
   'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
@@ -41,9 +43,6 @@ self.addEventListener('fetch', e => {
   /* Supabase e APIs externas: NUNCA cacheia */
   if (
     url.includes('supabase.co') ||
-    url.includes('script.google.com') ||
-    url.includes('imgbb.com') ||
-    url.includes('imgur.com') ||
     url.includes('google-analytics') ||
     url.includes('googletagmanager')
   ) return;
