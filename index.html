@@ -31,15 +31,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="./fontawesome-subset.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.__sbScriptFailed=true"></script>
     <script src="./qrcode.min.js"></script>
     <script>
-    /* Fallback Font Awesome se CDN falhar */
     document.addEventListener('DOMContentLoaded',function(){
-        var ok=false;
-        try{var s=document.createElement('span');s.className='fa fa-check';s.style.cssText='position:absolute;visibility:hidden';document.body.appendChild(s);ok=window.getComputedStyle(s,':before').content!=='none'&&window.getComputedStyle(s,':before').content!=='';document.body.removeChild(s);}catch(e){}
-        if(!ok){var l=document.createElement('link');l.rel='stylesheet';l.href='https://use.fontawesome.com/releases/v6.4.0/css/all.css';document.head.appendChild(l);}
         /* Rede lenta/instável: se a lib essencial (Supabase) não carregou a tempo, mostra tela de erro
            em vez de deixar a splash travada para sempre (era o principal motivo de "a loja não abre"). */
         setTimeout(function(){
