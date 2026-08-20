@@ -1600,9 +1600,10 @@ async function salvarProduto(publicar,btnClicado){
 }
 
 async function toggleAtivoProduto(id, ativar){
+    const p = produtosCache.find(x => parseInt(x.id) === parseInt(id));
+    if(!p) return;
+    const antes = p.ativo;
     try {
-        const p = produtosCache.find(x => parseInt(x.id) === parseInt(id));
-        if(!p) return;
         p.ativo = ativar;
         await api({ action: 'admin_salvar_produto', produto: p });
         toast(ativar ? '✅ Produto ativado!' : 'Produto desativado');
@@ -1610,7 +1611,10 @@ async function toggleAtivoProduto(id, ativar){
         /* Best-effort — só ajuda a propagar mais rápido pra loja, não é crítico.
            .catch evita um unhandledrejection no console se essa chamada falhar. */
         api({ action: 'admin_salvar_config', config: { _last_update: Date.now().toString() } }).catch(()=>{});
-    } catch(e){ toast('Erro', true); }
+    } catch(e){
+        p.ativo = antes; /* desfaz no cache — senão abrirModalProduto() mostraria o estado errado */
+        toast('Erro', true);
+    }
 }
 
 function duplicarProduto(){
@@ -1725,11 +1729,18 @@ async function salvarCupom(){
 async function toggleCupom(codigo, ativo){
     const c = window._cuponsCache ? window._cuponsCache.find(x => x.codigo === codigo) : null;
     if(!c) return;
+    const antes = c.ativo;
     c.ativo = ativo;
     try {
         await api({ action: 'admin_salvar_cupom', cupom: c });
         toast(ativo ? '✅ Cupom ativado!' : 'Cupom desativado');
-    } catch(e){ toast('Erro', true); }
+    } catch(e){
+        /* Falhou: desfaz no cache — senão abrirModalCupom() (que confia no cache já
+           carregado sem re-buscar) mostraria o cupom como se o toggle tivesse dado certo. */
+        c.ativo = antes;
+        toast('Erro', true);
+        carregarCupons();
+    }
 }
 
 /* ============================================================
