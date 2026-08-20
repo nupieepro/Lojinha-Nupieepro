@@ -394,7 +394,7 @@
 
 <div class="filter-container">
     <div class="filter-scroll" id="filter-scroll">
-        <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+        <button class="filter-btn active" data-cat="todos">Todos</button>
     </div>
 </div>
 
@@ -649,14 +649,25 @@ function renderFiltros(){
     if(!scroll) return;
     const presentes=new Set(produtos.map(p=>p.categoria));
     const usadas=categoriasVitrine.filter(c=>presentes.has(c.id));
-    let html=`<button class="filter-btn${filtroAtual==='todos'?' active':''}" onclick="filtrar('todos',this)">Todos</button>`;
+    let html=`<button class="filter-btn${filtroAtual==='todos'?' active':''}" data-cat="todos">Todos</button>`;
     usadas.forEach(c=>{
-        html+=`<button class="filter-btn${filtroAtual===c.id?' active':''}" onclick="filtrar('${c.id}',this)">${c.emoji?san(c.emoji)+' ':''}${san(c.nome)}</button>`;
+        /* data-cat (atributo HTML) em vez de interpolar dentro de onclick="filtrar('...')":
+           c.id vem de config editável pelo admin — se contivesse uma aspa simples, o valor
+           HTML-escapado seria decodificado de volta ANTES do onclick rodar como JS, quebrando
+           a string e permitindo injetar código. Atributo + listener delegado (abaixo) não tem
+           esse problema porque o valor nunca é tratado como código. */
+        html+=`<button class="filter-btn${filtroAtual===c.id?' active':''}" data-cat="${san(c.id)}">${c.emoji?san(c.emoji)+' ':''}${san(c.nome)}</button>`;
     });
     scroll.innerHTML=html;
     /* Só centraliza se os botões couberem inteiros — senão fica cortado à esquerda sem dar pra rolar até lá */
     scroll.classList.toggle('centralizado', scroll.scrollWidth<=scroll.clientWidth);
 }
+/* Listener delegado — sobrevive à troca de innerHTML dos botões a cada renderFiltros(),
+   porque fica no container (#filter-scroll), não nos botões. Registrado uma vez só, aqui. */
+document.getElementById('filter-scroll').addEventListener('click',e=>{
+    const b=e.target.closest('.filter-btn');
+    if(b) filtrar(b.dataset.cat||'todos',b);
+});
 let _resizeFiltrosT;
 window.addEventListener('resize',()=>{
     clearTimeout(_resizeFiltrosT);
@@ -766,15 +777,27 @@ window.addEventListener('load',()=>{
             .on('postgres_changes',{event:'*',schema:'public',table:'config'},agendarCarregarAPI)
             .subscribe();
     }
+    /* Link de compartilhamento (?id=X): se o produto já estiver no cache local, abre
+       direto. Senão, guarda o id pendente — carregarAPI() abre assim que os dados
+       reais chegarem, em vez de checar só agora contra os 4 produtos de bootstrap
+       (ou um cache antigo) e desistir silenciosamente se ele não estiver aí ainda. */
     const pid=new URLSearchParams(location.search).get('id');
-    if(pid&&produtos.find(p=>p.id==pid)) setTimeout(()=>abrirDetalhes(parseInt(pid)),1000);
+    if(pid){
+        const pidNum=parseInt(pid,10);
+        if(!isNaN(pidNum)){
+            if(produtos.find(p=>p.id===pidNum)) setTimeout(()=>abrirDetalhes(pidNum),400);
+            else window._pidPendente=pidNum;
+        }
+    }
     /* Se a tela de erro de conexão já assumiu a splash, não mexe nela */
     setTimeout(()=>{
         if(window.__erroConexaoAtivo) return;
         const s=document.getElementById('splash-screen');s.classList.add('hidden');setTimeout(()=>s.style.display='none',400);
     },900);
     document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharModais(null);});
-    document.getElementById('campo-busca').addEventListener('input',function(){busca=this.value.trim().toLowerCase();renderVitrine();});
+    /* Busca já é tratada pelo oninput="debounceBusca(...)" inline no HTML (300ms) — um
+       addEventListener('input') redundante aqui existia antes e disparava renderVitrine()
+       SEM debounce a cada tecla, dobrando o trabalho de render e tornando o debounce inútil. */
     window.addEventListener('online',()=>{ if(_sb){ toast('🌐 Conexão restabelecida! Atualizando...'); carregarAPI(); } });
     window.addEventListener('offline',()=>{ toast('📡 Sem conexão com a internet. Mostrando dados salvos.',1); });
 });
@@ -896,9 +919,16 @@ async function carregarAPI(tentativa){
                 const normalizados = d.map(normalizarProduto);
                 produtos.length=0;
                 produtos.push(...normalizados);
+                sincronizarCarrinhoComProdutos();
                 renderVitrine();
                 /* Cache local para carregamento instantâneo no futuro */
                 localStorage.setItem('nupieepro_cache_produtos', JSON.stringify({t:Date.now(), d:normalizados}));
+            }
+            /* Resolve o link de compartilhamento pendente (ver window.addEventListener('load',...))
+               agora que os dados reais chegaram — só tenta uma vez, contra a lista final. */
+            if(window._pidPendente!=null){
+                if(produtos.find(p=>p.id===window._pidPendente)) abrirDetalhes(window._pidPendente);
+                window._pidPendente=null;
             }
         }
         renderFiltros();
@@ -956,7 +986,7 @@ function criarCardProduto(p){
     } else if(ult){
         badges+=`<span class="badge badge-ultimas">⚡ Últimas ${p.estoque}</span>`;
     } else {
-        badges+=`<span class="badge badge-estoque">✅ Em estoque</span>`;
+        badges+=`<span class="badge badge-estoque">✅ ${p.estoque} em estoque</span>`;
     }
     const el=document.createElement('div');
     el.className=`card${dest?' destaque':''}${esg?' esgotado':''}`;
@@ -985,7 +1015,12 @@ function renderVitrine(){
     const vazio=document.getElementById('vitrine-vazia');
     area.innerHTML='';
     const lista=produtos.filter(p=>{
-        if(!p.encomenda&&p.estoque===0) return false;
+        /* Esgotado (não-encomenda, estoque 0) continua na vitrine — card fica desabilitado
+           e com o badge "Esgotado" (.card.esgotado, criarCardProduto()). Antes esse filtro
+           removia o produto por completo, contradizendo o próprio código de destaque de
+           estoque logo abaixo (nunca chegava a rodar) e escondendo do cliente que o produto
+           existe/pode voltar — decisão revertida na auditoria B1 pra dar o mesmo destaque de
+           status que "sob encomenda" já tinha. */
         if(filtroAtual!=='todos'&&p.categoria!==filtroAtual) return false;
         if(busca) return p.nome.toLowerCase().includes(busca)||(p.descricao&&p.descricao.toLowerCase().includes(busca));
         return true;
@@ -1067,7 +1102,7 @@ function abrirDetalhes(id){
 
     /* Seletor de tamanho (camisas) */
     if(isCamisa&&itemSel.tamanhos&&itemSel.tamanhos.length){
-        st.innerHTML=itemSel.tamanhos.map(t=>`<option value="${t}">${t}</option>`).join('');
+        st.innerHTML=itemSel.tamanhos.map(t=>`<option value="${san(t)}">${san(t)}</option>`).join('');
         wt.style.display='block';
     } else wt.style.display='none';
 
@@ -1076,7 +1111,7 @@ function abrirDetalhes(id){
     if(isBotton&&itemSel.tipos_botton&&itemSel.tipos_botton.length){
         const grid=document.getElementById('botton-grid');
         grid.innerHTML=itemSel.tipos_botton.map((t,i)=>
-            `<div class="botton-opt${i===0?' selected':''}" onclick="selecionarBotton(this,'${t}')">${t}</div>`
+            `<div class="botton-opt${i===0?' selected':''}" onclick="selecionarBotton(this)">${san(t)}</div>`
         ).join('');
         wbEl.style.display='block';
     } else if(wbEl) wbEl.style.display='none';
@@ -1122,7 +1157,7 @@ function fecharModais(e){
 
 function alterarQtd(v){qtdTemp=Math.max(1,qtdTemp+v);document.getElementById('detalhe-qtd').textContent=qtdTemp;}
 
-function selecionarBotton(el, tipo){
+function selecionarBotton(el){
     document.querySelectorAll('.botton-opt').forEach(b=>b.classList.remove('selected'));
     el.classList.add('selected');
 }
@@ -1163,7 +1198,17 @@ function renderCarrinho(){
 function remItem(i){carrinho.splice(i,1);salvarCarrinho();atualizarBarra();renderCarrinho();}
 function limparCarrinho(){if(!confirm('Limpar a sacola?')) return;carrinho=[];cupomApl=null;salvarCarrinho();atualizarBarra();fecharModais(null);toast('Sacola esvaziada');}
 function salvarCarrinho(){localStorage.setItem('nupieepro_carrinho',JSON.stringify(carrinho));}
-function carregarCarrinho(){const s=localStorage.getItem('nupieepro_carrinho');if(s)carrinho=JSON.parse(s);atualizarBarra();}
+function carregarCarrinho(){
+    try{
+        const s=localStorage.getItem('nupieepro_carrinho');
+        if(s){const parsed=JSON.parse(s);if(Array.isArray(parsed))carrinho=parsed;}
+    }catch(e){
+        /* localStorage corrompido — descarta em vez de deixar o erro travar a splash
+           pra sempre (essa função roda antes do resto do load handler). */
+        localStorage.removeItem('nupieepro_carrinho');
+    }
+    atualizarBarra();
+}
 
 function validarCupom(){
     const cod=document.getElementById('campo-cupom').value.trim().toUpperCase();
@@ -1187,10 +1232,43 @@ function validarCupom(){
 }
 function removerCupom(){cupomApl=null;document.getElementById('cupom-ok').classList.remove('ativo');atualizarResumo();toast('Cupom removido');}
 
+/* Reconcilia a sacola salva com o catálogo atual. O carrinho guarda uma cópia do
+   produto no momento do "adicionar" — se o admin mudar o preço (ou remover o
+   produto) enquanto o item já está na sacola de alguém, sem isso o QR Pix seria
+   gerado com um valor que o servidor (criar_pedido, que recalcula tudo do banco)
+   nunca vai cobrar de verdade. Roda sempre que o catálogo é atualizado e de novo
+   ao abrir o checkout, pra pegar qualquer mudança que tenha chegado enquanto o
+   carrinho ficou parado no localStorage entre visitas. */
+function sincronizarCarrinhoComProdutos(){
+    if(!carrinho.length) return;
+    let precoMudou=false, algumRemovido=false;
+    carrinho=carrinho.filter(item=>{
+        const p=produtos.find(x=>x.id===item.id);
+        if(!p){ algumRemovido=true; return false; }
+        if(item.preco!==p.preco||item.nome!==p.nome){
+            item.preco=p.preco;item.nome=p.nome;item.img=p.img;precoMudou=true;
+        }
+        return true;
+    });
+    if(algumRemovido||precoMudou){
+        salvarCarrinho();atualizarBarra();
+        if(document.getElementById('modal-checkout').classList.contains('active')) renderCarrinho();
+        if(algumRemovido) toast('⚠️ Um item da sua sacola não está mais disponível e foi removido.',1);
+        else toast('ℹ️ O preço de um item da sua sacola foi atualizado.',1);
+    }
+}
 function calcSub(){return carrinho.reduce((a,i)=>a+i.preco*i.qtd,0);}
 function calcDesc(){if(!cupomApl)return 0;const isRestrito = cupomApl.produtos_ids && cupomApl.produtos_ids.length > 0;const itensDesc = isRestrito ? carrinho.filter(i=>cupomApl.produtos_ids.includes(i.id)) : carrinho;if(cupomApl.tipo==='percentual')return itensDesc.reduce((a,i)=>a+i.preco*i.qtd*cupomApl.valor/100,0);return Math.min(cupomApl.valor,itensDesc.reduce((a,i)=>a+i.preco*i.qtd,0));}
 function calcTotal(){return Math.max(0,calcSub()-calcDesc());}
 function atualizarResumo(){
+    /* Cupom restrito a produtos específicos: se o cliente remover da sacola o único item
+       elegível, o desconto cai pra R$0 mas o badge verde "cupom aplicado" continuava ligado
+       — parecia que o cupom ainda valia. Invalida de vez em vez de só esconder a linha. */
+    if(cupomApl&&cupomApl.produtos_ids&&cupomApl.produtos_ids.length&&!carrinho.some(i=>cupomApl.produtos_ids.includes(i.id))){
+        cupomApl=null;
+        document.getElementById('cupom-ok').classList.remove('ativo');
+        toast('Cupom removido: nenhum item elegível na sacola',1);
+    }
     const s=calcSub(),d=calcDesc(),t=calcTotal();
     document.getElementById('res-sub').textContent='R$ '+s.toFixed(2).replace('.',',');
     document.getElementById('res-total').textContent='R$ '+t.toFixed(2).replace('.',',');
@@ -1204,6 +1282,8 @@ function atualizarResumo(){
 
 function abrirCheckout(){
     if(!carrinho.length) return;
+    sincronizarCarrinhoComProdutos();
+    if(!carrinho.length) return; /* sacola pode ter esvaziado se todos os itens sumiram do catálogo */
     document.getElementById('tela-sucesso').classList.remove('ativo');
     document.getElementById('checkout-corpo').style.display='block';
     renderCarrinho();togglePix();
@@ -1434,13 +1514,24 @@ async function enviarPedidoZap(){
         btn.innerHTML=btnHtmlOriginal;
     }
 }
+/* Leitura defensiva do histórico local — usada tanto ao salvar quanto ao abrir.
+   Se o JSON estiver corrompido, some com "Meus Pedidos" (botão parece "morto") e,
+   pior, quebra salvarHist() DEPOIS do pedido já confirmado no servidor: o cliente
+   veria "❌ Erro ao enviar pedido" pra um pedido que na verdade foi registrado e,
+   se PIX, já pago — risco real de pedido duplicado numa nova tentativa. */
+function lerHist(){
+    try{
+        const h=JSON.parse(localStorage.getItem('nupieepro_hist')||'[]');
+        return Array.isArray(h)?h:[];
+    }catch(e){ return []; }
+}
 function salvarHist(num,data,total,itensSnapshot){
-    const h=JSON.parse(localStorage.getItem('nupieepro_hist')||'[]');
+    const h=lerHist();
     h.unshift({num,data,total,itens:(itensSnapshot||carrinho).map(i=>i.qtd+'x '+i.nome)});
-    localStorage.setItem('nupieepro_hist',JSON.stringify(h.slice(0,30)));
+    try{ localStorage.setItem('nupieepro_hist',JSON.stringify(h.slice(0,30))); }catch(e){}
 }
 function abrirMeusPedidos(){
-    const h=JSON.parse(localStorage.getItem('nupieepro_hist')||'[]');
+    const h=lerHist();
     const el=document.getElementById('lista-pedidos-hist');
     el.innerHTML=h.length?h.map(p=>`<div style="background:var(--n-bg-100);border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid var(--n-border-300)"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong style="color:var(--roxo-brand);font-size:0.82rem">#${p.num}</strong><span style="font-size:0.7rem;color:var(--texto-suave)">${p.data}</span></div><div style="font-size:0.76rem;color:var(--texto-suave);margin-bottom:6px">${p.itens.join(', ')}</div><div style="font-size:0.95rem;font-weight:800;color:var(--laranja-brand)">R$ ${p.total.toFixed(2).replace('.',',')}</div></div>`).join(''):'<p style="text-align:center;color:var(--texto-fraco);padding:20px">Nenhum pedido ainda 🛍️</p>';
     document.getElementById('modal-pedidos').classList.add('active');
@@ -1448,7 +1539,7 @@ function abrirMeusPedidos(){
 }
 function salvarUser(){localStorage.setItem('nupieepro_nome',document.getElementById('nome-cliente').value);localStorage.setItem('nupieepro_zap',document.getElementById('zap-cliente').value);localStorage.setItem('nupieepro_email',document.getElementById('email-cliente').value);localStorage.setItem('nupieepro_end',document.getElementById('endereco-cliente').value);}
 function carregarUser(){const n=localStorage.getItem('nupieepro_nome');if(n)document.getElementById('nome-cliente').value=n;const z=localStorage.getItem('nupieepro_zap');if(z)document.getElementById('zap-cliente').value=z;const e=localStorage.getItem('nupieepro_email');if(e)document.getElementById('email-cliente').value=e;const d=localStorage.getItem('nupieepro_end');if(d)document.getElementById('endereco-cliente').value=d;}
-function compartilhar(id,event){event.stopPropagation();const p=produtos.find(x=>x.id===id);const url=location.origin+location.pathname+'?id='+id;const txt='Olha o que encontrei na Lojinha Nupieepro: '+p.nome+' por R$ '+p.preco.toFixed(2).replace('.',',')+'!';if(navigator.share)navigator.share({title:'NUPIEEPRO STORE',text:txt,url}).catch(()=>{});else navigator.clipboard&&navigator.clipboard.writeText(url).then(()=>toast('🔗 Link copiado!'));}
+function compartilhar(id,event){event.stopPropagation();const p=produtos.find(x=>x.id===id);if(!p)return;/* produto pode ter sumido do catálogo (realtime) entre o card renderizar e o toque no botão */const url=location.origin+location.pathname+'?id='+id;const txt='Olha o que encontrei na Lojinha Nupieepro: '+p.nome+' por R$ '+p.preco.toFixed(2).replace('.',',')+'!';if(navigator.share)navigator.share({title:'NUPIEEPRO STORE',text:txt,url}).catch(()=>{});else navigator.clipboard&&navigator.clipboard.writeText(url).then(()=>toast('🔗 Link copiado!'));}
 function abrirSobre(){document.getElementById('modal-sobre').classList.add('active');travarScroll();}
 function abrirLGPD(){document.getElementById('modal-lgpd').classList.add('active');travarScroll();}
 let _tt;

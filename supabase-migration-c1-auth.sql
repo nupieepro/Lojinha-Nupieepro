@@ -177,10 +177,17 @@ BEGIN
         RAISE EXCEPTION 'Acesso negado' USING ERRCODE = '42501';
     END IF;
 
+    /* 'pago' nao e um valor de status (status nunca vira 'pago' — pagamento e a coluna
+       booleana p.pago, separada). Sem este CASE, o filtro "Pago" do admin sempre
+       voltava vazio: comparava status = 'pago', que nenhuma linha satisfaz. */
     SELECT jsonb_agg(row_to_json(p)::JSONB ORDER BY p.created_at DESC)
     INTO v_rows
     FROM public.pedidos p
-    WHERE (admin_get_pedidos.status IS NULL OR p.status = admin_get_pedidos.status);
+    WHERE (
+        admin_get_pedidos.status IS NULL
+        OR (CASE WHEN admin_get_pedidos.status = 'pago' THEN p.pago = TRUE
+                 ELSE p.status = admin_get_pedidos.status END)
+    );
 
     RETURN COALESCE(v_rows, '[]'::JSONB);
 END;
