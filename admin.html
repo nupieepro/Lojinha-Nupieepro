@@ -510,43 +510,43 @@
             <div class="form-titulo"><i class="fa-solid fa-store"></i> Informações Gerais</div>
             <div class="form-row cols-2">
                 <div>
-                    <label class="form-label">Nome da loja</label>
+                    <label class="form-label" for="cfg-nome-loja">Nome da loja</label>
                     <input type="text" id="cfg-nome-loja" class="form-input" placeholder="NUPIEEPRO STORE" maxlength="50">
                 </div>
                 <div>
-                    <label class="form-label">Mensagem de boas-vindas</label>
+                    <label class="form-label" for="cfg-boas-vindas">Mensagem de boas-vindas</label>
                     <input type="text" id="cfg-boas-vindas" class="form-input" placeholder="Bem-vindo(a), Nupilover!" maxlength="80">
                 </div>
             </div>
             <div class="form-row cols-2">
                 <div>
-                    <label class="form-label">Chave PIX</label>
+                    <label class="form-label" for="cfg-chave-pix">Chave PIX</label>
                     <input type="text" id="cfg-chave-pix" class="form-input" placeholder="email@gmail.com" maxlength="100">
                 </div>
                 <div>
-                    <label class="form-label">Nome do recebedor PIX</label>
+                    <label class="form-label" for="cfg-recebedor">Nome do recebedor PIX</label>
                     <input type="text" id="cfg-recebedor" class="form-input" placeholder="NUPIEEPRO" maxlength="25">
                 </div>
             </div>
             <div class="form-row cols-2">
                 <div>
-                    <label class="form-label">WhatsApp destino (só números)</label>
+                    <label class="form-label" for="cfg-whatsapp">WhatsApp destino (só números)</label>
                     <input type="text" id="cfg-whatsapp" class="form-input" placeholder="5586999999999" maxlength="15">
                 </div>
                 <div>
-                    <label class="form-label">E-mail financeiro</label>
+                    <label class="form-label" for="cfg-email-financeiro">E-mail financeiro</label>
                     <input type="email" id="cfg-email-financeiro" class="form-input" placeholder="financeiro@gmail.com" maxlength="100">
                 </div>
             </div>
             <div class="form-row">
                 <div>
-                    <label class="form-label">Rodapé da mensagem WhatsApp</label>
+                    <label class="form-label" for="cfg-rodape-zap">Rodapé da mensagem WhatsApp</label>
                     <input type="text" id="cfg-rodape-zap" class="form-input" placeholder="Prazo de confirmação: 24h úteis." maxlength="200">
                 </div>
             </div>
             <div class="form-row">
                 <div>
-                    <label class="form-label">Link Instagram</label>
+                    <label class="form-label" for="cfg-instagram">Link Instagram</label>
                     <input type="url" id="cfg-instagram" class="form-input" placeholder="https://instagram.com/nupieepro">
                 </div>
             </div>
@@ -559,11 +559,11 @@
             <div id="categorias-lista"></div>
             <div class="form-row cols-3" style="margin-top:10px;align-items:end">
                 <div>
-                    <label class="form-label">Emoji</label>
+                    <label class="form-label" for="cat-novo-emoji">Emoji</label>
                     <input type="text" id="cat-novo-emoji" class="form-input" placeholder="🎒" maxlength="4">
                 </div>
                 <div>
-                    <label class="form-label">Nome da categoria</label>
+                    <label class="form-label" for="cat-novo-nome">Nome da categoria</label>
                     <input type="text" id="cat-novo-nome" class="form-input" placeholder="Ex: Canecas" maxlength="30">
                 </div>
                 <button type="button" class="btn btn-laranja" onclick="adicionarCategoria()"><i class="fa-solid fa-plus"></i> Adicionar</button>
@@ -576,7 +576,7 @@
             <div class="form-hint" style="margin-bottom:12px">Personalize as cores da loja e destaque uma campanha ou coleção especial na vitrine.</div>
             <div class="form-row cols-2">
                 <div>
-                    <label class="form-label">Tema de cores</label>
+                    <label class="form-label" for="cfg-tema-preset">Tema de cores</label>
                     <select id="cfg-tema-preset" class="form-select" onchange="aoMudarTemaPreset()">
                         <option value="padrao">🟣 Padrão (roxo/laranja)</option>
                         <option value="natal">🎄 Natal</option>
@@ -607,21 +607,21 @@
             </div>
             <div class="form-row cols-2" style="margin-top:8px">
                 <div>
-                    <label class="form-label">Título do banner</label>
+                    <label class="form-label" for="cfg-hero-titulo">Título do banner</label>
                     <input type="text" id="cfg-hero-titulo" class="form-input" placeholder="Ex: Edição Calourada 2026" maxlength="60">
                 </div>
                 <div>
-                    <label class="form-label">Subtítulo</label>
+                    <label class="form-label" for="cfg-hero-subtitulo">Subtítulo</label>
                     <input type="text" id="cfg-hero-subtitulo" class="form-input" placeholder="Ex: Produtos exclusivos por tempo limitado" maxlength="100">
                 </div>
             </div>
             <div class="form-row cols-2">
                 <div>
-                    <label class="form-label">Imagem de fundo (opcional)</label>
+                    <label class="form-label" for="cfg-hero-img">Imagem de fundo (opcional)</label>
                     <input type="url" id="cfg-hero-img" class="form-input" placeholder="https://...">
                 </div>
                 <div>
-                    <label class="form-label">Link ao clicar (opcional)</label>
+                    <label class="form-label" for="cfg-hero-link">Link ao clicar (opcional)</label>
                     <input type="url" id="cfg-hero-link" class="form-input" placeholder="https://...">
                 </div>
             </div>
@@ -632,11 +632,11 @@
                 <div id="colecoes-lista"></div>
                 <div class="form-row cols-3" style="margin-top:10px;align-items:end">
                     <div>
-                        <label class="form-label">Emoji</label>
+                        <label class="form-label" for="col-novo-emoji">Emoji</label>
                         <input type="text" id="col-novo-emoji" class="form-input" placeholder="🎓" maxlength="4">
                     </div>
                     <div>
-                        <label class="form-label">Nome da coleção</label>
+                        <label class="form-label" for="col-novo-nome">Nome da coleção</label>
                         <input type="text" id="col-novo-nome" class="form-input" placeholder="Ex: Kit Calouro" maxlength="30">
                     </div>
                     <button type="button" class="btn btn-outline" onclick="adicionarColecao()"><i class="fa-solid fa-plus"></i> Adicionar</button>
@@ -658,11 +658,11 @@
             </div>
             <div class="form-row cols-2" style="margin-top:12px">
                 <div>
-                    <label class="form-label">Texto do aviso</label>
+                    <label class="form-label" for="cfg-aviso-texto">Texto do aviso</label>
                     <input type="text" id="cfg-aviso-texto" class="form-input" placeholder="Texto do aviso" maxlength="200">
                 </div>
                 <div>
-                    <label class="form-label">Tipo</label>
+                    <label class="form-label" for="cfg-aviso-tipo">Tipo</label>
                     <select id="cfg-aviso-tipo" class="form-select">
                         <option value="info">ℹ️ Info (azul)</option>
                         <option value="alerta">⚠️ Alerta (amarelo)</option>
@@ -719,17 +719,17 @@
         <input type="hidden" id="prod-id">
         <div class="form-row cols-2">
             <div>
-                <label class="form-label">Nome *</label>
+                <label class="form-label" for="prod-nome">Nome *</label>
                 <input type="text" id="prod-nome" class="form-input" placeholder="Nome do produto" maxlength="100">
             </div>
             <div>
-                <label class="form-label">Categoria *</label>
+                <label class="form-label" for="prod-categoria">Categoria *</label>
                 <select id="prod-categoria" class="form-select"></select>
             </div>
         </div>
         <div class="form-row cols-2">
             <div>
-                <label class="form-label">Coleção temática (opcional)</label>
+                <label class="form-label" for="prod-colecao">Coleção temática (opcional)</label>
                 <select id="prod-colecao" class="form-select">
                     <option value="">Nenhuma</option>
                 </select>
@@ -738,20 +738,20 @@
         </div>
         <div class="form-row cols-3">
             <div>
-                <label class="form-label">Preço de venda (R$) *</label>
+                <label class="form-label" for="prod-preco">Preço de venda (R$) *</label>
                 <input type="number" id="prod-preco" class="form-input" placeholder="0,00" step="0.01" min="0">
             </div>
             <div>
-                <label class="form-label">Custo (R$)</label>
+                <label class="form-label" for="prod-custo">Custo (R$)</label>
                 <input type="number" id="prod-custo" class="form-input" placeholder="0,00" step="0.01" min="0">
             </div>
             <div>
-                <label class="form-label">Estoque</label>
+                <label class="form-label" for="prod-estoque">Estoque</label>
                 <input type="number" id="prod-estoque" class="form-input" placeholder="0" min="0">
             </div>
         </div>
         <div>
-            <label class="form-label">Descrição</label>
+            <label class="form-label" for="prod-descricao">Descrição</label>
             <textarea id="prod-descricao" class="form-textarea" placeholder="Descrição do produto..." maxlength="500"></textarea>
         </div>
         <div>
@@ -800,7 +800,7 @@
                 </label>
             </div>
             <div>
-                <label class="form-label">Prazo de encomenda</label>
+                <label class="form-label" for="prod-prazo">Prazo de encomenda</label>
                 <input type="text" id="prod-prazo" class="form-input" placeholder="Ex: Apenas sob encomenda" maxlength="60">
                 <label class="form-label" style="margin-top:12px">Agendamento (opcional)</label>
                 <input type="datetime-local" id="prod-agendamento" class="form-input">
@@ -833,12 +833,12 @@
         <div class="modal-titulo">Configurar Cupom</div>
         <div class="form-row cols-2">
             <div>
-                <label class="form-label">Código do cupom *</label>
+                <label class="form-label" for="cup-codigo">Código do cupom *</label>
                 <input type="text" id="cup-codigo" class="form-input" placeholder="CALOUROEP10" maxlength="20" style="text-transform:uppercase">
                 <div class="form-hint">Sem espaços, sem acento</div>
             </div>
             <div>
-                <label class="form-label">Tipo de desconto *</label>
+                <label class="form-label" for="cup-tipo">Tipo de desconto *</label>
                 <select id="cup-tipo" class="form-select">
                     <option value="percentual">Percentual (%)</option>
                     <option value="fixo">Valor fixo (R$)</option>
@@ -847,21 +847,21 @@
         </div>
         <div class="form-row cols-2">
             <div>
-                <label class="form-label">Valor do desconto *</label>
+                <label class="form-label" for="cup-valor">Valor do desconto *</label>
                 <input type="number" id="cup-valor" class="form-input" placeholder="10" min="0">
             </div>
             <div>
-                <label class="form-label">Compra mínima (R$)</label>
+                <label class="form-label" for="cup-minimo">Compra mínima (R$)</label>
                 <input type="number" id="cup-minimo" class="form-input" placeholder="0" min="0">
             </div>
         </div>
         <div class="form-row cols-2">
             <div>
-                <label class="form-label">Limite de usos</label>
+                <label class="form-label" for="cup-limite">Limite de usos</label>
                 <input type="number" id="cup-limite" class="form-input" placeholder="500" min="1">
             </div>
             <div>
-                <label class="form-label">Usos realizados</label>
+                <label class="form-label" for="cup-usos">Usos realizados</label>
                 <input type="number" id="cup-usos" class="form-input" placeholder="0" min="0">
             </div>
         </div>
@@ -870,7 +870,7 @@
             <div id="cup-produtos-check" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px"></div>
         </div>
         <div style="margin-top:12px">
-            <label class="form-label">Descrição (aparece no card da vitrine)</label>
+            <label class="form-label" for="cup-descricao">Descrição (aparece no card da vitrine)</label>
             <textarea id="cup-descricao" class="form-textarea" placeholder="Descreva o benefício do cupom..." maxlength="200" rows="2"></textarea>
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin:12px 0">
@@ -1324,7 +1324,7 @@ function abrirPedido(numero){
             Total: R$ ${(p.total||0).toFixed(2).replace('.',',')}
         </div>
         <div style="margin-bottom:16px">
-            <label class="form-label">Anotação interna</label>
+            <label class="form-label" for="pedido-anotacao">Anotação interna</label>
             <textarea id="pedido-anotacao" class="form-textarea" rows="2" maxlength="300" placeholder="Só o admin vê...">${san(p.anotacao_interna||'')}</textarea>
         </div>
         <div style="margin-bottom:12px">
