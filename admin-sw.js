@@ -3,13 +3,14 @@
    Versão: 3.0.0 — Auto-update ativo
    ============================================================ */
 
-const CACHE = 'nupi-admin-v8';
+const CACHE = 'nupi-admin-v9';
 
 const ESSENCIAIS = [
   './admin.html',
   './admin-manifest.json',
   './icons/admin-icon-180.png',
   './icons/admin-icon-192.png',
+  './design-tokens.css',
   './fontawesome-subset.css',
   './fonts/fa-solid-subset.woff2',
   './fonts/fa-brands-subset.woff2',

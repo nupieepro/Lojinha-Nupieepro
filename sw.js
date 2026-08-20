@@ -3,9 +3,10 @@
    Caminhos relativos — funciona em qualquer subpasta
    ============================================================ */
 
-const CACHE = 'nupieepro-v17';
+const CACHE = 'nupieepro-v18';
 
 const CACHEAR = [
+    './design-tokens.css',
     './fontawesome-subset.css',
     './fonts/fa-solid-subset.woff2',
     './fonts/fa-brands-subset.woff2',

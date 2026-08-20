@@ -20,6 +20,7 @@
     <link rel="manifest" href="./admin-manifest.json">
     <link rel="preload" href="./fonts/leaguespartan-bold-subset.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/adumu-regular-subset.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="./design-tokens.css">
     <link rel="stylesheet" href="./fontawesome-subset.css">
     <script src="./vendor/supabase-js-2.112.2.min.js" onerror="window.__sbScriptFailed=true"></script>
     <style>
@@ -32,17 +33,25 @@
         :root {
             --font-titulo: 'Adumu', Impact, 'Arial Narrow Bold', sans-serif;
             --font-corpo: 'League Spartan', -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-            --roxo:   #0f0732;
-            --laranja: #f85900;
-            --laranja-glow: rgba(248,89,0,0.3);
-            --branco: #ffffff;
-            --fundo:  #f0f2f8;
-            --card:   #ffffff;
+            /* Cores de marca/semânticas vêm de design-tokens.css (compartilhado com a loja) —
+               nomes locais (--roxo, --laranja etc.) continuam iguais pra não precisar tocar
+               em cada var() já usado no arquivo. --fundo/--card/--texto/--suave ficam literais:
+               são o "fundo do admin", não um conceito de marca. */
+            --roxo:   var(--marca-roxo);
+            --roxo-brand-escuro: var(--marca-roxo-escuro);
+            --laranja: var(--marca-laranja);
+            --laranja-glow: var(--marca-laranja-glow);
+            --branco: var(--marca-branco);
+            --fundo:  var(--n-bg-200);
+            --card:   var(--branco);
             --texto:  #0f0732;
             --suave:  #5a5575;
-            --verde:  #27ae60;
-            --vermelho: #e74c3c;
-            --amarelo:  #f39c12;
+            --verde:  var(--cor-sucesso);
+            --vermelho: var(--cor-erro-solido);
+            --amarelo:  var(--cor-aviso);
+            /* Sombra própria do admin — não é igual a nenhum dos 3 níveis da loja
+               (--sombra-sm/md/lg em design-tokens.css), então fica literal aqui pra não
+               mudar o visual existente sem motivo. */
             --shadow: 0 4px 20px rgba(15,7,50,0.10);
         }
         *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -55,7 +64,7 @@
         #tela-login {
             min-height:100vh; display:flex; align-items:center;
             justify-content:center; padding:20px;
-            background:linear-gradient(135deg, var(--roxo) 0%, #1a1245 100%);
+            background:linear-gradient(135deg, var(--roxo) 0%, var(--roxo-brand-escuro) 100%);
         }
         .login-box {
             background:var(--card); border-radius:24px;
@@ -66,16 +75,16 @@
         .login-logo { width:80px; height:80px; border-radius:50%; border:3px solid var(--laranja); object-fit:cover; margin:0 auto 16px; display:block; box-shadow:0 0 20px var(--laranja-glow); }
         .login-titulo { font-family:var(--font-titulo); font-size:1.3rem; font-weight:400; color:var(--roxo); margin-bottom:4px; }
         .login-sub { font-size:0.8rem; color:var(--suave); margin-bottom:28px; }
-        .login-input { width:100%; padding:14px 16px; border:2px solid #eee; border-radius:12px; font-size:0.95rem; outline:none; transition:0.2s; margin-bottom:12px; }
+        .login-input { width:100%; padding:14px 16px; border:2px solid var(--n-border-300); border-radius:12px; font-size:0.95rem; outline:none; transition:0.2s; margin-bottom:12px; }
         .login-input:focus { border-color:var(--roxo); }
-        .login-btn { width:100%; padding:16px; background:var(--roxo); color:#fff; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; transition:0.2s; margin-top:4px; }
+        .login-btn { width:100%; padding:16px; background:var(--roxo); color:var(--branco); border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; transition:0.2s; margin-top:4px; }
         .login-btn:active { transform:scale(0.98); }
         .login-erro { color:var(--vermelho); font-size:0.82rem; margin-top:8px; display:none; }
 
         /* ── LAYOUT ADMIN ── */
         #app { display:none; }
         .topbar {
-            background:var(--roxo); color:#fff;
+            background:var(--roxo); color:var(--branco);
             padding:0 24px; height:60px;
             display:flex; align-items:center;
             justify-content:space-between;
@@ -87,15 +96,15 @@
         .topbar-titulo { font-family:var(--font-titulo); font-weight:400; font-size:0.95rem; }
         .topbar-titulo span { color:var(--laranja); }
         .topbar-right { display:flex; align-items:center; gap:12px; }
-        .topbar-badge { background:var(--laranja); color:#fff; border-radius:20px; padding:3px 10px; font-size:0.7rem; font-weight:700; display:none; }
+        .topbar-badge { background:var(--laranja); color:var(--branco); border-radius:20px; padding:3px 10px; font-size:0.7rem; font-weight:700; display:none; }
         .topbar-badge.ativo { display:inline-block; animation:pulse 1.5s infinite; }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
-        .btn-sair { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:#fff; padding:6px 12px; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer; }
+        .btn-sair { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:var(--branco); padding:6px 12px; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer; }
         .btn-sair:hover { background:rgba(255,255,255,0.2); }
 
         /* ── ABAS ── */
         .abas-nav {
-            background:#fff; border-bottom:1px solid #eee;
+            background:var(--branco); border-bottom:1px solid var(--n-border-300);
             display:flex; overflow-x:auto; padding:0 16px;
             scrollbar-width:none; gap:4px; position:sticky; top:60px; z-index:99;
         }
@@ -107,7 +116,7 @@
             transition:0.2s; display:flex; align-items:center; gap:6px;
         }
         .aba-btn.ativa { color:var(--roxo); border-bottom-color:var(--laranja); }
-        .aba-btn .badge-count { background:var(--vermelho); color:#fff; border-radius:10px; padding:1px 6px; font-size:0.65rem; font-weight:700; }
+        .aba-btn .badge-count { background:var(--vermelho); color:var(--branco); border-radius:10px; padding:1px 6px; font-size:0.65rem; font-weight:700; }
 
         .conteudo { padding:20px; max-width:1200px; margin:0 auto; }
 
@@ -127,32 +136,32 @@
         @media(min-width:600px){ .form-row.cols-2 { grid-template-columns:1fr 1fr; } }
         @media(min-width:600px){ .form-row.cols-3 { grid-template-columns:1fr 1fr 1fr; } }
         .form-label { font-size:0.78rem; font-weight:700; color:var(--suave); margin-bottom:4px; display:block; }
-        .form-input { width:100%; padding:12px 14px; border:1px solid #e0e0e0; border-radius:10px; font-size:0.9rem; outline:none; transition:0.2s; background:#fbfbfb; }
-        .form-input:focus { border-color:var(--roxo); background:#fff; box-shadow:0 0 0 3px rgba(15,7,50,0.08); }
-        .form-select { width:100%; padding:12px 14px; border:1px solid #e0e0e0; border-radius:10px; font-size:0.9rem; outline:none; background:#fbfbfb; -webkit-appearance:none; appearance:none; }
-        .form-textarea { width:100%; padding:12px 14px; border:1px solid #e0e0e0; border-radius:10px; font-size:0.9rem; outline:none; resize:vertical; min-height:80px; background:#fbfbfb; }
-        .form-hint { font-size:0.72rem; color:#aaa; margin-top:3px; }
+        .form-input { width:100%; padding:12px 14px; border:1px solid var(--n-border-200); border-radius:10px; font-size:0.9rem; outline:none; transition:0.2s; background:var(--n-bg-300); }
+        .form-input:focus { border-color:var(--roxo); background:var(--branco); box-shadow:0 0 0 3px rgba(15,7,50,0.08); }
+        .form-select { width:100%; padding:12px 14px; border:1px solid var(--n-border-200); border-radius:10px; font-size:0.9rem; outline:none; background:var(--n-bg-300); -webkit-appearance:none; appearance:none; }
+        .form-textarea { width:100%; padding:12px 14px; border:1px solid var(--n-border-200); border-radius:10px; font-size:0.9rem; outline:none; resize:vertical; min-height:80px; background:var(--n-bg-300); }
+        .form-hint { font-size:0.72rem; color:var(--texto-fraco); margin-top:3px; }
 
         /* ── TOGGLE ── */
-        .toggle-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid #f0f0f0; }
+        .toggle-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--n-border-300); }
         .toggle-row:last-child { border-bottom:none; }
         .toggle-info { flex:1; }
         .toggle-label { font-size:0.88rem; font-weight:700; color:var(--texto); }
         .toggle-desc  { font-size:0.75rem; color:var(--suave); margin-top:2px; }
         .toggle { position:relative; width:48px; height:26px; flex-shrink:0; }
         .toggle input { opacity:0; width:0; height:0; }
-        .toggle-slider { position:absolute; inset:0; background:#ddd; border-radius:26px; cursor:pointer; transition:0.3s; }
-        .toggle-slider:before { content:''; position:absolute; width:20px; height:20px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:0.3s; box-shadow:0 2px 4px rgba(0,0,0,0.2); }
+        .toggle-slider { position:absolute; inset:0; background:var(--n-border-400); border-radius:26px; cursor:pointer; transition:0.3s; }
+        .toggle-slider:before { content:''; position:absolute; width:20px; height:20px; left:3px; bottom:3px; background:var(--branco); border-radius:50%; transition:0.3s; box-shadow:0 2px 4px rgba(0,0,0,0.2); }
         input:checked + .toggle-slider { background:var(--laranja); }
         input:checked + .toggle-slider:before { transform:translateX(22px); }
 
         /* ── BOTÕES ── */
         .btn { padding:10px 18px; border-radius:10px; font-size:0.85rem; font-weight:700; border:none; cursor:pointer; transition:0.2s; display:inline-flex; align-items:center; gap:6px; }
         .btn:active { transform:scale(0.97); }
-        .btn-primary   { background:var(--roxo); color:#fff; box-shadow:0 4px 12px rgba(15,7,50,0.2); }
-        .btn-laranja   { background:var(--laranja); color:#fff; box-shadow:0 4px 12px var(--laranja-glow); }
-        .btn-verde     { background:var(--verde); color:#fff; }
-        .btn-vermelho  { background:var(--vermelho); color:#fff; }
+        .btn-primary   { background:var(--roxo); color:var(--branco); box-shadow:0 4px 12px rgba(15,7,50,0.2); }
+        .btn-laranja   { background:var(--laranja); color:var(--branco); box-shadow:0 4px 12px var(--laranja-glow); }
+        .btn-verde     { background:var(--verde); color:var(--branco); }
+        .btn-vermelho  { background:var(--vermelho); color:var(--branco); }
         .btn-outline   { background:transparent; color:var(--roxo); border:2px solid var(--roxo); }
         .btn-sm        { padding:6px 12px; font-size:0.78rem; border-radius:8px; }
         .btn-full      { width:100%; justify-content:center; padding:14px; }
@@ -166,9 +175,9 @@
             border-left:4px solid transparent;
             transition:0.2s;
         }
-        .produto-item.inativo { opacity:0.5; border-left-color:#ddd; }
+        .produto-item.inativo { opacity:0.5; border-left-color:var(--n-border-400); }
         .produto-item.ativo   { border-left-color:var(--verde); }
-        .produto-thumb { width:56px; height:56px; border-radius:10px; object-fit:cover; background:#f0f2f8; flex-shrink:0; }
+        .produto-thumb { width:56px; height:56px; border-radius:10px; object-fit:cover; background:var(--n-bg-200); flex-shrink:0; }
         .produto-info  { flex:1; min-width:0; }
         .produto-nome  { font-size:0.88rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
         .produto-preco { font-size:0.95rem; color:var(--laranja); font-weight:800; }
@@ -185,9 +194,9 @@
         .pedido-item.novo       { border-left-color:var(--amarelo); }
         .pedido-item.confirmado { border-left-color:var(--verde); }
         .pedido-item.em_producao{ border-left-color:var(--laranja); }
-        .pedido-item.pronto     { border-left-color:#8e44ad; }
-        .pedido-item.entregue   { border-left-color:#2980b9; }
-        .pedido-item.cancelado  { border-left-color:#e74c3c; }
+        .pedido-item.pronto     { border-left-color:var(--cor-destaque-solido); }
+        .pedido-item.entregue   { border-left-color:var(--cor-info-solido); }
+        .pedido-item.cancelado  { border-left-color:var(--cor-erro-solido); }
         .pedido-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; gap:6px; }
         .pedido-numero { font-size:0.88rem; font-weight:800; color:var(--roxo); }
         .pedido-data   { font-size:0.72rem; color:var(--suave); }
@@ -195,25 +204,25 @@
         .pedido-itens  { font-size:0.78rem; color:var(--suave); margin-bottom:8px; }
         .pedido-total  { font-size:1rem; font-weight:800; color:var(--laranja); }
         .status-badge  { padding:3px 10px; border-radius:20px; font-size:0.68rem; font-weight:700; text-transform:uppercase; }
-        .status-novo       { background:#fff8e1; color:#f57f17; }
-        .status-confirmado { background:#e8f5e9; color:#2e7d32; }
-        .status-em_producao{ background:#fff3e0; color:#e65100; }
-        .status-pronto     { background:#f3e5f5; color:#6a1b9a; }
-        .status-entregue   { background:#e3f2fd; color:#1565c0; }
-        .status-pago       { background:#e8f5e9; color:#1b5e20; }
-        .status-cancelado  { background:#ffebee; color:#b71c1c; }
+        .status-novo       { background:var(--cor-aviso-bg); color:var(--cor-aviso-texto); }
+        .status-confirmado { background:var(--cor-sucesso-bg); color:var(--cor-sucesso-texto); }
+        .status-em_producao{ background:var(--cor-laranja-status-bg); color:var(--cor-laranja-status-texto); }
+        .status-pronto     { background:var(--cor-destaque-bg); color:var(--cor-destaque-texto); }
+        .status-entregue   { background:var(--cor-info-bg); color:var(--cor-info-texto); }
+        .status-pago       { background:var(--cor-sucesso-bg); color:var(--cor-sucesso-texto-forte); }
+        .status-cancelado  { background:var(--cor-erro-bg-forte); color:var(--cor-erro-texto); }
         .pedido-acoes { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
 
         /* ── CUPONS ── */
         .cupom-item { background:var(--card); border-radius:14px; padding:16px; margin-bottom:10px; box-shadow:var(--shadow); display:flex; align-items:center; gap:12px; }
         .cupom-codigo { font-size:1rem; font-weight:800; color:var(--roxo); letter-spacing:1px; flex:1; }
         .cupom-meta { font-size:0.78rem; color:var(--suave); margin-top:4px; }
-        .cupom-tipo { display:inline-block; padding:2px 8px; border-radius:8px; font-size:0.68rem; font-weight:700; background:var(--laranja); color:#fff; }
+        .cupom-tipo { display:inline-block; padding:2px 8px; border-radius:8px; font-size:0.68rem; font-weight:700; background:var(--laranja); color:var(--branco); }
 
         /* ── NOTIFICAÇÃO NOVO PEDIDO ── */
         #notif-pedido {
             position:fixed; top:70px; right:20px;
-            background:var(--roxo); color:#fff;
+            background:var(--roxo); color:var(--branco);
             border-radius:16px; padding:16px 20px;
             box-shadow:0 8px 24px rgba(15,7,50,0.3);
             z-index:999; display:none;
@@ -229,7 +238,7 @@
         #toast-admin {
             position:fixed; bottom:20px; left:50%;
             transform:translateX(-50%) translateY(100px);
-            background:var(--roxo); color:#fff;
+            background:var(--roxo); color:var(--branco);
             padding:12px 24px; border-radius:50px;
             font-size:0.88rem; font-weight:600;
             box-shadow:0 4px 20px rgba(15,7,50,0.3);
@@ -250,7 +259,7 @@
         }
         .modal-overlay.ativo { opacity:1; visibility:visible; pointer-events:all; }
         .modal-box {
-            background:#fff; width:100%; max-width:560px;
+            background:var(--branco); width:100%; max-width:560px;
             border-radius:24px 24px 0 0; padding:28px 24px;
             max-height:90vh; overflow-y:auto;
             animation:slideUp 0.4s cubic-bezier(0.16,1,0.3,1);
@@ -259,19 +268,19 @@
         @media(min-width:600px){ .modal-overlay{align-items:center} .modal-box{border-radius:24px} }
         @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
         .modal-titulo { font-family:var(--font-titulo); font-size:1.1rem; font-weight:400; color:var(--roxo); margin-bottom:20px; }
-        .modal-close { position:absolute; top:20px; right:20px; background:#f0f2f5; border:none; width:32px; height:32px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--roxo); }
+        .modal-close { position:absolute; top:20px; right:20px; background:var(--n-bg-200); border:none; width:32px; height:32px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--roxo); }
 
         /* ── PREVIEW ── */
-        #preview-iframe { width:100%; height:500px; border:none; border-radius:12px; border:1px solid #eee; }
+        #preview-iframe { width:100%; height:500px; border:none; border-radius:12px; border:1px solid var(--n-border-300); }
         .preview-toolbar { display:flex; gap:8px; margin-bottom:12px; align-items:center; flex-wrap:wrap; }
-        .preview-btn { padding:6px 14px; border-radius:8px; border:1px solid #ddd; background:#fff; font-size:0.78rem; font-weight:600; cursor:pointer; transition:0.2s; }
-        .preview-btn.ativo { background:var(--roxo); color:#fff; border-color:var(--roxo); }
+        .preview-btn { padding:6px 14px; border-radius:8px; border:1px solid var(--n-border-400); background:var(--branco); font-size:0.78rem; font-weight:600; cursor:pointer; transition:0.2s; }
+        .preview-btn.ativo { background:var(--roxo); color:var(--branco); border-color:var(--roxo); }
 
         /* ── LOG ── */
-        .log-item { padding:10px 14px; border-radius:10px; margin-bottom:6px; font-size:0.78rem; background:#f8f9fc; border-left:3px solid #ddd; }
-        .log-item.ERRO_GET, .log-item.ERRO_POST { border-left-color:var(--vermelho); background:#fff0f0; }
-        .log-item.PEDIDO  { border-left-color:var(--verde); background:#f0fff4; }
-        .log-item.LOGIN_OK{ border-left-color:var(--laranja); background:#fff8f0; }
+        .log-item { padding:10px 14px; border-radius:10px; margin-bottom:6px; font-size:0.78rem; background:var(--n-bg-100); border-left:3px solid var(--n-border-400); }
+        .log-item.ERRO_GET, .log-item.ERRO_POST { border-left-color:var(--vermelho); background:var(--cor-erro-bg); }
+        .log-item.PEDIDO  { border-left-color:var(--verde); background:var(--cor-sucesso-bg); }
+        .log-item.LOGIN_OK{ border-left-color:var(--laranja); background:var(--n-bg-warm); }
         .log-data { font-size:0.7rem; color:var(--suave); margin-bottom:2px; }
 
         /* ── EMPTY STATE ── */
@@ -284,16 +293,16 @@
         @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
 
         /* ── UPLOAD FOTOS ── */
-        .upload-area { border:2px dashed rgba(15,7,50,0.2); border-radius:12px; padding:16px; margin-bottom:8px; text-align:center; cursor:pointer; transition:0.2s; background:#fafafa; }
-        .upload-area:hover { border-color:var(--laranja); background:#fff8f0; }
-        .upload-area.dragover { border-color:var(--laranja); background:#fff3e0; }
+        .upload-area { border:2px dashed rgba(15,7,50,0.2); border-radius:12px; padding:16px; margin-bottom:8px; text-align:center; cursor:pointer; transition:0.2s; background:var(--n-bg-300); }
+        .upload-area:hover { border-color:var(--laranja); background:var(--n-bg-warm); }
+        .upload-area.dragover { border-color:var(--laranja); background:var(--cor-laranja-status-bg); }
         .upload-area input[type=file] { display:none; }
         .upload-label { font-size:0.82rem; color:var(--suave); cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:6px; }
         .upload-label i { font-size:1.5rem; color:var(--laranja); }
         .fotos-preview { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
-        .foto-preview-item { position:relative; width:72px; height:72px; border-radius:10px; overflow:hidden; border:2px solid #eee; flex-shrink:0; }
+        .foto-preview-item { position:relative; width:72px; height:72px; border-radius:10px; overflow:hidden; border:2px solid var(--n-border-300); flex-shrink:0; }
         .foto-preview-item img { width:100%; height:100%; object-fit:cover; }
-        .foto-preview-item .foto-remove { position:absolute; top:2px; right:2px; background:rgba(231,76,60,0.9); color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:0.6rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .foto-preview-item .foto-remove { position:absolute; top:2px; right:2px; background:rgba(231,76,60,0.9); color:var(--branco); border:none; border-radius:50%; width:20px; height:20px; font-size:0.6rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
         .foto-uploading { opacity:0.5; }
         .upload-progress { font-size:0.72rem; color:var(--laranja); font-weight:700; text-align:center; margin-bottom:4px; display:none; }
 
@@ -318,7 +327,7 @@
         <input type="email" id="campo-email" class="login-input" placeholder="E-mail" maxlength="120" autocomplete="username">
         <div style="position:relative">
             <input type="password" id="campo-senha" class="login-input" placeholder="Senha de acesso" maxlength="72" autocomplete="current-password" style="padding-right:48px">
-            <button onclick="toggleSenha()" type="button" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#aaa;font-size:1rem" id="btn-ver-senha" aria-label="Ver senha">
+            <button onclick="toggleSenha()" type="button" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--texto-fraco);font-size:1rem" id="btn-ver-senha" aria-label="Ver senha">
                 <i class="fa-solid fa-eye" id="icone-senha"></i>
             </button>
         </div>
@@ -376,23 +385,23 @@
     <div class="conteudo" id="aba-dashboard">
         <div class="dash-grid">
             <div class="dash-card">
-                <div class="dash-card-icon" style="background:#fff0e6"><i class="fa-solid fa-dollar-sign" style="color:var(--laranja)"></i></div>
+                <div class="dash-card-icon" style="background:var(--cor-laranja-status-bg)"><i class="fa-solid fa-dollar-sign" style="color:var(--laranja)"></i></div>
                 <div class="dash-card-val" id="dash-faturamento">—</div>
                 <div class="dash-card-label">Faturamento total</div>
             </div>
             <div class="dash-card">
-                <div class="dash-card-icon" style="background:#e8f5e9"><i class="fa-solid fa-bag-shopping" style="color:var(--verde)"></i></div>
+                <div class="dash-card-icon" style="background:var(--cor-sucesso-bg)"><i class="fa-solid fa-bag-shopping" style="color:var(--verde)"></i></div>
                 <div class="dash-card-val" id="dash-pedidos">—</div>
                 <div class="dash-card-label">Total de pedidos</div>
-                <div id="dash-cancelados" style="font-size:0.68rem;color:#e74c3c;font-weight:700;margin-top:4px;display:none"></div>
+                <div id="dash-cancelados" style="font-size:0.68rem;color:var(--cor-erro-solido);font-weight:700;margin-top:4px;display:none"></div>
             </div>
             <div class="dash-card">
-                <div class="dash-card-icon" style="background:#e3f2fd"><i class="fa-solid fa-clock" style="color:#1565c0"></i></div>
+                <div class="dash-card-icon" style="background:var(--cor-info-bg)"><i class="fa-solid fa-clock" style="color:#1565c0"></i></div>
                 <div class="dash-card-val" id="dash-hoje">—</div>
                 <div class="dash-card-label">Pedidos hoje</div>
             </div>
             <div class="dash-card">
-                <div class="dash-card-icon" style="background:#f3e5f5"><i class="fa-solid fa-receipt" style="color:#6a1b9a"></i></div>
+                <div class="dash-card-icon" style="background:var(--cor-destaque-bg)"><i class="fa-solid fa-receipt" style="color:#6a1b9a"></i></div>
                 <div class="dash-card-val" id="dash-ticket">—</div>
                 <div class="dash-card-label">Ticket médio</div>
             </div>
@@ -612,7 +621,7 @@
                 </div>
             </div>
 
-            <div style="margin-top:16px;padding-top:16px;border-top:1px solid #f0f0f0">
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--n-border-300)">
                 <div class="form-titulo" style="font-size:0.9rem;margin-bottom:10px"><i class="fa-solid fa-tags"></i> Coleções temáticas</div>
                 <div class="form-hint" style="margin-bottom:10px">Agrupe produtos numa coleção (ex: "Kit Calouro") para exibi-los juntos, com destaque, na vitrine.</div>
                 <div id="colecoes-lista"></div>
@@ -793,7 +802,7 @@
                 <div class="form-hint">Produto aparece automaticamente nesta data</div>
             </div>
         </div>
-        <div id="prod-margem" style="background:#f0fff4;border-radius:10px;padding:12px;margin:12px 0;font-size:0.82rem;color:var(--verde);display:none">
+        <div id="prod-margem" style="background:var(--cor-sucesso-bg);border-radius:10px;padding:12px;margin:12px 0;font-size:0.82rem;color:var(--verde);display:none">
             <i class="fa-solid fa-chart-line"></i> Margem de lucro: <strong id="prod-margem-val">—</strong>
         </div>
         <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
@@ -890,7 +899,7 @@
 <div id="notif-pedido">
     <div class="notif-titulo">🛍️ Novo pedido!</div>
     <div class="notif-msg" id="notif-msg"></div>
-    <button class="btn btn-sm" style="margin-top:8px;background:var(--laranja);color:#fff;border:none" onclick="abrirAba('pedidos');fecharNotif()">Ver pedido</button>
+    <button class="btn btn-sm" style="margin-top:8px;background:var(--laranja);color:var(--branco);border:none" onclick="abrirAba('pedidos');fecharNotif()">Ver pedido</button>
 </div>
 
 <script>
@@ -928,11 +937,11 @@ if ('serviceWorker' in navigator) {
         var d   = document.createElement("div");
         var txt = document.createElement("div");
         var btn = document.createElement("button");
-        d.style.cssText   = "position:fixed;bottom:0;left:0;right:0;background:#0f0732;color:#fff;padding:14px 18px;z-index:9998;display:flex;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(0,0,0,0.3)";
+        d.style.cssText   = "position:fixed;bottom:0;left:0;right:0;background:var(--roxo);color:var(--branco);padding:14px 18px;z-index:9998;display:flex;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(0,0,0,0.3)";
         txt.style.cssText = "flex:1;font-size:0.82rem;line-height:1.4";
         txt.innerHTML     = "<strong style='color:#f85900'>Instalar painel no iPhone:</strong><br>Toque em <strong>Compartilhar</strong> e depois <strong>Adicionar a Tela de Inicio</strong>";
         btn.textContent   = "X";
-        btn.style.cssText = "background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:4px;flex-shrink:0";
+        btn.style.cssText = "background:none;border:none;color:var(--branco);font-size:1.2rem;cursor:pointer;padding:4px;flex-shrink:0";
         btn.onclick       = function(){ d.remove(); localStorage.setItem("nupi_admin_ios_dica","1"); };
         d.appendChild(txt);
         d.appendChild(btn);
@@ -991,7 +1000,7 @@ function mostrarErroConexaoAdmin(){
     }
     const banner = document.createElement('div');
     banner.id = 'banner-erro-conexao';
-    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#e74c3c;color:#fff;text-align:center;padding:10px 16px;font-size:0.82rem;font-weight:700;z-index:99999;cursor:pointer';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:var(--cor-erro-solido);color:var(--branco);text-align:center;padding:10px 16px;font-size:0.82rem;font-weight:700;z-index:99999;cursor:pointer';
     banner.innerHTML = '📡 Sem conexão com o servidor — toque para tentar novamente';
     banner.onclick = () => location.reload();
     document.body.appendChild(banner);
@@ -1272,14 +1281,14 @@ function abrirPedido(numero){
     document.getElementById('modal-pedido-titulo').textContent = `Pedido #${p.numero}`;
 
     const itensHTML = Array.isArray(p.itens) ? p.itens.map(i =>
-        `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:0.85rem">
+        `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--n-border-300);font-size:0.85rem">
             <span>${i.qtd}x ${i.nome}${i.tamanho && i.tamanho!=='Único'?' ('+i.tamanho+')':''}</span>
             <span style="font-weight:700">R$ ${((i.preco||0)*(i.qtd||1)).toFixed(2).replace('.',',')}</span>
         </div>`
     ).join('') : '';
 
     document.getElementById('modal-pedido-conteudo').innerHTML = `
-        <div style="background:#f8f9fc;border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.85rem">
+        <div style="background:var(--n-bg-100);border-radius:12px;padding:14px;margin-bottom:16px;font-size:0.85rem">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
                 <div><b>Cliente:</b> ${p.nome}</div>
                 <div><b>WhatsApp:</b> ${p.whatsapp}</div>
@@ -1313,7 +1322,7 @@ function abrirPedido(numero){
             <button class="btn btn-outline btn-sm" onclick="salvarAnotacao('${p.numero}')">
                 <i class="fa-solid fa-floppy-disk"></i> Salvar anotação
             </button>
-            <a href="https://wa.me/${p.whatsapp||''}" target="_blank" rel="noopener" class="btn btn-sm" style="background:#25D366;color:#fff">
+            <a href="https://wa.me/${p.whatsapp||''}" target="_blank" rel="noopener" class="btn btn-sm" style="background:#25D366;color:var(--branco)">
                 <i class="fa-brands fa-whatsapp"></i> WhatsApp
             </a>
             ${p.comprovante_path?`<button class="btn btn-outline btn-sm" onclick="verComprovante('${p.comprovante_path}')">
@@ -1436,7 +1445,7 @@ async function carregarProdutos(){
             const ativo = p.ativo === true || p.ativo === 'TRUE';
             return `
             <div class="produto-item ${ativo?'ativo':'inativo'}">
-                ${img ? `<img src="${img}" class="produto-thumb" loading="lazy" onerror="this.style.display='none'">` : '<div class="produto-thumb" style="background:#f0f2f8;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-box-open" style="color:#ccc"></i></div>'}
+                ${img ? `<img src="${img}" class="produto-thumb" loading="lazy" onerror="this.style.display='none'">` : '<div class="produto-thumb" style="background:var(--n-bg-200);display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-box-open" style="color:#ccc"></i></div>'}
                 <div class="produto-info">
                     <div class="produto-nome">${p.nome||''}</div>
                     <div class="produto-preco">R$ ${(parseFloat(p.preco)||0).toFixed(2).replace('.',',')}</div>
@@ -1656,7 +1665,7 @@ async function abrirModalCupom(codigo){
     const prods     = produtosCache.length ? produtosCache : await api({ action: 'admin_get_produtos' });
     const selecionados = c && c.produtos_restringidos ? c.produtos_restringidos.split(',').map(id => parseInt(id.trim())) : [];
     container.innerHTML = prods.map(p => `
-        <label style="display:flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:600;cursor:pointer;background:#f8f9fc;padding:6px 10px;border-radius:8px">
+        <label style="display:flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:600;cursor:pointer;background:var(--n-bg-100);padding:6px 10px;border-radius:8px">
             <input type="checkbox" value="${p.id}" ${selecionados.includes(parseInt(p.id))?'checked':''}> ${p.nome}
         </label>
     `).join('');
@@ -1727,7 +1736,7 @@ function renderCategoriasAdmin(){
     const el = document.getElementById('categorias-lista');
     if(!el) return;
     el.innerHTML = categoriasAtuais.map(c => `
-        <div style="display:flex;align-items:center;gap:10px;background:#f8f9fc;border-radius:10px;padding:8px 12px;margin-bottom:6px">
+        <div style="display:flex;align-items:center;gap:10px;background:var(--n-bg-100);border-radius:10px;padding:8px 12px;margin-bottom:6px">
             <span style="font-size:1.1rem">${c.emoji||'🏷️'}</span>
             <span style="flex:1;font-size:0.85rem;font-weight:600">${c.nome}</span>
             <button type="button" class="btn btn-sm btn-vermelho" onclick="removerCategoria('${c.id}')"><i class="fa-solid fa-trash"></i></button>
@@ -1739,7 +1748,7 @@ function renderColecoesAdmin(){
     const el = document.getElementById('colecoes-lista');
     if(!el) return;
     el.innerHTML = colecoesAtuais.map(c => `
-        <div style="display:flex;align-items:center;gap:10px;background:#f8f9fc;border-radius:10px;padding:8px 12px;margin-bottom:6px">
+        <div style="display:flex;align-items:center;gap:10px;background:var(--n-bg-100);border-radius:10px;padding:8px 12px;margin-bottom:6px">
             <span style="font-size:1.1rem">${c.emoji||'🏷️'}</span>
             <span style="flex:1;font-size:0.85rem;font-weight:600">${c.nome}</span>
             <button type="button" class="btn btn-sm btn-vermelho" onclick="removerColecao('${c.id}')"><i class="fa-solid fa-trash"></i></button>
@@ -1863,7 +1872,7 @@ async function carregarConfig(){
         /* Banners */
         const bannersEl = document.getElementById('banners-config');
         bannersEl.innerHTML = [1,2,3].map(n => `
-            <div style="border:1px solid #eee;border-radius:12px;padding:14px;margin-bottom:10px">
+            <div style="border:1px solid var(--n-border-300);border-radius:12px;padding:14px;margin-bottom:10px">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
                     <span style="font-weight:700;font-size:0.85rem">Banner ${n}</span>
                     <label class="toggle" style="margin:0">
@@ -2114,7 +2123,7 @@ let _toastTimer;
 function toast(msg, erro = false){
     const el = document.getElementById('toast-admin');
     el.textContent = msg;
-    el.style.background = erro ? '#e74c3c' : 'var(--roxo)';
+    el.style.background = erro ? 'var(--cor-erro-solido)' : 'var(--roxo)';
     el.classList.add('show');
     clearTimeout(_toastTimer);
     _toastTimer = setTimeout(() => el.classList.remove('show'), 3000);

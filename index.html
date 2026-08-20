@@ -39,6 +39,7 @@
     <meta name="msapplication-TileImage" content="./icons/loja-icon-144.png">
     <link rel="preload" href="./fonts/leaguespartan-bold-subset.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="./fonts/adumu-regular-subset.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="./design-tokens.css">
     <link rel="stylesheet" href="./fontawesome-subset.css">
     <script src="./vendor/supabase-js-2.112.2.min.js" onerror="window.__sbScriptFailed=true"></script>
     <script src="./qrcode.min.js"></script>
@@ -79,7 +80,12 @@
         :root{
             --font-titulo:'Adumu',Impact,'Arial Narrow Bold',sans-serif;
             --font-corpo:'League Spartan',-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
-            --roxo-brand:#0f0732;--laranja-brand:#f85900;--azul-coracao:#007bff;--branco:#ffffff;--laranja-glow:rgba(248,89,0,0.3);--fundo:#F5F7FB;--card-bg:#ffffff;--texto:#0f0732;--texto-suave:#5a5575;--verde-zap:#25D366;--vermelho-del:#FF4757;--shadow-sm:0 4px 12px rgba(15,7,50,0.05);--shadow-md:0 10px 30px rgba(15,7,50,0.1);--shadow-lg:0 20px 50px rgba(15,7,50,0.15);}
+            /* Cores de marca/semânticas vêm de design-tokens.css (compartilhado com o admin) —
+               os nomes locais (--roxo-brand etc.) continuam os mesmos pra não precisar tocar
+               em cada var() já usado no arquivo inteiro, só a fonte virou token. --fundo,
+               --card-bg, --texto e --texto-suave ficam literais aqui mesmo: são o "fundo da
+               loja", não um conceito de marca — cada app pode ter o seu. */
+            --roxo-brand:var(--marca-roxo);--roxo-brand-escuro:var(--marca-roxo-escuro);--laranja-brand:var(--marca-laranja);--azul-coracao:var(--marca-azul-coracao);--branco:var(--marca-branco);--laranja-glow:var(--marca-laranja-glow);--fundo:#F5F7FB;--card-bg:var(--branco);--texto:#0f0732;--texto-suave:#5a5575;--verde-zap:var(--marca-verde-zap);--vermelho-del:var(--marca-vermelho-del);--shadow-sm:var(--sombra-sm);--shadow-md:var(--sombra-md);--shadow-lg:var(--sombra-lg);}
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
         /* A folga para a barra flutuante do carrinho fica no <footer> (padding-bottom),
            não no body — no body ela sobrava DEPOIS do rodapé e aparecia como uma
@@ -107,7 +113,7 @@
         .manut-insta i{color:var(--laranja-brand);}
 
         /* HEADER */
-        header{background:linear-gradient(160deg,var(--roxo-brand) 20%,#1a1245 100%);color:var(--branco);padding:16px 16px 80px;border-radius:0 0 40px 40px;text-align:center;box-shadow:var(--shadow-lg);position:relative;}
+        header{background:linear-gradient(160deg,var(--roxo-brand) 20%,var(--roxo-brand-escuro) 100%);color:var(--branco);padding:16px 16px 80px;border-radius:0 0 40px 40px;text-align:center;box-shadow:var(--shadow-lg);position:relative;}
         /* Header - tudo centralizado */
         .header-inner{max-width:600px;margin:0 auto;position:relative;}
         .header-row{display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative;}
@@ -127,13 +133,13 @@
 
         /* CARD CUPOM */
         #card-cupom{display:none;max-width:1100px;margin:0 auto 16px;padding:0 12px;position:relative;z-index:10;}
-        .cupom-banner{background:linear-gradient(135deg,var(--roxo-brand),#1a1245);border-radius:16px;padding:16px 20px;border:1px solid rgba(248,89,0,0.3);display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+        .cupom-banner{background:linear-gradient(135deg,var(--roxo-brand),var(--roxo-brand-escuro));border-radius:16px;padding:16px 20px;border:1px solid rgba(248,89,0,0.3);display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
         .cupom-icone{background:var(--laranja-brand);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-        .cupom-icone i{color:#fff;font-size:1rem;}
+        .cupom-icone i{color:var(--branco);font-size:1rem;}
         .cupom-texto{flex:1;min-width:160px;}
         .cupom-titulo{font-family:var(--font-titulo);color:var(--branco);font-weight:400;font-size:0.88rem;margin-bottom:3px;}
         .cupom-desc{color:rgba(255,255,255,0.7);font-size:0.75rem;line-height:1.4;}
-        .cupom-btn-usar{background:var(--laranja-brand);color:#fff;border:none;border-radius:10px;padding:9px 16px;font-size:0.8rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:0.15s;}
+        .cupom-btn-usar{background:var(--laranja-brand);color:var(--branco);border:none;border-radius:10px;padding:9px 16px;font-size:0.8rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:0.15s;}
         .cupom-btn-usar:active{transform:scale(0.96);}
 
         /* HERO / BANNER TEMÁTICO */
@@ -142,7 +148,7 @@
            normalmente é o filter-container, mas quando o hero banner está ativo é ele quem encaixa. */
         body.tem-hero #hero-banner{margin-top:-50px;}
         body.tem-hero .filter-container{margin-top:12px;}
-        .hero-inner{display:block;border-radius:20px;padding:26px 24px;background:linear-gradient(135deg,var(--roxo-brand),#1a1245);text-decoration:none;box-shadow:var(--shadow-md);}
+        .hero-inner{display:block;border-radius:20px;padding:26px 24px;background:linear-gradient(135deg,var(--roxo-brand),var(--roxo-brand-escuro));text-decoration:none;box-shadow:var(--shadow-md);}
         .hero-titulo{font-family:var(--font-titulo);color:var(--branco);font-size:1.2rem;font-weight:400;line-height:1.25;}
         .hero-subtitulo{color:rgba(255,255,255,0.8);font-size:0.85rem;margin-top:6px;}
         @media(min-width:1024px){#hero-banner{padding:0 20px;margin-bottom:20px;max-width:1300px}.hero-inner{padding:40px 44px}.hero-titulo{font-size:1.6rem}.hero-subtitulo{font-size:0.95rem;max-width:60%}}
@@ -191,30 +197,30 @@
         @media(hover:hover){.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}}
         .card.destaque{border:2px solid var(--laranja-brand);box-shadow:0 0 0 2px var(--laranja-glow),var(--shadow-sm);}
         .card.esgotado{opacity:0.5;filter:grayscale(0.5);pointer-events:none;}
-        .image-wrapper{width:100%;aspect-ratio:1/1;background:#f0f2f8;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-        .image-wrapper::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#f0f2f8 25%,#e4e7ef 50%,#f0f2f8 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;z-index:1;}
+        .image-wrapper{width:100%;aspect-ratio:1/1;background:var(--n-bg-200);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+        .image-wrapper::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--n-bg-200) 25%,var(--n-bg-200) 50%,var(--n-bg-200) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;z-index:1;}
         @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
         .image-wrapper.loaded::before{display:none;}
         .prod-img{opacity:0;transition:opacity 0.3s;}
         .prod-img.visible{opacity:1;}
         .prod-img{width:100%;height:100%;object-fit:cover;z-index:2;}
         .share-btn{position:absolute;top:10px;right:10px;width:34px;height:34px;background:rgba(255,255,255,0.95);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.1);z-index:5;color:var(--roxo-brand);font-size:0.85rem;border:none;}
-        .share-btn:active{background:var(--roxo-brand);color:#fff;}
-        .no-photo-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#f5f7fa,#e4e7ec);color:var(--roxo-brand);}
+        .share-btn:active{background:var(--roxo-brand);color:var(--branco);}
+        .no-photo-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--n-bg-100),var(--n-bg-200));color:var(--roxo-brand);}
         .no-photo-placeholder i{font-size:2rem;margin-bottom:8px;opacity:0.35;}
         .no-photo-placeholder span{font-size:0.7rem;font-weight:700;opacity:0.55;text-transform:uppercase;}
         .badge-wrap{position:absolute;bottom:8px;left:8px;display:flex;flex-wrap:wrap;gap:3px;z-index:5;}
         .badge{padding:2px 7px;border-radius:20px;font-size:0.58rem;font-weight:700;text-transform:uppercase;}
-        .badge-destaque{background:var(--laranja-brand);color:#fff;}
-        .badge-encomenda{background:#f39c12;color:#fff;}
-        .badge-esgotado{background:#7f8c8d;color:#fff;}
-        .badge-ultimas{background:var(--vermelho-del);color:#fff;}
-        .badge-estoque{background:#27ae60;color:#fff;}
+        .badge-destaque{background:var(--laranja-brand);color:var(--branco);}
+        .badge-encomenda{background:var(--cor-aviso);color:var(--branco);}
+        .badge-esgotado{background:var(--n-gray-medio);color:var(--branco);}
+        .badge-ultimas{background:var(--vermelho-del);color:var(--branco);}
+        .badge-estoque{background:var(--cor-sucesso);color:var(--branco);}
         .card-info{padding:14px;text-align:center;display:flex;flex-direction:column;flex-grow:1;cursor:pointer;}
         .card-title{font-family:var(--font-titulo);font-size:0.82rem;font-weight:400;color:var(--roxo-brand);line-height:1.3;height:34px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
         .card-price{font-size:1.05rem;color:var(--laranja-brand);font-weight:800;margin-top:5px;}
         .card-enc{font-size:0.68rem;color:var(--laranja-brand);font-weight:700;margin-top:3px;}
-        .tap-hint{font-size:0.62rem;color:#aaa;margin-top:auto;padding-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+        .tap-hint{font-size:0.62rem;color:var(--texto-fraco);margin-top:auto;padding-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
 
         /* VITRINE VAZIA */
         #vitrine-vazia{display:none;text-align:center;padding:50px 20px;grid-column:1/-1;color:var(--texto-suave);}
@@ -227,20 +233,20 @@
         .modal-panel{background:var(--card-bg);width:100%;max-width:500px;border-radius:28px 28px 0 0;padding:28px 22px;box-shadow:var(--shadow-lg);animation:slideUp 0.35s cubic-bezier(0.16,1,0.3,1);max-height:92vh;overflow-y:auto;position:relative;}
         @media(min-width:600px){.modal-bg{align-items:center}.modal-panel{border-radius:28px}}
         @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-        .close-btn{position:absolute;top:18px;right:18px;background:#f0f2f5;width:34px;height:34px;border-radius:50%;border:none;font-size:1.1rem;color:var(--roxo-brand);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;}
-        .close-btn:active{background:#e0e2e5;}
+        .close-btn{position:absolute;top:18px;right:18px;background:var(--n-bg-200);width:34px;height:34px;border-radius:50%;border:none;font-size:1.1rem;color:var(--roxo-brand);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;}
+        .close-btn:active{background:var(--n-hover);}
 
         /* MODAL PRODUTO */
-        .detail-img-box{width:100%;height:230px;background:#f4f6f9;border-radius:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border:1px solid #eee;}
+        .detail-img-box{width:100%;height:230px;background:var(--n-bg-100);border-radius:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border:1px solid var(--n-border-300);}
         .detail-img{width:100%;height:100%;object-fit:contain;z-index:2;}
         .detail-title{font-family:var(--font-titulo);font-size:1.3rem;font-weight:400;color:var(--roxo-brand);line-height:1.2;margin-bottom:4px;}
         .detail-price{font-size:1.7rem;color:var(--laranja-brand);font-weight:800;margin-bottom:4px;display:inline-block;}
-        .detail-desc{font-size:0.84rem;color:var(--texto-suave);line-height:1.6;margin-bottom:14px;background:#f8f9fc;padding:10px 12px;border-radius:10px;}
-        .detail-enc{font-size:0.78rem;background:#fff8e1;color:#f57f17;padding:8px 12px;border-radius:10px;margin-bottom:14px;font-weight:600;}
+        .detail-desc{font-size:0.84rem;color:var(--texto-suave);line-height:1.6;margin-bottom:14px;background:var(--n-bg-100);padding:10px 12px;border-radius:10px;}
+        .detail-enc{font-size:0.78rem;background:var(--cor-aviso-bg);color:var(--cor-aviso-texto);padding:8px 12px;border-radius:10px;margin-bottom:14px;font-weight:600;}
         .detail-estoque{font-size:0.78rem;color:var(--texto-suave);margin-top:-6px;margin-bottom:10px;}
-        .nice-select{width:100%;padding:14px;border-radius:14px;border:2px solid #eef2f6;background:#fff;font-size:0.9rem;color:var(--texto);font-weight:600;outline:none;margin-bottom:18px;appearance:none;-webkit-appearance:none;}
+        .nice-select{width:100%;padding:14px;border-radius:14px;border:2px solid var(--n-border-100);background:var(--branco);font-size:0.9rem;color:var(--texto);font-weight:600;outline:none;margin-bottom:18px;appearance:none;-webkit-appearance:none;}
         .nice-select:focus{border-color:var(--roxo-brand);}
-        .qty-wrapper{display:flex;align-items:center;justify-content:space-between;background:#f8f9fc;padding:5px;border-radius:14px;border:1px solid #eee;margin-bottom:22px;}
+        .qty-wrapper{display:flex;align-items:center;justify-content:space-between;background:var(--n-bg-100);padding:5px;border-radius:14px;border:1px solid var(--n-border-300);margin-bottom:22px;}
         .qty-btn{width:46px;height:46px;background:white;border:none;border-radius:10px;font-size:1.1rem;color:var(--roxo-brand);font-weight:700;cursor:pointer;box-shadow:var(--shadow-sm);}
         .qty-btn:active{transform:scale(0.9);}
         .qty-num{font-size:1.2rem;font-weight:700;}
@@ -249,55 +255,55 @@
         .btn-primary{width:100%;padding:16px;border:none;border-radius:14px;background:var(--roxo-brand);color:var(--branco);font-size:0.95rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;transition:0.15s;box-shadow:0 6px 20px rgba(15,7,50,0.2);}
         .btn-primary:active{transform:scale(0.98);}
         .btn-secondary{width:100%;padding:12px;border:2px solid var(--roxo-brand);border-radius:14px;background:transparent;color:var(--roxo-brand);font-size:0.88rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;margin-top:10px;transition:0.15s;}
-        .btn-secondary:active{background:#f0f0f0;}
-        .btn-danger{width:100%;padding:11px;border:1px solid var(--vermelho-del);border-radius:12px;background:#fff0f0;color:var(--vermelho-del);font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:8px;transition:0.15s;}
+        .btn-secondary:active{background:var(--n-border-300);}
+        .btn-danger{width:100%;padding:11px;border:1px solid var(--vermelho-del);border-radius:12px;background:var(--cor-erro-bg);color:var(--vermelho-del);font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:8px;transition:0.15s;}
 
         /* INPUTS */
-        .input-box{width:100%;padding:14px;border:1px solid #e0e0e0;border-radius:12px;margin-bottom:10px;outline:none;font-size:0.9rem;transition:border-color 0.2s;background:#fbfbfb;font-family:inherit;color:var(--texto);}
-        .input-box:focus{border-color:var(--roxo-brand);background:#fff;}
+        .input-box{width:100%;padding:14px;border:1px solid var(--n-border-200);border-radius:12px;margin-bottom:10px;outline:none;font-size:0.9rem;transition:border-color 0.2s;background:var(--n-bg-300);font-family:inherit;color:var(--texto);}
+        .input-box:focus{border-color:var(--roxo-brand);background:var(--branco);}
         .input-label{font-size:0.78rem;font-weight:700;color:var(--texto-suave);margin-bottom:5px;display:block;}
-        .radio-option{padding:13px 14px;border:1px solid #eee;border-radius:12px;display:flex;align-items:center;gap:12px;cursor:pointer;font-size:0.88rem;font-weight:500;transition:0.15s;margin-bottom:8px;color:var(--texto);}
-        .radio-option:has(input:checked){border-color:var(--laranja-brand);background:#fffbf8;color:var(--laranja-brand);font-weight:700;box-shadow:inset 0 0 0 1px var(--laranja-brand);}
+        .radio-option{padding:13px 14px;border:1px solid var(--n-border-300);border-radius:12px;display:flex;align-items:center;gap:12px;cursor:pointer;font-size:0.88rem;font-weight:500;transition:0.15s;margin-bottom:8px;color:var(--texto);}
+        .radio-option:has(input:checked){border-color:var(--laranja-brand);background:var(--n-bg-warm);color:var(--laranja-brand);font-weight:700;box-shadow:inset 0 0 0 1px var(--laranja-brand);}
         .radio-option input{accent-color:var(--laranja-brand);width:17px;height:17px;}
 
         /* CUPOM CHECKOUT */
-        .cupom-checkout{background:linear-gradient(135deg,var(--roxo-brand),#1a1245);border-radius:14px;padding:14px;margin-bottom:14px;border:1px solid rgba(248,89,0,0.3);}
+        .cupom-checkout{background:linear-gradient(135deg,var(--roxo-brand),var(--roxo-brand-escuro));border-radius:14px;padding:14px;margin-bottom:14px;border:1px solid rgba(248,89,0,0.3);}
         .cupom-checkout-titulo{font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.8);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;}
         .cupom-row{display:flex;gap:7px;}
-        .cupom-input{flex:1;padding:11px 13px;border:2px solid rgba(248,89,0,0.4);border-radius:10px;font-size:0.82rem;font-family:inherit;text-transform:uppercase;outline:none;background:rgba(255,255,255,0.08);color:#fff;font-weight:700;letter-spacing:1px;}
+        .cupom-input{flex:1;padding:11px 13px;border:2px solid rgba(248,89,0,0.4);border-radius:10px;font-size:0.82rem;font-family:inherit;text-transform:uppercase;outline:none;background:rgba(255,255,255,0.08);color:var(--branco);font-weight:700;letter-spacing:1px;}
         .cupom-input::placeholder{color:rgba(255,255,255,0.4);font-weight:400;text-transform:none;letter-spacing:0;}
         .cupom-input:focus{border-color:var(--laranja-brand);}
-        .cupom-aplicar{padding:11px 14px;background:var(--laranja-brand);color:#fff;border:none;border-radius:10px;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap;}
+        .cupom-aplicar{padding:11px 14px;background:var(--laranja-brand);color:var(--branco);border:none;border-radius:10px;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap;}
         .cupom-aplicar:active{transform:scale(0.95);}
         #cupom-ok{display:none;margin-top:8px;background:rgba(39,174,96,0.2);border:1px solid rgba(39,174,96,0.4);border-radius:8px;padding:7px 11px;font-size:0.78rem;color:#a8e6c0;font-weight:600;align-items:center;gap:6px;}
         #cupom-ok.ativo{display:flex;}
         .cupom-remover{margin-left:auto;background:none;border:none;color:#ff8a80;cursor:pointer;font-size:0.78rem;font-weight:700;}
 
         /* CARRINHO */
-        .cart-list{list-style:none;margin:10px 0 14px;max-height:200px;overflow-y:auto;border:1px solid #f0f0f0;border-radius:14px;padding:8px;background:#fafafa;}
-        .cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 8px;border-bottom:1px solid #eee;}
+        .cart-list{list-style:none;margin:10px 0 14px;max-height:200px;overflow-y:auto;border:1px solid var(--n-border-300);border-radius:14px;padding:8px;background:var(--n-bg-300);}
+        .cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 8px;border-bottom:1px solid var(--n-border-300);}
         .cart-item:last-child{border-bottom:none;}
         .cart-item-info strong{font-size:0.82rem;color:var(--roxo-brand);display:block;}
         .cart-item-info span{font-size:0.73rem;color:var(--texto-suave);}
-        .btn-trash{background:#fff0f0;color:var(--vermelho-del);width:32px;height:32px;border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+        .btn-trash{background:var(--cor-erro-bg);color:var(--vermelho-del);width:32px;height:32px;border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
 
         /* RESUMO */
-        .resumo-box{background:#f8f9fc;border-radius:12px;padding:12px;margin-bottom:14px;}
+        .resumo-box{background:var(--n-bg-100);border-radius:12px;padding:12px;margin-bottom:14px;}
         .resumo-linha{display:flex;justify-content:space-between;font-size:0.82rem;color:var(--texto-suave);margin-bottom:5px;}
-        .resumo-linha.total{font-size:0.95rem;font-weight:800;color:var(--roxo-brand);margin-bottom:0;padding-top:7px;border-top:1px solid #eee;}
-        .resumo-linha.desconto{color:#27ae60;font-weight:700;}
+        .resumo-linha.total{font-size:0.95rem;font-weight:800;color:var(--roxo-brand);margin-bottom:0;padding-top:7px;border-top:1px solid var(--n-border-300);}
+        .resumo-linha.desconto{color:var(--cor-sucesso);font-weight:700;}
 
         /* PIX */
-        .pix-box{display:none;background:#f8f9fc;border-radius:14px;padding:18px;margin-bottom:14px;text-align:center;}
+        .pix-box{display:none;background:var(--n-bg-100);border-radius:14px;padding:18px;margin-bottom:14px;text-align:center;}
         .pix-box.ativo{display:block;}
         .pix-valor{font-size:1.3rem;font-weight:800;color:var(--laranja-brand);margin-bottom:10px;}
-        .pix-qr{width:170px;height:170px;margin:0 auto 10px;border:3px solid var(--roxo-brand);border-radius:14px;overflow:hidden;background:#fff;padding:6px;}
+        .pix-qr{width:170px;height:170px;margin:0 auto 10px;border:3px solid var(--roxo-brand);border-radius:14px;overflow:hidden;background:var(--branco);padding:6px;}
         .pix-qr img{width:100%;height:100%;}
-        .pix-chave{font-size:0.78rem;color:var(--texto-suave);background:#fff;border:1px solid #ddd;border-radius:8px;padding:7px 10px;margin-bottom:8px;word-break:break-all;}
-        .pix-copiar{padding:9px 18px;background:var(--roxo-brand);color:#fff;border:none;border-radius:10px;font-size:0.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;margin:0 auto 8px;}
+        .pix-chave{font-size:0.78rem;color:var(--texto-suave);background:var(--branco);border:1px solid var(--n-border-400);border-radius:8px;padding:7px 10px;margin-bottom:8px;word-break:break-all;}
+        .pix-copiar{padding:9px 18px;background:var(--roxo-brand);color:var(--branco);border:none;border-radius:10px;font-size:0.82rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;margin:0 auto 8px;}
         .pix-timer{font-size:0.72rem;color:var(--vermelho-del);font-weight:700;}
-        .pix-destaque{background:#e8f5e9;border-radius:10px;padding:7px 12px;font-size:0.78rem;color:#2e7d32;font-weight:700;margin-bottom:10px;display:none;align-items:center;gap:6px;}
-        #comprovante-label:hover{border-color:var(--laranja-brand);background:#fffbf8;}
+        .pix-destaque{background:var(--cor-sucesso-bg);border-radius:10px;padding:7px 12px;font-size:0.78rem;color:var(--cor-sucesso-texto);font-weight:700;margin-bottom:10px;display:none;align-items:center;gap:6px;}
+        #comprovante-label:hover{border-color:var(--laranja-brand);background:var(--n-bg-warm);}
         .pix-destaque.ativo{display:flex;}
 
         /* SUCESSO */
@@ -305,7 +311,7 @@
         #tela-sucesso.ativo{display:block;}
         .sucesso-icon{font-size:3.5rem;margin-bottom:12px;}
         .sucesso-titulo{font-family:var(--font-titulo);font-size:1.3rem;font-weight:400;color:var(--roxo-brand);margin-bottom:6px;}
-        .sucesso-num{background:var(--roxo-brand);color:#fff;border-radius:10px;padding:10px 18px;font-size:0.82rem;font-weight:700;margin-bottom:16px;display:inline-block;}
+        .sucesso-num{background:var(--roxo-brand);color:var(--branco);border-radius:10px;padding:10px 18px;font-size:0.82rem;font-weight:700;margin-bottom:16px;display:inline-block;}
         .sucesso-msg{font-size:0.86rem;color:var(--texto-suave);margin-bottom:18px;}
 
         /* BARRA FLUTUANTE */
@@ -321,12 +327,12 @@
 
         /* BOTTON SELECTOR */
         .botton-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px;}
-        .botton-opt{padding:10px 8px;border:2px solid #eee;border-radius:12px;text-align:center;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--roxo-brand);transition:0.15s;}
-        .botton-opt.selected{border-color:var(--laranja-brand);background:#fffbf8;color:var(--laranja-brand);}
+        .botton-opt{padding:10px 8px;border:2px solid var(--n-border-300);border-radius:12px;text-align:center;cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--roxo-brand);transition:0.15s;}
+        .botton-opt.selected{border-color:var(--laranja-brand);background:var(--n-bg-warm);color:var(--laranja-brand);}
         .botton-opt:active{transform:scale(0.97);}
 
         /* FOOTER */
-        footer{margin-top:44px;background:linear-gradient(160deg,var(--roxo-brand) 20%,#1a1245 100%);border-radius:40px 40px 0 0;padding:44px 20px 120px;text-align:center;color:var(--branco);box-shadow:0 -10px 30px rgba(15,7,50,0.15);}
+        footer{margin-top:44px;background:linear-gradient(160deg,var(--roxo-brand) 20%,var(--roxo-brand-escuro) 100%);border-radius:40px 40px 0 0;padding:44px 20px 120px;text-align:center;color:var(--branco);box-shadow:0 -10px 30px rgba(15,7,50,0.15);}
         .footer-inner{max-width:600px;margin:0 auto;}
         /* PNG com fundo transparente — assenta direto no gradiente, sem "caixa" atrás */
         /* Só o emblema: o nome da marca já aparece logo abaixo, no "Feito com ... pelo
@@ -453,7 +459,7 @@
             <strong style="color:var(--roxo-brand)">Seus direitos:</strong><br>
             Você pode solicitar a exclusão dos seus dados a qualquer momento pelo Instagram <a href="https://www.instagram.com/nupieepro" target="_blank" style="color:var(--laranja-brand)">@nupieepro</a>.
         </p>
-        <div style="background:#f8f9fc;border-radius:10px;padding:12px;font-size:0.78rem;color:var(--texto-suave);text-align:center">
+        <div style="background:var(--n-bg-100);border-radius:10px;padding:12px;font-size:0.78rem;color:var(--texto-suave);text-align:center">
             NUPIEEPRO — Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI<br>
             Contato: <a href="https://www.instagram.com/nupieepro" target="_blank" style="color:var(--laranja-brand)">@nupieepro</a>
         </div>
@@ -543,7 +549,7 @@
             <label class="radio-option"><input type="radio" name="pgto" value="PIX" checked onchange="togglePix()"> PIX</label>
             <label class="radio-option"><input type="radio" name="pgto" value="Dinheiro" onchange="togglePix()"> Dinheiro</label>
             <label class="radio-option"><input type="radio" name="pgto" value="Cartão" onchange="togglePix()"> Cartão</label>
-            <div id="aviso-presencial" style="display:none;background:#f8f9fc;border-radius:10px;padding:10px;font-size:0.82rem;color:var(--texto-suave);margin-bottom:10px"><i class="fa-solid fa-circle-info"></i> Pagamento na retirada ou entrega.</div>
+            <div id="aviso-presencial" style="display:none;background:var(--n-bg-100);border-radius:10px;padding:10px;font-size:0.82rem;color:var(--texto-suave);margin-bottom:10px"><i class="fa-solid fa-circle-info"></i> Pagamento na retirada ou entrega.</div>
 
             <div class="pix-box ativo" id="pix-box">
                 <div class="pix-valor" id="pix-valor"></div>
@@ -555,7 +561,7 @@
                     <div style="font-size:0.8rem;font-weight:700;color:var(--roxo-brand);margin-bottom:8px">
                         📎 Anexe o comprovante do PIX:
                     </div>
-                    <label id="comprovante-label" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px;border:2px dashed #ddd;border-radius:12px;cursor:pointer;font-size:0.78rem;color:#aaa;transition:0.2s">
+                    <label id="comprovante-label" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px;border:2px dashed var(--n-border-400);border-radius:12px;cursor:pointer;font-size:0.78rem;color:#aaa;transition:0.2s">
                         <i class="fa-solid fa-file-pdf" id="comprovante-pdf-icon" style="display:none;font-size:1.4rem;color:var(--vermelho-del)"></i>
                         <i class="fa-solid fa-image" id="comprovante-img-icon" style="font-size:1.4rem;color:var(--laranja-brand)"></i>
                         Toque para anexar (Imagem ou PDF)
@@ -593,9 +599,9 @@
         <p style="text-align:center;font-size:0.75rem;color:var(--texto-suave);margin-bottom:14px">Núcleo Piauiense de Estudantes de Engenharia de Produção</p>
         <p style="font-size:0.83rem;color:var(--texto);line-height:1.7;margin-bottom:14px">O Núcleo Piauiense de Estudantes de Engenharia de Produção (NUPIEEPRO), da Universidade Federal do Piauí (UFPI), dedica-se à realização de eventos, treinamentos e projetos com o objetivo de promover experiências na área de Engenharia de Produção. Fundado em 2015, sendo duas vezes apontado pela ABEPRO Jovem como o <strong>Núcleo Mais Inovador do Brasil</strong> e eleito o <strong>Maior Núcleo do Brasil</strong>.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px">
-            <span style="background:var(--roxo-brand);color:#fff;padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700">🏆 Mais Inovador 2x</span>
-            <span style="background:var(--roxo-brand);color:#fff;padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700">🥇 Maior Núcleo do Brasil</span>
-            <span style="background:var(--roxo-brand);color:#fff;padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700">📅 Desde 2015</span>
+            <span style="background:var(--roxo-brand);color:var(--branco);padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700">🏆 Mais Inovador 2x</span>
+            <span style="background:var(--roxo-brand);color:var(--branco);padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700">🥇 Maior Núcleo do Brasil</span>
+            <span style="background:var(--roxo-brand);color:var(--branco);padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:700">📅 Desde 2015</span>
         </div>
         <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" class="btn-primary" style="text-decoration:none"><i class="fa-brands fa-instagram"></i> Seguir no Instagram</a>
     </div>
@@ -662,7 +668,7 @@ window.addEventListener('resize',()=>{
 
 /* Tema visual (vitrine temática) — troca as cores de marca conforme escolhido no admin */
 const TEMA_PRESETS={
-    padrao:      {cor1:'#0f0732',cor2:'#f85900'},
+    padrao:      {cor1:'var(--roxo-brand)',cor2:'var(--laranja-brand)'},
     natal:       {cor1:'#7f0000',cor2:'#1b5e20'},
     calourada:   {cor1:'#0d1b4c',cor2:'#ffab00'},
     verao:       {cor1:'#004d61',cor2:'#ff6f00'},
@@ -728,14 +734,14 @@ window.addEventListener('load',()=>{
         setTimeout(function(){
             var d = document.createElement('div');
             d.id = 'ios-install-dica';
-            d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#0f0732;color:#fff;padding:14px 18px;z-index:9998;display:flex;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(0,0,0,0.3);';
+            d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:var(--roxo-brand);color:var(--branco);padding:14px 18px;z-index:9998;display:flex;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(0,0,0,0.3);';
             var btn = document.createElement('button');
             btn.textContent = 'X';
-            btn.style.cssText = 'background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;padding:4px';
+            btn.style.cssText = 'background:none;border:none;color:var(--branco);font-size:1.2rem;cursor:pointer;padding:4px';
             btn.onclick = function(){ d.remove(); localStorage.setItem('nupi_ios_dica','1'); };
             var txt = document.createElement('div');
             txt.style.cssText = 'flex:1;font-size:0.82rem;line-height:1.4';
-            txt.innerHTML = '<strong style="color:#f85900">Instalar a loja no iPhone:</strong><br>Toque em <strong>Compartilhar</strong> e depois <strong>Adicionar a Tela de Inicio</strong>';
+            txt.innerHTML = '<strong style="color:var(--laranja-brand)">Instalar a loja no iPhone:</strong><br>Toque em <strong>Compartilhar</strong> e depois <strong>Adicionar a Tela de Inicio</strong>';
             d.appendChild(txt);
             d.appendChild(btn);
             document.body.appendChild(d);
@@ -1342,7 +1348,7 @@ async function enviarPedidoZap(){
     if(pgto==='PIX'&&!window._comprovante){
         toast('⚠️ Anexe o comprovante do PIX antes de enviar!',1);
         document.getElementById('comprovante-label').style.border='2px dashed var(--vermelho-del)';
-        setTimeout(()=>{if(document.getElementById('comprovante-label'))document.getElementById('comprovante-label').style.border='2px dashed #ddd';},3000);
+        setTimeout(()=>{if(document.getElementById('comprovante-label'))document.getElementById('comprovante-label').style.border='2px dashed var(--n-border-400)';},3000);
         return;
     }
     if(!_sb){ toast('❌ Sem conexão com o servidor. Verifique sua internet.',1); return; }
@@ -1436,7 +1442,7 @@ function salvarHist(num,data,total,itensSnapshot){
 function abrirMeusPedidos(){
     const h=JSON.parse(localStorage.getItem('nupieepro_hist')||'[]');
     const el=document.getElementById('lista-pedidos-hist');
-    el.innerHTML=h.length?h.map(p=>`<div style="background:#f8f9fc;border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid #eee"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong style="color:var(--roxo-brand);font-size:0.82rem">#${p.num}</strong><span style="font-size:0.7rem;color:var(--texto-suave)">${p.data}</span></div><div style="font-size:0.76rem;color:var(--texto-suave);margin-bottom:6px">${p.itens.join(', ')}</div><div style="font-size:0.95rem;font-weight:800;color:var(--laranja-brand)">R$ ${p.total.toFixed(2).replace('.',',')}</div></div>`).join(''):'<p style="text-align:center;color:#bbb;padding:20px">Nenhum pedido ainda 🛍️</p>';
+    el.innerHTML=h.length?h.map(p=>`<div style="background:var(--n-bg-100);border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid var(--n-border-300)"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong style="color:var(--roxo-brand);font-size:0.82rem">#${p.num}</strong><span style="font-size:0.7rem;color:var(--texto-suave)">${p.data}</span></div><div style="font-size:0.76rem;color:var(--texto-suave);margin-bottom:6px">${p.itens.join(', ')}</div><div style="font-size:0.95rem;font-weight:800;color:var(--laranja-brand)">R$ ${p.total.toFixed(2).replace('.',',')}</div></div>`).join(''):'<p style="text-align:center;color:var(--texto-fraco);padding:20px">Nenhum pedido ainda 🛍️</p>';
     document.getElementById('modal-pedidos').classList.add('active');
     travarScroll();
 }

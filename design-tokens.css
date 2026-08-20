@@ -1,0 +1,91 @@
+/* ============================================================
+   DESIGN SYSTEM — NUPIEEPRO
+   Tokens compartilhados entre a loja (index.html) e o admin
+   (admin.html). Cor, tipografia base, sombra e transição num
+   lugar só — qualquer ajuste de marca passa a valer nos dois.
+
+   Escopo desta consolidação: cor é onde havia duplicação real
+   (o mesmo tom escrito de formas ligeiramente diferentes nos
+   dois arquivos — #f8f9fc vs #f0f2f8, #fbfbfb repetido, os pares
+   fundo/texto dos badges de status já seguiam o mesmo padrão nos
+   dois lugares sem estarem nomeados). Raio de borda e espaçamento
+   NÃO foram forçados numa escala rígida: os valores hoje variam
+   por componente de propósito (pill vs. card vs. botão pequeno) e
+   comprimir isso numa escala de 4-5 passos mudaria o visual sem
+   nenhuma justificativa técnica — só encaixar num sistema por
+   encaixar. Fica registrado como decisão consciente, não omissão.
+   ============================================================ */
+
+:root{
+    /* ---- Marca (não muda: roxo e laranja são a identidade) ---- */
+    --marca-roxo:#0f0732;
+    --marca-roxo-escuro:#1a1245;   /* tom mais escuro do roxo, usado em gradientes (header, hero) */
+    --marca-laranja:#f85900;
+    --marca-laranja-glow:rgba(248,89,0,0.3);
+    --marca-branco:#ffffff;
+    --marca-azul-coracao:#007bff;
+    --marca-verde-zap:#25D366;
+    --marca-vermelho-del:#FF4757;
+
+    /* ---- Texto e fundo base ---- */
+    --texto:#0f0732;
+    --texto-suave:#5a5575;
+    --texto-fraco:#aaaaaa;
+    --fundo:#F5F7FB;
+    --card-bg:#ffffff;
+
+    /* ---- Neutros — fundos/bordas sutis reunidos numa escala pequena
+       (antes: #f8f9fc, #f0f2f8, #f0f2f5, #f4f6f9, #e4e7ef, #e4e7ec, #fafafa
+       todos coexistiam como "cinza bem claro" quase indistinguíveis) ---- */
+    --n-bg-100:#f8f9fc;   /* fundo neutro claro (inputs, seções sutis) */
+    --n-bg-200:#f0f2f8;   /* fundo neutro um degrau abaixo */
+    --n-bg-300:#fbfbfb;   /* quase branco, para inputs sobre fundo branco */
+    --n-bg-warm:#fffbf8;  /* fundo levemente quente, uso pontual */
+    --n-border-100:#eef2f6;
+    --n-border-200:#e0e0e0;
+    --n-border-300:#eeeeee;
+    --n-border-400:#dddddd;
+    --n-gray-medio:#7f8c8d;   /* usado em estados neutros/desabilitados (ex: badge Esgotado) */
+    --n-hover:#e0e2e5;
+
+    /* ---- Semântico: sucesso / aviso / erro / info / destaque —
+       cada um com um par fundo-suave + texto, o padrão que já existia
+       repetido (badges de status do admin, avisos da loja) ---- */
+    --cor-sucesso:#27ae60;
+    --cor-sucesso-bg:#e8f5e9;
+    --cor-sucesso-texto:#2e7d32;
+    --cor-sucesso-texto-forte:#1b5e20;   /* variante mais escura, usada só no badge "Pago" pra diferenciar de "Confirmado" */
+
+    --cor-aviso:#f39c12;
+    --cor-aviso-bg:#fff8e1;
+    --cor-aviso-texto:#f57f17;
+
+    --cor-laranja-status-bg:#fff3e0;
+    --cor-laranja-status-texto:#e65100;
+
+    --cor-erro-bg:#fff0f0;
+    --cor-erro-bg-forte:#ffebee;
+    --cor-erro-texto:#b71c1c;
+    --cor-erro-solido:#e74c3c;
+
+    --cor-info-bg:#e3f2fd;
+    --cor-info-texto:#1565c0;
+    --cor-info-solido:#2980b9;
+
+    --cor-destaque-bg:#f3e5f5;
+    --cor-destaque-texto:#6a1b9a;
+    --cor-destaque-solido:#8e44ad;
+
+    --cor-recorte-suave:#ff8a80;   /* acento decorativo pontual (gradientes/glow) */
+    --cor-recorte-verde:#a8e6c0;   /* idem, tom verde-claro decorativo */
+
+    /* ---- Sombra — 3 níveis, os mesmos nos dois apps agora
+       (admin tinha só 1 nível "--shadow"; passou a usar esta escala) ---- */
+    --sombra-sm:0 4px 12px rgba(15,7,50,0.05);
+    --sombra-md:0 10px 30px rgba(15,7,50,0.1);
+    --sombra-lg:0 20px 50px rgba(15,7,50,0.15);
+
+    /* ---- Transição — as duas durações que já dominavam o código ---- */
+    --transicao-rapida:0.15s;
+    --transicao-base:0.2s;
+}
