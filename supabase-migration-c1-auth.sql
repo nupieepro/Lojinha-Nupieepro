@@ -108,6 +108,7 @@ SET search_path = public
 AS $$
 DECLARE
     v_faturado      NUMERIC := 0;
+    v_faturado_pago NUMERIC := 0;
     v_total         INTEGER := 0;
     v_cancelados    INTEGER := 0;
     v_hoje          INTEGER := 0;
@@ -121,6 +122,9 @@ BEGIN
     END IF;
 
     SELECT COALESCE(SUM(total), 0) INTO v_faturado FROM public.pedidos WHERE status <> 'cancelado';
+    -- Recebido de verdade: só pedidos com pagamento confirmado. "Faturamento
+    -- total" sozinho inflava a métrica somando pedidos ainda não pagos (achado B8).
+    SELECT COALESCE(SUM(total), 0) INTO v_faturado_pago FROM public.pedidos WHERE status <> 'cancelado' AND pago = TRUE;
     SELECT COUNT(*) INTO v_total FROM public.pedidos WHERE status <> 'cancelado';
     SELECT COUNT(*) INTO v_cancelados FROM public.pedidos WHERE status = 'cancelado';
     SELECT COUNT(*) INTO v_hoje FROM public.pedidos WHERE status <> 'cancelado' AND created_at >= CURRENT_DATE;
@@ -152,14 +156,15 @@ BEGIN
     FROM public.pedidos WHERE status <> 'cancelado' AND cupom <> '';
 
     RETURN jsonb_build_object(
-        'total_faturado',   v_faturado,
-        'total_pedidos',    v_total,
-        'total_cancelados', v_cancelados,
-        'pedidos_hoje',     v_hoje,
-        'ticket_medio',     v_ticket,
-        'mais_vendido',     v_mais_vendido,
-        'pagamentos',       COALESCE(v_pagamentos, '{}'::JSONB),
-        'desconto_cupons',  v_desconto
+        'total_faturado',      v_faturado,
+        'total_faturado_pago', v_faturado_pago,
+        'total_pedidos',       v_total,
+        'total_cancelados',    v_cancelados,
+        'pedidos_hoje',        v_hoje,
+        'ticket_medio',        v_ticket,
+        'mais_vendido',        v_mais_vendido,
+        'pagamentos',          COALESCE(v_pagamentos, '{}'::JSONB),
+        'desconto_cupons',     v_desconto
     );
 END;
 $$;
@@ -224,6 +229,22 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION public._csv_campo(v TEXT)
+RETURNS TEXT
+LANGUAGE sql
+IMMUTABLE
+AS $$
+    -- Neutraliza CSV/Formula Injection: campo de texto livre do cliente (nome,
+    -- observacao, endereco, etc) comecando com =, +, -, @, TAB ou CR e' interpretado
+    -- como formula por Excel/Sheets ao abrir o export -- pode rodar comando externo
+    -- ou vazar dado. Prefixa com aspa simples pra forcar leitura como texto, e
+    -- escapa aspas duplas embutidas em TODO campo (achado na auditoria B8).
+    SELECT '"' || REPLACE(
+        CASE WHEN v ~ '^[=+\-@\t\r]' THEN '''' || v ELSE v END,
+        '"', '""'
+    ) || '"'
+$$;
+
 CREATE OR REPLACE FUNCTION public.admin_exportar_csv()
 RETURNS TEXT
 LANGUAGE plpgsql
@@ -239,21 +260,21 @@ BEGIN
 
     SELECT 'Nº Pedido,Data,Nome,WhatsApp,Email,Entrega,Endereço,Pagamento,Status,Pago,Total,Itens,Cupom,Desconto,Anotação' || E'\n' ||
            STRING_AGG(
-               '"' || numero || '",' ||
-               '"' || TO_CHAR(created_at AT TIME ZONE 'America/Fortaleza', 'DD/MM/YYYY HH24:MI') || '",' ||
-               '"' || COALESCE(nome,'') || '",' ||
-               '"' || COALESCE(whatsapp,'') || '",' ||
-               '"' || COALESCE(email,'') || '",' ||
-               '"' || COALESCE(entrega,'') || '",' ||
-               '"' || REPLACE(COALESCE(endereco,''), '"', '""') || '",' ||
-               '"' || COALESCE(pagamento,'') || '",' ||
-               '"' || COALESCE(status,'') || '",' ||
-               '"' || (CASE WHEN pago THEN 'Sim' ELSE 'Não' END) || '",' ||
-               '"' || total::TEXT || '",' ||
-               '"' || COALESCE((SELECT STRING_AGG(item->>'qtd' || 'x ' || item->>'nome', ' | ') FROM jsonb_array_elements(itens) AS item), '') || '",' ||
-               '"' || COALESCE(cupom,'') || '",' ||
-               '"' || desconto::TEXT || '",' ||
-               '"' || REPLACE(COALESCE(anotacao_interna,''), '"', '""') || '"',
+               public._csv_campo(numero) || ',' ||
+               public._csv_campo(TO_CHAR(created_at AT TIME ZONE 'America/Fortaleza', 'DD/MM/YYYY HH24:MI')) || ',' ||
+               public._csv_campo(COALESCE(nome,'')) || ',' ||
+               public._csv_campo(COALESCE(whatsapp,'')) || ',' ||
+               public._csv_campo(COALESCE(email,'')) || ',' ||
+               public._csv_campo(COALESCE(entrega,'')) || ',' ||
+               public._csv_campo(COALESCE(endereco,'')) || ',' ||
+               public._csv_campo(COALESCE(pagamento,'')) || ',' ||
+               public._csv_campo(COALESCE(status,'')) || ',' ||
+               public._csv_campo(CASE WHEN pago THEN 'Sim' ELSE 'Não' END) || ',' ||
+               public._csv_campo(total::TEXT) || ',' ||
+               public._csv_campo(COALESCE((SELECT STRING_AGG(item->>'qtd' || 'x ' || (item->>'nome'), ' | ') FROM jsonb_array_elements(itens) AS item), '')) || ',' ||
+               public._csv_campo(COALESCE(cupom,'')) || ',' ||
+               public._csv_campo(desconto::TEXT) || ',' ||
+               public._csv_campo(COALESCE(anotacao_interna,'')),
                E'\n' ORDER BY created_at DESC
            )
     INTO v_csv

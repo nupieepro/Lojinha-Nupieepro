@@ -387,7 +387,12 @@
             <div class="dash-card">
                 <div class="dash-card-icon" style="background:var(--cor-laranja-status-bg)"><i class="fa-solid fa-dollar-sign" style="color:var(--laranja)"></i></div>
                 <div class="dash-card-val" id="dash-faturamento">—</div>
-                <div class="dash-card-label">Faturamento total</div>
+                <div class="dash-card-label">Total em pedidos (inclui não pagos)</div>
+            </div>
+            <div class="dash-card">
+                <div class="dash-card-icon" style="background:var(--cor-sucesso-bg)"><i class="fa-solid fa-circle-check" style="color:var(--verde)"></i></div>
+                <div class="dash-card-val" id="dash-faturamento-pago">—</div>
+                <div class="dash-card-label">Recebido (pagamento confirmado)</div>
             </div>
             <div class="dash-card">
                 <div class="dash-card-icon" style="background:var(--cor-sucesso-bg)"><i class="fa-solid fa-bag-shopping" style="color:var(--verde)"></i></div>
@@ -675,10 +680,10 @@
 
         <!-- Botões de ação -->
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <button class="btn btn-primary" onclick="salvarConfig(false)" style="flex:1">
+            <button class="btn btn-primary" id="btn-salvar-config-rascunho" onclick="salvarConfig(false,this)" style="flex:1">
                 <i class="fa-solid fa-floppy-disk"></i> Salvar rascunho
             </button>
-            <button class="btn btn-laranja" onclick="salvarConfig(true)" style="flex:1">
+            <button class="btn btn-laranja" id="btn-salvar-config-publicar" onclick="salvarConfig(true,this)" style="flex:1">
                 <i class="fa-solid fa-rocket"></i> Publicar
             </button>
         </div>
@@ -1215,6 +1220,7 @@ async function carregarDashboard(){
     try {
         const d = await api({ action: 'admin_dashboard' });
         document.getElementById('dash-faturamento').textContent = `R$ ${(d.total_faturado||0).toFixed(2).replace('.',',')}`;
+        document.getElementById('dash-faturamento-pago').textContent = `R$ ${(d.total_faturado_pago||0).toFixed(2).replace('.',',')}`;
         document.getElementById('dash-pedidos').textContent     = d.total_pedidos || 0;
         document.getElementById('dash-hoje').textContent        = d.pedidos_hoje  || 0;
         document.getElementById('dash-ticket').textContent      = `R$ ${(d.ticket_medio||0).toFixed(2).replace('.',',')}`;
@@ -1399,13 +1405,14 @@ async function salvarAnotacao(numero){
 async function exportarCSV(){
     toast('⏳ Gerando CSV...');
     try {
+        /* admin_exportar_csv() é RETURNS TEXT no banco — o supabase-js entrega isso
+           como string primitiva em "res", não um objeto {url}/{csv}. O código antigo
+           checava res.url/res.csv (sempre undefined numa string) e SEMPRE caía no
+           "Erro ao exportar: sem dados", mesmo com o CSV inteiro pronto em mãos —
+           export 100% não-funcional. */
         const res = await api({ action: 'admin_exportar_csv' });
-        if(res.url){
-            window.open(res.url, '_blank', 'noopener');
-            toast('✅ CSV gerado! Abrindo download...');
-        } else if(res.csv){
-            /* Fallback: baixa direto pelo browser */
-            const blob = new Blob([res.csv], {type:'text/csv;charset=utf-8;'});
+        if(typeof res === 'string' && res.length){
+            const blob = new Blob(['﻿'+res], {type:'text/csv;charset=utf-8;'});
             const url  = URL.createObjectURL(blob);
             const a    = document.createElement('a');
             a.href = url; a.download = 'pedidos_nupieepro.csv';
@@ -1413,7 +1420,7 @@ async function exportarCSV(){
             document.body.removeChild(a); URL.revokeObjectURL(url);
             toast('✅ CSV baixado!');
         } else {
-            toast('Erro ao exportar: ' + (res.erro||'sem dados'), true);
+            toast('Nenhum pedido para exportar.', true);
         }
     } catch(e){ toast('Erro: ' + e.message, true); }
 }
@@ -1551,13 +1558,19 @@ document.getElementById('prod-categoria').addEventListener('change', function(){
 async function salvarProduto(publicar,btnClicado){
     const nome = document.getElementById('prod-nome').value.trim();
     if(!nome){ toast('Informe o nome do produto!', true); return; }
+    /* "Preço de venda (R$) *" é rotulado como obrigatório mas nada impedia salvar
+       vazio/inválido como R$0,00 — produto ia ao ar "de graça", comprável de
+       verdade via checkout com PIX real (achado B8). */
+    const precoInput = document.getElementById('prod-preco').value.trim();
+    const precoNum = parseFloat(precoInput);
+    if(!precoInput || isNaN(precoNum) || precoNum <= 0){ toast('Informe um preço de venda válido (maior que R$0,00)!', true); return; }
 
     const id = document.getElementById('prod-id').value;
     const produto = {
         id:             id ? parseInt(id) : null,
         nome,
         descricao:      document.getElementById('prod-descricao').value.trim(),
-        preco:          parseFloat(document.getElementById('prod-preco').value) || 0,
+        preco:          precoNum,
         custo:          parseFloat(document.getElementById('prod-custo').value) || 0,
         tipo:           document.getElementById('prod-categoria').value === 'camisa' ? 'camisa' : 'unico',
         categoria:      document.getElementById('prod-categoria').value,
@@ -1618,9 +1631,18 @@ async function toggleAtivoProduto(id, ativar){
 }
 
 function duplicarProduto(){
+    /* Sem produto original (modal já estava em "Novo Produto"), duplicar não faz
+       sentido — viraria um produto em branco chamado " (cópia)". */
+    if(!document.getElementById('prod-id').value){ toast('Abra um produto existente para duplicar.', true); return; }
     document.getElementById('prod-id').value = '';
     document.getElementById('prod-nome').value += ' (cópia)';
-    toast('Produto duplicado — salve para criar');
+    /* Estoque e "ativo" NÃO são copiados — ficam com um default seguro (0 / inativo).
+       Copiar o estoque literal do original criava dois produtos "com 5 unidades"
+       quando fisicamente só existem 5 (risco real de overselling); copiar "ativo"
+       publicava a cópia na loja antes do admin revisar preço/fotos/tamanhos dela. */
+    document.getElementById('prod-estoque').value = 0;
+    document.getElementById('prod-ativo').checked = false;
+    toast('Produto duplicado — revise estoque e ative antes de publicar');
 }
 
 /* ============================================================
@@ -1701,13 +1723,18 @@ async function abrirModalCupom(codigo){
 async function salvarCupom(){
     const codigo = document.getElementById('cup-codigo').value.trim().toUpperCase();
     if(!codigo){ toast('Informe o código!', true); return; }
+    /* "Valor do desconto *" era rotulado obrigatório mas salvava 0 em silêncio se
+       vazio/inválido — cupom "ativo" sem desconto nenhum, sem nenhum aviso. */
+    const valorInput = document.getElementById('cup-valor').value.trim();
+    const valorNum = parseFloat(valorInput);
+    if(!valorInput || isNaN(valorNum) || valorNum <= 0){ toast('Informe um valor de desconto válido (maior que 0)!', true); return; }
 
     const prods_ids = [...document.querySelectorAll('#cup-produtos-check input:checked')].map(el => parseInt(el.value));
 
     const cupom = {
         codigo,
         tipo:        document.getElementById('cup-tipo').value,
-        valor:       parseFloat(document.getElementById('cup-valor').value) || 0,
+        valor:       valorNum,
         minimo:      parseFloat(document.getElementById('cup-minimo').value) || 0,
         limite:      parseInt(document.getElementById('cup-limite').value)   || 500,
         usos:        parseInt(document.getElementById('cup-usos').value)     || 0,
@@ -1734,6 +1761,10 @@ async function toggleCupom(codigo, ativo){
     try {
         await api({ action: 'admin_salvar_cupom', cupom: c });
         toast(ativo ? '✅ Cupom ativado!' : 'Cupom desativado');
+        /* A opacidade do card (0.5 quando inativo) só é calculada na hora de renderizar
+           — sem re-render, o card de um cupom recém-desativado ficava com opacidade de
+           "ativo" até o admin trocar de aba e voltar. */
+        carregarCupons();
     } catch(e){
         /* Falhou: desfaz no cache — senão abrirModalCupom() (que confia no cache já
            carregado sem re-buscar) mostraria o cupom como se o toggle tivesse dado certo. */
@@ -1957,10 +1988,14 @@ async function salvarConfigToggle(chave, valor){
     }, 300);
 }
 
-async function salvarConfig(publicar){
-    const btnPublicar = document.querySelector('.btn-laranja');
-    const btnRascunho = document.querySelector('.btn-primary[onclick*="salvarConfig"]');
-    if(btnPublicar) btnPublicar.disabled = true;
+async function salvarConfig(publicar,btnClicado){
+    /* Antes usava document.querySelector('.btn-laranja') sem escopo — pegava o
+       PRIMEIRO elemento com essa classe no DOM inteiro, que é o botão "Novo produto"
+       da aba Produtos, não o "Publicar" desta aba. O botão real nunca ficava
+       desabilitado (sem proteção contra duplo clique/duplo submit), e um botão de
+       outra aba era desabilitado à toa. Agora usa os dois botões reais por id. */
+    const btns=[document.getElementById('btn-salvar-config-rascunho'),document.getElementById('btn-salvar-config-publicar')].filter(Boolean);
+    btns.forEach(b=>b.disabled=true);
 
     const config = {
         nome_loja:            document.getElementById('cfg-nome-loja').value.trim(),
@@ -1992,7 +2027,7 @@ async function salvarConfig(publicar){
             setTimeout(carregarConfig, 1500);
         } else { toast('Erro ao salvar: ' + (res.erro||''), true); }
     } catch(e){ toast('Erro: ' + e.message, true); }
-    finally { if(btnPublicar) btnPublicar.disabled = false; }
+    finally { btns.forEach(b=>b.disabled=false); }
 }
 
 /* ============================================================

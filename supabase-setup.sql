@@ -109,8 +109,17 @@ ALTER TABLE public.pedidos  ENABLE ROW LEVEL SECURITY;
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'produtos' AND policyname = 'produtos_publico_select') THEN
+        -- agendamento (texto "YYYY-MM-DDTHH:MM", vindo de <input type="datetime-local">
+        -- no admin): produto agendado só fica visível a partir da data/hora marcada,
+        -- mesmo com ativo=true (antes o campo era só decorativo — achado B8).
         CREATE POLICY "produtos_publico_select" ON public.produtos
-            FOR SELECT TO anon USING (ativo = TRUE);
+            FOR SELECT TO anon USING (
+                ativo = TRUE
+                AND (
+                    agendamento IS NULL OR agendamento = ''
+                    OR agendamento <= to_char(now() AT TIME ZONE 'America/Fortaleza', 'YYYY-MM-DD"T"HH24:MI')
+                )
+            );
     END IF;
     IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'public' AND tablename = 'cupons' AND policyname = 'cupons_publico_select') THEN
         CREATE POLICY "cupons_publico_select" ON public.cupons

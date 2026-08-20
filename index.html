@@ -196,7 +196,13 @@
         /* hover:hover evita o efeito "grudar" em toque (tablet/celular não têm hover de verdade) */
         @media(hover:hover){.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}}
         .card.destaque{border:2px solid var(--laranja-brand);box-shadow:0 0 0 2px var(--laranja-glow),var(--shadow-sm);}
-        .card.esgotado{opacity:0.5;filter:grayscale(0.5);pointer-events:none;}
+        /* Sem pointer-events:none — isso bloqueava TAMBÉM o botão de compartilhar e a
+           abertura do modal de detalhes (descrição, prazo de reposição), não só o
+           "adicionar à sacola". O card esgotado continua opaco/cinza (informativo),
+           mas dá pra olhar e compartilhar; quem trava especificamente é o botão
+           "Adicionar à Sacola" dentro do modal (ver abrirDetalhes/.btn-disabled). */
+        .card.esgotado{opacity:0.6;filter:grayscale(0.5);}
+        .btn-primary.btn-disabled{opacity:0.5;pointer-events:none;background:var(--n-gray-medio);box-shadow:none;}
         .image-wrapper{width:100%;aspect-ratio:1/1;background:var(--n-bg-200);position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
         .image-wrapper::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--n-bg-200) 25%,var(--n-bg-200) 50%,var(--n-bg-200) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;z-index:1;}
         @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -410,7 +416,7 @@
 </div>
 
 <div class="container" id="vitrine-area"></div>
-<div id="vitrine-vazia">
+<div id="vitrine-vazia" role="status" aria-live="polite">
     <i class="fa-solid fa-box-open"></i>
     <h3>Nenhum produto encontrado</h3>
     <p>Tente outro termo ou categoria</p>
@@ -493,7 +499,7 @@
             <div class="qty-num" id="detalhe-qtd">1</div>
             <button class="qty-btn" onclick="alterarQtd(1)">+</button>
         </div>
-        <button class="btn-primary" onclick="adicionarAoCarrinho()"><i class="fa-solid fa-bag-shopping"></i> Adicionar à Sacola</button>
+        <button class="btn-primary" id="btn-add-carrinho" onclick="adicionarAoCarrinho()"><i class="fa-solid fa-bag-shopping"></i> <span id="btn-add-carrinho-texto">Adicionar à Sacola</span></button>
     </div>
 </div>
 
@@ -507,6 +513,7 @@
             <div class="sucesso-titulo">Pedido enviado!</div>
             <div id="sucesso-num" class="sucesso-num"></div>
             <div id="sucesso-msg" class="sucesso-msg"></div>
+            <button class="btn-primary" id="btn-abrir-zap-sucesso" onclick="reabrirZapPedido()" style="display:none;background:var(--verde-zap);margin-bottom:10px"><i class="fa-brands fa-whatsapp"></i> Abrir WhatsApp e enviar pedido</button>
             <button class="btn-primary" onclick="fecharModais(null)"><i class="fa-solid fa-store"></i> Continuar comprando</button>
             <button class="btn-secondary" onclick="abrirMeusPedidos()"><i class="fa-solid fa-clock-rotate-left"></i> Meus pedidos</button>
         </div>
@@ -517,7 +524,7 @@
             <div class="cupom-checkout">
                 <div class="cupom-checkout-titulo"><i class="fa-solid fa-tag"></i> Insira seu cupom</div>
                 <div class="cupom-row">
-                    <input type="text" id="campo-cupom" class="cupom-input" placeholder="Digite o código" maxlength="20" autocomplete="off">
+                    <input type="text" id="campo-cupom" class="cupom-input" placeholder="Digite o código" aria-label="Código do cupom" maxlength="20" autocomplete="off">
                     <button class="cupom-aplicar" onclick="validarCupom()">Aplicar</button>
                 </div>
                 <div id="cupom-ok"><i class="fa-solid fa-circle-check"></i><span id="cupom-ok-texto"></span><button class="cupom-remover" onclick="removerCupom()">✕</button></div>
@@ -532,17 +539,17 @@
             </div>
 
             <h3 style="color:var(--roxo-brand);font-size:0.9rem;margin:14px 0 8px;font-weight:700">Seus Dados</h3>
-            <input type="text" id="nome-cliente" class="input-box" placeholder="Nome completo" maxlength="100" autocomplete="name">
-            <input type="tel" id="zap-cliente" class="input-box" placeholder="WhatsApp com DDD" maxlength="16" autocomplete="tel">
-            <input type="email" id="email-cliente" class="input-box" placeholder="E-mail (opcional)" maxlength="100" autocomplete="email">
+            <input type="text" id="nome-cliente" class="input-box" placeholder="Nome completo" aria-label="Nome completo" maxlength="100" autocomplete="name">
+            <input type="tel" id="zap-cliente" class="input-box" placeholder="WhatsApp com DDD" aria-label="WhatsApp com DDD" maxlength="16" autocomplete="tel">
+            <input type="email" id="email-cliente" class="input-box" placeholder="E-mail (opcional)" aria-label="E-mail (opcional)" maxlength="100" autocomplete="email">
 
             <h3 style="color:var(--roxo-brand);font-size:0.9rem;margin:14px 0 8px;font-weight:700">Entrega</h3>
             <label class="radio-option"><input type="radio" name="entrega" value="Retirada UFPI" checked onchange="toggleEndereco()"><i class="fa-solid fa-building-columns" style="color:var(--texto-suave)"></i> Retirada (UFPI)</label>
             <label class="radio-option"><input type="radio" name="entrega" value="Entrega" onchange="toggleEndereco()"><i class="fa-solid fa-motorcycle" style="color:var(--texto-suave)"></i> Entrega (verificar taxa)</label>
             <div id="box-endereco" style="display:none">
-                <input type="text" id="endereco-cliente" class="input-box" placeholder="Endereço para entrega" maxlength="200">
+                <input type="text" id="endereco-cliente" class="input-box" placeholder="Endereço para entrega" aria-label="Endereço para entrega" maxlength="200">
             </div>
-            <input type="text" id="campo-obs" class="input-box" placeholder="Observações (opcional)" maxlength="300" style="margin-top:6px">
+            <input type="text" id="campo-obs" class="input-box" placeholder="Observações (opcional)" aria-label="Observações (opcional)" maxlength="300" style="margin-top:6px">
 
             <h3 style="color:var(--roxo-brand);font-size:0.9rem;margin:14px 0 8px;font-weight:700">Pagamento</h3>
             <div class="pix-destaque ativo" id="pix-destaque"><i class="fa-solid fa-bolt"></i> PIX = confirmação mais rápida!</div>
@@ -585,7 +592,8 @@
 <div class="modal-bg" id="modal-pedidos" onclick="fecharModais(event)" role="dialog" aria-modal="true">
     <div class="modal-panel">
         <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
-        <h2 style="color:var(--roxo-brand);margin-bottom:16px;font-size:1.2rem;font-weight:800"><i class="fa-solid fa-clock-rotate-left"></i> Meus Pedidos</h2>
+        <h2 style="color:var(--roxo-brand);margin-bottom:6px;font-size:1.2rem;font-weight:800"><i class="fa-solid fa-clock-rotate-left"></i> Meus Pedidos</h2>
+        <p style="font-size:0.72rem;color:var(--texto-fraco);margin-bottom:14px;line-height:1.5">Fica salvo só neste aparelho/navegador (não numa conta) — trocar de celular ou limpar os dados do navegador some com essa lista aqui, mas seu pedido continua registrado com a gente. Guarda o número do pedido, ou fala com a gente pelo WhatsApp com o número em mãos pra consultar.</p>
         <div id="lista-pedidos-hist"></div>
     </div>
 </div>
@@ -679,7 +687,11 @@ window.addEventListener('resize',()=>{
 
 /* Tema visual (vitrine temática) — troca as cores de marca conforme escolhido no admin */
 const TEMA_PRESETS={
-    padrao:      {cor1:'var(--roxo-brand)',cor2:'var(--laranja-brand)'},
+    /* Hex de verdade, não a string CSS var(--x) — hexToRgba() faz parseInt em
+       fatias do valor pra montar o glow; com 'var(--roxo-brand)' o parseInt dá
+       NaN→0 em tudo e o glow saía preto (rgba(0,0,0,...)) em vez de laranja, no
+       preset mais comum (o de qualquer loja que não mexeu no tema). */
+    padrao:      {cor1:'#0f0732',cor2:'#f85900'},
     natal:       {cor1:'#7f0000',cor2:'#1b5e20'},
     calourada:   {cor1:'#0d1b4c',cor2:'#ffab00'},
     verao:       {cor1:'#004d61',cor2:'#ff6f00'},
@@ -824,10 +836,14 @@ function normalizarProduto(p){
     p.tamanhos = Array.isArray(p.tamanhos)
         ? p.tamanhos
         : (p.tamanhos||'').toString().split(',').map(s=>s.trim()).filter(Boolean);
-    /* Botton — detecta por tipo, nome ou ID e garante as opções */
+    /* Botton — detecta por tipo ou nome. Existia também um "|| p.id===7" (hack sem
+       comentário, herdado de quando o produto id=7 era um botton) — removido na
+       auditoria B4/B5 porque o id=7 hoje pertence a outro produto ("Camisa AZUL"),
+       e o hack estava forçando essa camisa a ser tratada como botton na loja
+       (escondia o seletor de tamanho real dela). ID pode ser reciclado pelo banco;
+       nunca deveria ter sido usado como sinal de tipo de produto. */
     const isBottonProd = p.tipo==='botton'
-        || (p.nome&&p.nome.toLowerCase().includes('botton'))
-        || p.id===7;
+        || (p.nome&&p.nome.toLowerCase().includes('botton'));
     if(isBottonProd){
         p.tipo = 'botton';
         /* Usa tamanhos já normalizados (sempre array aqui) */
@@ -920,6 +936,7 @@ async function carregarAPI(tentativa){
                 produtos.length=0;
                 produtos.push(...normalizados);
                 sincronizarCarrinhoComProdutos();
+                sincronizarModalProduto();
                 renderVitrine();
                 /* Cache local para carregamento instantâneo no futuro */
                 localStorage.setItem('nupieepro_cache_produtos', JSON.stringify({t:Date.now(), d:normalizados}));
@@ -992,7 +1009,7 @@ function criarCardProduto(p){
     el.className=`card${dest?' destaque':''}${esg?' esgotado':''}`;
     el.innerHTML=`
         <button class="share-btn" onclick="compartilhar(${p.id},event)" aria-label="Compartilhar"><i class="fa-solid fa-share-nodes"></i></button>
-        <div class="image-wrapper" onclick="abrirDetalhes(${p.id})">
+        <div class="image-wrapper${imgSrc?'':' loaded'}" onclick="abrirDetalhes(${p.id})">
             ${imgSrc
 ? `<img src="${san(imgSrc)}" class="prod-img" loading="lazy" alt="${san(p.nome)}"
     onload="this.classList.add('visible');this.closest('.image-wrapper').classList.add('loaded')"
@@ -1052,11 +1069,48 @@ function renderVitrine(){
     }
 }
 
+/* Chamada sempre que o catálogo é atualizado (realtime/refresh). Se o modal de
+   detalhes estiver aberto, o preço/estoque exibidos e o que adicionarAoCarrinho()
+   usaria ficavam presos no objeto antigo — o admin podia mudar preço/estoque, ou
+   até desativar o produto, enquanto o cliente decide a quantidade, sem o modal
+   refletir isso. Atualiza só o preço/estoque exibidos (não mexe no tamanho/design
+   já escolhido); se o produto sumiu do catálogo, fecha o modal e avisa. */
+function sincronizarModalProduto(){
+    if(!itemSel) return;
+    const modalAberto=document.getElementById('modal-details').classList.contains('active');
+    if(!modalAberto) return;
+    const atual=produtos.find(p=>p.id===itemSel.id);
+    if(!atual){
+        fecharModais(null);
+        toast('⚠️ Este produto não está mais disponível.',1);
+        return;
+    }
+    itemSel=atual;
+    document.getElementById('detalhe-preco').textContent='R$ '+itemSel.preco.toFixed(2).replace('.',',');
+    const estEl=document.getElementById('detalhe-estoque');
+    if(!itemSel.encomenda&&itemSel.estoque>0){estEl.textContent=itemSel.estoque+' em estoque';estEl.style.display='block';}else estEl.style.display='none';
+    atualizarBotaoAdicionar();
+}
+
+/* Esgotado (não-encomenda, estoque 0) — não dá pra adicionar à sacola. O card já fica
+   visível-mas-opaco na vitrine; dentro do modal o botão fica desabilitado de verdade,
+   não só cosmético, com o motivo explicado no texto do botão. */
+function atualizarBotaoAdicionar(){
+    const btn=document.getElementById('btn-add-carrinho');
+    const txt=document.getElementById('btn-add-carrinho-texto');
+    if(!btn||!itemSel) return;
+    const esgotado=!itemSel.encomenda&&itemSel.estoque===0;
+    btn.classList.toggle('btn-disabled',esgotado);
+    btn.disabled=esgotado;
+    txt.textContent=esgotado?'Esgotado':'Adicionar à Sacola';
+}
+
 function abrirDetalhes(id){
     itemSel=produtos.find(p=>p.id===id);
     if(!itemSel) return;
-    /* Garante botton sempre tem tipos — mesmo se API não mandou */
-    if(itemSel.tipo==='botton'||(itemSel.nome&&itemSel.nome.toLowerCase().includes('botton'))||itemSel.id===7){
+    /* Garante botton sempre tem tipos — mesmo se API não mandou. Mesmo hack de
+       id===7 removido aqui (ver normalizarProduto — o id foi reciclado pro banco). */
+    if(itemSel.tipo==='botton'||(itemSel.nome&&itemSel.nome.toLowerCase().includes('botton'))){
         itemSel.tipo='botton';
         /* FIX: verifica Array.isArray — tipos_botton pode chegar como string do cache */
         if(!itemSel.tipos_botton||!Array.isArray(itemSel.tipos_botton)||!itemSel.tipos_botton.length){
@@ -1069,6 +1123,7 @@ function abrirDetalhes(id){
         }
     }
     qtdTemp=1;
+    atualizarBotaoAdicionar();
     document.getElementById('detalhe-nome').textContent=itemSel.nome;
     document.getElementById('detalhe-preco').textContent='R$ '+itemSel.preco.toFixed(2).replace('.',',');
     document.getElementById('detalhe-qtd').textContent='1';
@@ -1101,13 +1156,17 @@ function abrirDetalhes(id){
     const isCamisa=itemSel.tipo==='camisa'||itemSel.categoria==='camisa';
     const isBotton=itemSel.tipo==='botton';
 
-    /* Seletor de tamanho (camisas) */
+    /* Seletor de tamanho (camisas). Limpa o <select> mesmo quando o wrapper fica
+       escondido — senão, ao abrir um produto B logo depois de um produto A (sem
+       fechar o modal), as <option> de A continuavam ali e "select-tamanho.value"
+       (lido em adicionarAoCarrinho) devolvia um tamanho que o cliente nunca viu
+       nem escolheu pra B, indo pro pedido real sem nenhum aviso. */
     if(isCamisa&&itemSel.tamanhos&&itemSel.tamanhos.length){
         st.innerHTML=itemSel.tamanhos.map(t=>`<option value="${san(t)}">${san(t)}</option>`).join('');
         wt.style.display='block';
-    } else wt.style.display='none';
+    } else { st.innerHTML=''; wt.style.display='none'; }
 
-    /* Seletor de tipo (bottons) */
+    /* Seletor de tipo (bottons) — mesma lógica de limpeza */
     const wbEl=document.getElementById('wrapper-botton');
     if(isBotton&&itemSel.tipos_botton&&itemSel.tipos_botton.length){
         const grid=document.getElementById('botton-grid');
@@ -1115,7 +1174,7 @@ function abrirDetalhes(id){
             `<div class="botton-opt${i===0?' selected':''}" onclick="selecionarBotton(this)">${san(t)}</div>`
         ).join('');
         wbEl.style.display='block';
-    } else if(wbEl) wbEl.style.display='none';
+    } else if(wbEl){ document.getElementById('botton-grid').innerHTML=''; wbEl.style.display='none'; }
     document.getElementById('modal-details').classList.add('active');
     travarScroll();
     history.replaceState({},'',location.pathname+'?id='+id);
@@ -1156,7 +1215,16 @@ function fecharModais(e){
     history.replaceState({},'',location.pathname);
 }
 
-function alterarQtd(v){qtdTemp=Math.max(1,qtdTemp+v);document.getElementById('detalhe-qtd').textContent=qtdTemp;}
+function alterarQtd(v){
+    /* Teto pelo estoque real (produto sob encomenda não tem esse limite — estoque=0
+       nele é normal). Antes só havia piso de 1: dava pra incrementar sem fim e só
+       descobrir no fim do checkout, depois de preencher tudo, que passou do estoque. */
+    const max=(itemSel&&!itemSel.encomenda&&itemSel.estoque>0)?itemSel.estoque:Infinity;
+    const novo=Math.max(1,Math.min(max,qtdTemp+v));
+    if(v>0&&novo===qtdTemp&&qtdTemp>=max) toast('Não há mais estoque disponível.',1);
+    qtdTemp=novo;
+    document.getElementById('detalhe-qtd').textContent=qtdTemp;
+}
 
 function selecionarBotton(el){
     document.querySelectorAll('.botton-opt').forEach(b=>b.classList.remove('selected'));
@@ -1173,7 +1241,14 @@ function adicionarAoCarrinho(){
         tam=sel?sel.textContent:'Padrão';
     }
     const i=carrinho.findIndex(x=>x.id===itemSel.id&&x.tamanho===tam);
-    if(i>=0) carrinho[i].qtd+=qtdTemp; else carrinho.push({...itemSel,tamanho:tam,qtd:qtdTemp});
+    if(i>=0){
+        const max=(!itemSel.encomenda&&itemSel.estoque>0)?itemSel.estoque:Infinity;
+        if(carrinho[i].qtd+qtdTemp>max){
+            toast('Só há '+(max-carrinho[i].qtd)+' unidade(s) a mais disponível(is) desse item.',1);
+            return;
+        }
+        carrinho[i].qtd+=qtdTemp;
+    } else carrinho.push({...itemSel,tamanho:tam,qtd:qtdTemp});
     salvarCarrinho();atualizarBarra();toast('✅ Adicionado à sacola!');fecharModais(null);
 }
 
@@ -1189,7 +1264,19 @@ function atualizarBarra(){
 function renderCarrinho(){
     const lista=document.getElementById('lista-carrinho');
     lista.innerHTML='';
-    if(!carrinho.length){fecharModais(null);return;}
+    const btnEnviar=document.getElementById('btn-enviar-pedido');
+    if(!carrinho.length){
+        /* Antes fechava o modal inteiro de supetão (sem nenhum aviso de "sacola
+           vazia") se o cliente removesse o último item no meio do preenchimento dos
+           dados — perdia o que já tinha digitado sem entender por quê. Agora mostra
+           o estado vazio dentro do próprio modal e trava o envio; quem fecha é o
+           cliente, quando quiser. */
+        lista.innerHTML='<li style="text-align:center;padding:20px 8px;color:var(--texto-fraco);font-size:0.85rem">Sua sacola está vazia.</li>';
+        if(btnEnviar) btnEnviar.disabled=true;
+        atualizarResumo();
+        return;
+    }
+    if(btnEnviar) btnEnviar.disabled=false;
     carrinho.forEach((item,idx)=>{
         const li=document.createElement('li');li.className='cart-item';
         li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>R$${item.preco.toFixed(2).replace('.',',')}${item.tamanho&&item.tamanho!=='Único'?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})" aria-label="Remover ${san(item.nome)} da sacola"><i class="fa-solid fa-trash"></i></button>`;
@@ -1293,12 +1380,18 @@ function abrirCheckout(){
 }
 function abrirCheckoutComCupom(){if(!carrinho.length){toast('Adicione produtos primeiro!',1);return;}abrirCheckout();setTimeout(()=>document.getElementById('campo-cupom').focus(),400);}
 function toggleEndereco(){document.getElementById('box-endereco').style.display=document.querySelector('input[name="entrega"]:checked').value==='Entrega'?'block':'none';}
+function reabrirZapPedido(){
+    if(window._ultimoZapUrl) window.open(window._ultimoZapUrl,'_blank','noopener');
+}
 function togglePix(){
     const p=document.querySelector('input[name="pgto"]:checked').value==='PIX';
     document.getElementById('pix-box').classList.toggle('ativo',p);
     document.getElementById('aviso-presencial').style.display=p?'none':'block';
     document.getElementById('pix-destaque').classList.toggle('ativo',p);
     if(p) gerarQRPix();
+    /* Trocou pra Dinheiro/Cartão: o timer de 1s do Pix (pixT) continuava rodando em
+       segundo plano, atualizando um elemento agora escondido, até o modal fechar. */
+    else if(pixT){ clearInterval(pixT); pixT=null; }
 }
 
 function gerarQRPix(){
@@ -1425,6 +1518,9 @@ async function enviarPedidoZap(){
     const pgto=document.querySelector('input[name="pgto"]:checked').value;
     const obs=document.getElementById('campo-obs').value.trim();
     if(!nome||!zap){toast('⚠️ Preencha Nome e WhatsApp!',1);return;}
+    /* Só checava "não vazio" — "12" passava, virava link wa.me inválido no pedido.
+       Telefone BR com DDD tem 10 (fixo) ou 11 (celular) dígitos. */
+    if(zap.length<10){toast('⚠️ WhatsApp inválido — inclua o DDD.',1);return;}
     if(entrega==='Entrega'&&!end){toast('⚠️ Informe o endereço!',1);return;}
     if(pgto==='PIX'&&!window._comprovante){
         toast('⚠️ Anexe o comprovante do PIX antes de enviar!',1);
@@ -1462,7 +1558,24 @@ async function enviarPedidoZap(){
             p_cupom_codigo:cupomApl?cupomApl.cod:null,p_comprovante_path:comprovantePath
         });
         if(error) throw new Error('Erro ao registrar o pedido. Tente novamente.');
-        if(!data.ok){ toast('⚠️ '+data.erro,1); return; }
+        if(!data.ok){
+            /* Se era PIX, o cliente muito provavelmente já pagou (comprovante é exigido
+               ANTES do envio) — um toast que some em 3s não é suficiente pra essa
+               situação. alert() trava até o cliente confirmar que leu, e manda ele
+               direto pro WhatsApp da loja com o motivo já preenchido, pra não perder
+               o comprovante que já anexou (ele fica órfão no Storage, mas o cliente
+               ainda tem o app do banco). Risco estrutural do fluxo (Pix manual sem
+               gateway) sinalizado no relatório da auditoria — isto é mitigação, não
+               a correção completa. */
+            if(pgto==='PIX'){
+                alert('Não foi possível registrar seu pedido: '+data.erro+'\n\nSe você já pagou via Pix, NÃO feche esta tela sem falar com a gente — toque OK e mande o comprovante pelo WhatsApp que vai abrir a seguir.');
+                const msgErro='Olá! Tentei fazer um pedido na Lojinha e o pagamento via Pix não foi registrado (motivo: '+data.erro+'). Já paguei e tenho o comprovante, podem me ajudar?';
+                window.open('https://wa.me/'+_w+'?text='+encodeURIComponent(msgErro),'_blank','noopener');
+            } else {
+                toast('⚠️ '+data.erro,1);
+            }
+            return;
+        }
 
         const num=data.numero,tt=data.total,sbv=data.subtotal,dc=data.desconto;
         const now=new Date().toLocaleString('pt-BR');
@@ -1491,6 +1604,7 @@ async function enviarPedidoZap(){
         salvarHist(num,now,tt,itensParaEnvio);
 
         const zapUrl='https://wa.me/'+_w+'?text='+encodeURIComponent(msg);
+        window._ultimoZapUrl=zapUrl; /* fallback manual — ver reabrirZapPedido() */
         const zapLink=document.createElement('a');
         zapLink.href=zapUrl;
         zapLink.target='_blank';
@@ -1505,6 +1619,12 @@ async function enviarPedidoZap(){
         const msgs=['Boa escolha! O Nupieepro agradece 🧡','Que venha mais! 💙🧡','Obrigado por apoiar o núcleo! ⚙️'];
         document.getElementById('sucesso-num').textContent='Pedido #'+num;
         document.getElementById('sucesso-msg').textContent=msgs[Math.floor(Math.random()*msgs.length)];
+        /* O clique automático acima pode ser bloqueado como pop-up (comum em desktop
+           Safari/Firefox, principalmente depois de vários "await" — a permissão de
+           gesto do usuário pode já ter expirado). Botão manual sempre visível na tela
+           de sucesso como rede de segurança: o pedido já está registrado no servidor
+           de qualquer forma, só falta garantir que a mensagem chegue no WhatsApp. */
+        document.getElementById('btn-abrir-zap-sucesso').style.display='flex';
         document.getElementById('tela-sucesso').classList.add('ativo');
         document.getElementById('checkout-corpo').style.display='none';
         document.getElementById('modal-checkout').querySelector('.modal-panel').scrollTop=0;
