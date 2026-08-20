@@ -57,9 +57,15 @@ REVOKE ALL ON public.pedidos_rate_limit FROM anon, authenticated;
 --    (upload liberado pro cliente durante o checkout; leitura só pra
 --    admin — diferente do bucket "produtos", que é público de propósito)
 -- ------------------------------------------------------------
-INSERT INTO storage.buckets (id, name, public)
-VALUES ('comprovantes', 'comprovantes', false)
-ON CONFLICT (id) DO NOTHING;
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES ('comprovantes', 'comprovantes', false, 8388608, ARRAY['image/jpeg','image/png','image/webp','image/heic','application/pdf'])
+ON CONFLICT (id) DO UPDATE SET
+    file_size_limit = EXCLUDED.file_size_limit,
+    allowed_mime_types = EXCLUDED.allowed_mime_types;
+-- Sem limite de tamanho/tipo, qualquer um (anon insere sem restrição — política
+-- comprovantes_anon_insert abaixo) podia subir arquivo de qualquer tipo/tamanho como
+-- "comprovante", sem nenhum pedido de verdade por trás — vetor de abuso de storage
+-- (achado na auditoria B2, aplicado direto em produção e replicado aqui).
 
 DO $$
 BEGIN
