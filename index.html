@@ -431,9 +431,9 @@
 </footer>
 
 <!-- MODAL LGPD -->
-<div class="modal-bg" id="modal-lgpd" onclick="fecharModais(event)">
+<div class="modal-bg" id="modal-lgpd" onclick="fecharModais(event)" role="dialog" aria-modal="true">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <h2 style="color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:14px">Privacidade e Proteção de Dados</h2>
         <p style="font-size:0.83rem;color:var(--texto);line-height:1.7;margin-bottom:10px">
             O <strong>NUPIEEPRO</strong> respeita sua privacidade e cumpre a 
@@ -467,11 +467,11 @@
 </div>
 
 <!-- MODAL PRODUTO -->
-<div class="modal-bg" id="modal-details" onclick="fecharModais(event)">
+<div class="modal-bg" id="modal-details" onclick="fecharModais(event)" role="dialog" aria-modal="true">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <div class="detail-img-box">
-            <img src="" id="detalhe-img" class="detail-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <img src="" alt="" id="detalhe-img" class="detail-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
             <div id="detalhe-fallback" class="no-photo-placeholder" style="display:none;position:absolute;inset:0;z-index:1"><i class="fa-solid fa-box-open"></i><span>Sem foto</span></div>
         </div>
         <h2 id="detalhe-nome" class="detail-title">Nome</h2>
@@ -498,9 +498,9 @@
 </div>
 
 <!-- MODAL CHECKOUT -->
-<div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)">
+<div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)" role="dialog" aria-modal="true">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
 
         <div id="tela-sucesso">
             <div class="sucesso-icon">🎉</div>
@@ -568,7 +568,7 @@
                         <input type="file" id="comprovante-input" accept="image/*,.pdf" style="display:none" onchange="previewComprovante(this)">
                     </label>
                     <div id="comprovante-preview" style="display:none;margin-top:8px;text-align:center">
-                        <img id="comprovante-img" src="" style="max-width:100%;max-height:180px;border-radius:10px;border:2px solid var(--verde-zap)">
+                        <img id="comprovante-img" src="" alt="Pré-visualização do comprovante enviado" style="max-width:100%;max-height:180px;border-radius:10px;border:2px solid var(--verde-zap)">
                         <div style="font-size:0.75rem;color:var(--verde-zap);font-weight:700;margin-top:4px">✅ Comprovante anexado!</div>
                         <button onclick="removerComprovante()" style="font-size:0.72rem;color:var(--vermelho-del);background:none;border:none;cursor:pointer;margin-top:4px">Trocar</button>
                     </div>
@@ -582,18 +582,18 @@
 </div>
 
 <!-- MODAL PEDIDOS -->
-<div class="modal-bg" id="modal-pedidos" onclick="fecharModais(event)">
+<div class="modal-bg" id="modal-pedidos" onclick="fecharModais(event)" role="dialog" aria-modal="true">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <h2 style="color:var(--roxo-brand);margin-bottom:16px;font-size:1.2rem;font-weight:800"><i class="fa-solid fa-clock-rotate-left"></i> Meus Pedidos</h2>
         <div id="lista-pedidos-hist"></div>
     </div>
 </div>
 
 <!-- MODAL SOBRE -->
-<div class="modal-bg" id="modal-sobre" onclick="fecharModais(event)">
+<div class="modal-bg" id="modal-sobre" onclick="fecharModais(event)" role="dialog" aria-modal="true">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <img src="./loja_icon_marca.png" alt="Logo" style="width:70px;height:70px;border-radius:50%;border:3px solid var(--laranja-brand);object-fit:cover;margin:0 auto 14px;display:block">
         <h2 style="text-align:center;color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:4px">NUPIEEPRO</h2>
         <p style="text-align:center;font-size:0.75rem;color:var(--texto-suave);margin-bottom:14px">Núcleo Piauiense de Estudantes de Engenharia de Produção</p>
@@ -1077,6 +1077,7 @@ function abrirDetalhes(id){
         || (typeof itemSel.imagens==='string' && itemSel.imagens.split(',')[0].trim())
         || '';
     const imgEl=document.getElementById('detalhe-img'),fbEl=document.getElementById('detalhe-fallback');
+    imgEl.alt=itemSel.nome||'';
     if(imgSrc){
         imgEl.style.opacity='0';
         imgEl.style.display='block';
@@ -1191,7 +1192,7 @@ function renderCarrinho(){
     if(!carrinho.length){fecharModais(null);return;}
     carrinho.forEach((item,idx)=>{
         const li=document.createElement('li');li.className='cart-item';
-        li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>R$${item.preco.toFixed(2).replace('.',',')}${item.tamanho&&item.tamanho!=='Único'?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})"><i class="fa-solid fa-trash"></i></button>`;
+        li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>R$${item.preco.toFixed(2).replace('.',',')}${item.tamanho&&item.tamanho!=='Único'?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})" aria-label="Remover ${san(item.nome)} da sacola"><i class="fa-solid fa-trash"></i></button>`;
         lista.appendChild(li);
     });atualizarResumo();
 }

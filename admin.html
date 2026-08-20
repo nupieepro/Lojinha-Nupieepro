@@ -707,9 +707,9 @@
 <!-- ============================================================
      MODAL — PRODUTO
      ============================================================ -->
-<div class="modal-overlay" id="modal-produto" onclick="fecharModal('modal-produto', event)">
+<div class="modal-overlay" id="modal-produto" onclick="fecharModal('modal-produto', event)" role="dialog" aria-modal="true">
     <div class="modal-box">
-        <button class="modal-close" onclick="fecharModalDireto('modal-produto')"><i class="fa-solid fa-xmark"></i></button>
+        <button class="modal-close" onclick="fecharModalDireto('modal-produto')" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <div class="modal-titulo" id="modal-produto-titulo">Novo Produto</div>
         <input type="hidden" id="prod-id">
         <div class="form-row cols-2">
@@ -822,9 +822,9 @@
 <!-- ============================================================
      MODAL — CUPOM
      ============================================================ -->
-<div class="modal-overlay" id="modal-cupom" onclick="fecharModal('modal-cupom', event)">
+<div class="modal-overlay" id="modal-cupom" onclick="fecharModal('modal-cupom', event)" role="dialog" aria-modal="true">
     <div class="modal-box">
-        <button class="modal-close" onclick="fecharModalDireto('modal-cupom')"><i class="fa-solid fa-xmark"></i></button>
+        <button class="modal-close" onclick="fecharModalDireto('modal-cupom')" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <div class="modal-titulo">Configurar Cupom</div>
         <div class="form-row cols-2">
             <div>
@@ -884,9 +884,9 @@
 <!-- ============================================================
      MODAL — PEDIDO DETALHE
      ============================================================ -->
-<div class="modal-overlay" id="modal-pedido" onclick="fecharModal('modal-pedido', event)">
+<div class="modal-overlay" id="modal-pedido" onclick="fecharModal('modal-pedido', event)" role="dialog" aria-modal="true">
     <div class="modal-box">
-        <button class="modal-close" onclick="fecharModalDireto('modal-pedido')"><i class="fa-solid fa-xmark"></i></button>
+        <button class="modal-close" onclick="fecharModalDireto('modal-pedido')" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <div class="modal-titulo" id="modal-pedido-titulo">Pedido</div>
         <div id="modal-pedido-conteudo"></div>
     </div>
@@ -1459,7 +1459,7 @@ async function carregarProdutos(){
             const ativo = p.ativo === true || p.ativo === 'TRUE';
             return `
             <div class="produto-item ${ativo?'ativo':'inativo'}">
-                ${img ? `<img src="${san(img)}" class="produto-thumb" loading="lazy" onerror="this.style.display='none'">` : '<div class="produto-thumb" style="background:var(--n-bg-200);display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-box-open" style="color:#ccc"></i></div>'}
+                ${img ? `<img src="${san(img)}" alt="${san(p.nome||'')}" class="produto-thumb" loading="lazy" onerror="this.style.display='none'">` : '<div class="produto-thumb" style="background:var(--n-bg-200);display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-box-open" style="color:#ccc"></i></div>'}
                 <div class="produto-info">
                     <div class="produto-nome">${san(p.nome||'')}</div>
                     <div class="produto-preco">R$ ${(parseFloat(p.preco)||0).toFixed(2).replace('.',',')}</div>
@@ -2063,7 +2063,7 @@ function renderFotosPreview(){
     container.innerHTML = fotosAtuais.map((url, idx) => `
         <div class="foto-preview-item" id="foto-item-${idx}">
             <img src="${url}" alt="Foto ${idx+1}" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\'><rect width=\'72\' height=\'72\' fill=\'%23eee\'/></svg>'">
-            <button class="foto-remove" onclick="removerFoto(${idx})" title="Remover foto">✕</button>
+            <button class="foto-remove" onclick="removerFoto(${idx})" title="Remover foto" aria-label="Remover foto ${idx+1}">✕</button>
         </div>
     `).join('');
     /* Atualiza o hidden input com as URLs */
