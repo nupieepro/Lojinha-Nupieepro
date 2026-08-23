@@ -646,6 +646,12 @@ let produtos=[
 ];
 let cupons={};  /* preenchido pela API — não hardcode mais */
 let carrinho=[],itemSel=null,qtdTemp=1,filtroAtual='todos',busca='',cupomApl=null,pixT=null;
+/* Chave de idempotência do pedido em andamento. Gerada uma vez por tentativa de
+   checkout e reenviada em toda retentativa — se a resposta da 1ª chamada se perder
+   por instabilidade de rede DEPOIS do servidor já ter criado o pedido, um reenvio
+   automático com a mesma chave devolve o pedido existente em vez de duplicar (ver
+   criar_pedido no banco). Reseta em sucesso ou quando a sacola some. */
+let _chaveIdempotenciaPedido=null;
 
 /* Categorias/filtros da vitrine — configuráveis pelo admin, com fallback padrão */
 const CATEGORIAS_PADRAO=[{id:'acessorio',nome:'Acessórios',emoji:''},{id:'camisa',nome:'Camisas',emoji:'👕'},{id:'combo',nome:'Combos',emoji:'🎁'}];
@@ -1284,7 +1290,7 @@ function renderCarrinho(){
     });atualizarResumo();
 }
 function remItem(i){carrinho.splice(i,1);salvarCarrinho();atualizarBarra();renderCarrinho();}
-function limparCarrinho(){if(!confirm('Limpar a sacola?')) return;carrinho=[];cupomApl=null;salvarCarrinho();atualizarBarra();fecharModais(null);toast('Sacola esvaziada');}
+function limparCarrinho(){if(!confirm('Limpar a sacola?')) return;carrinho=[];cupomApl=null;_chaveIdempotenciaPedido=null;salvarCarrinho();atualizarBarra();fecharModais(null);toast('Sacola esvaziada');}
 function salvarCarrinho(){localStorage.setItem('nupieepro_carrinho',JSON.stringify(carrinho));}
 function carregarCarrinho(){
     try{
@@ -1552,10 +1558,12 @@ async function enviarPedidoZap(){
         /* O servidor recalcula preço/estoque/cupom do zero — nunca confia no que o
            navegador calculou. O que volta em "data" é a fonte da verdade do pedido. */
         const itensRPC=carrinho.map(i=>({id:i.id,qtd:i.qtd,tamanho:i.tamanho||''}));
+        if(!_chaveIdempotenciaPedido) _chaveIdempotenciaPedido=crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2);
         const{data,error}=await _sb.rpc('criar_pedido',{
             p_nome:nome,p_whatsapp:zap,p_email:email,p_entrega:entrega,p_endereco:end,
             p_pagamento:pgto,p_observacao:obs,p_itens:itensRPC,
-            p_cupom_codigo:cupomApl?cupomApl.cod:null,p_comprovante_path:comprovantePath
+            p_cupom_codigo:cupomApl?cupomApl.cod:null,p_comprovante_path:comprovantePath,
+            p_chave_idempotencia:_chaveIdempotenciaPedido
         });
         if(error) throw new Error('Erro ao registrar o pedido. Tente novamente.');
         if(!data.ok){
@@ -1614,7 +1622,7 @@ async function enviarPedidoZap(){
         zapLink.click();
         setTimeout(()=>document.body.removeChild(zapLink),1000);
 
-        carrinho=[];cupomApl=null;window._comprovante=null;salvarCarrinho();atualizarBarra();
+        carrinho=[];cupomApl=null;window._comprovante=null;_chaveIdempotenciaPedido=null;salvarCarrinho();atualizarBarra();
 
         const msgs=['Boa escolha! O Nupieepro agradece 🧡','Que venha mais! 💙🧡','Obrigado por apoiar o núcleo! ⚙️'];
         document.getElementById('sucesso-num').textContent='Pedido #'+num;

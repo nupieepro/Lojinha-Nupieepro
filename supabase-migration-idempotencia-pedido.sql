@@ -1,57 +1,35 @@
 -- ============================================================
--- C4 — reCAPTCHA v3 com verificação server-side
--- ============================================================
--- ATENÇÃO: a definição de criar_pedido() abaixo ficou desatualizada depois da
--- auditoria B7 (chave de idempotência) — a versão CANÔNICA e atual da função
--- está em supabase-migration-idempotencia-pedido.sql (12 parâmetros, inclui
--- p_chave_idempotencia). Se for aplicar este arquivo do zero num ambiente novo,
--- aplique este primeiro e depois o de idempotência por cima.
--- O honeypot (#honeypot) permanece como camada extra — reCAPTCHA não o
--- substitui, complementa.
---
--- A verificação acontece DENTRO da mesma RPC que cria o pedido
--- (criar_pedido), não numa chamada separada — se fosse separada, um
--- client malicioso simplesmente pularia a etapa de verificação e
--- chamaria criar_pedido direto, tornando o reCAPTCHA decorativo.
---
--- PRÉ-REQUISITO: chave secreta cadastrada no Vault antes de aplicar:
---   select vault.create_secret('<CHAVE_SECRETA_AQUI>', 'recaptcha_secret_key',
---     'Chave secreta do reCAPTCHA v3 — usada só server-side em criar_pedido.');
--- Sem isso, a verificação fica desativada automaticamente (ver comentário
--- "modo sem chave" abaixo) — a função nunca quebra por falta da chave,
--- só deixa de aplicar essa camada.
+-- Idempotência em criar_pedido() — já aplicado direto em produção.
+-- Achado sinalizado na auditoria B7: se a resposta da RPC se perder
+-- por instabilidade de rede DEPOIS do servidor já ter criado o
+-- pedido (estoque decrementado, cupom usado), o cliente só vê "erro,
+-- tente novamente" e pode reenviar o mesmo pedido, duplicando-o.
 -- ============================================================
 
--- Assinatura antiga (10 parâmetros) precisa ser derrubada explicitamente —
--- CREATE OR REPLACE não troca o parâmetro novo por um "com default": muda
--- a lista de tipos, então sem o DROP o Postgres criaria uma sobrecarga nova
--- ao lado da antiga em vez de substituir (mesmo problema já corrigido no
--- C1 pras funções admin_*).
-DROP FUNCTION IF EXISTS public.criar_pedido(TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,JSONB,TEXT,TEXT);
+ALTER TABLE public.pedidos ADD COLUMN IF NOT EXISTS chave_idempotencia TEXT;
+CREATE UNIQUE INDEX IF NOT EXISTS pedidos_chave_idempotencia_key
+    ON public.pedidos(chave_idempotencia) WHERE chave_idempotencia IS NOT NULL;
 
--- Score mínimo configurável sem precisar de novo deploy (mesmo padrão das
--- demais chaves em config, ex. pausar_checkout)
-INSERT INTO public.config (chave, valor) VALUES ('recaptcha_min_score', '0.5')
-ON CONFLICT (chave) DO NOTHING;
-
+-- criar_pedido ganha o parâmetro p_chave_idempotencia (12º, com DEFAULT NULL —
+-- retrocompatível com quem ainda não manda). Isso muda a lista de parâmetros da
+-- função, o que faz o Postgres criar um NOVO overload em vez de substituir o
+-- existente (mesma pegadinha do CREATE OR REPLACE já documentada nas migrações
+-- do C1/C4) — por isso o DROP FUNCTION explícito da assinatura de 11 parâmetros
+-- logo depois. Sem isso, ficam dois "criar_pedido" coexistindo e o PostgREST
+-- pode não conseguir escolher qual chamar (erro de função ambígua).
 CREATE OR REPLACE FUNCTION public.criar_pedido(
-    p_nome             TEXT,
-    p_whatsapp         TEXT,
-    p_email            TEXT,
-    p_entrega          TEXT,
-    p_endereco         TEXT,
-    p_pagamento        TEXT,
-    p_observacao       TEXT,
-    p_itens            JSONB,
-    p_cupom_codigo     TEXT DEFAULT NULL,
-    p_comprovante_path TEXT DEFAULT NULL,
-    p_recaptcha_token  TEXT DEFAULT NULL
+    p_nome text, p_whatsapp text, p_email text, p_entrega text, p_endereco text,
+    p_pagamento text, p_observacao text, p_itens jsonb,
+    p_cupom_codigo text DEFAULT NULL::text,
+    p_comprovante_path text DEFAULT NULL::text,
+    p_recaptcha_token text DEFAULT NULL::text,
+    p_chave_idempotencia text DEFAULT NULL::text
 )
-RETURNS JSONB
-LANGUAGE plpgsql
-SECURITY DEFINER
-SET search_path = public
-AS $$
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
 DECLARE
     v_ip           TEXT;
     v_janela       TIMESTAMPTZ;
@@ -69,7 +47,6 @@ DECLARE
     v_total        NUMERIC := 0;
     v_numero       TEXT;
     v_id           INT;
-    -- reCAPTCHA
     v_recaptcha_secret    TEXT;
     v_recaptcha_min_score NUMERIC;
     v_req_id       BIGINT;
@@ -78,10 +55,28 @@ DECLARE
     v_tentativas   INT;
     v_rc_success   BOOLEAN;
     v_rc_score     NUMERIC;
+    -- Variáveis DEDICADAS pro lookup de idempotência — usar v_numero/v_subtotal/
+    -- v_desconto/v_total aqui foi um bug real, pego em teste antes de ir pra
+    -- produção: SELECT INTO sobre zero linhas (o caso normal, chave nova) zera
+    -- essas variáveis pra NULL como efeito colateral, e como elas são
+    -- reaproveitadas no resto da função, TODO pedido nascia com subtotal/
+    -- desconto/total NULL/0. Corrigido com variáveis próprias, sem overlap.
+    v_idemp_numero    TEXT;
+    v_idemp_subtotal  NUMERIC;
+    v_idemp_desconto  NUMERIC;
+    v_idemp_total     NUMERIC;
 BEGIN
-    ----------------------------------------------------------------
-    -- Rate limit (igual antes)
-    ----------------------------------------------------------------
+    -- Checado ANTES de qualquer outra coisa (nem consome cota de rate limit) —
+    -- um reenvio legítimo (retry de rede) não deve custar nada ao cliente.
+    IF COALESCE(TRIM(p_chave_idempotencia), '') <> '' THEN
+        SELECT numero, subtotal, desconto, total
+        INTO v_idemp_numero, v_idemp_subtotal, v_idemp_desconto, v_idemp_total
+        FROM public.pedidos WHERE chave_idempotencia = p_chave_idempotencia;
+        IF FOUND THEN
+            RETURN jsonb_build_object('ok', true, 'numero', v_idemp_numero, 'subtotal', v_idemp_subtotal, 'desconto', v_idemp_desconto, 'total', v_idemp_total);
+        END IF;
+    END IF;
+
     v_ip := NULLIF(TRIM(SPLIT_PART(COALESCE(current_setting('request.headers', true)::JSON->>'x-forwarded-for', ''), ',', 1)), '');
     v_ip := COALESCE(v_ip, 'desconhecido');
 
@@ -98,13 +93,6 @@ BEGIN
         UPDATE public.pedidos_rate_limit SET contagem = contagem + 1 WHERE ip = v_ip;
     END IF;
 
-    ----------------------------------------------------------------
-    -- reCAPTCHA v3 — verificado direto com o Google via pg_net, dentro
-    -- da mesma chamada que cria o pedido (não dá pra pular chamando outra
-    -- RPC). "Modo sem chave": se ninguém cadastrou a chave secreta no
-    -- Vault ainda, essa camada fica inativa e o pedido segue normalmente
-    -- pelas outras validações — nunca quebra o checkout por chave ausente.
-    ----------------------------------------------------------------
     SELECT decrypted_secret INTO v_recaptcha_secret
     FROM vault.decrypted_secrets WHERE name = 'recaptcha_secret_key';
 
@@ -122,9 +110,6 @@ BEGIN
             params := jsonb_build_object('secret', v_recaptcha_secret, 'response', p_recaptcha_token, 'remoteip', v_ip)
         );
 
-        -- Espera a resposta assíncrona do pg_net por até ~3s (20 x 150ms).
-        -- v_status/v_content ficam NULL se nada chegar a tempo — nunca dá
-        -- erro de "record not assigned" porque são escalares, não RECORD.
         v_tentativas := 0;
         v_status := NULL;
         LOOP
@@ -141,15 +126,8 @@ BEGIN
                 RETURN jsonb_build_object('ok', false, 'erro', 'Não foi possível confirmar que você não é um robô. Recarregue a página e tente novamente.');
             END IF;
         END IF;
-        -- Se v_status for NULL ou diferente de 200 (Google fora do ar, timeout),
-        -- a verificação é pulada propositalmente: uma instabilidade externa não
-        -- pode derrubar o checkout inteiro. Honeypot + rate limit + validação de
-        -- estoque/cupom continuam de pé de qualquer forma nesse cenário raro.
     END IF;
 
-    ----------------------------------------------------------------
-    -- Validação básica (igual antes)
-    ----------------------------------------------------------------
     IF COALESCE(TRIM(p_nome), '') = '' OR COALESCE(TRIM(p_whatsapp), '') = '' THEN
         RETURN jsonb_build_object('ok', false, 'erro', 'Preencha nome e WhatsApp.');
     END IF;
@@ -163,9 +141,6 @@ BEGIN
         RETURN jsonb_build_object('ok', false, 'erro', 'Sacola vazia.');
     END IF;
 
-    ----------------------------------------------------------------
-    -- Recalcula cada item a partir do banco (igual antes)
-    ----------------------------------------------------------------
     FOR v_item IN SELECT * FROM jsonb_array_elements(p_itens) LOOP
         v_id  := (v_item->>'id')::INT;
         v_qtd := (v_item->>'qtd')::INT;
@@ -191,9 +166,6 @@ BEGIN
         );
     END LOOP;
 
-    ----------------------------------------------------------------
-    -- Cupom (igual antes)
-    ----------------------------------------------------------------
     IF COALESCE(TRIM(p_cupom_codigo), '') <> '' THEN
         SELECT * INTO v_cupom FROM public.cupons WHERE codigo = UPPER(TRIM(p_cupom_codigo)) AND ativo = TRUE;
         IF NOT FOUND THEN
@@ -228,9 +200,6 @@ BEGIN
 
     v_total := GREATEST(0, v_subtotal - v_desconto);
 
-    ----------------------------------------------------------------
-    -- Debita estoque e insere o pedido (igual antes)
-    ----------------------------------------------------------------
     FOR v_item IN SELECT * FROM jsonb_array_elements(p_itens) LOOP
         v_id  := (v_item->>'id')::INT;
         v_qtd := (v_item->>'qtd')::INT;
@@ -245,11 +214,12 @@ BEGIN
 
     INSERT INTO public.pedidos (
         nome, whatsapp, email, entrega, endereco, pagamento, observacao,
-        itens, subtotal, desconto, cupom, total, comprovante_path
+        itens, subtotal, desconto, cupom, total, comprovante_path, chave_idempotencia
     ) VALUES (
         TRIM(p_nome), p_whatsapp, COALESCE(TRIM(p_email), ''), p_entrega, COALESCE(p_endereco, ''),
         p_pagamento, COALESCE(p_observacao, ''), v_snapshot, v_subtotal, v_desconto,
-        COALESCE(v_cupom_aplicado, ''), v_total, COALESCE(p_comprovante_path, '')
+        COALESCE(v_cupom_aplicado, ''), v_total, COALESCE(p_comprovante_path, ''),
+        NULLIF(TRIM(p_chave_idempotencia), '')
     )
     RETURNING numero INTO v_numero;
 
@@ -262,7 +232,6 @@ EXCEPTION
     WHEN OTHERS THEN
         RETURN jsonb_build_object('ok', false, 'erro', SQLERRM);
 END;
-$$;
+$function$;
 
-REVOKE EXECUTE ON FUNCTION public.criar_pedido(TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,JSONB,TEXT,TEXT,TEXT) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION public.criar_pedido(TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,JSONB,TEXT,TEXT,TEXT) TO anon, authenticated;
+DROP FUNCTION IF EXISTS public.criar_pedido(text, text, text, text, text, text, text, jsonb, text, text, text);
