@@ -593,7 +593,7 @@
     <div class="modal-panel">
         <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <h2 style="color:var(--roxo-brand);margin-bottom:6px;font-size:1.2rem;font-weight:800"><i class="fa-solid fa-clock-rotate-left"></i> Meus Pedidos</h2>
-        <p style="font-size:0.72rem;color:var(--texto-fraco);margin-bottom:14px;line-height:1.5">Fica salvo só neste aparelho/navegador (não numa conta) — trocar de celular ou limpar os dados do navegador some com essa lista aqui, mas seu pedido continua registrado com a gente. Guarda o número do pedido, ou fala com a gente pelo WhatsApp com o número em mãos pra consultar.</p>
+        <p style="font-size:0.72rem;color:var(--texto-fraco);margin-bottom:14px;line-height:1.5">Fica salvo só neste aparelho/navegador (não numa conta) — trocar de celular ou limpar os dados do navegador some com essa lista aqui, mas seu pedido continua registrado com a gente. Toque em "Ver status" pra conferir o andamento atual, ou guarda o número e fala com a gente pelo WhatsApp.</p>
         <div id="lista-pedidos-hist"></div>
     </div>
 </div>
@@ -1609,7 +1609,7 @@ async function enviarPedidoZap(){
         if(pgto==='PIX') msg+=`PIX enviado! Aguarde a confirmação.`;
 
         salvarUser();
-        salvarHist(num,now,tt,itensParaEnvio);
+        salvarHist(num,now,tt,itensParaEnvio,zap);
 
         const zapUrl='https://wa.me/'+_w+'?text='+encodeURIComponent(msg);
         window._ultimoZapUrl=zapUrl; /* fallback manual — ver reabrirZapPedido() */
@@ -1654,17 +1654,47 @@ function lerHist(){
         return Array.isArray(h)?h:[];
     }catch(e){ return []; }
 }
-function salvarHist(num,data,total,itensSnapshot){
+function salvarHist(num,data,total,itensSnapshot,whatsapp){
     const h=lerHist();
-    h.unshift({num,data,total,itens:(itensSnapshot||carrinho).map(i=>i.qtd+'x '+i.nome)});
+    /* whatsapp guardado junto — sem ele não dava pra "Meus Pedidos" consultar o
+       status real depois sem pedir pro cliente redigitar o número usado na compra. */
+    h.unshift({num,data,total,itens:(itensSnapshot||carrinho).map(i=>i.qtd+'x '+i.nome),whatsapp:whatsapp||''});
     try{ localStorage.setItem('nupieepro_hist',JSON.stringify(h.slice(0,30))); }catch(e){}
 }
 function abrirMeusPedidos(){
     const h=lerHist();
     const el=document.getElementById('lista-pedidos-hist');
-    el.innerHTML=h.length?h.map(p=>`<div style="background:var(--n-bg-100);border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid var(--n-border-300)"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong style="color:var(--roxo-brand);font-size:0.82rem">#${p.num}</strong><span style="font-size:0.7rem;color:var(--texto-suave)">${p.data}</span></div><div style="font-size:0.76rem;color:var(--texto-suave);margin-bottom:6px">${p.itens.join(', ')}</div><div style="font-size:0.95rem;font-weight:800;color:var(--laranja-brand)">R$ ${p.total.toFixed(2).replace('.',',')}</div></div>`).join(''):'<p style="text-align:center;color:var(--texto-fraco);padding:20px">Nenhum pedido ainda 🛍️</p>';
+    el.innerHTML=h.length?h.map((p,idx)=>`<div style="background:var(--n-bg-100);border-radius:12px;padding:12px;margin-bottom:10px;border:1px solid var(--n-border-300)"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong style="color:var(--roxo-brand);font-size:0.82rem">#${san(p.num)}</strong><span style="font-size:0.7rem;color:var(--texto-suave)">${san(p.data)}</span></div><div style="font-size:0.76rem;color:var(--texto-suave);margin-bottom:6px">${san(p.itens.join(', '))}</div><div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:0.95rem;font-weight:800;color:var(--laranja-brand)">R$ ${p.total.toFixed(2).replace('.',',')}</div>${p.whatsapp?`<button class="btn-secondary" style="width:auto;margin:0;padding:6px 12px;font-size:0.72rem" onclick="verificarStatusPedido(${idx},this)"><i class="fa-solid fa-rotate"></i> Ver status</button>`:''}</div><div id="status-pedido-${idx}" style="margin-top:8px"></div></div>`).join(''):'<p style="text-align:center;color:var(--texto-fraco);padding:20px">Nenhum pedido ainda 🛍️</p>';
     document.getElementById('modal-pedidos').classList.add('active');
     travarScroll();
+}
+
+/* Consulta o status real do pedido no servidor (numero + whatsapp usados na compra
+   — a RPC exige os dois batendo, então não dá pra ver status de pedido alheio só
+   sabendo o número). O histórico local (lerHist) é sempre um retrato congelado do
+   momento da compra; isso busca o estado atual de verdade. */
+async function verificarStatusPedido(idx,btn){
+    if(!_sb){ toast('❌ Sem conexão com o servidor.',1); return; }
+    const h=lerHist();
+    const p=h[idx];
+    if(!p||!p.whatsapp) return;
+    const alvo=document.getElementById('status-pedido-'+idx);
+    const original=btn.innerHTML;
+    btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i>';
+    try{
+        const{data,error}=await _sb.rpc('consultar_status_pedido',{p_numero:p.num,p_whatsapp:p.whatsapp});
+        if(error||!data.ok){
+            alvo.innerHTML=`<div style="font-size:0.75rem;color:var(--vermelho-del)">${san((data&&data.erro)||'Não foi possível consultar agora.')}</div>`;
+        } else {
+            const nomes={novo:'Novo',confirmado:'Confirmado',em_producao:'Em produção',pronto:'Pronto para retirada/entrega',entregue:'Entregue',cancelado:'Cancelado'};
+            const statusTxt=san(nomes[data.status]||data.status||'—');
+            alvo.innerHTML=`<div style="font-size:0.78rem;background:var(--n-bg-200);border-radius:8px;padding:6px 10px;display:inline-block"><b>Status:</b> ${statusTxt} · <b>Pagamento:</b> ${data.pago?'✅ Confirmado':'⏳ Aguardando'}</div>`;
+        }
+    }catch(e){
+        alvo.innerHTML='<div style="font-size:0.75rem;color:var(--vermelho-del)">Erro ao consultar. Tente novamente.</div>';
+    }finally{
+        btn.disabled=false;btn.innerHTML=original;
+    }
 }
 function salvarUser(){localStorage.setItem('nupieepro_nome',document.getElementById('nome-cliente').value);localStorage.setItem('nupieepro_zap',document.getElementById('zap-cliente').value);localStorage.setItem('nupieepro_email',document.getElementById('email-cliente').value);localStorage.setItem('nupieepro_end',document.getElementById('endereco-cliente').value);}
 function carregarUser(){const n=localStorage.getItem('nupieepro_nome');if(n)document.getElementById('nome-cliente').value=n;const z=localStorage.getItem('nupieepro_zap');if(z)document.getElementById('zap-cliente').value=z;const e=localStorage.getItem('nupieepro_email');if(e)document.getElementById('email-cliente').value=e;const d=localStorage.getItem('nupieepro_end');if(d)document.getElementById('endereco-cliente').value=d;}
