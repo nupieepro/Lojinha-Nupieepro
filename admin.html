@@ -1265,19 +1265,19 @@ async function carregarPedidos(){
         }
 
         document.getElementById('lista-pedidos').innerHTML = pedidosCache.map(p => `
-            <div class="pedido-item ${p.status||''}" onclick="abrirPedido('${p.numero}')">
+            <div class="pedido-item ${san(p.status)||''}" onclick="abrirPedido('${san(p.numero)}')">
                 <div class="pedido-header">
                     <div>
-                        <div class="pedido-numero">#${p.numero}</div>
-                        <div class="pedido-data">${p.data}</div>
+                        <div class="pedido-numero">#${san(p.numero)}</div>
+                        <div class="pedido-data">${san(p.data)}</div>
                     </div>
-                    <span class="status-badge status-${p.status}">${traduzirStatus(p.status)}</span>
+                    <span class="status-badge status-${san(p.status)}">${san(traduzirStatus(p.status))}</span>
                 </div>
                 <div class="pedido-cliente"><i class="fa-solid fa-user" style="color:var(--suave);margin-right:4px"></i>${san(p.nome)} · ${san(p.whatsapp)}</div>
                 <div class="pedido-itens">${formatarItens(p.itens)}</div>
                 <div style="display:flex;justify-content:space-between;align-items:center">
                     <div class="pedido-total">R$ ${(p.total||0).toFixed(2).replace('.',',')}</div>
-                    <div style="font-size:0.75rem;color:var(--suave)">${p.pagamento} · ${p.pago?'✅ Pago':'⏳ Aguardando'}</div>
+                    <div style="font-size:0.75rem;color:var(--suave)">${san(p.pagamento)} · ${p.pago?'✅ Pago':'⏳ Aguardando'}</div>
                 </div>
             </div>
         `).join('');
@@ -1331,15 +1331,15 @@ function abrirPedido(numero){
             <label class="form-label">Atualizar status</label>
             <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">
                 ${['novo','confirmado','em_producao','pronto','entregue','cancelado'].map(s =>
-                    `<button class="btn btn-sm ${p.status===s?'btn-primary':(s==='cancelado'?'btn-vermelho':'btn-outline')}" onclick="atualizarStatus('${p.numero}','${s}')">${traduzirStatus(s)}</button>`
+                    `<button class="btn btn-sm ${p.status===s?'btn-primary':(s==='cancelado'?'btn-vermelho':'btn-outline')}" onclick="atualizarStatus('${san(p.numero)}','${s}')">${traduzirStatus(s)}</button>`
                 ).join('')}
             </div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn btn-verde btn-sm" onclick="marcarPago('${p.numero}',${!p.pago})">
+            <button class="btn btn-verde btn-sm" onclick="marcarPago('${san(p.numero)}',${!p.pago})">
                 ${p.pago?'<i class="fa-solid fa-times"></i> Desmarcar pago':'<i class="fa-solid fa-check"></i> Marcar como pago'}
             </button>
-            <button class="btn btn-outline btn-sm" onclick="salvarAnotacao('${p.numero}')">
+            <button class="btn btn-outline btn-sm" onclick="salvarAnotacao('${san(p.numero)}')">
                 <i class="fa-solid fa-floppy-disk"></i> Salvar anotação
             </button>
             <a href="https://wa.me/${san((p.whatsapp||'').replace(/\D/g,''))}" target="_blank" rel="noopener" class="btn btn-sm" style="background:#25D366;color:var(--branco)">
