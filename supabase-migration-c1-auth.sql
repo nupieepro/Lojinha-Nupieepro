@@ -10,7 +10,7 @@
 --
 -- IMPORTANTE — ORDEM DE APLICAÇÃO (ver relatório de corte):
 --   1. Criar o usuário admin em Authentication → Users no Dashboard
---      (e-mail: nupieeprotreinamentos@gmail.com, "Auto Confirm User" marcado)
+--      (e-mail: marketingnupieepro@gmail.com, "Auto Confirm User" marcado)
 --   2. Aplicar este script inteiro
 --   3. Rodar a query de vínculo no final (liga o auth.users.id à admin_users)
 --   4. Fazer o merge do PR para main (GitHub Pages passa a servir o
@@ -547,10 +547,10 @@ CREATE POLICY "config_publico_select" ON public.config
 -- ------------------------------------------------------------
 -- 8. Vincula o usuário Auth ao papel de admin
 --    (só funciona depois que a conta é criada em Authentication → Users
---    no Dashboard, com o e-mail nupieeprotreinamentos@gmail.com)
+--    no Dashboard, com o e-mail marketingnupieepro@gmail.com)
 -- ------------------------------------------------------------
 INSERT INTO public.admin_users (user_id)
-SELECT id FROM auth.users WHERE email = 'nupieeprotreinamentos@gmail.com'
+SELECT id FROM auth.users WHERE email = 'marketingnupieepro@gmail.com'
 ON CONFLICT (user_id) DO NOTHING;
 
 -- Verificação: deve retornar 1 linha se o vínculo funcionou
