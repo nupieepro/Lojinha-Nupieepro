@@ -1,0 +1,67 @@
+/* Font Awesome Free — subset self-hospedado (só os 51 ícones que o projeto usa)
+   Ícones e fontes: (c) Fonticons, Inc — SIL OFL 1.1 (fontes) / CC BY 4.0 (ícones)
+   https://fontawesome.com/license/free
+   Gerado com fonttools a partir do pacote oficial @fortawesome/fontawesome-free */
+
+@font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:900;font-display:block;src:url("./fonts/fa-solid-subset.woff2") format("woff2");}
+@font-face{font-family:'Font Awesome 6 Brands';font-style:normal;font-weight:400;font-display:block;src:url("./fonts/fa-brands-subset.woff2") format("woff2");}
+
+[class^="fa-"],[class*=" fa-"]{display:inline-block;font-style:normal;font-variant:normal;text-rendering:auto;line-height:1;-webkit-font-smoothing:antialiased;}
+.fa-solid{font-family:'Font Awesome 6 Free';font-weight:900;}
+.fa-brands{font-family:'Font Awesome 6 Brands';font-weight:400;}
+
+.fa-arrow-up-right-from-square::before{content:"\f08e";}
+.fa-bag-shopping::before{content:"\f290";}
+.fa-bolt::before{content:"\f0e7";}
+.fa-box-open::before{content:"\f49e";}
+.fa-building-columns::before{content:"\f19c";}
+.fa-bullhorn::before{content:"\f0a1";}
+.fa-chart-line::before{content:"\f201";}
+.fa-check::before{content:"\f00c";}
+.fa-circle-check::before{content:"\f058";}
+.fa-circle-info::before{content:"\f05a";}
+.fa-circle-notch::before{content:"\f1ce";}
+.fa-clock::before{content:"\f017";}
+.fa-clock-rotate-left::before{content:"\f1da";}
+.fa-cloud-arrow-up::before{content:"\f0ee";}
+.fa-copy::before{content:"\f0c5";}
+.fa-credit-card::before{content:"\f09d";}
+.fa-desktop::before{content:"\f390";}
+.fa-dollar-sign::before{content:"\24";}
+.fa-download::before{content:"\f019";}
+.fa-eye::before{content:"\f06e";}
+.fa-eye-slash::before{content:"\f070";}
+.fa-file-csv::before{content:"\f6dd";}
+.fa-file-pdf::before{content:"\f1c1";}
+.fa-filter::before{content:"\f0b0";}
+.fa-floppy-disk::before{content:"\f0c7";}
+.fa-gear::before{content:"\f013";}
+.fa-heart::before{content:"\f004";}
+.fa-image::before{content:"\f03e";}
+.fa-lock::before{content:"\f023";}
+.fa-magnifying-glass::before{content:"\f002";}
+.fa-mobile-screen::before{content:"\f3cf";}
+.fa-motorcycle::before{content:"\f21c";}
+.fa-palette::before{content:"\f53f";}
+.fa-pen::before{content:"\f304";}
+.fa-plus::before{content:"\2b";}
+.fa-receipt::before{content:"\f543";}
+.fa-right-from-bracket::before{content:"\f2f5";}
+.fa-rocket::before{content:"\f135";}
+.fa-rotate::before{content:"\f2f1";}
+.fa-share-nodes::before{content:"\f1e0";}
+.fa-spinner::before{content:"\f110";}
+.fa-store::before{content:"\f54e";}
+.fa-tag::before{content:"\f02b";}
+.fa-tags::before{content:"\f02c";}
+.fa-trash::before{content:"\f1f8";}
+.fa-triangle-exclamation::before{content:"\f071";}
+.fa-trophy::before{content:"\f091";}
+.fa-user::before{content:"\f007";}
+.fa-xmark::before,.fa-times::before{content:"\f00d";}
+.fa-instagram::before{content:"\f16d";}
+.fa-whatsapp::before{content:"\f232";}
+
+.fa-spin{animation:fa-spin 2s infinite linear;}
+@media (prefers-reduced-motion:reduce){.fa-spin{animation-duration:6s;}}
+@keyframes fa-spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}

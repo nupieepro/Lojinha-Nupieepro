@@ -1,0 +1,22 @@
+Fontes self-hosted usadas no projeto, subsetadas (fonttools/pyftsubset) pro
+alfabeto latino que o site realmente usa — só os arquivos .woff2 aqui dentro,
+sem carregar nada de CDN externo em runtime.
+
+adumu-regular-subset.woff2
+  Fonte: Adumu Regular
+  Licença: SIL Open Font License 1.1 — texto completo em OFL-Adumu.txt
+           (fornecido junto com o arquivo original da fonte)
+
+leaguespartan-bold-subset.woff2
+  Fonte: League Spartan Bold
+  Licença: SIL Open Font License 1.1 (The League of Movable Type)
+  Fonte oficial: https://theleagueofmoveabletype.com/league-spartan
+  Só o peso Bold está em uso no projeto — decisão do time, ver histórico
+  de commits (typography: self-host Adumu + League Spartan).
+
+fa-solid-subset.woff2 / fa-brands-subset.woff2
+  Fonte: Font Awesome Free (@fortawesome/fontawesome-free)
+  Licença: fontes sob SIL OFL 1.1, ícones sob CC BY 4.0 — ver
+  https://fontawesome.com/license/free
+  Subset de 51 ícones (49 solid + 2 brands) via fonttools, a partir do
+  pacote oficial.

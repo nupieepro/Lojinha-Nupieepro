@@ -3,13 +3,20 @@
    Versão: 3.0.0 — Auto-update ativo
    ============================================================ */
 
-const CACHE = 'nupi-admin-v4';
+const CACHE = 'nupi-admin-v9';
 
 const ESSENCIAIS = [
-  '/Lojinha-Nupieepro/admin.html',
-  '/Lojinha-Nupieepro/admin-manifest.json',
-  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
+  './admin.html',
+  './admin-manifest.json',
+  './icons/admin-icon-180.png',
+  './icons/admin-icon-192.png',
+  './design-tokens.css',
+  './fontawesome-subset.css',
+  './fonts/fa-solid-subset.woff2',
+  './fonts/fa-brands-subset.woff2',
+  './fonts/adumu-regular-subset.woff2',
+  './fonts/leaguespartan-bold-subset.woff2',
+  './vendor/supabase-js-2.112.2.min.js'
 ];
 
 self.addEventListener('install', e => {
@@ -41,26 +48,9 @@ self.addEventListener('fetch', e => {
   /* Supabase e APIs externas: NUNCA cacheia */
   if (
     url.includes('supabase.co') ||
-    url.includes('script.google.com') ||
-    url.includes('imgbb.com') ||
-    url.includes('imgur.com') ||
     url.includes('google-analytics') ||
     url.includes('googletagmanager')
   ) return;
-
-  /* Fontes e FontAwesome — cache-first (raramente mudam) */
-  if (url.includes('fonts.g') || url.includes('cdnjs.cloudflare.com')) {
-    e.respondWith(
-      caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
-        if (res && res.status === 200) {
-          const clone = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
-        }
-        return res;
-      }))
-    );
-    return;
-  }
 
   /* admin.html e demais — rede primeiro, cache só se offline */
   e.respondWith(

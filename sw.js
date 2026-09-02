@@ -3,14 +3,23 @@
    Caminhos relativos — funciona em qualquer subpasta
    ============================================================ */
 
-const CACHE = 'nupieepro-v12';
+const CACHE = 'nupieepro-v18';
 
 const CACHEAR = [
-    'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+    './design-tokens.css',
+    './fontawesome-subset.css',
+    './fonts/fa-solid-subset.woff2',
+    './fonts/fa-brands-subset.woff2',
+    './fonts/adumu-regular-subset.woff2',
+    './fonts/leaguespartan-bold-subset.woff2',
+    './vendor/supabase-js-2.112.2.min.js',
     './loja_icon_marca.png',
     './loja_icon_emblema.png',
     './loja_icon_pwa.png',
+    './qrcode.min.js',
+    './icons/loja-icon-180.png',
+    './icons/loja-icon-152.png',
+    './icons/loja-icon-192.png',
 ];
 
 self.addEventListener('install', e => {
@@ -35,29 +44,12 @@ self.addEventListener('fetch', e => {
     if (e.request.method !== 'GET') return;
     if (url.startsWith('chrome-extension')) return;
 
-    /* Nunca cacheia: API Supabase, ImgBB, QR code, analytics */
+    /* Nunca cacheia: API Supabase, analytics */
     if (
         url.includes('supabase.co') ||
-        url.includes('script.google.com') ||
-        url.includes('ibb.co') ||
-        url.includes('imgbb.com') ||
-        url.includes('imgur.com') ||
-        url.includes('api.qrserver.com') ||
         url.includes('google-analytics') ||
         url.includes('googletagmanager')
     ) return;
-
-    /* Fontes e FontAwesome — cache */
-    if (url.includes('fonts.g') || url.includes('cdnjs.cloudflare.com')) {
-        e.respondWith(
-            caches.match(e.request).then(c => c || fetch(e.request).then(res => {
-                const clone = res.clone();
-                caches.open(CACHE).then(cache => cache.put(e.request, clone));
-                return res;
-            }))
-        );
-        return;
-    }
 
     /* A PÁGINA em si: busca ignorando o cache HTTP do navegador.
        O GitHub Pages manda Cache-Control: max-age=600, então um "rede primeiro"

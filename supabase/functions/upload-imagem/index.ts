@@ -1,13 +1,14 @@
 // ============================================================
 // EDGE FUNCTION — upload-imagem
-// Recebe uma foto de produto do painel admin, confere a senha
-// admin (mesma lógica de public._validar_admin) e sobe o arquivo
-// pro Storage usando a service role — assim o bucket "produtos"
-// não precisa liberar INSERT pra ninguém além desta function.
+// Recebe uma foto de produto do painel admin e sobe pro Storage
+// usando a service role — assim o bucket "produtos" não precisa
+// liberar INSERT pra ninguém além desta function.
 //
-// verify_jwt=false: a autorização real é a checagem de `chave`
-// abaixo (mesmo padrão das RPCs admin_* do banco, que também são
-// chamadas pelo anon key e se protegem via senha, não via JWT).
+// Autorização: valida o JWT do Supabase Auth enviado no header
+// Authorization e confere se o usuário é admin (existe em
+// public.admin_users) — mesmo padrão usado pelas RPCs admin_*
+// depois da migração para Supabase Auth (C1). Não recebe mais
+// senha em nenhum campo do formulário.
 // ============================================================
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 
@@ -37,23 +38,23 @@ Deno.serve(async (req) => {
   const admin = createClient(supabaseUrl, serviceRoleKey);
 
   try {
-    const form = await req.formData();
-    const chave = form.get('chave');
-    const arquivo = form.get('arquivo');
+    const authHeader = req.headers.get('authorization') || '';
+    const token = authHeader.replace(/^Bearer\s+/i, '');
+    if (!token) return jsonResponse({ error: 'Não autenticado' }, 401);
 
-    if (typeof chave !== 'string' || !chave) return jsonResponse({ error: 'Senha ausente' }, 400);
-    if (!(arquivo instanceof File)) return jsonResponse({ error: 'Arquivo ausente' }, 400);
+    const { data: userData, error: erroUser } = await admin.auth.getUser(token);
+    if (erroUser || !userData?.user) return jsonResponse({ error: 'Sessão inválida' }, 401);
 
-    // Mesma checagem que public._validar_admin faz no banco — senha fica só no config, nunca no código.
-    const { data: config, error: erroConfig } = await admin
-      .from('config')
-      .select('valor')
-      .eq('chave', 'admin_senha')
+    const { data: adminRow, error: erroAdmin } = await admin
+      .from('admin_users')
+      .select('user_id')
+      .eq('user_id', userData.user.id)
       .maybeSingle();
-    if (erroConfig || !config?.valor || config.valor !== chave) {
-      return jsonResponse({ error: 'Senha incorreta' }, 401);
-    }
+    if (erroAdmin || !adminRow) return jsonResponse({ error: 'Acesso negado' }, 403);
 
+    const form = await req.formData();
+    const arquivo = form.get('arquivo');
+    if (!(arquivo instanceof File)) return jsonResponse({ error: 'Arquivo ausente' }, 400);
     if (!TIPOS_ACEITOS.includes(arquivo.type)) return jsonResponse({ error: 'Tipo de arquivo não aceito' }, 400);
     if (arquivo.size > TAMANHO_MAX) return jsonResponse({ error: 'Arquivo maior que 8MB' }, 400);
 

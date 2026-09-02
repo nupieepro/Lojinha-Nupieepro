@@ -20,6 +20,12 @@ gs da lojinha.txt
 # PDFs de pedidos
 *.pdf
 
+# Exportações de pedidos/clientes (dados pessoais reais — nunca versionar)
+*.csv
+pedidos_*.csv
+pedidos_*.xlsx
+pedidos_*.pdf
+
 # Arquivos de backup
 *.bak
 *.backup
