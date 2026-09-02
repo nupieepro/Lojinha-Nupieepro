@@ -1397,8 +1397,14 @@ async function marcarPago(numero, pago){
 async function salvarAnotacao(numero){
     const anotacao = document.getElementById('pedido-anotacao').value;
     try {
-        await api({ action: 'admin_atualizar_pedido', numero, anotacao });
-        toast('Anotação salva!');
+        /* Não checava res.ok — sempre mostrava "Anotação salva!" mesmo quando a
+           API retornava {ok:false} (achado por outra sessão que corrigiu o mesmo
+           XSS deste arquivo direto na main, PR #15, enquanto esta branch seguia
+           aberta). Mesmo padrão de "sucesso falso" que atualizarStatus/marcarPago
+           já evitavam corretamente. */
+        const res = await api({ action: 'admin_atualizar_pedido', numero, anotacao });
+        if(res.ok){ toast('Anotação salva!'); }
+        else { toast('Erro: ' + (res.erro||'tente novamente'), true); }
     } catch(e){ toast('Erro', true); }
 }
 
