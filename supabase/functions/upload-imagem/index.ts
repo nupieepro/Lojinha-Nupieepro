@@ -9,6 +9,14 @@
 // public.admin_users) — mesmo padrão usado pelas RPCs admin_*
 // depois da migração para Supabase Auth (C1). Não recebe mais
 // senha em nenhum campo do formulário.
+//
+// verify_jwt=false no deploy/config.toml: esse é só o gate de
+// plataforma do Supabase (que exigiria um JWT válido antes mesmo
+// de invocar a function). A autorização de verdade é feita AQUI
+// dentro, validando o JWT manualmente via admin.auth.getUser() e
+// checando admin_users — mais robusto que o gate de plataforma
+// porque também confirma que o usuário é admin, não só que tem
+// uma sessão válida qualquer.
 // ============================================================
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 
