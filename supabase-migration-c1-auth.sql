@@ -57,6 +57,12 @@ AS $$
     );
 $$;
 
+-- REVOKE FROM anon sozinho não basta: CREATE FUNCTION concede EXECUTE pra PUBLIC
+-- por padrão, e anon herda de PUBLIC independente de qualquer REVOKE dirigido só
+-- a ele. Sem revogar de PUBLIC também, a função continua chamável por anon (a
+-- checagem is_admin() interna ainda barra, mas viola a intenção de "nenhuma
+-- função admin_* executável por anon" — bug real pego ao aplicar em produção).
+REVOKE EXECUTE ON FUNCTION public.is_admin() FROM PUBLIC;
 REVOKE EXECUTE ON FUNCTION public.is_admin() FROM anon;
 GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
 
@@ -74,6 +80,7 @@ AS $$
     SELECT public.is_admin();
 $$;
 
+REVOKE EXECUTE ON FUNCTION public.admin_verificar_sessao() FROM PUBLIC;
 REVOKE EXECUTE ON FUNCTION public.admin_verificar_sessao() FROM anon;
 GRANT EXECUTE ON FUNCTION public.admin_verificar_sessao() TO authenticated;
 
@@ -530,6 +537,7 @@ BEGIN
         'admin_get_cupons()', 'admin_salvar_cupom(jsonb)', 'admin_get_config()', 'admin_salvar_config(jsonb)'
     ]
     LOOP
+        EXECUTE format('REVOKE EXECUTE ON FUNCTION public.%s FROM PUBLIC', fn);
         EXECUTE format('REVOKE EXECUTE ON FUNCTION public.%s FROM anon', fn);
         EXECUTE format('GRANT EXECUTE ON FUNCTION public.%s TO authenticated', fn);
     END LOOP;
