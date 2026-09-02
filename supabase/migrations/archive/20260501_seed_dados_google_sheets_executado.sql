@@ -1,6 +1,19 @@
 -- ============================================================
+-- ⚠️ ARQUIVO HISTÓRICO — JÁ EXECUTADO, NÃO REAPLICAR
+--
+-- Carga única dos dados que existiam na planilha do Google Sheets
+-- (produtos e config) pro banco Supabase recém-criado, na migração
+-- inicial da loja pra esse backend. Os IDs são fixos (OVERRIDING
+-- SYSTEM VALUE) — rodar de novo tenta recriar linhas que já existem
+-- e falha por PK duplicada, ou pior, sobrescreve dado real que já
+-- mudou desde então (preço, estoque, produtos novos cadastrados
+-- pelo admin). Mantido só como registro histórico de onde os dados
+-- vieram — não faz parte da sequência de migrations pra montar o
+-- banco do zero.
+-- ============================================================
+--
 -- NUPIEEPRO STORE — Migração de Dados Google Sheets → Supabase
--- Execute DEPOIS do supabase-setup.sql
+-- Execute DEPOIS de 20260815000000_schema_inicial.sql
 -- Dashboard → SQL Editor → New query → cole e clique Run
 -- ============================================================
 

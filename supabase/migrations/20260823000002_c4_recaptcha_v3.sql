@@ -3,9 +3,9 @@
 -- ============================================================
 -- ATENÇÃO: a definição de criar_pedido() abaixo ficou desatualizada depois da
 -- auditoria B7 (chave de idempotência) — a versão CANÔNICA e atual da função
--- está em supabase-migration-idempotencia-pedido.sql (12 parâmetros, inclui
--- p_chave_idempotencia). Se for aplicar este arquivo do zero num ambiente novo,
--- aplique este primeiro e depois o de idempotência por cima.
+-- está em 20260902000002_idempotencia_criar_pedido.sql (12 parâmetros, inclui
+-- p_chave_idempotencia). Ordem de aplicação completa documentada em
+-- supabase/migrations/README.md.
 -- O honeypot (#honeypot) permanece como camada extra — reCAPTCHA não o
 -- substitui, complementa.
 --

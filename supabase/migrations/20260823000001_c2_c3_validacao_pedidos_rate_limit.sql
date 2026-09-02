@@ -1,9 +1,8 @@
 -- ============================================================
 -- ATENÇÃO: a definição de criar_pedido() abaixo é a ORIGINAL (10 parâmetros,
 -- sem reCAPTCHA nem idempotência). A versão CANÔNICA e atual está em
--- supabase-migration-idempotencia-pedido.sql. Se for aplicar do zero num
--- ambiente novo: este arquivo primeiro, depois c4-recaptcha.sql, depois
--- idempotencia-pedido.sql por cima (nessa ordem).
+-- 20260902000002_idempotencia_criar_pedido.sql. Ordem de aplicação completa
+-- documentada em supabase/migrations/README.md.
 -- ============================================================
 -- C2 — Validação server-side de pedidos
 -- C3 — Rate limiting real no servidor

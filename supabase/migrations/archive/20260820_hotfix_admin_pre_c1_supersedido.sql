@@ -1,4 +1,22 @@
 -- ============================================================
+-- ⚠️ ARQUIVO HISTÓRICO — NÃO REAPLICAR NUM BANCO NOVO
+--
+-- Este script foi um hotfix aplicado direto em produção ENQUANTO o
+-- painel admin ainda usava as funções antigas com parâmetro "chave"
+-- (senha em texto plano), antes do corte do C1 pra Supabase Auth.
+-- Corrige: export CSV quebrado (bug de tipo cliente/servidor), CSV/
+-- Formula Injection, e a métrica de faturamento somando pedido não
+-- pago.
+--
+-- Essas mesmas correções já estão incorporadas nas funções admin_*
+-- criadas por 20260902000001_c1_supabase_auth_admin.sql (a versão
+-- SEM o parâmetro "chave", que é a que roda em produção hoje). Este
+-- arquivo é mantido só como registro de auditoria de uma correção
+-- real que já foi feita — não faz parte da sequência de migrations
+-- pra montar o banco do zero. Rodar isso contra um banco que já
+-- passou pelo C1 falha (as funções com "chave" não existem mais).
+-- ============================================================
+--
 -- B8 — Correções de admin encontradas na auditoria aprofundada
 -- Já aplicadas direto em produção (todas retrocompatíveis com a
 -- assinatura atual das funções, pré-cutover do C1). Este arquivo
