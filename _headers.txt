@@ -1,3 +1,13 @@
+# ⚠️ ESTE ARQUIVO NÃO TEM EFEITO NA HOSPEDAGEM ATUAL (GitHub Pages).
+# Segue a convenção de headers HTTP do Netlify/Cloudflare Pages — GitHub
+# Pages não interpreta um arquivo "_headers", então nada aqui é aplicado
+# hoje. Mantido pronto para quando a hospedagem migrar (fora do escopo
+# desta auditoria). Enquanto isso, a única proteção equivalente que
+# FUNCIONA de fato é a Content-Security-Policy via <meta http-equiv> no
+# <head> de index.html/admin.html — que não cobre X-Frame-Options (sem
+# equivalente via <meta>; clickjacking fica sem mitigação até migrar).
+# Ver README.md, seção "Hospedagem e deploy".
+
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
