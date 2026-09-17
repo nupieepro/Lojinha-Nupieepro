@@ -980,7 +980,13 @@ const SUPABASE_ANON_KEY = 'sb_publishable_JgsW4RbPk2HwYgkvVnaEug_NE79JOxX';
 let _sb = null;
 try{
     if(typeof supabase === 'undefined') throw new Error('Supabase indisponível');
-    _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    /* storageKey próprio — sem isso o supabase-js grava a sessão numa chave derivada
+       só da URL do projeto, IDÊNTICA à que index.html usaria por padrão na mesma
+       origem (nupieepro.github.io). index.html agora roda com persistSession:false
+       (não faz login, não deveria ter sessão nenhuma), mas isolar a chave aqui
+       também é a defesa correta: a sessão do admin fica só na "gaveta" dela, nunca
+       compartilhada com nenhum outro cliente Supabase que rodar nesta origem. */
+    _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { storageKey: 'nupieepro-admin-auth' } });
 }catch(e){ mostrarErroConexaoAdmin(); }
 const LOJA_URL = 'https://nupieepro.github.io/Lojinha-Nupieepro/';
 

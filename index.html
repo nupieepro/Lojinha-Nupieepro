@@ -630,7 +630,20 @@ const SUPABASE_ANON_KEY = 'sb_publishable_JgsW4RbPk2HwYgkvVnaEug_NE79JOxX';
 let _sb = null;
 try{
     if(typeof supabase === 'undefined') throw new Error('Supabase indisponível');
-    _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    /* persistSession:false é essencial aqui — a loja nunca faz login (zero chamadas
+       _sb.auth.* neste arquivo), mas admin.html usa o MESMO projeto Supabase na MESMA
+       origem (nupieepro.github.io) sem storageKey próprio. Por padrão o supabase-js
+       grava a sessão no localStorage numa chave derivada só da URL do projeto — a
+       mesma nos dois arquivos. Resultado real (confirmado nos logs do projeto): se o
+       admin loga em admin.html e depois abre a loja no mesmo navegador (preview,
+       "abrir loja", ou só navegando), o cliente da loja pegava automaticamente a
+       sessão do admin já autenticado e passava a mandar Authorization: Bearer com o
+       JWT dele. As policies de RLS de produtos/config/cupons só liberam SELECT pra
+       role anon, não authenticated — então a loja via array vazio em tudo (produtos,
+       config, cupons), sem erro nenhum, parecendo loja vazia/"desatualizada". Sem
+       persistSession, este cliente nunca lê nem escreve sessão nenhuma — sempre
+       anon, sempre isolado do admin, mesmo no mesmo navegador. */
+    _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: false } });
 }catch(e){ mostrarErroConexao(); }
 let _w=atob('NTU4Njk5OTk3NjIyNg==');
 let _pixKey='financeiro.nupieepro@gmail.com';
