@@ -16,7 +16,7 @@ const ESSENCIAIS = [
   './fonts/fa-brands-subset.woff2',
   './fonts/adumu-regular-subset.woff2',
   './fonts/leaguespartan-bold-subset.woff2',
-  './vendor/supabase-js-2.112.2.min.js'
+  './vendor/supabase-js-2.116.0.min.js'
 ];
 
 self.addEventListener('install', e => {

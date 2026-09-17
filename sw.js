@@ -12,7 +12,7 @@ const CACHEAR = [
     './fonts/fa-brands-subset.woff2',
     './fonts/adumu-regular-subset.woff2',
     './fonts/leaguespartan-bold-subset.woff2',
-    './vendor/supabase-js-2.112.2.min.js',
+    './vendor/supabase-js-2.116.0.min.js',
     './loja_icon_marca.png',
     './loja_icon_emblema.png',
     './loja_icon_pwa.png',
