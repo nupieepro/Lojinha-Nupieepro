@@ -3,7 +3,7 @@
    Versão: 3.0.0 — Auto-update ativo
    ============================================================ */
 
-const CACHE = 'nupi-admin-v9';
+const CACHE = 'nupi-admin-v10';
 
 const ESSENCIAIS = [
   './admin.html',
@@ -16,7 +16,7 @@ const ESSENCIAIS = [
   './fonts/fa-brands-subset.woff2',
   './fonts/adumu-regular-subset.woff2',
   './fonts/leaguespartan-bold-subset.woff2',
-  './vendor/supabase-js-2.112.2.min.js'
+  './vendor/supabase-js-2.116.0.min.js'
 ];
 
 self.addEventListener('install', e => {
@@ -52,7 +52,25 @@ self.addEventListener('fetch', e => {
     url.includes('googletagmanager')
   ) return;
 
-  /* admin.html e demais — rede primeiro, cache só se offline */
+  /* admin.html: busca ignorando o cache HTTP do navegador. O GitHub Pages manda
+     Cache-Control: max-age=600 — sem "no-store" aqui, o próprio painel admin podia
+     continuar rodando uma versão de até 10min atrás depois de um deploy novo,
+     mesmo já com clients.claim() ativo (mesmo bug que existia em sw.js pra loja). */
+  if (e.request.destination === 'document') {
+    e.respondWith(
+      fetch(e.request, { cache: 'no-store' })
+        .then(res => {
+          if (!res || !res.ok || res.redirected) throw new Error('recorrer ao fetch normal');
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+          return res;
+        })
+        .catch(() => fetch(e.request).catch(() => caches.match(e.request)))
+    );
+    return;
+  }
+
+  /* Demais arquivos — rede primeiro, cache só se offline */
   e.respondWith(
     fetch(e.request)
       .then(res => {

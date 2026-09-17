@@ -41,7 +41,7 @@
     <link rel="preload" href="./fonts/adumu-regular-subset.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="./design-tokens.css">
     <link rel="stylesheet" href="./fontawesome-subset.css">
-    <script src="./vendor/supabase-js-2.112.2.min.js" onerror="window.__sbScriptFailed=true"></script>
+    <script src="./vendor/supabase-js-2.116.0.min.js" onerror="window.__sbScriptFailed=true"></script>
     <script src="./qrcode.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded',function(){
@@ -937,7 +937,12 @@ async function carregarAPI(tentativa){
         /* Processa Produtos */
         if(results[1].status === 'fulfilled'){
             const d = results[1].value;
-            if(Array.isArray(d)&&d.length>0){
+            /* Antes só atualizava quando d.length>0 — se o admin desativasse o
+               último produto ativo (ou todos), a API responde certo com [], mas a
+               loja ignorava essa resposta e continuava mostrando o cache antigo do
+               localStorage (ou os 4 produtos de bootstrap) como se nada tivesse
+               mudado. Array vazio é uma resposta válida e precisa refletir na vitrine. */
+            if(Array.isArray(d)){
                 const normalizados = d.map(normalizarProduto);
                 produtos.length=0;
                 produtos.push(...normalizados);
