@@ -3,7 +3,7 @@
    Caminhos relativos — funciona em qualquer subpasta
    ============================================================ */
 
-const CACHE = 'nupieepro-v18';
+const CACHE = 'nupieepro-v19';
 
 const CACHEAR = [
     './design-tokens.css',
@@ -54,8 +54,12 @@ self.addEventListener('fetch', e => {
     /* A PÁGINA em si: busca ignorando o cache HTTP do navegador.
        O GitHub Pages manda Cache-Control: max-age=600, então um "rede primeiro"
        comum ainda podia devolver um HTML de até 10 min atrás — quem já tinha o
-       site aberto/instalado ficava vendo a versão velha mesmo online. */
-    if (e.request.destination === 'document') {
+       site aberto/instalado ficava vendo a versão velha mesmo online.
+       Cobre 'iframe' além de 'document': o Preview do admin carrega a loja dentro
+       de um <iframe>, e essa navegação tem destination:'iframe', não 'document' —
+       sem essa linha o Preview cai no branch genérico abaixo e pode devolver a
+       mesma resposta cacheada por até 10min mesmo depois de salvar uma mudança. */
+    if (e.request.destination === 'document' || e.request.destination === 'iframe') {
         e.respondWith(
             fetch(e.request.url, { cache: 'no-store' })
                 .then(res => {

@@ -2040,7 +2040,14 @@ async function salvarConfig(publicar,btnClicado){
    PREVIEW
    ============================================================ */
 function carregarPreview(){
-    document.getElementById('preview-iframe').src = LOJA_URL;
+    /* Atribuir a mesma URL ao iframe é um no-op no navegador — não recarrega nada.
+       Sem isso, depois da primeira visita à aba Preview o iframe fica travado no
+       primeiro snapshot da loja para sempre, mesmo salvando produtos/config novos.
+       Um parâmetro de cache-busting força navegação real e também ignora qualquer
+       cache HTTP/CDN (GitHub Pages manda Cache-Control: max-age=600). */
+    const iframe = document.getElementById('preview-iframe');
+    iframe.src = 'about:blank';
+    iframe.src = LOJA_URL + '?_preview=' + Date.now();
 }
 
 function mudarPreview(modo){
@@ -2057,7 +2064,10 @@ function mudarPreview(modo){
 }
 
 function abrirLoja(){
-    window.open(LOJA_URL, '_blank', 'noopener');
+    /* Cache-busting: sem isso, o GitHub Pages pode devolver um HTML de até 10min
+       atrás (Cache-Control: max-age=600) pra quem acabou de publicar uma mudança
+       e foi conferir na hora. */
+    window.open(LOJA_URL + '?_preview=' + Date.now(), '_blank', 'noopener');
 }
 
 /* ============================================================
