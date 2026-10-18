@@ -3,6 +3,8 @@ Allow: /
 Disallow: /admin
 Disallow: /admin.html
 
+Sitemap: https://nupieepro.github.io/Lojinha-Nupieepro/sitemap.xml
+
 # Block AI Crawlers
 User-agent: GPTBot
 Disallow: /

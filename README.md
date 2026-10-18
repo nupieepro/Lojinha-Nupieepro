@@ -2,7 +2,7 @@
 
 Loja oficial do **Núcleo Piauiense de Estudantes de Engenharia de Produção — NUPIEEPRO**, da Universidade Federal do Piauí (UFPI).
 
-Site: [nupieepro.github.io](https://nupieepro.github.io) · Instagram: [@nupieepro](https://www.instagram.com/nupieepro)
+Site: [nupieepro.github.io/Lojinha-Nupieepro](https://nupieepro.github.io/Lojinha-Nupieepro/) · Instagram: [@nupieepro](https://www.instagram.com/nupieepro)
 
 ---
 
@@ -47,6 +47,7 @@ supabase/
   migrations/                 — schema e funções do banco, em ordem de aplicação (ver README ali dentro)
   functions/upload-imagem/    — Edge Function: upload de foto de produto autenticado
 _headers.txt                  — headers de segurança HTTP (ver observação abaixo — hoje NÃO tem efeito)
+404.html, robots.txt, sitemap.xml — SEO e página de erro (GitHub Pages serve 404.html nativamente)
 ```
 
 ## Rodando localmente

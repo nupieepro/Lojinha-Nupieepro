@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página não encontrada — NUPIEEPRO STORE</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#0f0732">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icons/loja-icon-192.png">
+    <link rel="stylesheet" href="./design-tokens.css">
+    <style>
+        @font-face{font-family:'Adumu';src:url('./fonts/adumu-regular-subset.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+        @font-face{font-family:'League Spartan';src:url('./fonts/leaguespartan-bold-subset.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            min-height:100vh;
+            display:flex;flex-direction:column;align-items:center;justify-content:center;
+            gap:18px;padding:32px 20px;text-align:center;
+            font-family:'League Spartan',-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+            font-weight:700;
+            background:linear-gradient(160deg,var(--marca-roxo) 0%,var(--marca-roxo-escuro) 100%);
+            color:var(--marca-branco);
+        }
+        img{width:96px;height:96px;object-fit:contain;}
+        h1{font-family:'Adumu',Impact,'Arial Narrow Bold',sans-serif;font-weight:400;font-size:2.4rem;letter-spacing:1px;text-transform:uppercase;}
+        p{max-width:420px;opacity:0.85;font-size:0.95rem;line-height:1.5;}
+        a.voltar{
+            margin-top:10px;display:inline-flex;align-items:center;gap:8px;
+            background:var(--marca-laranja);color:var(--marca-branco);
+            padding:14px 28px;border-radius:30px;text-decoration:none;
+            font-weight:700;font-size:0.9rem;transition:transform 0.15s;
+        }
+        a.voltar:active{transform:scale(0.96);}
+        :focus-visible{outline:3px solid var(--marca-laranja);outline-offset:3px;}
+    </style>
+</head>
+<body>
+    <img src="./loja_icon_marca.png" alt="Logo NUPIEEPRO" onerror="this.style.visibility='hidden'">
+    <h1>404 — Página não encontrada</h1>
+    <p>Essa página não existe ou foi movida. Volte pra loja pra continuar navegando pelos produtos do NUPIEEPRO.</p>
+    <a class="voltar" href="./index.html">← Voltar pra loja</a>
+</body>
+</html>
