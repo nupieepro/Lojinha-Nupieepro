@@ -225,6 +225,8 @@
         .card-info{padding:14px;text-align:center;display:flex;flex-direction:column;flex-grow:1;cursor:pointer;}
         .card-title{font-family:var(--font-titulo);font-size:0.82rem;font-weight:400;color:var(--roxo-brand);line-height:1.3;height:34px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
         .card-price{font-size:1.05rem;color:var(--laranja-brand);font-weight:800;margin-top:5px;}
+        .preco-antigo{text-decoration:line-through;color:var(--texto-fraco);font-weight:600;font-size:0.8em;margin-right:4px;}
+        .badge-desc{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:8px;background:var(--cor-sucesso);color:var(--branco);font-size:0.6rem;font-weight:800;vertical-align:middle;white-space:nowrap;}
         .card-enc{font-size:0.68rem;color:var(--laranja-brand);font-weight:700;margin-top:3px;}
         .tap-hint{font-size:0.62rem;color:var(--texto-fraco);margin-top:auto;padding-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
 
@@ -999,6 +1001,7 @@ async function carregarAPI(tentativa){
                     document.getElementById('card-cupom').style.display='none';
                     cupons = {};
                 }
+                if(!cupomApl) autoAplicarCupom();
             }
         }
     } catch(e){ console.error('Erro API:', e); }
@@ -1044,7 +1047,7 @@ function criarCardProduto(p){
         </div>
         <div class="card-info" onclick="abrirDetalhes(${p.id})">
             <div class="card-title">${san(p.nome)}</div>
-            <div class="card-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
+            <div class="card-price">${htmlPreco(p)}</div>
             ${enc?`<div class="card-enc">📦 Apenas sob encomenda</div>`:''}
             <div class="tap-hint">Ver Detalhes</div>
         </div>`;
@@ -1110,7 +1113,7 @@ function sincronizarModalProduto(){
         return;
     }
     itemSel=atual;
-    document.getElementById('detalhe-preco').textContent='R$ '+itemSel.preco.toFixed(2).replace('.',',');
+    document.getElementById('detalhe-preco').innerHTML=htmlPreco(itemSel);
     const estEl=document.getElementById('detalhe-estoque');
     if(!itemSel.encomenda&&itemSel.estoque>0){estEl.textContent=itemSel.estoque+' em estoque';estEl.style.display='block';}else estEl.style.display='none';
     atualizarBotaoAdicionar();
@@ -1149,7 +1152,7 @@ function abrirDetalhes(id){
     qtdTemp=1;
     atualizarBotaoAdicionar();
     document.getElementById('detalhe-nome').textContent=itemSel.nome;
-    document.getElementById('detalhe-preco').textContent='R$ '+itemSel.preco.toFixed(2).replace('.',',');
+    document.getElementById('detalhe-preco').innerHTML=htmlPreco(itemSel);
     document.getElementById('detalhe-qtd').textContent='1';
     const imgSrc = itemSel.img
         || (Array.isArray(itemSel.imagens) && itemSel.imagens[0])
@@ -1308,7 +1311,7 @@ function renderCarrinho(){
     });atualizarResumo();
 }
 function remItem(i){carrinho.splice(i,1);salvarCarrinho();atualizarBarra();renderCarrinho();}
-function limparCarrinho(){if(!confirm('Limpar a sacola?')) return;carrinho=[];cupomApl=null;_chaveIdempotenciaPedido=null;salvarCarrinho();atualizarBarra();fecharModais(null);toast('Sacola esvaziada');}
+function limparCarrinho(){if(!confirm('Limpar a sacola?')) return;carrinho=[];cupomApl=null;_chaveIdempotenciaPedido=null;salvarCarrinho();atualizarBarra();fecharModais(null);autoAplicarCupom();toast('Sacola esvaziada');}
 function salvarCarrinho(){localStorage.setItem('nupieepro_carrinho',JSON.stringify(carrinho));}
 function carregarCarrinho(){
     try{
@@ -1338,11 +1341,11 @@ function validarCupom(){
     }
     cupomApl={cod,...cup};
     document.getElementById('campo-cupom').value='';
-    document.getElementById('cupom-ok-texto').textContent=cod+' — '+cup.valor+'% aplicado';
+    document.getElementById('cupom-ok-texto').textContent=textoCupomAplicado(cupomApl);
     document.getElementById('cupom-ok').classList.add('ativo');
-    atualizarResumo();toast('🎉 Desconto de R$'+calcDesc().toFixed(2).replace('.',',')+'!');
+    renderVitrine();atualizarResumo();toast('🎉 Desconto de R$'+calcDesc().toFixed(2).replace('.',',')+'!');
 }
-function removerCupom(){cupomApl=null;document.getElementById('cupom-ok').classList.remove('ativo');atualizarResumo();toast('Cupom removido');}
+function removerCupom(){if(cupomApl&&cupomApl.cod===CUPOM_AUTO)window._cupomAutoRecusado=true;cupomApl=null;document.getElementById('cupom-ok').classList.remove('ativo');renderVitrine();atualizarResumo();toast('Cupom removido');}
 
 /* Reconcilia a sacola salva com o catálogo atual. O carrinho guarda uma cópia do
    produto no momento do "adicionar" — se o admin mudar o preço (ou remover o
@@ -1369,8 +1372,40 @@ function sincronizarCarrinhoComProdutos(){
         else toast('ℹ️ O preço de um item da sua sacola foi atualizado.',1);
     }
 }
+/* Cupom 'fixo_por_camisa' (ex.: LF2026): R$ valor de desconto por unidade de camisa,
+   nunca acima do preço dela. Retorna 0 pra outros produtos/cupons. */
+const CUPOM_AUTO='LF2026';
+function descontoUnit(p){
+    if(!cupomApl||cupomApl.tipo!=='fixo_por_camisa') return 0;
+    if(!(p.tipo==='camisa'||p.categoria==='camisa')) return 0;
+    return Math.min(Number(cupomApl.valor)||0,p.preco);
+}
+function fmtBRL(v){return 'R$ '+v.toFixed(2).replace('.',',');}
+function htmlPreco(p){
+    const d=descontoUnit(p);
+    if(!d) return fmtBRL(p.preco);
+    return `<span class="preco-antigo">${fmtBRL(p.preco)}</span><span>${fmtBRL(p.preco-d)}</span><span class="badge-desc">-${fmtBRL(d)}</span>`;
+}
+function textoCupomAplicado(c){
+    return c.tipo==='fixo_por_camisa'?c.cod+' — R$ '+Number(c.valor).toFixed(2).replace('.',',')+' off por camisa'
+        :c.tipo==='percentual'?c.cod+' — '+c.valor+'% aplicado':c.cod+' — R$ '+Number(c.valor).toFixed(2).replace('.',',')+' aplicado';
+}
+/* Pré-seleciona o cupom automático quando ele existe e está ativo. Chamado ao carregar
+   a API e depois de qualquer reset do carrinho (pedido enviado / sacola limpa). */
+function autoAplicarCupom(){
+    if(window._cupomAutoRecusado) return; /* cliente removeu de propósito */
+    const cup=cupons[CUPOM_AUTO];
+    if(!cup||!cup.ativo||cup.usos>=cup.limite){return;}
+    cupomApl={cod:CUPOM_AUTO,...cup};
+    const ok=document.getElementById('cupom-ok');
+    document.getElementById('cupom-ok-texto').textContent=textoCupomAplicado(cupomApl);
+    ok.classList.add('ativo');
+    renderVitrine();atualizarResumo();
+    if(itemSel&&document.getElementById('modal-details').classList.contains('active'))
+        document.getElementById('detalhe-preco').innerHTML=htmlPreco(itemSel);
+}
 function calcSub(){return carrinho.reduce((a,i)=>a+i.preco*i.qtd,0);}
-function calcDesc(){if(!cupomApl)return 0;const isRestrito = cupomApl.produtos_ids && cupomApl.produtos_ids.length > 0;const itensDesc = isRestrito ? carrinho.filter(i=>cupomApl.produtos_ids.includes(i.id)) : carrinho;if(cupomApl.tipo==='percentual')return itensDesc.reduce((a,i)=>a+i.preco*i.qtd*cupomApl.valor/100,0);return Math.min(cupomApl.valor,itensDesc.reduce((a,i)=>a+i.preco*i.qtd,0));}
+function calcDesc(){if(!cupomApl)return 0;if(cupomApl.tipo==='fixo_por_camisa')return carrinho.reduce((a,i)=>a+descontoUnit(i)*i.qtd,0);const isRestrito = cupomApl.produtos_ids && cupomApl.produtos_ids.length > 0;const itensDesc = isRestrito ? carrinho.filter(i=>cupomApl.produtos_ids.includes(i.id)) : carrinho;if(cupomApl.tipo==='percentual')return itensDesc.reduce((a,i)=>a+i.preco*i.qtd*cupomApl.valor/100,0);return Math.min(cupomApl.valor,itensDesc.reduce((a,i)=>a+i.preco*i.qtd,0));}
 function calcTotal(){return Math.max(0,calcSub()-calcDesc());}
 function atualizarResumo(){
     /* Cupom restrito a produtos específicos: se o cliente remover da sacola o único item
@@ -1580,7 +1615,7 @@ async function enviarPedidoZap(){
         const{data,error}=await _sb.rpc('criar_pedido',{
             p_nome:nome,p_whatsapp:zap,p_email:email,p_entrega:entrega,p_endereco:end,
             p_pagamento:pgto,p_observacao:obs,p_itens:itensRPC,
-            p_cupom_codigo:cupomApl?cupomApl.cod:null,p_comprovante_path:comprovantePath,
+            p_cupom_codigo:(cupomApl&&calcDesc()>0)?cupomApl.cod:null,p_comprovante_path:comprovantePath,
             p_chave_idempotencia:_chaveIdempotenciaPedido
         });
         if(error) throw new Error('Erro ao registrar o pedido. Tente novamente.');
@@ -1640,7 +1675,7 @@ async function enviarPedidoZap(){
         zapLink.click();
         setTimeout(()=>document.body.removeChild(zapLink),1000);
 
-        carrinho=[];cupomApl=null;window._comprovante=null;_chaveIdempotenciaPedido=null;salvarCarrinho();atualizarBarra();
+        carrinho=[];cupomApl=null;window._comprovante=null;_chaveIdempotenciaPedido=null;salvarCarrinho();atualizarBarra();window._cupomAutoRecusado=false;autoAplicarCupom();
 
         const msgs=['Boa escolha! O Nupieepro agradece 🧡','Que venha mais! 💙🧡','Obrigado por apoiar o núcleo! ⚙️'];
         document.getElementById('sucesso-num').textContent='Pedido #'+num;
