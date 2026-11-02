@@ -13,8 +13,9 @@ Schema e funções do backend Supabase (projeto `scacjsosvlllapbgetos`), em orde
 | 5 | `20260902000001_c1_supabase_auth_admin.sql` | Corta a autenticação do admin de senha em texto plano pra Supabase Auth real (JWT). Reescreve todas as funções `admin_*` sem o parâmetro `chave`, gate por `is_admin()`. **Depois de aplicar este arquivo, é preciso já ter criado a conta do admin em Authentication → Users e rodar a query de vínculo no final do script** — sem isso ninguém consegue logar no painel. |
 | 6 | `20260902000002_idempotencia_criar_pedido.sql` | Estende `criar_pedido` (mais uma vez) com uma chave de idempotência — protege contra pedido duplicado se a resposta da RPC se perder por instabilidade de rede depois do servidor já ter criado o pedido |
 | 7 | `20260902000003_consulta_status_pedido.sql` | RPC pública `consultar_status_pedido` — permite ao cliente ver o status atual do pedido (não só o retrato congelado do momento da compra) |
+| 8 | `20260903000001_cupom_lf2026_desconto_por_camisa.sql` | `criar_pedido` aceita cupom do tipo `fixo_por_camisa` (R$ X por unidade de camisa) e cria o cupom `LF2026` (R$ 5/camisa), pré-selecionado na loja |
 
-Cada arquivo 3-7 faz `DROP FUNCTION` da assinatura anterior de `criar_pedido`/`admin_*` antes de recriar — necessário porque mudar a lista de parâmetros de uma função faz o Postgres criar um *overload* novo em vez de substituir (`CREATE OR REPLACE` só troca uma função de mesma assinatura). Sem o `DROP` explícito, a versão anterior fica órfã no schema, ainda executável.
+Cada arquivo 3-8 faz `DROP FUNCTION` da assinatura anterior de `criar_pedido`/`admin_*` antes de recriar — necessário porque mudar a lista de parâmetros de uma função faz o Postgres criar um *overload* novo em vez de substituir (`CREATE OR REPLACE` só troca uma função de mesma assinatura). Sem o `DROP` explícito, a versão anterior fica órfã no schema, ainda executável.
 
 ## `archive/`
 
