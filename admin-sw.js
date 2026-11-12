@@ -3,7 +3,7 @@
    Versão: 3.0.0 — Auto-update ativo
    ============================================================ */
 
-const CACHE = 'nupi-admin-v10';
+const CACHE = 'nupi-admin-v11';
 
 const ESSENCIAIS = [
   './admin.html',

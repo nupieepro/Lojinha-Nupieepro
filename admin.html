@@ -1686,18 +1686,18 @@ async function carregarCupons(){
             <div class="cupom-item" style="opacity:${ativo?1:0.5}">
                 <div style="flex:1">
                     <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-                        <div class="cupom-codigo">${c.codigo}</div>
+                        <div class="cupom-codigo">${san(c.codigo)}</div>
                         <span class="cupom-tipo">${c.tipo === 'percentual' ? c.valor+'%' : 'R$'+c.valor}</span>
                     </div>
-                    <div class="cupom-meta">${c.descricao||''}</div>
+                    <div class="cupom-meta">${san(c.descricao||'')}</div>
                     <div class="cupom-meta" style="margin-top:4px">Usos: ${c.usos||0}/${c.limite||'∞'} · Mín: R$ ${(c.minimo||0).toFixed(2).replace('.',',')}</div>
                 </div>
                 <div style="display:flex;flex-direction:column;gap:6px">
-                    <button class="btn btn-sm btn-outline" onclick="abrirModalCupom('${c.codigo}')">
+                    <button class="btn btn-sm btn-outline" data-cod="${san(c.codigo)}" onclick="abrirModalCupom(this.dataset.cod)">
                         <i class="fa-solid fa-pen"></i>
                     </button>
                     <label class="toggle" style="margin:0">
-                        <input type="checkbox" ${ativo?'checked':''} onchange="toggleCupom('${c.codigo}',this.checked)">
+                        <input type="checkbox" ${ativo?'checked':''} data-cod="${san(c.codigo)}" onchange="toggleCupom(this.dataset.cod,this.checked)">
                         <span class="toggle-slider"></span>
                     </label>
                 </div>

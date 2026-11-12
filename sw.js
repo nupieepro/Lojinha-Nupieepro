@@ -3,7 +3,7 @@
    Caminhos relativos — funciona em qualquer subpasta
    ============================================================ */
 
-const CACHE = 'nupieepro-v19';
+const CACHE = 'nupieepro-v20';
 
 const CACHEAR = [
     './design-tokens.css',
