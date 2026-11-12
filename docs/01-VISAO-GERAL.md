@@ -38,7 +38,7 @@ WhatsApp (link wa.me)         → cliente envia o pedido pronto à equipe
 | `vendor/supabase-js-2.116.0.min.js` | supabase-js vendorizado (sem CDN) |
 | `qrcode.min.js` | Gera o QR do PIX no navegador |
 | `manifest.json`, `admin-manifest.json` | PWA instalável (loja e admin separados) |
-| `sw.js` (cache `nupieepro-v19`), `admin-sw.js` | Service workers. **Ao mudar assets, aumentar o número do cache**, senão navegadores ficam com a versão velha |
+| `sw.js` (cache `nupieepro-v20`), `admin-sw.js` | Service workers. **Ao mudar assets, aumentar o número do cache**, senão navegadores ficam com a versão velha |
 | `supabase/migrations/` | Schema e RPCs (ver `02-BANCO-E-BACKEND.md`) |
 | `supabase/functions/upload-imagem/` | Edge Function de upload de foto |
 | `supabase/config.toml` | Config do Supabase CLI (project_id `scacjsosvlllapbgetos`) |

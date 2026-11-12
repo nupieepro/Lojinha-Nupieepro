@@ -1,0 +1,49 @@
+name: Segurança
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '23 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  codeql:
+    runs-on: ubuntu-latest
+    continue-on-error: true   # repo privado sem GHAS falha por licença, não por código
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-extended
+      - uses: github/codeql-action/analyze@v3
+
+  testes-seguranca:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm test
+
+  saude-do-site:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Loja e admin no ar + certificado
+        run: |
+          set -e
+          for u in https://nupieepro.github.io/Lojinha-Nupieepro/ https://nupieepro.github.io/Lojinha-Nupieepro/admin.html; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$u")
+            echo "$u -> $code"; [ "$code" = "200" ] || { echo "::error::$u respondeu $code"; exit 1; }
+          done
+          echo | openssl s_client -servername nupieepro.github.io -connect nupieepro.github.io:443 2>/dev/null | openssl x509 -noout -enddate

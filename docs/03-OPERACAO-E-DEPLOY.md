@@ -3,7 +3,7 @@
 ## Deploy
 - **GitHub Pages**, branch `main`, pasta raiz. Merge/push em `main` publica em segundos (workflow "pages build and deployment"). **Não existe staging**: o que está em `main` é o que o cliente vê. Teste localmente antes.
 - Rodar local: `python3 -m http.server 8000` e abrir `http://localhost:8000/index.html` ou `/admin.html`. **Aponta para o banco de produção.** Pedido de teste vira pedido real.
-- Cache: se mudar CSS/JS/imagens, incrementar `CACHE` em `sw.js` / `admin-sw.js` (hoje `nupieepro-v19`); senão usuários recebem versão antiga.
+- Cache: se mudar CSS/JS/imagens, incrementar `CACHE` em `sw.js` / `admin-sw.js` (hoje `nupieepro-v20`); senão usuários recebem versão antiga.
 - Edge Functions: `supabase functions deploy upload-imagem --project-ref scacjsosvlllapbgetos` (precisa do Supabase CLI logado).
 - Migrations: colar no SQL Editor do Dashboard, na ordem do README de migrations.
 

@@ -1,0 +1,6 @@
+{
+  "name": "lojinha-nupieepro",
+  "private": true,
+  "description": "Loja do NUPIEEPRO. Site estático (sem build) — este package.json existe só para rodar os testes de segurança.",
+  "scripts": { "test": "node --test" }
+}
