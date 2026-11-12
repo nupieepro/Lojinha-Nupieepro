@@ -1,10 +1,12 @@
 # HANDOVER — Lojinha NUPIEEPRO
 
+**Documentação completa em `docs/`:** [01 Visão geral](docs/01-VISAO-GERAL.md) · [02 Banco e backend](docs/02-BANCO-E-BACKEND.md) · [03 Operação e deploy](docs/03-OPERACAO-E-DEPLOY.md) · [04 Credenciais e acessos (preencher)](docs/04-CREDENCIAIS-E-ACESSOS.md)
+
 Documento de passagem para quem assume a manutenção. Estado verificado em 12/11/2026.
 
 ## Resumo
 
-- Site estático (`index.html` loja, `admin.html` painel), sem build. Hospedado no **GitHub Pages**, direto da `main` (merge = deploy; não há staging).
+- Site estático (`index.html` loja, `admin.html` painel), sem build. Hospedado no **GitHub Pages** em `https://nupieepro.github.io/Lojinha-Nupieepro/` (o README antigo cita a raiz, que dá 404), direto da `main` (merge = deploy; não há staging).
 - Backend: **Supabase**, projeto `scacjsosvlllapbgetos` (nome "Lojinha", us-east-1, Postgres 17). Status: ACTIVE_HEALTHY.
 - Mais detalhes técnicos: `README.md`, `SECURITY.md`, `supabase/migrations/README.md`.
 
@@ -22,7 +24,7 @@ Documento de passagem para quem assume a manutenção. Estado verificado em 12/1
 | Função | No repo? | Obs |
 |---|---|---|
 | `upload-imagem` | Sim | Upload de foto de produto (admin). Ativa, v3 |
-| `resend-email` | **Não** | Existe só no Supabase (v8, verify_jwt=true). Usa Resend; precisa do secret da API. Versionar ou remover |
+| `resend-email` | **Não** | Existe só no Supabase (v8). Manda e-mail do pedido via Gmail SMTP (`SMTP_USER`/`SMTP_PASSWORD`), acionada por trigger em `pedidos` + segredo do Vault. **Essencial**: versionar no repo |
 | `migrar-fotos-ibb` | **Não** | Migração única de fotos do ImgBB. Provavelmente descartável |
 
 ## Pendências conhecidas
