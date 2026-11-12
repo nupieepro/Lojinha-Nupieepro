@@ -24,7 +24,7 @@ O linter do Supabase marca todas como "SECURITY DEFINER executável por authenti
 ## Migrations (ordem de aplicação em banco novo)
 Ver `supabase/migrations/README.md`. Resumo: schema inicial → bucket `produtos` → validação server-side + rate limit (C2/C3) → reCAPTCHA (C4, inerte) → migração do admin para Supabase Auth (C1) → idempotência → consulta de status → cupom LF2026. Elas são aplicadas **manualmente no SQL Editor** (não há CI de banco).
 
-**Itens que existem no banco de produção e NÃO estão nas migrations do repo** (quem recriar o banco do zero precisa refazer):
+**Itens que existiam só no banco de produção** e agora estão em `20260903000002_notificacao_email_pedidos_JA_APLICADO.sql` (triggers de e-mail e número único, `_notify_email_on_pedidos`). Continuam fora do Git por segurança: o **segredo do Vault** `service_role_key_notify_pedidos` e os **secrets SMTP** da função. Lista original:
 1. Triggers em `pedidos`: `trg_pedidos_email_insert`, `trg_pedidos_email_update` (chamam `_notify_email_on_pedidos()`) e `trg_pedidos_numero_unico` (`_pedidos_numero_unico_trg()`).
 2. Função `public._notify_email_on_pedidos()` (SECURITY DEFINER): lê o segredo `service_role_key_notify_pedidos` do **Vault** e faz `net.http_post` para `https://scacjsosvlllapbgetos.supabase.co/functions/v1/resend-email` com `{event, record}`.
 3. Extensão `pg_net` (instalada em `public`; ideal mover para `extensions`).
@@ -35,10 +35,9 @@ Ver `supabase/migrations/README.md`. Resumo: schema inicial → bucket `produtos
 | Função | Repo? | Função |
 |---|---|---|
 | `upload-imagem` | sim | Admin envia foto de produto. Valida JWT + `admin_users`, tipos jpeg/png/webp/gif, até 8 MB, grava no bucket `produtos` com service role. `verify_jwt=false` na plataforma (a checagem é feita dentro) |
-| `resend-email` | **não** (só no Supabase, v8) | Chamada pelo trigger. No INSERT de pedido envia e-mail ao financeiro e, se houver, ao cliente, via **Gmail SMTP (smtp.gmail.com:465)**. Secrets necessários: `SMTP_USER`, `SMTP_PASSWORD` (senha de app do Gmail); opcionais `EMAIL_FINANCEIRO` (padrão financeironupieepro@gmail.com), `NOME_LOJA`. A chave PIX do e-mail está **fixa no código**. O HTML do e-mail interpola `nome` do cliente sem escapar (risco baixo de HTML injection no e-mail) |
-| `migrar-fotos-ibb` | **não** | Migração única de fotos do ImgBB para o Storage. Provavelmente descartável |
+| `resend-email` | **sim** (versionada em 12/11/2026, `supabase/functions/resend-email/`) | Chamada pelo trigger. No INSERT de pedido envia e-mail ao financeiro e, se houver, ao cliente, via **Gmail SMTP (smtp.gmail.com:465)**. Secrets necessários: `SMTP_USER`, `SMTP_PASSWORD` (senha de app do Gmail); opcionais `EMAIL_FINANCEIRO` (padrão financeironupieepro@gmail.com), `NOME_LOJA`. A chave PIX do e-mail está **fixa no código**. O HTML do e-mail interpola `nome` do cliente sem escapar (risco baixo de HTML injection no e-mail) |
+| `migrar-fotos-ibb` | arquivada | Desativada em 12/11/2026 (stub 410). Código em `supabase/functions/_arquivadas/` |
 
-> Cópia do código do `resend-email`: baixar com `supabase functions download resend-email --project-ref scacjsosvlllapbgetos` e versionar em `supabase/functions/resend-email/`.
 
 ## Storage
 - `produtos` (público): fotos de produto. Escrita só pela Edge Function.

@@ -24,8 +24,8 @@ Documento de passagem para quem assume a manutenção. Estado verificado em 12/1
 | Função | No repo? | Obs |
 |---|---|---|
 | `upload-imagem` | Sim | Upload de foto de produto (admin). Ativa, v3 |
-| `resend-email` | **Não** | Existe só no Supabase (v8). Manda e-mail do pedido via Gmail SMTP (`SMTP_USER`/`SMTP_PASSWORD`), acionada por trigger em `pedidos` + segredo do Vault. **Essencial**: versionar no repo |
-| `migrar-fotos-ibb` | **Não** | Migração única de fotos do ImgBB. Provavelmente descartável |
+| `resend-email` | **Não** | Existe só no Supabase (v8). Manda e-mail do pedido via Gmail SMTP (`SMTP_USER`/`SMTP_PASSWORD`), acionada por trigger em `pedidos` + segredo do Vault. **Essencial**. Versionada em `supabase/functions/resend-email/` |
+| `migrar-fotos-ibb` | Arquivada | Desativada (stub 410) em 12/11/2026; estava exposta com senha em texto puro |
 
 ## Pendências conhecidas
 
