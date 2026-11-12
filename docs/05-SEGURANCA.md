@@ -35,7 +35,7 @@ O GitHub Pages **não aceita headers HTTP personalizados**, então a loja não t
 1. ~~Aplicar a migration de auditoria~~ (feito). Falta só **rodar** `select public.admin_antifraude_resumo();` de vez em quando (logado como admin).
 2. **Supabase → Auth:** *Leaked password protection*, MFA para o admin, senha mínima maior.
 3. **reCAPTCHA v3 (ou Cloudflare Turnstile):** hoje a proteção anti-bot do checkout é só o rate limit por IP. Cadastrar o site e guardar a secret no Vault (`recaptcha_secret_key`).
-4. **`resend-email`:** versionar no repo; trocar o Gmail SMTP por um provedor transacional (Resend/Brevo) com domínio autenticado (SPF/DKIM) e remover a chave PIX fixa do código; escapar `nome` no HTML do e-mail.
+4. **`resend-email`** (v9, 12/11/2026): já escapa o HTML do cliente, valida o e-mail contra injeção de cabeçalhos SMTP (CRLF) e não devolve texto de erro. **Falta**: trocar o Gmail SMTP por um provedor transacional (Resend/Brevo) com domínio autenticado (SPF/DKIM) e tirar a chave PIX fixa do código. **Atenção:** a v9 não teve envio real testado; na próxima compra, conferir se o e-mail chegou (Supabase → Edge Functions → resend-email → Logs). Se falhar, reverter para a v8 (código antigo no histórico do Git).
 5. **Backup:** o plano gratuito não tem backup automático. Pro (diário/PITR) ou `pg_dump` agendado para local externo; testar restauração em projeto novo 1× por semestre. Os comprovantes (`comprovantes`) e fotos (`produtos`) também precisam de cópia.
 6. **GitHub:** Secret scanning + push protection, branch protection na `main`, 2FA na organização.
 7. **Admin:** manter 1–2 admins no máximo; a tabela `admin_users` tem 1 hoje.

@@ -35,7 +35,7 @@ Ver `supabase/migrations/README.md`. Resumo: schema inicial → bucket `produtos
 | Função | Repo? | Função |
 |---|---|---|
 | `upload-imagem` | sim | Admin envia foto de produto. Valida JWT + `admin_users`, tipos jpeg/png/webp/gif, até 8 MB, grava no bucket `produtos` com service role. `verify_jwt=false` na plataforma (a checagem é feita dentro) |
-| `resend-email` | **sim** (versionada em 12/11/2026, `supabase/functions/resend-email/`) | Chamada pelo trigger. No INSERT de pedido envia e-mail ao financeiro e, se houver, ao cliente, via **Gmail SMTP (smtp.gmail.com:465)**. Secrets necessários: `SMTP_USER`, `SMTP_PASSWORD` (senha de app do Gmail); opcionais `EMAIL_FINANCEIRO` (padrão financeironupieepro@gmail.com), `NOME_LOJA`. A chave PIX do e-mail está **fixa no código**. O HTML do e-mail interpola `nome` do cliente sem escapar (risco baixo de HTML injection no e-mail) |
+| `resend-email` | **sim** (versionada em 12/11/2026, `supabase/functions/resend-email/`) | Chamada pelo trigger. No INSERT de pedido envia e-mail ao financeiro e, se houver, ao cliente, via **Gmail SMTP (smtp.gmail.com:465)**. Secrets necessários: `SMTP_USER`, `SMTP_PASSWORD` (senha de app do Gmail); opcionais `EMAIL_FINANCEIRO` (padrão financeironupieepro@gmail.com), `NOME_LOJA`. A chave PIX do e-mail está **fixa no código**. Desde a v9 (12/11/2026) escapa o HTML do cliente e valida o e-mail antes de enviar |
 | `migrar-fotos-ibb` | arquivada | Desativada em 12/11/2026 (stub 410). Código em `supabase/functions/_arquivadas/` |
 
 
