@@ -417,6 +417,11 @@
             <div id="dash-mais-vendido" style="font-size:1rem;font-weight:700;color:var(--roxo)">—</div>
         </div>
 
+        <div class="form-section" id="garantia-promo" aria-live="polite">
+            <div class="form-titulo"><i class="fa-solid fa-shield-halved"></i> Garantia da promoção</div>
+            <div id="garantia-promo-corpo" style="font-size:0.88rem;color:var(--suave)">Conferindo…</div>
+        </div>
+
         <div class="form-section">
             <div class="form-titulo"><i class="fa-solid fa-credit-card"></i> Pagamentos</div>
             <div id="dash-pagamentos" style="font-size:0.88rem;color:var(--suave)">—</div>
@@ -1251,7 +1256,38 @@ function abrirAba(nome){
 /* ============================================================
    DASHBOARD
    ============================================================ */
+/* Garantia da promoção: confere, com dados do servidor, se o que está programado é o que o cliente vai pagar */
+function dur(ms){ const m=Math.max(0,Math.floor(ms/60000)),d=Math.floor(m/1440),h=Math.floor(m%1440/60),mi=m%60; return (d?d+'d ':'')+(h||d?h+'h ':'')+mi+'min'; }
+async function renderGarantiaPromo(){
+    const el=document.getElementById('garantia-promo-corpo'); if(!el) return;
+    try {
+        const [prods,cups]=await Promise.all([api({action:'admin_get_produtos'}),api({action:'admin_get_cupons'})]);
+        produtosCache=prods;
+        const lista=(Array.isArray(cups)?cups:(cups&&cups.cupons)||[]);
+        const promos=prods.filter(p=>p.preco_promocional!==null&&p.preco_promocional!==undefined&&p.preco_promocional!==''&&p.promo_fim);
+        if(!promos.length){ el.innerHTML='<span style="color:var(--suave)">Nenhuma promoção programada.</span>'; return; }
+        const ini=Math.min(...promos.map(p=>Date.parse(p.promo_inicio))), fim=Math.max(...promos.map(p=>Date.parse(p.promo_fim))), n=Date.now();
+        const estado=n<ini?'agendada':(n<fim?'no ar':'encerrada');
+        const rot=san((promos.find(p=>p.promo_rotulo)||{}).promo_rotulo||'Promoção');
+        const dif=promos.filter(p=>{ const esperado=promoEstado(p)==='no ar'?Number(p.preco_promocional):Number(p.preco); return Math.abs(Number(p.preco_vigente)-esperado)>0.001; });
+        const cupAtivos=lista.filter(c=>c.ativo);
+        const fmt=v=>'R$ '+Number(v).toFixed(2).replace('.',',');
+        const ok=(b,t)=>`<div style="margin:3px 0">${b?'✅':'⚠️'} ${t}</div>`;
+        const cor=estado==='no ar'?'#1b7d45':(estado==='agendada'?'#b35400':'#6b6b6b');
+        const faixa=estado==='agendada'?'liga sozinha em '+dur(ini-n):(estado==='no ar'?'termina em '+dur(fim-n):'encerrada');
+        el.innerHTML=
+          `<div style="display:inline-block;padding:4px 12px;border-radius:999px;background:${cor};color:#fff;font-weight:800;font-size:.78rem;margin-bottom:8px">${rot}: ${estado.toUpperCase()} — ${faixa}</div>`+
+          `<div style="margin:2px 0 8px">De <b>${dataCurta(ini)}</b> até <b>${dataCurta(fim)}</b> (horário de Fortaleza)</div>`+
+          promos.map(p=>`<div style="display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px solid rgba(0,0,0,.06)"><span>${san(p.nome)}</span><span><s>${fmt(p.preco)}</s> → <b>${fmt(p.preco_promocional)}</b> <small>(cobra agora: ${fmt(p.preco_vigente)})</small></span></div>`).join('')+
+          `<div style="margin-top:8px">`+
+          ok(!dif.length,'O preço que o servidor cobra agora confere com a programação'+(dif.length?' — divergente em: '+dif.map(p=>san(p.nome)).join(', '):''))+
+          ok(!cupAtivos.length,cupAtivos.length?'Há cupom ativo ('+cupAtivos.map(c=>san(c.codigo)).join(', ')+') — ele acumula com a promoção':'Nenhum cupom ativo: a promoção vale sozinha, sem código')+
+          ok(promos.every(p=>Number(p.preco_promocional)<Number(p.preco)),'Todos os preços promocionais são menores que o normal')+
+          `</div><div style="margin-top:6px;font-size:.74rem;color:var(--suave)">O preço é decidido pelo servidor; o cliente não consegue alterá-lo.</div>`;
+    } catch(e){ el.textContent='Não foi possível conferir agora. Tente atualizar.'; }
+}
 async function carregarDashboard(){
+    renderGarantiaPromo();
     try {
         const d = await api({ action: 'admin_dashboard' });
         document.getElementById('dash-faturamento').textContent = `R$ ${(d.total_faturado||0).toFixed(2).replace('.',',')}`;
