@@ -238,46 +238,65 @@
         body.tem-promo-hero #promo-hero{margin-top:-50px;}
         body.tem-promo-hero #hero-banner{margin-top:12px;}
         body.tem-promo-hero .filter-container{margin-top:12px;}
-        .pb{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:1fr;min-height:310px;border-radius:24px;color:var(--branco);
-            background:radial-gradient(120% 140% at 88% 8%,#2c1b73 0%,var(--marca-roxo-escuro) 40%,var(--marca-roxo) 100%);box-shadow:0 16px 44px rgba(15,7,50,.38);}
+        .pb{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:1fr;border-radius:20px;color:var(--branco);
+            background:radial-gradient(120% 140% at 88% 8%,#2c1b73 0%,var(--marca-roxo-escuro) 40%,var(--marca-roxo) 100%);box-shadow:0 12px 32px rgba(15,7,50,.32);}
         .pb::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
             background:linear-gradient(135deg,rgba(248,89,0,.95),rgba(255,255,255,.14) 42%,rgba(0,123,255,.55));
             -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;}
-        .pb-canvas{position:absolute;right:-120px;top:-10px;width:320px;height:320px;opacity:.7;z-index:0;pointer-events:none;}
-        .pb::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(15,7,50,0) 0%,rgba(15,7,50,.55) 38%,rgba(15,7,50,.92) 62%);}
-        .pb-conteudo{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:26px 22px 24px;}
+        .pb::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(15,7,50,.9) 0%,rgba(15,7,50,.55) 55%,rgba(15,7,50,0) 100%);}
+        .pb-canvas{position:absolute;right:-70px;top:50%;width:230px;height:230px;transform:translateY(-50%);opacity:.7;z-index:0;pointer-events:none;}
+        .pb-conteudo{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:16px 16px 16px;min-width:0;}
         .pb-conteudo>*{animation:pb-entra .65s cubic-bezier(.2,.7,.2,1) both;}
         .pb-conteudo>*:nth-child(2){animation-delay:.07s}.pb-conteudo>*:nth-child(3){animation-delay:.14s}
-        .pb-conteudo>*:nth-child(4){animation-delay:.21s}.pb-conteudo>*:nth-child(5){animation-delay:.28s}
-        .pb-selo{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(248,89,0,.16);border:1px solid rgba(248,89,0,.6);
-            font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#ffc7a3;}
-        .pb-ponto{width:8px;height:8px;border-radius:50%;background:var(--marca-laranja);animation:pb-pulso 1.8s ease-out infinite;}
-        .pb-titulo{margin:0;font-family:var(--font-titulo);font-weight:400;line-height:.92;letter-spacing:.01em;font-size:clamp(2.9rem,13vw,4.8rem);text-shadow:0 6px 30px rgba(0,0,0,.35);}
-        .pb-titulo span{display:block;}
+        .pb-conteudo>*:nth-child(4){animation-delay:.21s}
+        .pb-selo{display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:999px;background:rgba(248,89,0,.16);border:1px solid rgba(248,89,0,.6);
+            font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:#ffc7a3;}
+        .pb-ponto{width:7px;height:7px;border-radius:50%;background:var(--marca-laranja);animation:pb-pulso 1.8s ease-out infinite;}
+        .pb-titulo{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.26em;font-family:var(--font-titulo);font-weight:400;line-height:1;letter-spacing:.01em;
+            font-size:clamp(1.9rem,8.6vw,2.9rem);text-shadow:0 4px 22px rgba(0,0,0,.35);}
+        .pb-titulo span{display:inline;}
         .pb-titulo .a{color:var(--marca-laranja);}
-        .pb-sub{margin:0;max-width:34ch;font-size:.95rem;line-height:1.45;color:rgba(255,255,255,.9);}
-        .pb-relogio{display:flex;gap:8px;margin:2px 0 0;padding:0;list-style:none;}
-        .pb-un{min-width:58px;padding:8px 6px 7px;text-align:center;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);}
-        .pb-un b{display:block;font-size:1.4rem;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums;}
-        .pb-un span{font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.78);}
-        .pb-ate{margin:0;font-size:.76rem;color:rgba(255,255,255,.8);}
-        .pb-cta{margin-top:6px;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:12px 22px;border:0;border-radius:14px;background:var(--marca-laranja);color:var(--marca-roxo);
-            font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 10px 26px var(--marca-laranja-glow);transition:transform .18s ease,box-shadow .18s ease;}
-        .pb-cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px var(--marca-laranja-glow);}
+        .pb-sub{margin:0;font-size:.82rem;line-height:1.35;color:rgba(255,255,255,.9);}
+        .pb-acao{display:flex;flex-direction:column;align-items:flex-start;gap:8px;}
+        .pb-relogio{display:flex;gap:6px;margin:0;padding:0;}
+        .pb-un{min-width:46px;padding:5px 5px 4px;text-align:center;border-radius:11px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);}
+        .pb-un b{display:block;font-size:1.1rem;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums;}
+        .pb-un span{font-size:.5rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.8);}
+        .pb-linha{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;}
+        .pb-ate{margin:0;font-size:.72rem;color:rgba(255,255,255,.82);}
+        .pb-cta{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:9px 18px;border:0;border-radius:12px;background:var(--marca-laranja);color:var(--marca-roxo);
+            font-weight:900;font-size:.92rem;cursor:pointer;box-shadow:0 8px 20px var(--marca-laranja-glow);transition:transform .18s ease,box-shadow .18s ease;}
+        .pb-cta:hover{transform:translateY(-2px);box-shadow:0 12px 26px var(--marca-laranja-glow);}
         .pb-cta:active{transform:translateY(0);}
         .pb-cta:focus-visible{outline:3px solid var(--branco);outline-offset:3px;}
-        @keyframes pb-pulso{0%{box-shadow:0 0 0 0 rgba(248,89,0,.75)}70%{box-shadow:0 0 0 10px rgba(248,89,0,0)}100%{box-shadow:0 0 0 0 rgba(248,89,0,0)}}
-        @keyframes pb-entra{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+        @keyframes pb-pulso{0%{box-shadow:0 0 0 0 rgba(248,89,0,.75)}70%{box-shadow:0 0 0 9px rgba(248,89,0,0)}100%{box-shadow:0 0 0 0 rgba(248,89,0,0)}}
+        @keyframes pb-entra{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
         @keyframes pb-brilho{0%,55%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
         .badge-promo{position:relative;overflow:hidden;}
         .badge-promo::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.6) 50%,transparent 70%);transform:translateX(-130%);animation:pb-brilho 3.4s ease-in-out infinite;}
-        @media(min-width:760px){
-            .pb{grid-template-columns:1.05fr .95fr;align-items:center;min-height:350px;}
-            .pb::before{display:none;}
-            .pb-canvas{position:relative;right:auto;top:auto;transform:none;grid-column:2;grid-row:1;width:100%;height:350px;opacity:.95;}
-            .pb-conteudo{grid-column:1;grid-row:1;padding:40px 44px;gap:12px;}
+        @media(min-width:520px){
+            .pb-canvas{right:-40px;width:270px;height:270px;}
+            .pb-conteudo{padding:20px 24px;gap:9px;}
+            .pb-acao{flex-direction:row;align-items:center;flex-wrap:wrap;gap:10px 18px;}
+            .pb-un{min-width:52px;}.pb-un b{font-size:1.2rem;}
         }
-        @media(max-width:359px){.pb-un{min-width:50px}.pb-un b{font-size:1.2rem}}
+        @media(min-width:900px){
+            .pb{grid-template-columns:1.2fr .8fr;align-items:center;}
+            .pb::before{display:none;}
+            .pb-canvas{position:relative;right:auto;top:auto;transform:none;grid-column:2;grid-row:1;width:100%;height:230px;opacity:.95;}
+            .pb-conteudo{grid-column:1;grid-row:1;padding:26px 36px;gap:10px;}
+            .pb-titulo{font-size:clamp(2.6rem,3.8vw,3.6rem);}
+            .pb-sub{font-size:.95rem;}
+        }
+        @media(max-height:640px){.pb-sub{display:none;}}
+        @media(max-height:520px){
+            .pb-canvas,.pb-sub,.pb-selo,.pb-ate{display:none;}.pb::before{display:none;}
+            .pb-conteudo{padding:12px 16px;gap:6px;}
+            .pb-titulo{font-size:1.7rem;}
+            .pb-acao{flex-direction:row;align-items:center;gap:10px 14px;}
+            .pb-cta{min-height:40px;padding:7px 16px;}
+        }
+        @media(max-width:359px){.pb-un{min-width:42px}.pb-un b{font-size:1rem}.pb-cta{padding:9px 14px}}
         @media(prefers-reduced-motion:reduce){
             .pb-conteudo>*,.pb-ponto,.badge-promo::after{animation:none!important;}
             .pb-cta{transition:none;}
@@ -286,12 +305,13 @@
         /* ===== Acessibilidade (WCAG 2.1 AA) =====
            Mesma identidade, um tom mais fechado onde há texto pequeno: o laranja #f85900 com texto branco dá 3,3:1
            (o mínimo para texto pequeno é 4,5:1). Decorativos e títulos grandes seguem com a cor original. */
-        :root{--laranja-ac:#c84800;--vermelho-ac:#c93844;--verde-ac:#1e8549;--cinza-ac:#6e6e6e;--texto-fraco:#6e6e6e;}
+        :root{--laranja-ac:#c84800;--vermelho-ac:#c93844;--verde-ac:#1b7d45;--cinza-ac:#6e6e6e;--texto-fraco:#6e6e6e;}
         .store-badge,.badge-destaque,.cupom-aplicar,.badge-promo{background:var(--laranja-ac)!important;}
         .badge-ultimas{background:var(--vermelho-ac)!important;}
         .badge-estoque,.badge-desc{background:var(--verde-ac)!important;}
         .card-price,.link-legal{color:var(--laranja-ac)!important;}
         .radio-option:has(input:checked){color:var(--laranja-ac)!important;}
+        .resumo-linha.desconto,.resumo-linha.desconto span{color:var(--verde-ac)!important;}
         .modal-panel a[style*="laranja-brand"]{color:var(--laranja-ac)!important;}
         .card-price .preco-antigo,.preco-antigo,.tap-hint,#comprovante-label{color:var(--cinza-ac)!important;}
         .pix-timer,#pix-timer-txt,.btn-danger{color:var(--vermelho-ac)!important;}
@@ -404,8 +424,12 @@
         .float-bar.visible{transform:translateX(-50%) translateY(0);}
 
         /* TOAST */
-        #toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-100px);background:white;color:var(--roxo-brand);padding:11px 22px;border-radius:50px;box-shadow:var(--shadow-md);font-weight:600;font-size:0.88rem;z-index:3000;display:flex;align-items:center;gap:8px;transition:transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275);max-width:90vw;}
-        #toast.show{transform:translateX(-50%) translateY(0);}
+        /* Toast: largura pelo conteúdo (max-content) até 92% da tela. Antes, com left:50% a largura disponível era só
+           metade da tela e o aviso quebrava em 3 a 5 linhas no celular. */
+        #toast{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;width:max-content;max-width:min(92vw,440px);transform:translate(-50%,-150%);background:white;color:var(--roxo-brand);padding:10px 18px;border-radius:16px;box-shadow:var(--shadow-md);font-weight:600;font-size:0.86rem;line-height:1.3;z-index:3000;display:flex;align-items:center;gap:9px;pointer-events:none;transition:transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275);}
+        #toast span{min-width:0;overflow-wrap:anywhere;}
+        #toast i{flex:0 0 auto;}
+        #toast.show{transform:translate(-50%,0);}
         #toast.erro{color:var(--vermelho-del);}
         #toast i{color:var(--verde-zap);font-size:1rem;}
         #toast.erro i{color:var(--vermelho-del);}
@@ -694,6 +718,7 @@
 
             <div class="resumo-box">
                 <div class="resumo-linha"><span>Subtotal</span><span id="res-sub">R$ 0,00</span></div>
+                <div class="resumo-linha desconto" id="res-promo-linha" style="display:none"><span id="res-promo-label">Você economiza</span><span id="res-promo-val"></span></div>
                 <div class="resumo-linha desconto" id="res-desc-linha" style="display:none"><span id="res-desc-label">Desconto</span><span id="res-desc-val"></span></div>
                 <div class="resumo-linha total"><span>Total</span><span id="res-total">R$ 0,00</span></div>
             </div>
@@ -1122,13 +1147,15 @@ const PromoHero=(()=>{
             '<div class="pb-conteudo">'+
               '<span class="pb-selo"><span class="pb-ponto" aria-hidden="true"></span>Promoção no ar</span>'+
               '<h2 class="pb-titulo"><span class="a">'+san(a)+'</span>'+(b?'<span>'+san(b)+'</span>':'')+'</h2>'+
-              '<p class="pb-sub">'+n+(n===1?' produto com preço especial':' produtos com preço especial')+', só por tempo limitado.</p>'+
+              '<p class="pb-sub">'+n+(n===1?' produto com preço especial':' produtos com preço especial')+' por tempo limitado.</p>'+
+              '<div class="pb-acao">'+
               '<div class="pb-relogio" role="timer" aria-label="Tempo restante da promoção" aria-live="off">'+
                 '<div class="pb-un"><b data-u="d">--</b><span>dias</span></div><div class="pb-un"><b data-u="h">--</b><span>horas</span></div>'+
                 '<div class="pb-un"><b data-u="m">--</b><span>min</span></div><div class="pb-un"><b data-u="s">--</b><span>seg</span></div>'+
               '</div>'+
-              '<p class="pb-ate">Vale até <strong>'+ateDia+'</strong> ou enquanto durar o estoque.</p>'+
-              '<button type="button" class="pb-cta" id="pb-cta">Ver ofertas <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>'+
+              '<div class="pb-linha"><button type="button" class="pb-cta" id="pb-cta">Ver ofertas <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>'+
+              '<p class="pb-ate">Até <strong>'+ateDia+'</strong> ou enquanto durar o estoque</p></div>'+
+              '</div>'+
             '</div>'+
           '</div>';
         el.hidden=false; document.body.classList.add('tem-promo-hero'); alvoAtual=alvo;
@@ -1632,7 +1659,8 @@ function renderCarrinho(){
     if(btnEnviar) btnEnviar.disabled=false;
     carrinho.forEach((item,idx)=>{
         const li=document.createElement('li');li.className='cart-item';
-        li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>R$${item.preco.toFixed(2).replace('.',',')}${item.tamanho&&item.tamanho!=='Único'?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})" aria-label="Remover ${san(item.nome)} da sacola"><i class="fa-solid fa-trash"></i></button>`;
+        const _riscado=(item.preco_original&&item.preco_original>item.preco)?`<s class="preco-antigo">R$${item.preco_original.toFixed(2).replace('.',',')}</s> `:'';
+        li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>${_riscado}R$${item.preco.toFixed(2).replace('.',',')}${item.tamanho&&item.tamanho!=='Único'?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})" aria-label="Remover ${san(item.nome)} da sacola"><i class="fa-solid fa-trash"></i></button>`;
         lista.appendChild(li);
     });atualizarResumo();
 }
@@ -1689,6 +1717,7 @@ function sincronizarCarrinhoComProdutos(){
         if(item.preco!==p.preco||item.nome!==p.nome){
             item.preco=p.preco;item.nome=p.nome;item.img=p.img;precoMudou=true;
         }
+        item.preco_original=p.preco_original||null;
         return true;
     });
     if(algumRemovido||precoMudou){
@@ -1763,6 +1792,9 @@ function atualizarResumo(){
     const s=calcSub(),d=calcDesc(),t=calcTotal();
     document.getElementById('res-sub').textContent='R$ '+s.toFixed(2).replace('.',',');
     document.getElementById('res-total').textContent='R$ '+t.toFixed(2).replace('.',',');
+    const eco=carrinho.reduce((a,i)=>a+((i.preco_original&&i.preco_original>i.preco)?(i.preco_original-i.preco)*i.qtd:0),0);
+    const pl=document.getElementById('res-promo-linha');
+    if(pl){ if(eco>0){document.getElementById('res-promo-val').textContent='R$ '+eco.toFixed(2).replace('.',',')+' (NUPI BLACK)';pl.style.display='flex';} else pl.style.display='none'; }
     const dl=document.getElementById('res-desc-linha');
     if(d>0&&cupomApl){document.getElementById('res-desc-val').textContent='- R$ '+d.toFixed(2).replace('.',',');document.getElementById('res-desc-label').textContent='Desconto ('+cupomApl.cod+')';dl.style.display='flex';}
     else dl.style.display='none';
@@ -2144,7 +2176,7 @@ function abrirLGPD(){abrirLegal('modal-lgpd');}
 function abrirTermos(){abrirLegal('modal-termos');}
 function abrirTrocas(){abrirLegal('modal-trocas');}
 let _tt;
-function toast(msg,erro=0){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.className='show'+(erro?' erro':'');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);}
+function toast(msg,erro=0){const t=document.getElementById('toast');if(!erro) msg=String(msg).replace(/^(✅|✔️?)\s*/,''); /* o ícone verde já indica sucesso: não repetir o emoji */document.getElementById('toast-msg').textContent=msg;t.className='show'+(erro?' erro':'');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
 </body>
 </html>
