@@ -45,7 +45,7 @@
 - Alternativa por SQL (SQL Editor): `update public.produtos set preco_promocional = 2.00, promo_inicio = timestamptz '2026-11-16 00:00:00-03', promo_fim = timestamptz '2026-11-30 23:59:59-03', promo_rotulo = 'NUPI BLACK' where id in (18,19,20,21);` (fuso de Fortaleza, -03).
 - Para encerrar antes: `update public.produtos set promo_fim = now() where id in (...);`.
 - Cupons **acumulam** com preço promocional (um cupom percentual vale sobre o preço já promocional). Se isso não for desejado, é preciso ajustar `criar_pedido` e `calcDesc` na loja.
-- **Pendência de segurança tratada em 15/11/2026:** a coluna `produtos.custo` era legível por qualquer visitante pela API. A migration `20261115000002_ocultar_custo_do_publico_APLICAR_DEPOIS_DO_DEPLOY.sql` corrige; só aplicar depois que a loja nova (que usa `listar_produtos_loja`) estiver no ar.
+- **Pendência de segurança tratada em 15/11/2026:** a coluna `produtos.custo` era legível por qualquer visitante pela API. A migration `20261115000002_ocultar_custo_do_publico_APLICAR_DEPOIS_DO_DEPLOY.sql` corrige; **aplicada em 15/11/2026**, depois do deploy da loja nova (que usa `listar_produtos_loja`); `custo` não é mais legível pela API pública.
 
 ## Como refazer a auditoria de acessibilidade (axe-core)
 1. `python3 -m http.server 8765` na pasta do repo.
