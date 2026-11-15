@@ -457,22 +457,23 @@
         .botton-opt:active{transform:scale(0.97);}
 
         /* FOOTER */
-        footer{margin-top:44px;background:linear-gradient(160deg,var(--roxo-brand) 20%,var(--roxo-brand-escuro) 100%);border-radius:40px 40px 0 0;padding:44px 20px 120px;text-align:center;color:var(--branco);box-shadow:0 -10px 30px rgba(15,7,50,0.15);}
+        footer{margin-top:44px;background:linear-gradient(160deg,var(--roxo-brand) 20%,var(--roxo-brand-escuro) 100%);border-radius:40px 40px 0 0;padding:36px 20px calc(96px + env(safe-area-inset-bottom,0px));text-align:center;color:var(--branco);box-shadow:0 -10px 30px rgba(15,7,50,0.15);}
         .footer-inner{max-width:600px;margin:0 auto;}
         /* PNG com fundo transparente — assenta direto no gradiente, sem "caixa" atrás */
         /* Só o emblema: o nome da marca já aparece logo abaixo, no "Feito com ... pelo
            NUPIEEPRO" — repetir o logotipo escrito aqui era redundante e pesava demais. */
         .footer-logo{width:84px;height:auto;display:block;margin:0 auto 4px;}
         /* nowrap + flex:1 mantém os 3 numa fileira só até nas telas de 360px */
-        .footer-actions{display:flex;justify-content:center;gap:8px;margin-top:26px;}
+        .footer-actions{display:flex;justify-content:center;gap:8px;margin-top:20px;}
         .footer-action-btn{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:var(--branco);padding:11px 10px;border-radius:30px;font-family:inherit;font-size:0.75rem;font-weight:700;text-decoration:none;white-space:nowrap;cursor:pointer;transition:0.2s;}
         @media(min-width:600px){.footer-actions{gap:12px;}.footer-action-btn{flex:0 0 auto;padding:12px 22px;font-size:0.8rem;}}
         .footer-action-btn:active{background:var(--laranja-brand);border-color:var(--laranja-brand);transform:scale(0.96);}
         .footer-action-btn i{font-size:0.85rem;color:var(--laranja-brand);}
         .footer-action-btn:active i{color:var(--branco);}
-        .footer-divider{width:60px;height:2px;background:rgba(255,255,255,0.15);border-radius:2px;margin:28px auto 18px;}
+        .footer-divider{width:60px;height:2px;background:rgba(255,255,255,0.15);border-radius:2px;margin:22px auto 16px;}
         .footer-credit{font-size:0.78rem;font-weight:600;opacity:0.9;}
-        .footer-lgpd{background:none;border:none;color:rgba(255,255,255,0.55);font-size:0.68rem;cursor:pointer;text-decoration:underline;font-family:inherit;margin-top:10px;padding:4px;}
+        .footer-legal{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 18px;margin-top:14px;}
+        .footer-lgpd{background:none;border:none;color:rgba(255,255,255,0.55);font-size:0.68rem;cursor:pointer;text-decoration:underline;font-family:inherit;margin:0;padding:8px 4px;min-height:36px;}
     </style>
 </head>
 <body>
@@ -557,9 +558,11 @@
         </div>
         <div class="footer-divider"></div>
         <div class="footer-credit">Feito com <i class="fa-solid fa-heart" style="color:var(--azul-coracao)"></i> <i class="fa-solid fa-heart" style="color:var(--laranja-brand)"></i> pelo NUPIEEPRO</div>
-        <button class="footer-lgpd" onclick="abrirLGPD()">Privacidade e Proteção de Dados (LGPD)</button>
-        <button class="footer-lgpd" onclick="abrirTermos()">Termos de compra</button>
-        <button class="footer-lgpd" onclick="abrirTrocas()">Trocas e devoluções</button>
+        <nav class="footer-legal" aria-label="Informações legais">
+            <button class="footer-lgpd" onclick="abrirLGPD()">Privacidade e Proteção de Dados (LGPD)</button>
+            <button class="footer-lgpd" onclick="abrirTermos()">Termos de compra</button>
+            <button class="footer-lgpd" onclick="abrirTrocas()">Trocas e devoluções</button>
+        </nav>
     </div>
 </footer>
 
