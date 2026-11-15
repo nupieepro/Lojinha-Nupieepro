@@ -3,7 +3,7 @@
 ## Deploy
 - **GitHub Pages**, branch `main`, pasta raiz. Merge/push em `main` publica em segundos (workflow "pages build and deployment"). **Não existe staging**: o que está em `main` é o que o cliente vê. Teste localmente antes.
 - Rodar local: `python3 -m http.server 8000` e abrir `http://localhost:8000/index.html` ou `/admin.html`. **Aponta para o banco de produção.** Pedido de teste vira pedido real.
-- Cache: se mudar CSS/JS/imagens, incrementar `CACHE` em `sw.js` / `admin-sw.js` (hoje `nupieepro-v20`); senão usuários recebem versão antiga.
+- Cache: se mudar CSS/JS/imagens, incrementar `CACHE` em `sw.js` / `admin-sw.js` (hoje `nupieepro-v21`); senão usuários recebem versão antiga.
 - Edge Functions: `supabase functions deploy upload-imagem --project-ref scacjsosvlllapbgetos` (precisa do Supabase CLI logado).
 - Migrations: colar no SQL Editor do Dashboard, na ordem do README de migrations.
 
@@ -38,3 +38,10 @@
 - [ ] Criar admin novo em Auth → Users e inserir em `public.admin_users`; remover o antigo
 - [ ] Rotacionar: service role key (e **atualizar o segredo do Vault `service_role_key_notify_pedidos`**), senha de app do Gmail (`SMTP_PASSWORD`)
 - [ ] Registrar reCAPTCHA no nome do novo responsável
+
+## Promoção por período (NUPI BLACK e futuras)
+- Cada produto pode ter `preco_promocional`, `promo_inicio`, `promo_fim` e `promo_rotulo` (tabela `produtos`). O **servidor** decide o preço vigente pelo relógio do banco (`preco_vigente()`); a loja lê o catálogo por `listar_produtos_loja()` (já com `preco_atual`/`em_promocao`) e `criar_pedido` cobra o preço vigente. Fora da janela o preço volta ao normal sozinho.
+- Para criar uma promoção nova (SQL Editor): `update public.produtos set preco_promocional = 2.00, promo_inicio = timestamptz '2026-11-16 00:00:00-03', promo_fim = timestamptz '2026-12-01 00:00:00-03', promo_rotulo = 'NUPI BLACK' where id in (18,19,20,21);` (fuso de Fortaleza, -03).
+- Para encerrar antes: `update public.produtos set promo_fim = now() where id in (...);`.
+- Cupons **acumulam** com preço promocional (um cupom percentual vale sobre o preço já promocional). Se isso não for desejado, é preciso ajustar `criar_pedido` e `calcDesc` na loja.
+- **Pendência de segurança tratada em 15/11/2026:** a coluna `produtos.custo` era legível por qualquer visitante pela API. A migration `20261115000002_ocultar_custo_do_publico_APLICAR_DEPOIS_DO_DEPLOY.sql` corrige; só aplicar depois que a loja nova (que usa `listar_produtos_loja`) estiver no ar.

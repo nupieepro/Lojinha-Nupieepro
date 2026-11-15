@@ -228,6 +228,10 @@
         .preco-antigo{text-decoration:line-through;color:var(--texto-fraco);font-weight:600;font-size:0.8em;margin-right:4px;}
         .card-price .preco-antigo{display:block;margin:0 0 1px;}
         .cupom-codigo{display:inline-block;background:rgba(255,255,255,0.12);border:1px dashed var(--laranja-brand);border-radius:8px;padding:2px 10px;letter-spacing:1.5px;font-weight:800;}
+        /* Textos legais abrem por cima de qualquer outra janela (inclusive o checkout) */
+        #modal-lgpd,#modal-termos,#modal-trocas{z-index:2100;}
+        .link-legal{background:none;border:none;padding:0;color:var(--laranja-brand);font:inherit;font-weight:800;text-decoration:underline;cursor:pointer;}
+        .badge-promo{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:8px;background:var(--laranja-brand);color:var(--branco);font-size:0.6rem;font-weight:800;letter-spacing:.04em;vertical-align:middle;}
         .badge-desc{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:8px;background:var(--cor-sucesso);color:var(--branco);font-size:0.6rem;font-weight:800;vertical-align:middle;white-space:nowrap;}
         .card-enc{font-size:0.68rem;color:var(--laranja-brand);font-weight:700;margin-top:3px;}
         .tap-hint{font-size:0.62rem;color:var(--texto-fraco);margin-top:auto;padding-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
@@ -437,37 +441,112 @@
         <div class="footer-divider"></div>
         <div class="footer-credit">Feito com <i class="fa-solid fa-heart" style="color:var(--azul-coracao)"></i> <i class="fa-solid fa-heart" style="color:var(--laranja-brand)"></i> pelo NUPIEEPRO</div>
         <button class="footer-lgpd" onclick="abrirLGPD()">Privacidade e Proteção de Dados (LGPD)</button>
+        <button class="footer-lgpd" onclick="abrirTermos()">Termos de compra</button>
+        <button class="footer-lgpd" onclick="abrirTrocas()">Trocas e devoluções</button>
     </div>
 </footer>
 
 <!-- MODAL LGPD -->
-<div class="modal-bg" id="modal-lgpd" onclick="fecharModais(event)" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modal-lgpd" onclick="fecharLegal(event,'modal-lgpd')" role="dialog" aria-modal="true" aria-label="Privacidade e Proteção de Dados">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharLegal(null,'modal-lgpd')" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <h2 style="color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:14px">Privacidade e Proteção de Dados</h2>
-        <p style="font-size:0.83rem;color:var(--texto);line-height:1.7;margin-bottom:10px">
-            O <strong>NUPIEEPRO</strong> respeita sua privacidade e cumpre a 
-            <strong>Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018)</strong>.
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">O <strong>NUPIEEPRO</strong> respeita sua privacidade e segue a <strong>Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018)</strong>.</p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Quem é o responsável pelos dados</strong><br>
+            O NUPIEEPRO, organização estudantil sem fins lucrativos da UFPI. Fale com a gente pelo Instagram <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a> para qualquer assunto sobre seus dados.
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
-            <strong style="color:var(--roxo-brand)">Quais dados coletamos:</strong><br>
-            Nome, WhatsApp, e-mail (opcional) e endereço (quando necessário para entrega).
+            <strong style="color:var(--roxo-brand)">Quais dados coletamos</strong><br>
+            Nome, WhatsApp, e-mail (opcional), endereço (só quando você escolhe entrega) e, se você enviar, a foto do comprovante de pagamento.
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
-            <strong style="color:var(--roxo-brand)">Para que usamos:</strong><br>
-            Exclusivamente para processar seu pedido, confirmar pagamento e entrar em contato sobre a compra.
+            <strong style="color:var(--roxo-brand)">Para que usamos (e por que podemos)</strong><br>
+            Somente para receber e entregar seu pedido, confirmar o pagamento e falar com você sobre a compra. Isso é necessário para realizar a compra que você pediu (LGPD, art. 7º, V). Não usamos seus dados para propaganda de terceiros.
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
-            <strong style="color:var(--roxo-brand)">Compartilhamento:</strong><br>
-            Seus dados não são vendidos nem compartilhados com terceiros. São usados apenas internamente pela equipe do NUPIEEPRO.
+            <strong style="color:var(--roxo-brand)">Com quem os dados passam</strong><br>
+            Não vendemos seus dados. Para o sistema funcionar, eles passam por serviços que operam em nosso nome: <strong>Supabase</strong> (guarda os pedidos e os comprovantes, com acesso restrito à equipe), <strong>Google/Gmail</strong> (envia o e-mail de confirmação, se você informar e-mail) e <strong>WhatsApp</strong> (quando você toca em enviar o pedido). Dentro do núcleo, só a equipe da loja acessa.
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
-            <strong style="color:var(--roxo-brand)">Armazenamento:</strong><br>
-            Os dados ficam salvos no banco de dados do NUPIEEPRO (Supabase), com acesso restrito à equipe autenticada, e alguns dados de preenchimento (nome, WhatsApp) ficam salvos no seu próprio dispositivo (localStorage) só para agilizar seu próximo pedido.
+            <strong style="color:var(--roxo-brand)">Cookies e rastreadores</strong><br>
+            Não usamos cookies de rastreamento nem ferramentas de análise ou publicidade de terceiros. Guardamos só no seu aparelho (localStorage) a sua sacola, a lista dos seus pedidos e, se você quiser, nome e WhatsApp para preencher mais rápido.
         </p>
-        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:16px">
-            <strong style="color:var(--roxo-brand)">Seus direitos:</strong><br>
-            Você pode solicitar a exclusão dos seus dados a qualquer momento pelo Instagram <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a>.
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Por quanto tempo guardamos</strong><br>
+            Pelo tempo necessário para entregar o pedido e prestar contas das vendas do núcleo. Depois disso, ou se você pedir antes, apagamos ou anonimizamos, salvo se alguma obrigação legal exigir guardar.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Seus direitos</strong><br>
+            Você pode pedir confirmação de que tratamos seus dados, acesso, correção, anonimização, exclusão e informação sobre com quem compartilhamos (LGPD, art. 18), pelo Instagram <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a>.
+        </p>
+        <div style="background:var(--n-bg-100);border-radius:10px;padding:12px;font-size:0.78rem;color:var(--texto-suave);text-align:center">
+            NUPIEEPRO — Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI<br>
+            Contato: <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TERMOS -->
+<div class="modal-bg" id="modal-termos" onclick="fecharLegal(event,'modal-termos')" role="dialog" aria-modal="true" aria-label="Termos de compra">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharLegal(null,'modal-termos')" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+        <h2 style="color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:14px">Termos de compra</h2>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Quem vende</strong><br>
+            A Lojinha é mantida pelo <strong>NUPIEEPRO</strong>, organização estudantil sem fins lucrativos da UFPI. A renda das vendas é revertida para as atividades do núcleo.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Como comprar</strong><br>
+            Escolha os produtos, preencha seus dados e envie o pedido. O pagamento pode ser feito por PIX, dinheiro ou cartão. <strong>O pedido só é confirmado depois que a equipe conferir o pagamento</strong>; você acompanha o andamento em &quot;Meus pedidos&quot;.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Preços e promoções</strong><br>
+            Os preços estão em reais. Promoções, como a NUPI BLACK, valem apenas no período divulgado e enquanto houver estoque. O valor cobrado é o que o sistema calcula no momento em que você envia o pedido.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Estoque</strong><br>
+            Se algum item acabar antes da confirmação, a equipe fala com você para trocar por outro ou devolver o valor pago.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Cartão de crédito</strong><br>
+            Pode haver acréscimo das taxas da operadora. A equipe informa o valor antes de cobrar, e você decide se quer seguir.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Retirada e entrega</strong><br>
+            Combinadas com a equipe pelo WhatsApp depois da confirmação do pedido.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Mudanças nestes termos</strong><br>
+            Podemos atualizar este texto. Vale a versão que estiver no site quando você enviar o pedido.
+        </p>
+        <div style="background:var(--n-bg-100);border-radius:10px;padding:12px;font-size:0.78rem;color:var(--texto-suave);text-align:center">
+            NUPIEEPRO — Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI<br>
+            Contato: <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TROCAS -->
+<div class="modal-bg" id="modal-trocas" onclick="fecharLegal(event,'modal-trocas')" role="dialog" aria-modal="true" aria-label="Trocas e devoluções">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharLegal(null,'modal-trocas')" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+        <h2 style="color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:14px">Trocas e devoluções</h2>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Desistência da compra</strong><br>
+            Se você comprou pelo site e se arrependeu, pode desistir em até <strong>7 dias corridos</strong> depois de receber o produto, desde que ele esteja sem uso e no estado original. Devolvemos o valor pelo mesmo meio de pagamento.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Produto com defeito</strong><br>
+            Avise em até <strong>30 dias</strong> depois de receber. Trocamos por outro igual ou devolvemos o valor.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Produtos feitos sob encomenda</strong><br>
+            Por serem feitos especialmente para o seu pedido, só podem ser trocados ou devolvidos em caso de defeito.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Como pedir</strong><br>
+            Mande uma mensagem para o Instagram <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a> com o número do pedido e o motivo.
         </p>
         <div style="background:var(--n-bg-100);border-radius:10px;padding:12px;font-size:0.78rem;color:var(--texto-suave);text-align:center">
             NUPIEEPRO — Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI<br>
@@ -561,6 +640,7 @@
             <label class="radio-option"><input type="radio" name="pgto" value="Dinheiro" onchange="togglePix()"> Dinheiro</label>
             <label class="radio-option"><input type="radio" name="pgto" value="Cartão" onchange="togglePix()"> Cartão</label>
             <div id="aviso-presencial" style="display:none;background:var(--n-bg-100);border-radius:10px;padding:10px;font-size:0.82rem;color:var(--texto-suave);margin-bottom:10px"><i class="fa-solid fa-circle-info"></i> Pagamento na retirada ou entrega.</div>
+            <div id="aviso-cartao" style="display:none;background:var(--n-bg-100);border-radius:10px;padding:10px;font-size:0.82rem;color:var(--texto-suave);margin-bottom:10px"><i class="fa-solid fa-credit-card"></i> Cartão de crédito: pode haver acréscimo das taxas da operadora, informado pela equipe antes da cobrança.</div>
 
             <div class="pix-box ativo" id="pix-box">
                 <div class="pix-valor" id="pix-valor"></div>
@@ -587,6 +667,7 @@
             </div>
 
             <button class="btn-danger" onclick="limparCarrinho()"><i class="fa-solid fa-trash"></i> Limpar sacola</button>
+            <p style="font-size:0.72rem;color:var(--texto-fraco);line-height:1.5;margin-top:10px;text-align:center">Ao enviar o pedido você concorda com os <button type="button" class="link-legal" onclick="abrirTermos()">Termos de compra</button>, a <button type="button" class="link-legal" onclick="abrirLGPD()">Política de Privacidade</button> e as regras de <button type="button" class="link-legal" onclick="abrirTrocas()">Trocas e devoluções</button>.</p>
             <button class="btn-primary" id="btn-enviar-pedido" onclick="enviarPedidoZap()" style="margin-top:10px;background:var(--verde-zap)"><i class="fa-brands fa-whatsapp"></i> Enviar Pedido</button>
         </div>
     </div>
@@ -847,6 +928,13 @@ const IMG_FALLBACK = {
 
 function normalizarProduto(p){
     p.colecao = p.colecao || '';
+    /* Promoção por período: o servidor manda preco (tabela) + preco_atual (vigente). Daqui pra frente
+       TODA a loja (cards, sacola, totais) usa p.preco = preço vigente; p.preco_original guarda o "De". */
+    if(!p._promoAplicada){
+        p._promoAplicada=true;
+        if(p.em_promocao&&Number(p.preco_atual)<Number(p.preco)){ p.preco_original=Number(p.preco); p.preco=Number(p.preco_atual); }
+        else p.preco_original=null;
+    }
     const imgs = Array.isArray(p.imagens)
         ? p.imagens
         : (p.imagens||'').toString().split(',').map(s=>s.trim()).filter(s=>s&&s.startsWith('http'));
@@ -894,7 +982,16 @@ async function buscarAPI(action){
         return Object.fromEntries((data||[]).map(r=>[r.chave,r.valor]));
     }
     if(action==='produtos'){
-        const {data,error}=await _sb.from('produtos').select('*').eq('ativo',true);
+        /* Catálogo vem da RPC listar_produtos_loja: o SERVIDOR decide o preço vigente (promoção por
+           período, ex. NUPI BLACK) e a lista não inclui a coluna `custo`. Se a RPC ainda não existir
+           (ex.: deploy antes da migration), cai no select por colunas — sem `custo`. */
+        try{
+            const r=await _sb.rpc('listar_produtos_loja');
+            if(!r.error&&Array.isArray(r.data)) return r.data;
+        }catch(e){ /* usa o fallback */ }
+        const {data,error}=await _sb.from('produtos')
+            .select('id,nome,descricao,preco,tipo,categoria,tamanhos,imagens,estoque,destaque,novo,encomenda,prazo_encomenda,badge_extra,ativo,agendamento')
+            .eq('ativo',true);
         if(error) throw new Error(error.message);
         return data||[];
     }
@@ -1386,8 +1483,12 @@ function descontoUnit(p){
 function fmtBRL(v){return 'R$ '+v.toFixed(2).replace('.',',');}
 function htmlPreco(p){
     const d=descontoUnit(p);
-    if(!d) return fmtBRL(p.preco);
-    return `<span class="preco-antigo">${fmtBRL(p.preco)}</span><span>${fmtBRL(p.preco-d)}</span><span class="badge-desc">-${fmtBRL(d)}</span>`;
+    const promo=!!(p.preco_original&&p.preco_original>p.preco);
+    if(!d&&!promo) return fmtBRL(p.preco);
+    const antigo=promo?p.preco_original:p.preco;
+    const final=p.preco-d;
+    const selo=promo?`<span class="badge-promo">${san(p.promo_rotulo||'NUPI BLACK')}</span>`:'';
+    return `<span class="preco-antigo">${fmtBRL(antigo)}</span><span>${fmtBRL(final)}</span><span class="badge-desc">-${fmtBRL(antigo-final)}</span>${selo}`;
 }
 function textoCupomAplicado(c){
     return c.tipo==='fixo_por_camisa'?c.cod+' — R$ '+Number(c.valor).toFixed(2).replace('.',',')+' off por camisa'
@@ -1460,7 +1561,9 @@ function reabrirZapPedido(){
     if(window._ultimoZapUrl) window.open(window._ultimoZapUrl,'_blank','noopener');
 }
 function togglePix(){
-    const p=document.querySelector('input[name="pgto"]:checked').value==='PIX';
+    const _pg=document.querySelector('input[name="pgto"]:checked').value;
+    const p=_pg==='PIX';
+    const _ac=document.getElementById('aviso-cartao'); if(_ac) _ac.style.display=(_pg==='Cartão')?'block':'none';
     document.getElementById('pix-box').classList.toggle('ativo',p);
     document.getElementById('aviso-presencial').style.display=p?'none':'block';
     document.getElementById('pix-destaque').classList.toggle('ativo',p);
@@ -1770,7 +1873,17 @@ function salvarUser(){localStorage.setItem('nupieepro_nome',document.getElementB
 function carregarUser(){const n=localStorage.getItem('nupieepro_nome');if(n)document.getElementById('nome-cliente').value=n;const z=localStorage.getItem('nupieepro_zap');if(z)document.getElementById('zap-cliente').value=z;const e=localStorage.getItem('nupieepro_email');if(e)document.getElementById('email-cliente').value=e;const d=localStorage.getItem('nupieepro_end');if(d)document.getElementById('endereco-cliente').value=d;}
 function compartilhar(id,event){event.stopPropagation();const p=produtos.find(x=>x.id===id);if(!p)return;/* produto pode ter sumido do catálogo (realtime) entre o card renderizar e o toque no botão */const url=location.origin+location.pathname+'?id='+id;const txt='Olha o que encontrei na Lojinha Nupieepro: '+p.nome+' por R$ '+p.preco.toFixed(2).replace('.',',')+'!';if(navigator.share)navigator.share({title:'NUPIEEPRO STORE',text:txt,url}).catch(()=>{});else navigator.clipboard&&navigator.clipboard.writeText(url).then(()=>toast('🔗 Link copiado!'));}
 function abrirSobre(){document.getElementById('modal-sobre').classList.add('active');travarScroll();}
-function abrirLGPD(){document.getElementById('modal-lgpd').classList.add('active');travarScroll();}
+/* Janelas legais abrem POR CIMA (inclusive do checkout) e fecham sozinhas, sem derrubar o checkout
+   (fecharModais() fecha tudo e zera o comprovante enviado). */
+function abrirLegal(id){const jaTrava=!!document.querySelector('.modal-bg.active');document.getElementById(id).classList.add('active');if(!jaTrava)travarScroll();}
+function fecharLegal(e,id){
+    if(e&&e.target!==e.currentTarget) return;
+    document.getElementById(id).classList.remove('active');
+    if(!document.querySelector('.modal-bg.active')) destravarScroll();
+}
+function abrirLGPD(){abrirLegal('modal-lgpd');}
+function abrirTermos(){abrirLegal('modal-termos');}
+function abrirTrocas(){abrirLegal('modal-trocas');}
 let _tt;
 function toast(msg,erro=0){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.className='show'+(erro?' erro':'');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
