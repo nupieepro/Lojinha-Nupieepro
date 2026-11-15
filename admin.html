@@ -807,6 +807,28 @@
                 <div class="form-hint">Produto aparece automaticamente nesta data</div>
             </div>
         </div>
+        <fieldset id="prod-promo-bloco" style="border:1px solid var(--n-border-300);border-radius:12px;padding:12px 14px;margin:12px 0;min-width:0">
+            <legend class="form-label" style="padding:0 6px;margin:0">🔥 Promoção por período (opcional)</legend>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px">
+                <div style="min-width:0">
+                    <label class="form-label" for="prod-promo-preco">Preço promocional (R$)</label>
+                    <input type="number" id="prod-promo-preco" class="form-input" placeholder="Ex: 2,00" step="0.01" min="0">
+                </div>
+                <div style="min-width:0">
+                    <label class="form-label" for="prod-promo-rotulo">Selo (ex.: NUPI BLACK)</label>
+                    <input type="text" id="prod-promo-rotulo" class="form-input" placeholder="NUPI BLACK" maxlength="30" style="width:100%;min-width:0">
+                </div>
+                <div style="min-width:0">
+                    <label class="form-label" for="prod-promo-inicio">Início (horário de Fortaleza)</label>
+                    <input type="datetime-local" id="prod-promo-inicio" class="form-input" style="width:100%;min-width:0">
+                </div>
+                <div style="min-width:0">
+                    <label class="form-label" for="prod-promo-fim">Fim (horário de Fortaleza)</label>
+                    <input type="datetime-local" id="prod-promo-fim" class="form-input" style="width:100%;min-width:0">
+                </div>
+            </div>
+            <div class="form-hint" style="margin-top:8px">Dentro do período a loja cobra o preço promocional e mostra o preço antigo riscado. Fora dele, volta ao preço normal sozinha. Para remover a promoção, deixe o preço promocional vazio e salve.</div>
+        </fieldset>
         <div id="prod-margem" style="background:var(--cor-sucesso-bg);border-radius:10px;padding:12px;margin:12px 0;font-size:0.82rem;color:var(--verde);display:none">
             <i class="fa-solid fa-chart-line"></i> Margem de lucro: <strong id="prod-margem-val">—</strong>
         </div>
@@ -995,6 +1017,13 @@ const LOJA_URL = 'https://nupieepro.github.io/Lojinha-Nupieepro/';
    formulário da loja) — nome, endereço, observação e até o tamanho de cada item são
    texto livre do cliente, gravado verbatim. Sem isso, um pedido malicioso executa JS
    dentro da sessão autenticada do admin assim que a aba de Pedidos abre. */
+/* Quadrado cinza mostrado quando uma foto não carrega (valor pronto, sem aspas dentro de atributo HTML) */
+const IMG_ERRO_SVG = 'data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27%3E%3Crect width=%2772%27 height=%2772%27 fill=%27%23eee%27/%3E%3C/svg%3E';
+/* Promoção por período: datas sempre no horário de Fortaleza (UTC-3, sem horário de verão) */
+function promoParaInput(iso){ if(!iso) return ''; const d=new Date(iso); if(isNaN(d)) return ''; return new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Fortaleza',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(d).replace(' ','T'); }
+function inputParaPromo(v){ return v ? v+':00-03:00' : ''; }
+function promoEstado(p){ if(p.preco_promocional===null||p.preco_promocional===undefined||p.preco_promocional==='') return null; const ini=Date.parse(p.promo_inicio),fim=Date.parse(p.promo_fim),n=Date.now(); if(isNaN(ini)||isNaN(fim)) return null; return n<ini?'agendada':(n<fim?'no ar':'encerrada'); }
+function dataCurta(iso){ return new Date(iso).toLocaleString('pt-BR',{timeZone:'America/Fortaleza',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
 function san(s){return (s===null||s===undefined)?'':String(s).replace(/[<>"'&]/g,c=>({'<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#x27;','&':'&amp;'}[c]));}
 
 let sessaoAdmin   = null;  // sessão atual do Supabase Auth (null = não logado)
@@ -1482,6 +1511,8 @@ async function carregarProdutos(){
                 <div class="produto-info">
                     <div class="produto-nome">${san(p.nome||'')}</div>
                     <div class="produto-preco">R$ ${(parseFloat(p.preco)||0).toFixed(2).replace('.',',')}</div>
+                    ${(()=>{ const st=promoEstado(p); if(!st) return ''; const cor=st==='no ar'?'#1b7d45':(st==='agendada'?'#8a5a00':'#6e6e6e');
+                        return `<div class="produto-promo" style="font-size:0.78rem;font-weight:800;color:${cor}">🔥 ${san(p.promo_rotulo||'Promoção')} · R$ ${(parseFloat(p.preco_promocional)||0).toFixed(2).replace('.',',')} · ${st}<span style="display:block;font-weight:600;font-size:0.72rem">${dataCurta(p.promo_inicio)} → ${dataCurta(p.promo_fim)}</span></div>`; })()}
                     <div class="produto-meta">
                         Estoque: ${p.estoque||0} · ${san(p.categoria||'')}
                         ${p.encomenda===true||p.encomenda==='TRUE'?'· 📦 Encomenda':''}
@@ -1516,6 +1547,10 @@ function abrirModalProduto(id){
     document.getElementById('prod-descricao').value = p ? p.descricao : '';
     document.getElementById('prod-prazo').value     = p ? p.prazo_encomenda : '';
     document.getElementById('prod-agendamento').value = p && p.agendamento ? p.agendamento : '';
+    document.getElementById('prod-promo-preco').value  = p && p.preco_promocional!=null ? p.preco_promocional : '';
+    document.getElementById('prod-promo-rotulo').value = p ? (p.promo_rotulo||'') : '';
+    document.getElementById('prod-promo-inicio').value = p ? promoParaInput(p.promo_inicio) : '';
+    document.getElementById('prod-promo-fim').value    = p ? promoParaInput(p.promo_fim) : '';
 
     const imgs = p ? (Array.isArray(p.imagens) ? p.imagens.join(', ') : p.imagens||'') : '';
     carregarFotosModal(p ? (Array.isArray(p.imagens) ? p.imagens : (p.imagens||'').split(',').map(i=>i.trim()).filter(Boolean)) : []);
@@ -1577,6 +1612,17 @@ async function salvarProduto(publicar,btnClicado){
     const precoNum = parseFloat(precoInput);
     if(!precoInput || isNaN(precoNum) || precoNum <= 0){ toast('Informe um preço de venda válido (maior que R$0,00)!', true); return; }
 
+    /* Promoção (opcional): confere antes de enviar; o banco confere de novo */
+    const promoPrecoTxt = document.getElementById('prod-promo-preco').value.trim();
+    const promoIni = document.getElementById('prod-promo-inicio').value;
+    const promoFim = document.getElementById('prod-promo-fim').value;
+    if(promoPrecoTxt!==''){
+        const pp = parseFloat(promoPrecoTxt);
+        if(isNaN(pp) || pp < 0){ toast('Preço promocional inválido.', true); return; }
+        if(pp >= precoNum){ toast('O preço promocional precisa ser menor que o preço normal.', true); return; }
+        if(!promoIni || !promoFim){ toast('Informe o início e o fim da promoção.', true); return; }
+        if(promoFim <= promoIni){ toast('O fim da promoção precisa ser depois do início.', true); return; }
+    }
     const id = document.getElementById('prod-id').value;
     const produto = {
         id:             id ? parseInt(id) : null,
@@ -1597,6 +1643,10 @@ async function salvarProduto(publicar,btnClicado){
         badge_extra:    '',
         ativo:          publicar ? true : document.getElementById('prod-ativo').checked,
         agendamento:    document.getElementById('prod-agendamento').value,
+        preco_promocional: promoPrecoTxt,
+        promo_inicio:   inputParaPromo(promoIni),
+        promo_fim:      inputParaPromo(promoFim),
+        promo_rotulo:   document.getElementById('prod-promo-rotulo').value.trim(),
     };
 
     /* Antes, o botão travado em "Salvando..." era sempre o de classe .btn-primary
@@ -2130,7 +2180,7 @@ function renderFotosPreview(){
     if(!container) return;
     container.innerHTML = fotosAtuais.map((url, idx) => `
         <div class="foto-preview-item" id="foto-item-${idx}">
-            <img src="${url}" alt="Foto ${idx+1}" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\'><rect width=\'72\' height=\'72\' fill=\'%23eee\'/></svg>'">
+            <img src="${san(url)}" alt="Foto ${idx+1}" onerror="this.onerror=null;this.src=IMG_ERRO_SVG">
             <button class="foto-remove" onclick="removerFoto(${idx})" title="Remover foto" aria-label="Remover foto ${idx+1}">✕</button>
         </div>
     `).join('');

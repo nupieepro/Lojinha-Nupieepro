@@ -93,7 +93,7 @@
         body{font-family:var(--font-corpo);font-weight:700;background:var(--fundo);color:var(--texto);overflow-x:hidden;}
         img{max-width:100%;display:block;}
         button{font-family:inherit;cursor:pointer;}
-        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}}
 
         /* SPLASH */
         #splash-screen{position:fixed;inset:0;background:var(--roxo-brand);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s,visibility 0.5s;}
@@ -228,6 +228,117 @@
         .preco-antigo{text-decoration:line-through;color:var(--texto-fraco);font-weight:600;font-size:0.8em;margin-right:4px;}
         .card-price .preco-antigo{display:block;margin:0 0 1px;}
         .cupom-codigo{display:inline-block;background:rgba(255,255,255,0.12);border:1px dashed var(--laranja-brand);border-radius:8px;padding:2px 10px;letter-spacing:1.5px;font-weight:800;}
+        /* Textos legais abrem por cima de qualquer outra janela (inclusive o checkout) */
+        #modal-lgpd,#modal-termos,#modal-trocas{z-index:2100;}
+
+        /* ===== NUPI BLACK — destaque animado (aparece sozinho durante a promoção) ===== */
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+        /* O cartão fica ABAIXO do cabeçalho (nada de margem negativa): o cabeçalho encolhe o
+           respiro inferior quando há promoção e o cartão ganha um espaço fixo e centralizado. */
+        #promo-hero{width:100%;max-width:1120px;margin:0 auto 14px;padding:0 14px;box-sizing:border-box;}
+        #promo-hero[hidden]{display:none;}
+        body.tem-promo-hero header{padding-bottom:26px;}
+        body.tem-promo-hero #promo-hero{margin-top:18px;}
+        body.tem-promo-hero #hero-banner{margin-top:12px;}
+        body.tem-promo-hero .filter-container{margin-top:14px;}
+        .pb{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) clamp(96px,30vw,140px);grid-template-areas:"topo globo" "acao globo";align-items:center;gap:12px 4px;padding:16px;border-radius:20px;color:var(--branco);
+            background:radial-gradient(120% 140% at 88% 8%,#2c1b73 0%,var(--marca-roxo-escuro) 40%,var(--marca-roxo) 100%);box-shadow:0 12px 32px rgba(15,7,50,.32);}
+        @property --pb-ang{syntax:'<angle>';initial-value:0deg;inherits:false;}
+        .pb::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;
+            background:conic-gradient(from var(--pb-ang),rgba(255,255,255,.1) 0deg,rgba(248,89,0,1) 70deg,rgba(255,255,255,.1) 150deg,rgba(0,123,255,.9) 250deg,rgba(255,255,255,.1) 360deg);
+            -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+            animation:pb-gira 7s linear infinite;}
+        .pb::before{content:"";position:absolute;z-index:-1;width:60%;aspect-ratio:1;right:-8%;top:-40%;border-radius:50%;pointer-events:none;
+            background:radial-gradient(circle,rgba(248,89,0,.28),rgba(248,89,0,0) 65%);animation:pb-respira 6s ease-in-out infinite;}
+        .pb{animation:pb-card .7s cubic-bezier(.2,.7,.2,1) both;}
+        .pb-topo{grid-area:topo;display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0;}
+        .pb-globo{grid-area:globo;position:relative;width:100%;aspect-ratio:1/1;pointer-events:none;animation:pb-globo-in 1s .15s cubic-bezier(.2,.7,.2,1) both;align-self:center;}
+        .pb-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+        .pb-acao{grid-area:acao;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;min-width:0;}
+        .pb-topo>*,.pb-acao>*{animation:pb-entra .65s cubic-bezier(.2,.7,.2,1) both;}
+        .pb-topo>*:nth-child(2){animation-delay:.07s}.pb-topo>*:nth-child(3){animation-delay:.14s}.pb-acao>*{animation-delay:.21s}
+        .pb-selo{display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:999px;background:rgba(248,89,0,.16);border:1px solid rgba(248,89,0,.6);
+            font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:#ffc7a3;}
+        .pb-ponto{width:7px;height:7px;border-radius:50%;background:var(--marca-laranja);animation:pb-pulso 1.8s ease-out infinite;}
+        .pb-titulo{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.26em;font-family:var(--font-titulo);font-weight:400;line-height:1;letter-spacing:.01em;
+            font-size:clamp(1.9rem,8.6vw,2.9rem);text-shadow:0 4px 22px rgba(0,0,0,.35);}
+        .pb-titulo span{display:inline;}
+        .pb-titulo .a{color:var(--marca-laranja);}
+        .pb-sub{margin:0;font-size:.82rem;line-height:1.35;color:rgba(255,255,255,.9);}
+        .pb-relogio{display:flex;gap:5px;margin:0;padding:0;}
+        .pb-un{min-width:40px;padding:5px 4px 4px;text-align:center;border-radius:11px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);}
+        .pb-un b{display:block;font-size:1.05rem;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums;}
+        .pb-un span{font-size:.5rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.8);}
+        .pb-linha{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;}
+        .pb-ate{margin:0;font-size:.72rem;color:rgba(255,255,255,.82);}
+        .pb-cta{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:9px 18px;border:0;border-radius:12px;background:var(--marca-laranja);color:var(--marca-roxo);
+            font-weight:900;font-size:.92rem;cursor:pointer;box-shadow:0 8px 20px var(--marca-laranja-glow);transition:transform .18s ease,box-shadow .18s ease;}
+        .pb-cta{position:relative;overflow:hidden;}
+        .pb-cta::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-130%);animation:pb-brilho 4.2s 1.2s ease-in-out infinite;pointer-events:none;}
+        .pb-un b.tic{animation:pb-tick .32s ease-out;}
+        .pb-cta:hover{transform:translateY(-2px);box-shadow:0 12px 26px var(--marca-laranja-glow);}
+        .pb-cta:active{transform:translateY(0);}
+        .pb-cta:focus-visible{outline:3px solid var(--branco);outline-offset:3px;}
+        @keyframes pb-pulso{0%{box-shadow:0 0 0 0 rgba(248,89,0,.75)}70%{box-shadow:0 0 0 9px rgba(248,89,0,0)}100%{box-shadow:0 0 0 0 rgba(248,89,0,0)}}
+        @keyframes pb-gira{to{--pb-ang:360deg}}
+        @keyframes pb-respira{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.12)}}
+        @keyframes pb-card{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+        @keyframes pb-tick{0%{transform:translateY(-35%);opacity:.2}100%{transform:none;opacity:1}}
+        @keyframes pb-globo-in{from{opacity:0;transform:scale(.82) rotate(-12deg)}to{opacity:1;transform:none}}
+        @keyframes pb-entra{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+        @keyframes pb-brilho{0%,55%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+        .badge-promo{position:relative;overflow:hidden;}
+        .badge-promo::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.6) 50%,transparent 70%);transform:translateX(-130%);animation:pb-brilho 3.4s ease-in-out infinite;}
+        @media(min-width:520px){
+            .pb{grid-template-columns:minmax(0,1fr) clamp(130px,24vw,190px);padding:20px 24px;gap:12px 12px;}
+            .pb-un{min-width:52px;}.pb-un b{font-size:1.2rem;}
+        }
+        @media(min-width:760px){
+            .pb{grid-template-columns:minmax(0,1fr) clamp(190px,22vw,260px);grid-template-areas:"topo globo" "acao globo";padding:clamp(24px,2.6vw,36px) clamp(28px,3.4vw,48px);gap:clamp(14px,1.6vw,22px) clamp(24px,3vw,44px);align-content:center;border-radius:24px;}
+            .pb-selo{font-size:.7rem;padding:5px 13px;}
+            .pb-titulo{font-size:clamp(2.8rem,5.4vw,4.4rem);}
+            .pb-sub{font-size:clamp(1rem,1.3vw,1.15rem);max-width:34ch;}
+            .pb-relogio{gap:10px;}
+            .pb-un{min-width:clamp(64px,6.4vw,82px);padding:8px 8px 6px;border-radius:14px;}
+            .pb-un b{font-size:clamp(1.5rem,2.6vw,2rem);}
+            .pb-un span{font-size:.62rem;}
+            .pb-ate{font-size:.85rem;}
+            .pb-cta{min-height:50px;padding:12px 26px;font-size:1.05rem;border-radius:14px;}
+        }
+        @media(max-height:640px){.pb-sub{display:none;}}
+        @media(max-height:520px){
+            .pb{grid-template-columns:minmax(0,1fr);grid-template-areas:"topo" "acao";padding:12px 16px;gap:6px;}
+            .pb-globo,.pb-sub,.pb-selo,.pb-ate{display:none;}
+            .pb-titulo{font-size:1.7rem;}
+            .pb-cta{min-height:40px;padding:7px 16px;}
+        }
+        @media(max-width:359px){.pb-un{min-width:42px}.pb-un b{font-size:1rem}.pb-cta{padding:9px 14px}}
+        @media(prefers-reduced-motion:reduce){
+            .pb,.pb::before,.pb::after,.pb-globo,.pb-topo>*,.pb-acao>*,.pb-ponto,.pb-cta::after,.pb-un b.tic,.badge-promo::after{animation:none!important;}
+            .pb-cta{transition:none;}
+        }
+
+        /* ===== Acessibilidade (WCAG 2.1 AA) =====
+           Mesma identidade, um tom mais fechado onde há texto pequeno: o laranja #f85900 com texto branco dá 3,3:1
+           (o mínimo para texto pequeno é 4,5:1). Decorativos e títulos grandes seguem com a cor original. */
+        :root{--laranja-ac:#c84800;--vermelho-ac:#c93844;--verde-ac:#1b7d45;--cinza-ac:#6e6e6e;--texto-fraco:#6e6e6e;}
+        .store-badge,.badge-destaque,.cupom-aplicar,.badge-promo{background:var(--laranja-ac)!important;}
+        .badge-ultimas{background:var(--vermelho-ac)!important;}
+        .badge-estoque,.badge-desc{background:var(--verde-ac)!important;}
+        .card-price,.link-legal{color:var(--laranja-ac)!important;}
+        .radio-option:has(input:checked){color:var(--laranja-ac)!important;}
+        .resumo-linha.desconto,.resumo-linha.desconto span{color:var(--verde-ac)!important;}
+        .modal-panel a[style*="laranja-brand"]{color:var(--laranja-ac)!important;}
+        .card-price .preco-antigo,.preco-antigo,.tap-hint,#comprovante-label{color:var(--cinza-ac)!important;}
+        .pix-timer,#pix-timer-txt,.btn-danger{color:var(--vermelho-ac)!important;}
+        #btn-enviar-pedido{color:var(--marca-roxo)!important;}
+        .filter-btn:not(.active){background:var(--branco);border:1px solid var(--n-border-400);color:var(--texto);}
+        .pular-link{position:fixed;left:12px;top:-60px;z-index:3000;padding:12px 18px;border-radius:12px;background:var(--marca-roxo);color:var(--branco);font-weight:800;text-decoration:none;transition:top .15s;}
+        .pular-link:focus{top:12px;outline:3px solid var(--marca-laranja);outline-offset:2px;}
+        a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--marca-azul-coracao);outline-offset:2px;}
+        #conteudo:focus{outline:none;}
+        .link-legal{background:none;border:none;padding:0;color:var(--laranja-brand);font:inherit;font-weight:800;text-decoration:underline;cursor:pointer;}
+        .badge-promo{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:8px;background:var(--laranja-brand);color:var(--branco);font-size:0.6rem;font-weight:800;letter-spacing:.04em;vertical-align:middle;}
         .badge-desc{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:8px;background:var(--cor-sucesso);color:var(--branco);font-size:0.6rem;font-weight:800;vertical-align:middle;white-space:nowrap;}
         .card-enc{font-size:0.68rem;color:var(--laranja-brand);font-weight:700;margin-top:3px;}
         .tap-hint{font-size:0.62rem;color:var(--texto-fraco);margin-top:auto;padding-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
@@ -329,8 +440,12 @@
         .float-bar.visible{transform:translateX(-50%) translateY(0);}
 
         /* TOAST */
-        #toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-100px);background:white;color:var(--roxo-brand);padding:11px 22px;border-radius:50px;box-shadow:var(--shadow-md);font-weight:600;font-size:0.88rem;z-index:3000;display:flex;align-items:center;gap:8px;transition:transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275);max-width:90vw;}
-        #toast.show{transform:translateX(-50%) translateY(0);}
+        /* Toast: largura pelo conteúdo (max-content) até 92% da tela. Antes, com left:50% a largura disponível era só
+           metade da tela e o aviso quebrava em 3 a 5 linhas no celular. */
+        #toast{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;width:max-content;max-width:min(92vw,440px);transform:translate(-50%,-150%);background:white;color:var(--roxo-brand);padding:10px 18px;border-radius:16px;box-shadow:var(--shadow-md);font-weight:600;font-size:0.86rem;line-height:1.3;z-index:3000;display:flex;align-items:center;gap:9px;pointer-events:none;transition:transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275);}
+        #toast span{min-width:0;overflow-wrap:anywhere;}
+        #toast i{flex:0 0 auto;}
+        #toast.show{transform:translate(-50%,0);}
         #toast.erro{color:var(--vermelho-del);}
         #toast i{color:var(--verde-zap);font-size:1rem;}
         #toast.erro i{color:var(--vermelho-del);}
@@ -373,7 +488,7 @@
     </a>
 </div>
 
-<div id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-msg">Adicionado!</span></div>
+<div id="toast" role="status" aria-live="polite"><i class="fa-solid fa-circle-check"></i><span id="toast-msg">Adicionado!</span></div>
 
 <div id="splash-screen">
     <img src="./loja_icon_marca.png" alt="Logo" class="splash-img" onerror="this.style.visibility='hidden'">
@@ -381,6 +496,7 @@
 </div>
 
 <header>
+<a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
     <div class="header-inner">
         <div class="header-row">
             <div class="header-brand">
@@ -399,6 +515,9 @@
         </div>
     </div>
 </header>
+<main id="conteudo" tabindex="-1">
+
+<section id="promo-hero" hidden></section>
 
 <div id="hero-banner" style="display:none"></div>
 
@@ -426,6 +545,8 @@
     <p>Tente outro termo ou categoria</p>
 </div>
 
+</main>
+
 <footer>
     <div class="footer-inner">
         <img src="./loja_icon_emblema.png" alt="NupieePro" class="footer-logo" onerror="this.style.visibility='hidden'">
@@ -437,37 +558,112 @@
         <div class="footer-divider"></div>
         <div class="footer-credit">Feito com <i class="fa-solid fa-heart" style="color:var(--azul-coracao)"></i> <i class="fa-solid fa-heart" style="color:var(--laranja-brand)"></i> pelo NUPIEEPRO</div>
         <button class="footer-lgpd" onclick="abrirLGPD()">Privacidade e Proteção de Dados (LGPD)</button>
+        <button class="footer-lgpd" onclick="abrirTermos()">Termos de compra</button>
+        <button class="footer-lgpd" onclick="abrirTrocas()">Trocas e devoluções</button>
     </div>
 </footer>
 
 <!-- MODAL LGPD -->
-<div class="modal-bg" id="modal-lgpd" onclick="fecharModais(event)" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modal-lgpd" onclick="fecharLegal(event,'modal-lgpd')" role="dialog" aria-modal="true" aria-label="Privacidade e Proteção de Dados">
     <div class="modal-panel">
-        <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+        <button class="close-btn" onclick="fecharLegal(null,'modal-lgpd')" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <h2 style="color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:14px">Privacidade e Proteção de Dados</h2>
-        <p style="font-size:0.83rem;color:var(--texto);line-height:1.7;margin-bottom:10px">
-            O <strong>NUPIEEPRO</strong> respeita sua privacidade e cumpre a 
-            <strong>Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018)</strong>.
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">O <strong>NUPIEEPRO</strong> respeita sua privacidade e segue a <strong>Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018)</strong>.</p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Quem é o responsável pelos dados</strong><br>
+            O NUPIEEPRO, organização estudantil sem fins lucrativos da UFPI. Fale com a gente pelo Instagram <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a> para qualquer assunto sobre seus dados.
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
-            <strong style="color:var(--roxo-brand)">Quais dados coletamos:</strong><br>
-            Nome, WhatsApp, e-mail (opcional) e endereço (quando necessário para entrega).
+            <strong style="color:var(--roxo-brand)">Quais dados coletamos</strong><br>
+            Nome, WhatsApp, e-mail (opcional), endereço (só quando você escolhe entrega) e, se você enviar, a foto do comprovante de pagamento.
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
-            <strong style="color:var(--roxo-brand)">Para que usamos:</strong><br>
-            Exclusivamente para processar seu pedido, confirmar pagamento e entrar em contato sobre a compra.
+            <strong style="color:var(--roxo-brand)">Para que usamos (e por que podemos)</strong><br>
+            Somente para receber e entregar seu pedido, confirmar o pagamento e falar com você sobre a compra. Isso é necessário para realizar a compra que você pediu (LGPD, art. 7º, V). Não usamos seus dados para propaganda de terceiros.
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
-            <strong style="color:var(--roxo-brand)">Compartilhamento:</strong><br>
-            Seus dados não são vendidos nem compartilhados com terceiros. São usados apenas internamente pela equipe do NUPIEEPRO.
+            <strong style="color:var(--roxo-brand)">Com quem os dados passam</strong><br>
+            Não vendemos seus dados. Para o sistema funcionar, eles passam por serviços que operam em nosso nome: <strong>Supabase</strong> (guarda os pedidos e os comprovantes, com acesso restrito à equipe), <strong>Google/Gmail</strong> (envia o e-mail de confirmação, se você informar e-mail) e <strong>WhatsApp</strong> (quando você toca em enviar o pedido). Dentro do núcleo, só a equipe da loja acessa.
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
-            <strong style="color:var(--roxo-brand)">Armazenamento:</strong><br>
-            Os dados ficam salvos no banco de dados do NUPIEEPRO (Supabase), com acesso restrito à equipe autenticada, e alguns dados de preenchimento (nome, WhatsApp) ficam salvos no seu próprio dispositivo (localStorage) só para agilizar seu próximo pedido.
+            <strong style="color:var(--roxo-brand)">Cookies e rastreadores</strong><br>
+            Não usamos cookies de rastreamento nem ferramentas de análise ou publicidade de terceiros. Guardamos só no seu aparelho (localStorage) a sua sacola, a lista dos seus pedidos e, se você quiser, nome e WhatsApp para preencher mais rápido.
         </p>
-        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:16px">
-            <strong style="color:var(--roxo-brand)">Seus direitos:</strong><br>
-            Você pode solicitar a exclusão dos seus dados a qualquer momento pelo Instagram <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a>.
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Por quanto tempo guardamos</strong><br>
+            Pelo tempo necessário para entregar o pedido e prestar contas das vendas do núcleo. Depois disso, ou se você pedir antes, apagamos ou anonimizamos, salvo se alguma obrigação legal exigir guardar.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Seus direitos</strong><br>
+            Você pode pedir confirmação de que tratamos seus dados, acesso, correção, anonimização, exclusão e informação sobre com quem compartilhamos (LGPD, art. 18), pelo Instagram <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a>.
+        </p>
+        <div style="background:var(--n-bg-100);border-radius:10px;padding:12px;font-size:0.78rem;color:var(--texto-suave);text-align:center">
+            NUPIEEPRO — Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI<br>
+            Contato: <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TERMOS -->
+<div class="modal-bg" id="modal-termos" onclick="fecharLegal(event,'modal-termos')" role="dialog" aria-modal="true" aria-label="Termos de compra">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharLegal(null,'modal-termos')" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+        <h2 style="color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:14px">Termos de compra</h2>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Quem vende</strong><br>
+            A Lojinha é mantida pelo <strong>NUPIEEPRO</strong>, organização estudantil sem fins lucrativos da UFPI. A renda das vendas é revertida para as atividades do núcleo.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Como comprar</strong><br>
+            Escolha os produtos, preencha seus dados e envie o pedido. O pagamento pode ser feito por PIX, dinheiro ou cartão. <strong>O pedido só é confirmado depois que a equipe conferir o pagamento</strong>; você acompanha o andamento em &quot;Meus pedidos&quot;.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Preços e promoções</strong><br>
+            Os preços estão em reais. Promoções, como a NUPI BLACK, valem apenas no período divulgado e enquanto houver estoque. O valor cobrado é o que o sistema calcula no momento em que você envia o pedido.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Estoque</strong><br>
+            Se algum item acabar antes da confirmação, a equipe fala com você para trocar por outro ou devolver o valor pago.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Cartão de crédito</strong><br>
+            O pagamento é feito por aproximação (NFC). Pode haver acréscimo das taxas da operadora, que depende do valor da compra e é informado a você no momento do pagamento.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Retirada e entrega</strong><br>
+            Combinadas com a equipe pelo WhatsApp depois da confirmação do pedido.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Mudanças nestes termos</strong><br>
+            Podemos atualizar este texto. Vale a versão que estiver no site quando você enviar o pedido.
+        </p>
+        <div style="background:var(--n-bg-100);border-radius:10px;padding:12px;font-size:0.78rem;color:var(--texto-suave);text-align:center">
+            NUPIEEPRO — Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI<br>
+            Contato: <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL TROCAS -->
+<div class="modal-bg" id="modal-trocas" onclick="fecharLegal(event,'modal-trocas')" role="dialog" aria-modal="true" aria-label="Trocas e devoluções">
+    <div class="modal-panel">
+        <button class="close-btn" onclick="fecharLegal(null,'modal-trocas')" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+        <h2 style="color:var(--roxo-brand);font-size:1.1rem;font-weight:800;margin-bottom:14px">Trocas e devoluções</h2>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Desistência da compra</strong><br>
+            Se você comprou pelo site e se arrependeu, pode desistir em até <strong>7 dias corridos</strong> depois de receber o produto, desde que ele esteja sem uso e no estado original. Devolvemos o valor pelo mesmo meio de pagamento.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Produto com defeito</strong><br>
+            Avise em até <strong>30 dias</strong> depois de receber. Trocamos por outro igual ou devolvemos o valor.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Produtos feitos sob encomenda</strong><br>
+            Por serem feitos especialmente para o seu pedido, só podem ser trocados ou devolvidos em caso de defeito.
+        </p>
+        <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
+            <strong style="color:var(--roxo-brand)">Como pedir</strong><br>
+            Mande uma mensagem para o Instagram <a href="https://www.instagram.com/nupieepro" target="_blank" rel="noopener noreferrer" style="color:var(--laranja-brand)">@nupieepro</a> com o número do pedido e o motivo.
         </p>
         <div style="background:var(--n-bg-100);border-radius:10px;padding:12px;font-size:0.78rem;color:var(--texto-suave);text-align:center">
             NUPIEEPRO — Núcleo Piauiense de Estudantes de Engenharia de Produção — UFPI<br>
@@ -477,7 +673,7 @@
 </div>
 
 <!-- MODAL PRODUTO -->
-<div class="modal-bg" id="modal-details" onclick="fecharModais(event)" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modal-details" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Detalhes do produto">
     <div class="modal-panel">
         <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <div class="detail-img-box">
@@ -508,7 +704,7 @@
 </div>
 
 <!-- MODAL CHECKOUT -->
-<div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Finalizar pedido">
     <div class="modal-panel">
         <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
 
@@ -538,6 +734,7 @@
 
             <div class="resumo-box">
                 <div class="resumo-linha"><span>Subtotal</span><span id="res-sub">R$ 0,00</span></div>
+                <div class="resumo-linha desconto" id="res-promo-linha" style="display:none"><span id="res-promo-label">Você economiza</span><span id="res-promo-val"></span></div>
                 <div class="resumo-linha desconto" id="res-desc-linha" style="display:none"><span id="res-desc-label">Desconto</span><span id="res-desc-val"></span></div>
                 <div class="resumo-linha total"><span>Total</span><span id="res-total">R$ 0,00</span></div>
             </div>
@@ -561,6 +758,7 @@
             <label class="radio-option"><input type="radio" name="pgto" value="Dinheiro" onchange="togglePix()"> Dinheiro</label>
             <label class="radio-option"><input type="radio" name="pgto" value="Cartão" onchange="togglePix()"> Cartão</label>
             <div id="aviso-presencial" style="display:none;background:var(--n-bg-100);border-radius:10px;padding:10px;font-size:0.82rem;color:var(--texto-suave);margin-bottom:10px"><i class="fa-solid fa-circle-info"></i> Pagamento na retirada ou entrega.</div>
+            <div id="aviso-cartao" style="display:none;background:var(--n-bg-100);border-radius:10px;padding:10px;font-size:0.82rem;color:var(--texto-suave);margin-bottom:10px"><i class="fa-solid fa-credit-card"></i> Cartão (por aproximação/NFC): pode haver acréscimo das taxas, que depende do valor e é informado no momento do pagamento.</div>
 
             <div class="pix-box ativo" id="pix-box">
                 <div class="pix-valor" id="pix-valor"></div>
@@ -587,13 +785,14 @@
             </div>
 
             <button class="btn-danger" onclick="limparCarrinho()"><i class="fa-solid fa-trash"></i> Limpar sacola</button>
+            <p style="font-size:0.72rem;color:var(--texto-fraco);line-height:1.5;margin-top:10px;text-align:center">Ao enviar o pedido você concorda com os <button type="button" class="link-legal" onclick="abrirTermos()">Termos de compra</button>, a <button type="button" class="link-legal" onclick="abrirLGPD()">Política de Privacidade</button> e as regras de <button type="button" class="link-legal" onclick="abrirTrocas()">Trocas e devoluções</button>.</p>
             <button class="btn-primary" id="btn-enviar-pedido" onclick="enviarPedidoZap()" style="margin-top:10px;background:var(--verde-zap)"><i class="fa-brands fa-whatsapp"></i> Enviar Pedido</button>
         </div>
     </div>
 </div>
 
 <!-- MODAL PEDIDOS -->
-<div class="modal-bg" id="modal-pedidos" onclick="fecharModais(event)" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modal-pedidos" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Meus pedidos">
     <div class="modal-panel">
         <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <h2 style="color:var(--roxo-brand);margin-bottom:6px;font-size:1.2rem;font-weight:800"><i class="fa-solid fa-clock-rotate-left"></i> Meus Pedidos</h2>
@@ -603,7 +802,7 @@
 </div>
 
 <!-- MODAL SOBRE -->
-<div class="modal-bg" id="modal-sobre" onclick="fecharModais(event)" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modal-sobre" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Sobre o NUPIEEPRO">
     <div class="modal-panel">
         <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <img src="./loja_icon_marca.png" alt="Logo" style="width:70px;height:70px;border-radius:50%;border:3px solid var(--laranja-brand);object-fit:cover;margin:0 auto 14px;display:block">
@@ -619,7 +818,7 @@
     </div>
 </div>
 
-<div class="float-bar" id="barra-carrinho" onclick="abrirCheckout()">
+<div class="float-bar" id="barra-carrinho" role="button" tabindex="0" aria-label="Abrir sacola e finalizar pedido" onclick="abrirCheckout()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirCheckout();}">
     <div style="line-height:1.2">
         <div id="barra-qtd" style="font-size:0.72rem;opacity:0.8;font-weight:500">0 itens</div>
         <div id="barra-total" style="font-weight:800;font-size:1.1rem;color:var(--laranja-brand)">R$ 0,00</div>
@@ -763,6 +962,9 @@ window.addEventListener('load',()=>{
                    depois, então quem abria e fechava rápido nunca pegava a atualização. */
                 reg.update();
                 setInterval(()=>reg.update(), 5*60*1000);
+                /* ao voltar para a aba (ou do cache de "voltar") confere versão nova na hora */
+                document.addEventListener('visibilitychange',()=>{ if(!document.hidden) reg.update(); });
+                window.addEventListener('pageshow',e=>{ if(e.persisted) reg.update(); });
             })
             .catch(()=>{});
         /* Recarrega quando SW atualizar — sessionStorage persiste no reload, evita loop infinito */
@@ -797,14 +999,28 @@ window.addEventListener('load',()=>{
     /* Exibe cache do localStorage imediatamente enquanto a API carrega */
     try {
         const _c=JSON.parse(localStorage.getItem('nupieepro_cache_produtos')||'null');
-        if(_c&&Array.isArray(_c.d)&&_c.d.length){produtos.length=0;produtos.push(..._c.d);}
+        if(_c&&Array.isArray(_c.d)&&_c.d.length&&(Date.now()-(_c.t||0))<6*3600*1000){  /* cache local vale no máximo 6h */
+            /* Promoção que já venceu não pode aparecer pelo cache (o preço cobrado é sempre o do servidor) */
+            produtos.length=0;
+            produtos.push(..._c.d.map(p=>{
+                if(p.preco_original&&p.promo_fim&&Date.parse(p.promo_fim)<=Date.now()){ p.preco=p.preco_original; p.preco_original=null; p.em_promocao=false; }
+                return p;
+            }));
+        }
     } catch(e){}
     renderVitrine();
     renderFiltros();
+    PromoHero.render();
     if(_sb){
         carregarAPI();
         /* Realtime: qualquer alteração do admin reflete instantaneamente na loja */
         let _apiDebounce;
+        /* A promoção liga/desliga pelo relógio do banco (não gera evento de tabela): reconfere a cada 5 min
+           e ao voltar para a aba, para quem deixou a loja aberta atravessar a meia-noite. */
+        let _ultimaAtualizacao=Date.now();
+        const _recarregarSeVisivel=()=>{ if(!document.hidden&&Date.now()-_ultimaAtualizacao>60000){ _ultimaAtualizacao=Date.now(); carregarAPI(); } };
+        setInterval(_recarregarSeVisivel,5*60*1000);
+        document.addEventListener('visibilitychange',_recarregarSeVisivel);
         function agendarCarregarAPI(){ clearTimeout(_apiDebounce); _apiDebounce=setTimeout(carregarAPI,150); }
         _sb.channel('store-live')
             .on('postgres_changes',{event:'*',schema:'public',table:'produtos'},agendarCarregarAPI)
@@ -829,7 +1045,7 @@ window.addEventListener('load',()=>{
         if(window.__erroConexaoAtivo) return;
         const s=document.getElementById('splash-screen');s.classList.add('hidden');setTimeout(()=>s.style.display='none',400);
     },900);
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharModais(null);});
+    /* Esc: tratado em um único lugar, mais abaixo (fecha só a janela do topo). */
     /* Busca já é tratada pelo oninput="debounceBusca(...)" inline no HTML (300ms) — um
        addEventListener('input') redundante aqui existia antes e disparava renderVitrine()
        SEM debounce a cada tecla, dobrando o trabalho de render e tornando o debounce inútil. */
@@ -845,8 +1061,151 @@ const IMG_FALLBACK = {
     4: 'https://scacjsosvlllapbgetos.supabase.co/storage/v1/object/public/produtos/5e338609-0214-42fa-a832-7a3da6d59dd7.png',
 };
 
+/* ===== NUPI BLACK: destaque animado + contagem regressiva =====
+   Aparece SOZINHO enquanto algum produto está em promoção (o servidor manda em_promocao/promo_fim)
+   e some quando a janela acaba. Esfera em canvas 2D (sem biblioteca), pausa fora da tela/aba oculta
+   e fica parada para quem prefere menos movimento. */
+const PromoHero=(()=>{
+    let tick=null, raf=0, rodando=false, obs=null, alvoAtual=0, desenhar=null;
+    const reduz=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fimDaPromo=()=>{
+        const ds=produtos.filter(p=>p.em_promocao&&p.promo_fim).map(p=>Date.parse(p.promo_fim)).filter(Number.isFinite);
+        return ds.length?Math.min(...ds):0;
+    };
+    const dois=n=>String(n).padStart(2,'0');
+
+    function esfera(cv){
+        const ctx=cv.getContext('2d'); if(!ctx) return null;
+        let w=0,h=0,dpr=1;
+        const LAT=22,LON=26,PTS=64;
+        function medir(){
+            const r=cv.getBoundingClientRect(); dpr=Math.min(window.devicePixelRatio||1,2);
+            w=r.width; h=r.height; cv.width=Math.max(1,Math.round(w*dpr)); cv.height=Math.max(1,Math.round(h*dpr));
+            ctx.setTransform(dpr,0,0,dpr,0,0);
+        }
+        medir();
+        function quadro(t){
+            ctx.clearRect(0,0,w,h);
+            const cx=w/2,cy=h/2,R=Math.min(w,h)*0.33;
+            const rotY=t*0.00021,rotX=-0.42+Math.sin(t*0.00014)*0.08;
+            const cY=Math.cos(rotY),sY=Math.sin(rotY),cX=Math.cos(rotX),sX=Math.sin(rotX);
+            // halo suave (laranja da marca)
+            const g0=ctx.createRadialGradient(cx,cy,R*0.2,cx,cy,R*1.7);
+            g0.addColorStop(0,'rgba(248,89,0,.22)'); g0.addColorStop(1,'rgba(248,89,0,0)');
+            ctx.globalCompositeOperation='source-over'; ctx.fillStyle=g0; ctx.fillRect(0,0,w,h);
+            const P=(phi,th)=>{
+                const ond=1+0.07*Math.sin(3*th+t*0.0011)*Math.cos(2*phi+t*0.0008)+0.03*Math.sin(5*phi-t*0.0013);
+                const x=Math.cos(phi)*Math.cos(th)*R*ond,y=Math.sin(phi)*R*ond,z=Math.cos(phi)*Math.sin(th)*R*ond;
+                const x1=x*cY+z*sY,z1=-x*sY+z*cY;
+                const y1=y*cX-z1*sX,z2=y*sX+z1*cX;
+                const f=1/(1-z2/(R*4.2));
+                return [cx+x1*f,cy+y1*f,z2];
+            };
+            const frente=new Path2D(),tras=new Path2D();
+            const linha=(fn)=>{
+                let a=fn(0);
+                for(let j=1;j<=PTS;j++){
+                    const b=fn(j),alvo=(a[2]+b[2])>=0?frente:tras;
+                    alvo.moveTo(a[0],a[1]); alvo.lineTo(b[0],b[1]); a=b;
+                }
+            };
+            for(let i=1;i<LAT;i++){const phi=-Math.PI/2+Math.PI*i/LAT; linha(j=>P(phi,2*Math.PI*j/PTS));}
+            for(let i=0;i<LON;i++){const th=2*Math.PI*i/LON; linha(j=>P(-Math.PI/2+Math.PI*j/PTS,th));}
+            ctx.globalCompositeOperation='lighter'; ctx.lineCap='round';
+            ctx.lineWidth=1; ctx.strokeStyle='rgba(0,123,255,.30)'; ctx.stroke(tras);
+            const g=ctx.createLinearGradient(cx-R,cy-R,cx+R,cy+R);
+            g.addColorStop(0,'#f85900'); g.addColorStop(.55,'#ff9a5c'); g.addColorStop(1,'#ffffff');
+            ctx.lineWidth=1.15; ctx.strokeStyle=g; ctx.globalAlpha=.9; ctx.stroke(frente); ctx.globalAlpha=1;
+            // órbita fina
+            ctx.beginPath(); ctx.ellipse(cx,cy,R*1.28,R*0.42,-0.5+Math.sin(t*0.0004)*0.06,0,Math.PI*2);
+            ctx.strokeStyle='rgba(255,255,255,.22)'; ctx.lineWidth=1; ctx.stroke();
+            ctx.globalCompositeOperation='source-over';
+        }
+        return {quadro,medir};
+    }
+
+    function loop(t){
+        if(!rodando) return;
+        desenhar&&desenhar.quadro(t);
+        raf=requestAnimationFrame(loop);
+    }
+    function ligar(){ if(rodando||reduz()||document.hidden) return; rodando=true; raf=requestAnimationFrame(loop); }
+    function desligar(){ rodando=false; cancelAnimationFrame(raf); }
+    function parar(){
+        desligar(); clearInterval(tick); tick=null; alvoAtual=0; desenhar=null;
+        if(obs){obs.disconnect();obs=null;}
+        window.removeEventListener('resize',aoRedimensionar);
+    }
+    function aoRedimensionar(){ if(desenhar){desenhar.medir(); if(!rodando) desenhar.quadro(1500);} }
+    document.addEventListener('visibilitychange',()=>{ if(!desenhar) return; if(document.hidden) desligar(); else ligar(); });
+
+    function atualizarRelogio(){
+        const alvo=alvoAtual, falta=alvo-Date.now();
+        if(falta<=0){ render(); if(typeof carregarAPI==='function') carregarAPI(); return; }
+        const d=Math.floor(falta/86400000),h=Math.floor(falta%86400000/3600000),m=Math.floor(falta%3600000/60000),s=Math.floor(falta%60000/1000);
+        const set=(k,v)=>{const el=document.querySelector('#promo-hero [data-u="'+k+'"]'); if(el&&el.textContent!==v){ const prim=el.textContent==='--'; el.textContent=v; if(!prim){ el.classList.remove('tic'); void el.offsetWidth; el.classList.add('tic'); } }};
+        set('d',dois(d)); set('h',dois(h)); set('m',dois(m)); set('s',dois(s));
+    }
+
+    function render(){
+        const el=document.getElementById('promo-hero'); if(!el) return;
+        const alvo=fimDaPromo();
+        if(!alvo||alvo<=Date.now()){
+            parar(); el.hidden=true; el.innerHTML=''; document.body.classList.remove('tem-promo-hero'); return;
+        }
+        if(!el.hidden&&alvoAtual===alvo) return;           // já está no ar com o mesmo prazo
+        parar();
+        const promos=produtos.filter(p=>p.em_promocao);
+        const rotulo=(promos.find(p=>p.promo_rotulo)||{}).promo_rotulo||'NUPI BLACK';
+        const partes=String(rotulo).trim().split(/\s+/); const a=partes.shift()||'', b=partes.join(' ');
+        const ateDia=new Date(alvo-1000).toLocaleDateString('pt-BR',{timeZone:'America/Fortaleza',day:'2-digit',month:'2-digit'});
+        const n=promos.length;
+        el.innerHTML=
+          '<div class="pb" role="region" aria-label="Promoção '+san(rotulo)+'">'+
+            '<div class="pb-topo">'+
+              '<span class="pb-selo"><span class="pb-ponto" aria-hidden="true"></span>Promoção no ar</span>'+
+              '<h2 class="pb-titulo"><span class="a">'+san(a)+'</span>'+(b?'<span>'+san(b)+'</span>':'')+'</h2>'+
+              '<p class="pb-sub">'+n+(n===1?' produto com preço especial':' produtos com preço especial')+'</p>'+
+            '</div>'+
+            '<div class="pb-globo" aria-hidden="true"><canvas class="pb-canvas"></canvas></div>'+
+            '<div class="pb-acao">'+
+              '<div class="pb-relogio" role="timer" aria-label="Tempo restante da promoção" aria-live="off">'+
+                '<div class="pb-un"><b data-u="d">--</b><span>dias</span></div><div class="pb-un"><b data-u="h">--</b><span>horas</span></div>'+
+                '<div class="pb-un"><b data-u="m">--</b><span>min</span></div><div class="pb-un"><b data-u="s">--</b><span>seg</span></div>'+
+              '</div>'+
+              '<div class="pb-linha"><button type="button" class="pb-cta" id="pb-cta">Ver ofertas <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>'+
+              '<p class="pb-ate">Até <strong>'+ateDia+'</strong> ou enquanto durar o estoque</p></div>'+
+            '</div>'+
+          '</div>';
+        el.hidden=false; document.body.classList.add('tem-promo-hero'); alvoAtual=alvo;
+        document.getElementById('pb-cta').addEventListener('click',()=>{
+            const alvoEl=document.getElementById('vitrine-area')||document.body;
+            alvoEl.scrollIntoView({behavior:reduz()?'auto':'smooth',block:'start'});
+        });
+        atualizarRelogio(); tick=setInterval(atualizarRelogio,1000);
+        const cv=el.querySelector('.pb-canvas');
+        desenhar=esfera(cv);
+        if(desenhar){
+            desenhar.quadro(1500);                           // 1º quadro estático (também p/ quem reduz movimento)
+            window.addEventListener('resize',aoRedimensionar);
+            if('IntersectionObserver' in window){
+                obs=new IntersectionObserver(es=>{ es[0].isIntersecting?ligar():desligar(); },{threshold:0.05});
+                obs.observe(cv);
+            } else ligar();
+        }
+    }
+    return {render};
+})();
+
 function normalizarProduto(p){
     p.colecao = p.colecao || '';
+    /* Promoção por período: o servidor manda preco (tabela) + preco_atual (vigente). Daqui pra frente
+       TODA a loja (cards, sacola, totais) usa p.preco = preço vigente; p.preco_original guarda o "De". */
+    if(!p._promoAplicada){
+        p._promoAplicada=true;
+        if(p.em_promocao&&Number(p.preco_atual)<Number(p.preco)){ p.preco_original=Number(p.preco); p.preco=Number(p.preco_atual); }
+        else p.preco_original=null;
+    }
     const imgs = Array.isArray(p.imagens)
         ? p.imagens
         : (p.imagens||'').toString().split(',').map(s=>s.trim()).filter(s=>s&&s.startsWith('http'));
@@ -894,7 +1253,16 @@ async function buscarAPI(action){
         return Object.fromEntries((data||[]).map(r=>[r.chave,r.valor]));
     }
     if(action==='produtos'){
-        const {data,error}=await _sb.from('produtos').select('*').eq('ativo',true);
+        /* Catálogo vem da RPC listar_produtos_loja: o SERVIDOR decide o preço vigente (promoção por
+           período, ex. NUPI BLACK) e a lista não inclui a coluna `custo`. Se a RPC ainda não existir
+           (ex.: deploy antes da migration), cai no select por colunas — sem `custo`. */
+        try{
+            const r=await _sb.rpc('listar_produtos_loja');
+            if(!r.error&&Array.isArray(r.data)) return r.data;
+        }catch(e){ /* usa o fallback */ }
+        const {data,error}=await _sb.from('produtos')
+            .select('id,nome,descricao,preco,tipo,categoria,tamanhos,imagens,estoque,destaque,novo,encomenda,prazo_encomenda,badge_extra,ativo,agendamento')
+            .eq('ativo',true);
         if(error) throw new Error(error.message);
         return data||[];
     }
@@ -966,6 +1334,7 @@ async function carregarAPI(tentativa){
                 sincronizarCarrinhoComProdutos();
                 sincronizarModalProduto();
                 renderVitrine();
+                PromoHero.render();
                 /* Cache local para carregamento instantâneo no futuro */
                 localStorage.setItem('nupieepro_cache_produtos', JSON.stringify({t:Date.now(), d:normalizados}));
             }
@@ -1309,7 +1678,8 @@ function renderCarrinho(){
     if(btnEnviar) btnEnviar.disabled=false;
     carrinho.forEach((item,idx)=>{
         const li=document.createElement('li');li.className='cart-item';
-        li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>R$${item.preco.toFixed(2).replace('.',',')}${item.tamanho&&item.tamanho!=='Único'?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})" aria-label="Remover ${san(item.nome)} da sacola"><i class="fa-solid fa-trash"></i></button>`;
+        const _riscado=(item.preco_original&&item.preco_original>item.preco)?`<s class="preco-antigo">R$${item.preco_original.toFixed(2).replace('.',',')}</s> `:'';
+        li.innerHTML=`<div class="cart-item-info"><strong>${item.qtd}x ${san(item.nome)}</strong><span>${_riscado}R$${item.preco.toFixed(2).replace('.',',')}${item.tamanho&&item.tamanho!=='Único'?' | '+item.tamanho:''} = R$${(item.preco*item.qtd).toFixed(2).replace('.',',')}</span></div><button class="btn-trash" onclick="remItem(${idx})" aria-label="Remover ${san(item.nome)} da sacola"><i class="fa-solid fa-trash"></i></button>`;
         lista.appendChild(li);
     });atualizarResumo();
 }
@@ -1366,6 +1736,7 @@ function sincronizarCarrinhoComProdutos(){
         if(item.preco!==p.preco||item.nome!==p.nome){
             item.preco=p.preco;item.nome=p.nome;item.img=p.img;precoMudou=true;
         }
+        item.preco_original=p.preco_original||null;
         return true;
     });
     if(algumRemovido||precoMudou){
@@ -1386,8 +1757,12 @@ function descontoUnit(p){
 function fmtBRL(v){return 'R$ '+v.toFixed(2).replace('.',',');}
 function htmlPreco(p){
     const d=descontoUnit(p);
-    if(!d) return fmtBRL(p.preco);
-    return `<span class="preco-antigo">${fmtBRL(p.preco)}</span><span>${fmtBRL(p.preco-d)}</span><span class="badge-desc">-${fmtBRL(d)}</span>`;
+    const promo=!!(p.preco_original&&p.preco_original>p.preco);
+    if(!d&&!promo) return fmtBRL(p.preco);
+    const antigo=promo?p.preco_original:p.preco;
+    const final=p.preco-d;
+    const selo=promo?`<span class="badge-promo">${san(p.promo_rotulo||'NUPI BLACK')}</span>`:'';
+    return `<span class="preco-antigo">${fmtBRL(antigo)}</span><span>${fmtBRL(final)}</span><span class="badge-desc">-${fmtBRL(antigo-final)}</span>${selo}`;
 }
 function textoCupomAplicado(c){
     return c.tipo==='fixo_por_camisa'?c.cod+' — R$ '+Number(c.valor).toFixed(2).replace('.',',')+' off por camisa'
@@ -1436,6 +1811,9 @@ function atualizarResumo(){
     const s=calcSub(),d=calcDesc(),t=calcTotal();
     document.getElementById('res-sub').textContent='R$ '+s.toFixed(2).replace('.',',');
     document.getElementById('res-total').textContent='R$ '+t.toFixed(2).replace('.',',');
+    const eco=carrinho.reduce((a,i)=>a+((i.preco_original&&i.preco_original>i.preco)?(i.preco_original-i.preco)*i.qtd:0),0);
+    const pl=document.getElementById('res-promo-linha');
+    if(pl){ if(eco>0){document.getElementById('res-promo-val').textContent='R$ '+eco.toFixed(2).replace('.',',')+' (NUPI BLACK)';pl.style.display='flex';} else pl.style.display='none'; }
     const dl=document.getElementById('res-desc-linha');
     if(d>0&&cupomApl){document.getElementById('res-desc-val').textContent='- R$ '+d.toFixed(2).replace('.',',');document.getElementById('res-desc-label').textContent='Desconto ('+cupomApl.cod+')';dl.style.display='flex';}
     else dl.style.display='none';
@@ -1460,7 +1838,9 @@ function reabrirZapPedido(){
     if(window._ultimoZapUrl) window.open(window._ultimoZapUrl,'_blank','noopener');
 }
 function togglePix(){
-    const p=document.querySelector('input[name="pgto"]:checked').value==='PIX';
+    const _pg=document.querySelector('input[name="pgto"]:checked').value;
+    const p=_pg==='PIX';
+    const _ac=document.getElementById('aviso-cartao'); if(_ac) _ac.style.display=(_pg==='Cartão')?'block':'none';
     document.getElementById('pix-box').classList.toggle('ativo',p);
     document.getElementById('aviso-presencial').style.display=p?'none':'block';
     document.getElementById('pix-destaque').classList.toggle('ativo',p);
@@ -1770,9 +2150,52 @@ function salvarUser(){localStorage.setItem('nupieepro_nome',document.getElementB
 function carregarUser(){const n=localStorage.getItem('nupieepro_nome');if(n)document.getElementById('nome-cliente').value=n;const z=localStorage.getItem('nupieepro_zap');if(z)document.getElementById('zap-cliente').value=z;const e=localStorage.getItem('nupieepro_email');if(e)document.getElementById('email-cliente').value=e;const d=localStorage.getItem('nupieepro_end');if(d)document.getElementById('endereco-cliente').value=d;}
 function compartilhar(id,event){event.stopPropagation();const p=produtos.find(x=>x.id===id);if(!p)return;/* produto pode ter sumido do catálogo (realtime) entre o card renderizar e o toque no botão */const url=location.origin+location.pathname+'?id='+id;const txt='Olha o que encontrei na Lojinha Nupieepro: '+p.nome+' por R$ '+p.preco.toFixed(2).replace('.',',')+'!';if(navigator.share)navigator.share({title:'NUPIEEPRO STORE',text:txt,url}).catch(()=>{});else navigator.clipboard&&navigator.clipboard.writeText(url).then(()=>toast('🔗 Link copiado!'));}
 function abrirSobre(){document.getElementById('modal-sobre').classList.add('active');travarScroll();}
-function abrirLGPD(){document.getElementById('modal-lgpd').classList.add('active');travarScroll();}
+/* Janelas legais abrem POR CIMA (inclusive do checkout) e fecham sozinhas, sem derrubar o checkout
+   (fecharModais() fecha tudo e zera o comprovante enviado). */
+/* Acessibilidade de teclado: Esc fecha a janela do topo; o foco vai para dentro da janela ao abrir e volta ao
+   botão que a abriu ao fechar. */
+(function(){
+    const ordem=['modal-lgpd','modal-termos','modal-trocas'];
+    document.addEventListener('keydown',e=>{
+        if(e.key!=='Escape') return;
+        for(const id of ordem){ const m=document.getElementById(id); if(m&&m.classList.contains('active')){ fecharLegal(null,id); return; } }
+        if(document.querySelector('.modal-bg.active')) fecharModais(null);
+    });
+    const lembrar=new WeakMap();
+    /* Enquanto há janela aberta, o resto da página fica inerte (teclado/leitor de tela não "escapam" para trás). */
+    function atualizarInerte(){
+        const ativos=[...document.querySelectorAll('.modal-bg.active')];
+        const topo=ativos.find(m=>ordem.includes(m.id))||ativos[ativos.length-1]||null;
+        document.querySelectorAll('header,main,footer,#barra-carrinho').forEach(el=>{ el.inert=!!topo; });
+        document.querySelectorAll('.modal-bg').forEach(m=>{ m.inert=!!(topo&&m!==topo); });
+    }
+    const obs=new MutationObserver(muts=>{
+        atualizarInerte();
+        for(const mu of muts){
+            const m=mu.target; if(!m.classList||!m.classList.contains('modal-bg')) continue;
+            const ativo=m.classList.contains('active'), tinha=mu.oldValue&&/\bactive\b/.test(mu.oldValue);
+            if(ativo&&!tinha){
+                lembrar.set(m,document.activeElement);
+                /* a janela aparece com transição (visibility): tenta algumas vezes até o foco entrar */
+                let n=0; const tentar=()=>{ const f=m.querySelector('.close-btn,button,[href],input,select,textarea'); if(f) f.focus({preventScroll:true}); if(!m.contains(document.activeElement)&&++n<8) setTimeout(tentar,100); };
+                setTimeout(tentar,60);
+            }
+            else if(!ativo&&tinha){ const o=lembrar.get(m); if(o&&o.focus&&document.contains(o)) o.focus({preventScroll:true}); }
+        }
+    });
+    document.querySelectorAll('.modal-bg').forEach(m=>obs.observe(m,{attributes:true,attributeFilter:['class'],attributeOldValue:true}));
+})();
+function abrirLegal(id){const jaTrava=!!document.querySelector('.modal-bg.active');document.getElementById(id).classList.add('active');if(!jaTrava)travarScroll();}
+function fecharLegal(e,id){
+    if(e&&e.target!==e.currentTarget) return;
+    document.getElementById(id).classList.remove('active');
+    if(!document.querySelector('.modal-bg.active')) destravarScroll();
+}
+function abrirLGPD(){abrirLegal('modal-lgpd');}
+function abrirTermos(){abrirLegal('modal-termos');}
+function abrirTrocas(){abrirLegal('modal-trocas');}
 let _tt;
-function toast(msg,erro=0){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;t.className='show'+(erro?' erro':'');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);}
+function toast(msg,erro=0){const t=document.getElementById('toast');if(!erro) msg=String(msg).replace(/^(✅|✔️?)\s*/,''); /* o ícone verde já indica sucesso: não repetir o emoji */document.getElementById('toast-msg').textContent=msg;t.className='show'+(erro?' erro':'');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
 </body>
 </html>
