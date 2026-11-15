@@ -93,7 +93,7 @@
         body{font-family:var(--font-corpo);font-weight:700;background:var(--fundo);color:var(--texto);overflow-x:hidden;}
         img{max-width:100%;display:block;}
         button{font-family:inherit;cursor:pointer;}
-        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}}
 
         /* SPLASH */
         #splash-screen{position:fixed;inset:0;background:var(--roxo-brand);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s,visibility 0.5s;}
@@ -230,6 +230,77 @@
         .cupom-codigo{display:inline-block;background:rgba(255,255,255,0.12);border:1px dashed var(--laranja-brand);border-radius:8px;padding:2px 10px;letter-spacing:1.5px;font-weight:800;}
         /* Textos legais abrem por cima de qualquer outra janela (inclusive o checkout) */
         #modal-lgpd,#modal-termos,#modal-trocas{z-index:2100;}
+
+        /* ===== NUPI BLACK — destaque animado (aparece sozinho durante a promoção) ===== */
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+        #promo-hero{max-width:1300px;margin:0 auto 14px;padding:0 16px;}
+        #promo-hero[hidden]{display:none;}
+        body.tem-promo-hero #promo-hero{margin-top:-50px;}
+        body.tem-promo-hero #hero-banner{margin-top:12px;}
+        body.tem-promo-hero .filter-container{margin-top:12px;}
+        .pb{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:1fr;min-height:310px;border-radius:24px;color:var(--branco);
+            background:radial-gradient(120% 140% at 88% 8%,#2c1b73 0%,var(--marca-roxo-escuro) 40%,var(--marca-roxo) 100%);box-shadow:0 16px 44px rgba(15,7,50,.38);}
+        .pb::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+            background:linear-gradient(135deg,rgba(248,89,0,.95),rgba(255,255,255,.14) 42%,rgba(0,123,255,.55));
+            -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;}
+        .pb-canvas{position:absolute;right:-120px;top:-10px;width:320px;height:320px;opacity:.7;z-index:0;pointer-events:none;}
+        .pb::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(15,7,50,0) 0%,rgba(15,7,50,.55) 38%,rgba(15,7,50,.92) 62%);}
+        .pb-conteudo{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:26px 22px 24px;}
+        .pb-conteudo>*{animation:pb-entra .65s cubic-bezier(.2,.7,.2,1) both;}
+        .pb-conteudo>*:nth-child(2){animation-delay:.07s}.pb-conteudo>*:nth-child(3){animation-delay:.14s}
+        .pb-conteudo>*:nth-child(4){animation-delay:.21s}.pb-conteudo>*:nth-child(5){animation-delay:.28s}
+        .pb-selo{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(248,89,0,.16);border:1px solid rgba(248,89,0,.6);
+            font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#ffc7a3;}
+        .pb-ponto{width:8px;height:8px;border-radius:50%;background:var(--marca-laranja);animation:pb-pulso 1.8s ease-out infinite;}
+        .pb-titulo{margin:0;font-family:var(--font-titulo);font-weight:400;line-height:.92;letter-spacing:.01em;font-size:clamp(2.9rem,13vw,4.8rem);text-shadow:0 6px 30px rgba(0,0,0,.35);}
+        .pb-titulo span{display:block;}
+        .pb-titulo .a{color:var(--marca-laranja);}
+        .pb-sub{margin:0;max-width:34ch;font-size:.95rem;line-height:1.45;color:rgba(255,255,255,.9);}
+        .pb-relogio{display:flex;gap:8px;margin:2px 0 0;padding:0;list-style:none;}
+        .pb-un{min-width:58px;padding:8px 6px 7px;text-align:center;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);}
+        .pb-un b{display:block;font-size:1.4rem;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums;}
+        .pb-un span{font-size:.58rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.78);}
+        .pb-ate{margin:0;font-size:.76rem;color:rgba(255,255,255,.8);}
+        .pb-cta{margin-top:6px;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:12px 22px;border:0;border-radius:14px;background:var(--marca-laranja);color:var(--marca-roxo);
+            font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 10px 26px var(--marca-laranja-glow);transition:transform .18s ease,box-shadow .18s ease;}
+        .pb-cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px var(--marca-laranja-glow);}
+        .pb-cta:active{transform:translateY(0);}
+        .pb-cta:focus-visible{outline:3px solid var(--branco);outline-offset:3px;}
+        @keyframes pb-pulso{0%{box-shadow:0 0 0 0 rgba(248,89,0,.75)}70%{box-shadow:0 0 0 10px rgba(248,89,0,0)}100%{box-shadow:0 0 0 0 rgba(248,89,0,0)}}
+        @keyframes pb-entra{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+        @keyframes pb-brilho{0%,55%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+        .badge-promo{position:relative;overflow:hidden;}
+        .badge-promo::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.6) 50%,transparent 70%);transform:translateX(-130%);animation:pb-brilho 3.4s ease-in-out infinite;}
+        @media(min-width:760px){
+            .pb{grid-template-columns:1.05fr .95fr;align-items:center;min-height:350px;}
+            .pb::before{display:none;}
+            .pb-canvas{position:relative;right:auto;top:auto;transform:none;grid-column:2;grid-row:1;width:100%;height:350px;opacity:.95;}
+            .pb-conteudo{grid-column:1;grid-row:1;padding:40px 44px;gap:12px;}
+        }
+        @media(max-width:359px){.pb-un{min-width:50px}.pb-un b{font-size:1.2rem}}
+        @media(prefers-reduced-motion:reduce){
+            .pb-conteudo>*,.pb-ponto,.badge-promo::after{animation:none!important;}
+            .pb-cta{transition:none;}
+        }
+
+        /* ===== Acessibilidade (WCAG 2.1 AA) =====
+           Mesma identidade, um tom mais fechado onde há texto pequeno: o laranja #f85900 com texto branco dá 3,3:1
+           (o mínimo para texto pequeno é 4,5:1). Decorativos e títulos grandes seguem com a cor original. */
+        :root{--laranja-ac:#c84800;--vermelho-ac:#c93844;--verde-ac:#1e8549;--cinza-ac:#6e6e6e;--texto-fraco:#6e6e6e;}
+        .store-badge,.badge-destaque,.cupom-aplicar,.badge-promo{background:var(--laranja-ac)!important;}
+        .badge-ultimas{background:var(--vermelho-ac)!important;}
+        .badge-estoque,.badge-desc{background:var(--verde-ac)!important;}
+        .card-price,.link-legal{color:var(--laranja-ac)!important;}
+        .radio-option:has(input:checked){color:var(--laranja-ac)!important;}
+        .modal-panel a[style*="laranja-brand"]{color:var(--laranja-ac)!important;}
+        .card-price .preco-antigo,.preco-antigo,.tap-hint,#comprovante-label{color:var(--cinza-ac)!important;}
+        .pix-timer,#pix-timer-txt,.btn-danger{color:var(--vermelho-ac)!important;}
+        #btn-enviar-pedido{color:var(--marca-roxo)!important;}
+        .filter-btn:not(.active){background:var(--branco);border:1px solid var(--n-border-400);color:var(--texto);}
+        .pular-link{position:fixed;left:12px;top:-60px;z-index:3000;padding:12px 18px;border-radius:12px;background:var(--marca-roxo);color:var(--branco);font-weight:800;text-decoration:none;transition:top .15s;}
+        .pular-link:focus{top:12px;outline:3px solid var(--marca-laranja);outline-offset:2px;}
+        a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--marca-azul-coracao);outline-offset:2px;}
+        #conteudo:focus{outline:none;}
         .link-legal{background:none;border:none;padding:0;color:var(--laranja-brand);font:inherit;font-weight:800;text-decoration:underline;cursor:pointer;}
         .badge-promo{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:8px;background:var(--laranja-brand);color:var(--branco);font-size:0.6rem;font-weight:800;letter-spacing:.04em;vertical-align:middle;}
         .badge-desc{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:8px;background:var(--cor-sucesso);color:var(--branco);font-size:0.6rem;font-weight:800;vertical-align:middle;white-space:nowrap;}
@@ -377,7 +448,7 @@
     </a>
 </div>
 
-<div id="toast"><i class="fa-solid fa-circle-check"></i><span id="toast-msg">Adicionado!</span></div>
+<div id="toast" role="status" aria-live="polite"><i class="fa-solid fa-circle-check"></i><span id="toast-msg">Adicionado!</span></div>
 
 <div id="splash-screen">
     <img src="./loja_icon_marca.png" alt="Logo" class="splash-img" onerror="this.style.visibility='hidden'">
@@ -385,6 +456,7 @@
 </div>
 
 <header>
+<a class="pular-link" href="#conteudo">Pular para o conteúdo</a>
     <div class="header-inner">
         <div class="header-row">
             <div class="header-brand">
@@ -403,6 +475,9 @@
         </div>
     </div>
 </header>
+<main id="conteudo" tabindex="-1">
+
+<section id="promo-hero" hidden></section>
 
 <div id="hero-banner" style="display:none"></div>
 
@@ -429,6 +504,8 @@
     <h3>Nenhum produto encontrado</h3>
     <p>Tente outro termo ou categoria</p>
 </div>
+
+</main>
 
 <footer>
     <div class="footer-inner">
@@ -510,7 +587,7 @@
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
             <strong style="color:var(--roxo-brand)">Cartão de crédito</strong><br>
-            Pode haver acréscimo das taxas da operadora. A equipe informa o valor antes de cobrar, e você decide se quer seguir.
+            O pagamento é feito por aproximação (NFC). Pode haver acréscimo das taxas da operadora, que depende do valor da compra e é informado a você no momento do pagamento.
         </p>
         <p style="font-size:0.82rem;color:var(--texto-suave);line-height:1.6;margin-bottom:10px">
             <strong style="color:var(--roxo-brand)">Retirada e entrega</strong><br>
@@ -556,7 +633,7 @@
 </div>
 
 <!-- MODAL PRODUTO -->
-<div class="modal-bg" id="modal-details" onclick="fecharModais(event)" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modal-details" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Detalhes do produto">
     <div class="modal-panel">
         <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <div class="detail-img-box">
@@ -587,7 +664,7 @@
 </div>
 
 <!-- MODAL CHECKOUT -->
-<div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modal-checkout" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Finalizar pedido">
     <div class="modal-panel">
         <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
 
@@ -640,7 +717,7 @@
             <label class="radio-option"><input type="radio" name="pgto" value="Dinheiro" onchange="togglePix()"> Dinheiro</label>
             <label class="radio-option"><input type="radio" name="pgto" value="Cartão" onchange="togglePix()"> Cartão</label>
             <div id="aviso-presencial" style="display:none;background:var(--n-bg-100);border-radius:10px;padding:10px;font-size:0.82rem;color:var(--texto-suave);margin-bottom:10px"><i class="fa-solid fa-circle-info"></i> Pagamento na retirada ou entrega.</div>
-            <div id="aviso-cartao" style="display:none;background:var(--n-bg-100);border-radius:10px;padding:10px;font-size:0.82rem;color:var(--texto-suave);margin-bottom:10px"><i class="fa-solid fa-credit-card"></i> Cartão de crédito: pode haver acréscimo das taxas da operadora, informado pela equipe antes da cobrança.</div>
+            <div id="aviso-cartao" style="display:none;background:var(--n-bg-100);border-radius:10px;padding:10px;font-size:0.82rem;color:var(--texto-suave);margin-bottom:10px"><i class="fa-solid fa-credit-card"></i> Cartão (por aproximação/NFC): pode haver acréscimo das taxas, que depende do valor e é informado no momento do pagamento.</div>
 
             <div class="pix-box ativo" id="pix-box">
                 <div class="pix-valor" id="pix-valor"></div>
@@ -674,7 +751,7 @@
 </div>
 
 <!-- MODAL PEDIDOS -->
-<div class="modal-bg" id="modal-pedidos" onclick="fecharModais(event)" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modal-pedidos" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Meus pedidos">
     <div class="modal-panel">
         <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <h2 style="color:var(--roxo-brand);margin-bottom:6px;font-size:1.2rem;font-weight:800"><i class="fa-solid fa-clock-rotate-left"></i> Meus Pedidos</h2>
@@ -684,7 +761,7 @@
 </div>
 
 <!-- MODAL SOBRE -->
-<div class="modal-bg" id="modal-sobre" onclick="fecharModais(event)" role="dialog" aria-modal="true">
+<div class="modal-bg" id="modal-sobre" onclick="fecharModais(event)" role="dialog" aria-modal="true" aria-label="Sobre o NUPIEEPRO">
     <div class="modal-panel">
         <button class="close-btn" onclick="fecharModais(null)" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
         <img src="./loja_icon_marca.png" alt="Logo" style="width:70px;height:70px;border-radius:50%;border:3px solid var(--laranja-brand);object-fit:cover;margin:0 auto 14px;display:block">
@@ -700,7 +777,7 @@
     </div>
 </div>
 
-<div class="float-bar" id="barra-carrinho" onclick="abrirCheckout()">
+<div class="float-bar" id="barra-carrinho" role="button" tabindex="0" aria-label="Abrir sacola e finalizar pedido" onclick="abrirCheckout()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirCheckout();}">
     <div style="line-height:1.2">
         <div id="barra-qtd" style="font-size:0.72rem;opacity:0.8;font-weight:500">0 itens</div>
         <div id="barra-total" style="font-weight:800;font-size:1.1rem;color:var(--laranja-brand)">R$ 0,00</div>
@@ -878,14 +955,28 @@ window.addEventListener('load',()=>{
     /* Exibe cache do localStorage imediatamente enquanto a API carrega */
     try {
         const _c=JSON.parse(localStorage.getItem('nupieepro_cache_produtos')||'null');
-        if(_c&&Array.isArray(_c.d)&&_c.d.length){produtos.length=0;produtos.push(..._c.d);}
+        if(_c&&Array.isArray(_c.d)&&_c.d.length){
+            /* Promoção que já venceu não pode aparecer pelo cache (o preço cobrado é sempre o do servidor) */
+            produtos.length=0;
+            produtos.push(..._c.d.map(p=>{
+                if(p.preco_original&&p.promo_fim&&Date.parse(p.promo_fim)<=Date.now()){ p.preco=p.preco_original; p.preco_original=null; p.em_promocao=false; }
+                return p;
+            }));
+        }
     } catch(e){}
     renderVitrine();
     renderFiltros();
+    PromoHero.render();
     if(_sb){
         carregarAPI();
         /* Realtime: qualquer alteração do admin reflete instantaneamente na loja */
         let _apiDebounce;
+        /* A promoção liga/desliga pelo relógio do banco (não gera evento de tabela): reconfere a cada 5 min
+           e ao voltar para a aba, para quem deixou a loja aberta atravessar a meia-noite. */
+        let _ultimaAtualizacao=Date.now();
+        const _recarregarSeVisivel=()=>{ if(!document.hidden&&Date.now()-_ultimaAtualizacao>60000){ _ultimaAtualizacao=Date.now(); carregarAPI(); } };
+        setInterval(_recarregarSeVisivel,5*60*1000);
+        document.addEventListener('visibilitychange',_recarregarSeVisivel);
         function agendarCarregarAPI(){ clearTimeout(_apiDebounce); _apiDebounce=setTimeout(carregarAPI,150); }
         _sb.channel('store-live')
             .on('postgres_changes',{event:'*',schema:'public',table:'produtos'},agendarCarregarAPI)
@@ -910,7 +1001,7 @@ window.addEventListener('load',()=>{
         if(window.__erroConexaoAtivo) return;
         const s=document.getElementById('splash-screen');s.classList.add('hidden');setTimeout(()=>s.style.display='none',400);
     },900);
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')fecharModais(null);});
+    /* Esc: tratado em um único lugar, mais abaixo (fecha só a janela do topo). */
     /* Busca já é tratada pelo oninput="debounceBusca(...)" inline no HTML (300ms) — um
        addEventListener('input') redundante aqui existia antes e disparava renderVitrine()
        SEM debounce a cada tecla, dobrando o trabalho de render e tornando o debounce inútil. */
@@ -925,6 +1016,140 @@ const IMG_FALLBACK = {
     3: 'https://scacjsosvlllapbgetos.supabase.co/storage/v1/object/public/produtos/b6959faa-823b-413b-bc13-94763164f09a.jpg',
     4: 'https://scacjsosvlllapbgetos.supabase.co/storage/v1/object/public/produtos/5e338609-0214-42fa-a832-7a3da6d59dd7.png',
 };
+
+/* ===== NUPI BLACK: destaque animado + contagem regressiva =====
+   Aparece SOZINHO enquanto algum produto está em promoção (o servidor manda em_promocao/promo_fim)
+   e some quando a janela acaba. Esfera em canvas 2D (sem biblioteca), pausa fora da tela/aba oculta
+   e fica parada para quem prefere menos movimento. */
+const PromoHero=(()=>{
+    let tick=null, raf=0, rodando=false, obs=null, alvoAtual=0, desenhar=null;
+    const reduz=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fimDaPromo=()=>{
+        const ds=produtos.filter(p=>p.em_promocao&&p.promo_fim).map(p=>Date.parse(p.promo_fim)).filter(Number.isFinite);
+        return ds.length?Math.min(...ds):0;
+    };
+    const dois=n=>String(n).padStart(2,'0');
+
+    function esfera(cv){
+        const ctx=cv.getContext('2d'); if(!ctx) return null;
+        let w=0,h=0,dpr=1;
+        const LAT=22,LON=26,PTS=64;
+        function medir(){
+            const r=cv.getBoundingClientRect(); dpr=Math.min(window.devicePixelRatio||1,2);
+            w=r.width; h=r.height; cv.width=Math.max(1,Math.round(w*dpr)); cv.height=Math.max(1,Math.round(h*dpr));
+            ctx.setTransform(dpr,0,0,dpr,0,0);
+        }
+        medir();
+        function quadro(t){
+            ctx.clearRect(0,0,w,h);
+            const cx=w/2,cy=h/2,R=Math.min(w,h)*0.34;
+            const rotY=t*0.00021,rotX=-0.42+Math.sin(t*0.00014)*0.08;
+            const cY=Math.cos(rotY),sY=Math.sin(rotY),cX=Math.cos(rotX),sX=Math.sin(rotX);
+            // halo suave (laranja da marca)
+            const g0=ctx.createRadialGradient(cx,cy,R*0.2,cx,cy,R*1.7);
+            g0.addColorStop(0,'rgba(248,89,0,.22)'); g0.addColorStop(1,'rgba(248,89,0,0)');
+            ctx.globalCompositeOperation='source-over'; ctx.fillStyle=g0; ctx.fillRect(0,0,w,h);
+            const P=(phi,th)=>{
+                const ond=1+0.07*Math.sin(3*th+t*0.0011)*Math.cos(2*phi+t*0.0008)+0.03*Math.sin(5*phi-t*0.0013);
+                const x=Math.cos(phi)*Math.cos(th)*R*ond,y=Math.sin(phi)*R*ond,z=Math.cos(phi)*Math.sin(th)*R*ond;
+                const x1=x*cY+z*sY,z1=-x*sY+z*cY;
+                const y1=y*cX-z1*sX,z2=y*sX+z1*cX;
+                const f=1/(1-z2/(R*4.2));
+                return [cx+x1*f,cy+y1*f,z2];
+            };
+            const frente=new Path2D(),tras=new Path2D();
+            const linha=(fn)=>{
+                let a=fn(0);
+                for(let j=1;j<=PTS;j++){
+                    const b=fn(j),alvo=(a[2]+b[2])>=0?frente:tras;
+                    alvo.moveTo(a[0],a[1]); alvo.lineTo(b[0],b[1]); a=b;
+                }
+            };
+            for(let i=1;i<LAT;i++){const phi=-Math.PI/2+Math.PI*i/LAT; linha(j=>P(phi,2*Math.PI*j/PTS));}
+            for(let i=0;i<LON;i++){const th=2*Math.PI*i/LON; linha(j=>P(-Math.PI/2+Math.PI*j/PTS,th));}
+            ctx.globalCompositeOperation='lighter'; ctx.lineCap='round';
+            ctx.lineWidth=1; ctx.strokeStyle='rgba(0,123,255,.30)'; ctx.stroke(tras);
+            const g=ctx.createLinearGradient(cx-R,cy-R,cx+R,cy+R);
+            g.addColorStop(0,'#f85900'); g.addColorStop(.55,'#ff9a5c'); g.addColorStop(1,'#ffffff');
+            ctx.lineWidth=1.15; ctx.strokeStyle=g; ctx.globalAlpha=.9; ctx.stroke(frente); ctx.globalAlpha=1;
+            // órbita fina
+            ctx.beginPath(); ctx.ellipse(cx,cy,R*1.28,R*0.42,-0.5+Math.sin(t*0.0004)*0.06,0,Math.PI*2);
+            ctx.strokeStyle='rgba(255,255,255,.22)'; ctx.lineWidth=1; ctx.stroke();
+            ctx.globalCompositeOperation='source-over';
+        }
+        return {quadro,medir};
+    }
+
+    function loop(t){
+        if(!rodando) return;
+        desenhar&&desenhar.quadro(t);
+        raf=requestAnimationFrame(loop);
+    }
+    function ligar(){ if(rodando||reduz()||document.hidden) return; rodando=true; raf=requestAnimationFrame(loop); }
+    function desligar(){ rodando=false; cancelAnimationFrame(raf); }
+    function parar(){
+        desligar(); clearInterval(tick); tick=null; alvoAtual=0; desenhar=null;
+        if(obs){obs.disconnect();obs=null;}
+        window.removeEventListener('resize',aoRedimensionar);
+    }
+    function aoRedimensionar(){ if(desenhar){desenhar.medir(); if(!rodando) desenhar.quadro(1500);} }
+    document.addEventListener('visibilitychange',()=>{ if(!desenhar) return; if(document.hidden) desligar(); else ligar(); });
+
+    function atualizarRelogio(){
+        const alvo=alvoAtual, falta=alvo-Date.now();
+        if(falta<=0){ render(); if(typeof carregarAPI==='function') carregarAPI(); return; }
+        const d=Math.floor(falta/86400000),h=Math.floor(falta%86400000/3600000),m=Math.floor(falta%3600000/60000),s=Math.floor(falta%60000/1000);
+        const set=(k,v)=>{const el=document.querySelector('#promo-hero [data-u="'+k+'"]'); if(el&&el.textContent!==v) el.textContent=v;};
+        set('d',dois(d)); set('h',dois(h)); set('m',dois(m)); set('s',dois(s));
+    }
+
+    function render(){
+        const el=document.getElementById('promo-hero'); if(!el) return;
+        const alvo=fimDaPromo();
+        if(!alvo||alvo<=Date.now()){
+            parar(); el.hidden=true; el.innerHTML=''; document.body.classList.remove('tem-promo-hero'); return;
+        }
+        if(!el.hidden&&alvoAtual===alvo) return;           // já está no ar com o mesmo prazo
+        parar();
+        const promos=produtos.filter(p=>p.em_promocao);
+        const rotulo=(promos.find(p=>p.promo_rotulo)||{}).promo_rotulo||'NUPI BLACK';
+        const partes=String(rotulo).trim().split(/\s+/); const a=partes.shift()||'', b=partes.join(' ');
+        const ateDia=new Date(alvo-1000).toLocaleDateString('pt-BR',{timeZone:'America/Fortaleza',day:'2-digit',month:'2-digit'});
+        const n=promos.length;
+        el.innerHTML=
+          '<div class="pb" role="region" aria-label="Promoção '+san(rotulo)+'">'+
+            '<canvas class="pb-canvas" aria-hidden="true"></canvas>'+
+            '<div class="pb-conteudo">'+
+              '<span class="pb-selo"><span class="pb-ponto" aria-hidden="true"></span>Promoção no ar</span>'+
+              '<h2 class="pb-titulo"><span class="a">'+san(a)+'</span>'+(b?'<span>'+san(b)+'</span>':'')+'</h2>'+
+              '<p class="pb-sub">'+n+(n===1?' produto com preço especial':' produtos com preço especial')+', só por tempo limitado.</p>'+
+              '<div class="pb-relogio" role="timer" aria-label="Tempo restante da promoção" aria-live="off">'+
+                '<div class="pb-un"><b data-u="d">--</b><span>dias</span></div><div class="pb-un"><b data-u="h">--</b><span>horas</span></div>'+
+                '<div class="pb-un"><b data-u="m">--</b><span>min</span></div><div class="pb-un"><b data-u="s">--</b><span>seg</span></div>'+
+              '</div>'+
+              '<p class="pb-ate">Vale até <strong>'+ateDia+'</strong> ou enquanto durar o estoque.</p>'+
+              '<button type="button" class="pb-cta" id="pb-cta">Ver ofertas <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>'+
+            '</div>'+
+          '</div>';
+        el.hidden=false; document.body.classList.add('tem-promo-hero'); alvoAtual=alvo;
+        document.getElementById('pb-cta').addEventListener('click',()=>{
+            const alvoEl=document.getElementById('vitrine-area')||document.body;
+            alvoEl.scrollIntoView({behavior:reduz()?'auto':'smooth',block:'start'});
+        });
+        atualizarRelogio(); tick=setInterval(atualizarRelogio,1000);
+        const cv=el.querySelector('.pb-canvas');
+        desenhar=esfera(cv);
+        if(desenhar){
+            desenhar.quadro(1500);                           // 1º quadro estático (também p/ quem reduz movimento)
+            window.addEventListener('resize',aoRedimensionar);
+            if('IntersectionObserver' in window){
+                obs=new IntersectionObserver(es=>{ es[0].isIntersecting?ligar():desligar(); },{threshold:0.05});
+                obs.observe(cv);
+            } else ligar();
+        }
+    }
+    return {render};
+})();
 
 function normalizarProduto(p){
     p.colecao = p.colecao || '';
@@ -1063,6 +1288,7 @@ async function carregarAPI(tentativa){
                 sincronizarCarrinhoComProdutos();
                 sincronizarModalProduto();
                 renderVitrine();
+                PromoHero.render();
                 /* Cache local para carregamento instantâneo no futuro */
                 localStorage.setItem('nupieepro_cache_produtos', JSON.stringify({t:Date.now(), d:normalizados}));
             }
@@ -1875,6 +2101,39 @@ function compartilhar(id,event){event.stopPropagation();const p=produtos.find(x=
 function abrirSobre(){document.getElementById('modal-sobre').classList.add('active');travarScroll();}
 /* Janelas legais abrem POR CIMA (inclusive do checkout) e fecham sozinhas, sem derrubar o checkout
    (fecharModais() fecha tudo e zera o comprovante enviado). */
+/* Acessibilidade de teclado: Esc fecha a janela do topo; o foco vai para dentro da janela ao abrir e volta ao
+   botão que a abriu ao fechar. */
+(function(){
+    const ordem=['modal-lgpd','modal-termos','modal-trocas'];
+    document.addEventListener('keydown',e=>{
+        if(e.key!=='Escape') return;
+        for(const id of ordem){ const m=document.getElementById(id); if(m&&m.classList.contains('active')){ fecharLegal(null,id); return; } }
+        if(document.querySelector('.modal-bg.active')) fecharModais(null);
+    });
+    const lembrar=new WeakMap();
+    /* Enquanto há janela aberta, o resto da página fica inerte (teclado/leitor de tela não "escapam" para trás). */
+    function atualizarInerte(){
+        const ativos=[...document.querySelectorAll('.modal-bg.active')];
+        const topo=ativos.find(m=>ordem.includes(m.id))||ativos[ativos.length-1]||null;
+        document.querySelectorAll('header,main,footer,#barra-carrinho').forEach(el=>{ el.inert=!!topo; });
+        document.querySelectorAll('.modal-bg').forEach(m=>{ m.inert=!!(topo&&m!==topo); });
+    }
+    const obs=new MutationObserver(muts=>{
+        atualizarInerte();
+        for(const mu of muts){
+            const m=mu.target; if(!m.classList||!m.classList.contains('modal-bg')) continue;
+            const ativo=m.classList.contains('active'), tinha=mu.oldValue&&/\bactive\b/.test(mu.oldValue);
+            if(ativo&&!tinha){
+                lembrar.set(m,document.activeElement);
+                /* a janela aparece com transição (visibility): tenta algumas vezes até o foco entrar */
+                let n=0; const tentar=()=>{ const f=m.querySelector('.close-btn,button,[href],input,select,textarea'); if(f) f.focus({preventScroll:true}); if(!m.contains(document.activeElement)&&++n<8) setTimeout(tentar,100); };
+                setTimeout(tentar,60);
+            }
+            else if(!ativo&&tinha){ const o=lembrar.get(m); if(o&&o.focus&&document.contains(o)) o.focus({preventScroll:true}); }
+        }
+    });
+    document.querySelectorAll('.modal-bg').forEach(m=>obs.observe(m,{attributes:true,attributeFilter:['class'],attributeOldValue:true}));
+})();
 function abrirLegal(id){const jaTrava=!!document.querySelector('.modal-bg.active');document.getElementById(id).classList.add('active');if(!jaTrava)travarScroll();}
 function fecharLegal(e,id){
     if(e&&e.target!==e.currentTarget) return;

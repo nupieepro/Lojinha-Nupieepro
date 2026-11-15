@@ -3,7 +3,7 @@
 ## Deploy
 - **GitHub Pages**, branch `main`, pasta raiz. Merge/push em `main` publica em segundos (workflow "pages build and deployment"). **Não existe staging**: o que está em `main` é o que o cliente vê. Teste localmente antes.
 - Rodar local: `python3 -m http.server 8000` e abrir `http://localhost:8000/index.html` ou `/admin.html`. **Aponta para o banco de produção.** Pedido de teste vira pedido real.
-- Cache: se mudar CSS/JS/imagens, incrementar `CACHE` em `sw.js` / `admin-sw.js` (hoje `nupieepro-v21`); senão usuários recebem versão antiga.
+- Cache: se mudar CSS/JS/imagens, incrementar `CACHE` em `sw.js` / `admin-sw.js` (hoje `nupieepro-v22`); senão usuários recebem versão antiga.
 - Edge Functions: `supabase functions deploy upload-imagem --project-ref scacjsosvlllapbgetos` (precisa do Supabase CLI logado).
 - Migrations: colar no SQL Editor do Dashboard, na ordem do README de migrations.
 
@@ -45,3 +45,9 @@
 - Para encerrar antes: `update public.produtos set promo_fim = now() where id in (...);`.
 - Cupons **acumulam** com preço promocional (um cupom percentual vale sobre o preço já promocional). Se isso não for desejado, é preciso ajustar `criar_pedido` e `calcDesc` na loja.
 - **Pendência de segurança tratada em 15/11/2026:** a coluna `produtos.custo` era legível por qualquer visitante pela API. A migration `20261115000002_ocultar_custo_do_publico_APLICAR_DEPOIS_DO_DEPLOY.sql` corrige; só aplicar depois que a loja nova (que usa `listar_produtos_loja`) estiver no ar.
+
+## Como refazer a auditoria de acessibilidade (axe-core)
+1. `python3 -m http.server 8765` na pasta do repo.
+2. Em uma pasta fora do repo: `npm i axe-core@4.10.2 playwright`.
+3. Com o Playwright (Chromium), abrir `http://localhost:8765/index.html`, injetar `node_modules/axe-core/axe.min.js` e rodar `await axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','best-practice']}})` na home, no detalhe de um produto (`abrirDetalhes(id)`), no checkout (`abrirCheckout()`) e em `abrirTermos()`.
+4. Meta: 0 violações. Resultado de 15/11/2026: 0 nas quatro telas.

@@ -89,3 +89,25 @@ test('RPCs admin_* e criar_pedido: nenhuma migration concede EXECUTE a anon para
     assert.ok(!/grant\s+execute\s+on\s+function\s+public\.admin_[^;]*\bto\s+[^;]*\banon\b/i.test(t), `${f}: admin_* liberada para anon`);
   }
 });
+
+test('acessibilidade estática da loja: main, link de pular, diálogos com nome, imagens com alt', () => {
+  const t = fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8');
+  assert.equal((t.match(/<main[\s>]/g) || []).length, 1, 'deve haver exatamente um <main>');
+  assert.equal((t.match(/<\/main>/g) || []).length, 1, 'deve haver exatamente um </main>');
+  // o <main> não pode englobar as janelas (modais), senão elas ficam inertes junto com o fundo
+  const iMain = t.search(/<main[\s>]/), fMain = t.indexOf('</main>'), primeiroModal = t.indexOf('<div class="modal-bg"');
+  assert.ok(fMain > iMain && fMain < primeiroModal, '</main> precisa fechar ANTES da primeira janela (modal-bg)');
+  assert.ok(/class="pular-link"/.test(t), 'falta o link "Pular para o conteúdo"');
+  for (const m of t.matchAll(/<div class="modal-bg"[^>]*>/g)) {
+    assert.ok(/role="dialog"/.test(m[0]) && /aria-modal="true"/.test(m[0]) && /aria-label="[^"]+"/.test(m[0]), 'janela sem role/aria-label: ' + m[0].slice(0, 60));
+  }
+  for (const m of t.matchAll(/<img\b[^>]*>/g)) assert.ok(/\balt=/.test(m[0]), '<img> sem alt: ' + m[0].slice(0, 60));
+});
+
+test('preço nunca vem do navegador: o pedido só envia id/qtd/tamanho dos itens', () => {
+  const t = fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8');
+  const i = t.indexOf("rpc('criar_pedido'");
+  assert.ok(i > 0, 'chamada de criar_pedido não encontrada');
+  const trecho = t.slice(i, i + 900);
+  assert.ok(!/p_preco|p_total|p_desconto|p_subtotal/.test(trecho), 'criar_pedido não pode receber preço/total do cliente');
+});
