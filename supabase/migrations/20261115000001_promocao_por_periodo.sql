@@ -301,6 +301,6 @@ begin
 end $$;
 
 -- NUPI BLACK 2026: 16/11 00:00 até 30/11 23:59:59 (America/Fortaleza, UTC-3)
-update public.produtos set preco_promocional = 2.00,  promo_inicio = timestamptz '2026-11-16 00:00:00-03', promo_fim = timestamptz '2026-12-01 00:00:00-03', promo_rotulo = 'NUPI BLACK' where id in (18,19,20,21) and preco > 2.00;
-update public.produtos set preco_promocional = 12.00, promo_inicio = timestamptz '2026-11-16 00:00:00-03', promo_fim = timestamptz '2026-12-01 00:00:00-03', promo_rotulo = 'NUPI BLACK' where id = 17 and preco > 12.00;
-update public.produtos set preco_promocional = 15.00, promo_inicio = timestamptz '2026-11-16 00:00:00-03', promo_fim = timestamptz '2026-12-01 00:00:00-03', promo_rotulo = 'NUPI BLACK' where id = 16 and preco > 15.00;
+update public.produtos set preco_promocional = 2.00,  promo_inicio = timestamptz '2026-11-16 00:00:00-03', promo_fim = timestamptz '2026-11-30 23:59:59-03', promo_rotulo = 'NUPI BLACK' where id in (18,19,20,21) and preco > 2.00;
+update public.produtos set preco_promocional = 12.00, promo_inicio = timestamptz '2026-11-16 00:00:00-03', promo_fim = timestamptz '2026-11-30 23:59:59-03', promo_rotulo = 'NUPI BLACK' where id = 17 and preco > 12.00;
+update public.produtos set preco_promocional = 15.00, promo_inicio = timestamptz '2026-11-16 00:00:00-03', promo_fim = timestamptz '2026-11-30 23:59:59-03', promo_rotulo = 'NUPI BLACK' where id = 16 and preco > 15.00;
