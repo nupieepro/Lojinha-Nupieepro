@@ -238,17 +238,17 @@
         body.tem-promo-hero #promo-hero{margin-top:-50px;}
         body.tem-promo-hero #hero-banner{margin-top:12px;}
         body.tem-promo-hero .filter-container{margin-top:12px;}
-        .pb{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:1fr;border-radius:20px;color:var(--branco);
+        .pb{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) clamp(92px,27vw,132px);grid-template-areas:"topo globo" "acao acao";align-items:center;gap:10px 6px;padding:16px;border-radius:20px;color:var(--branco);
             background:radial-gradient(120% 140% at 88% 8%,#2c1b73 0%,var(--marca-roxo-escuro) 40%,var(--marca-roxo) 100%);box-shadow:0 12px 32px rgba(15,7,50,.32);}
         .pb::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
             background:linear-gradient(135deg,rgba(248,89,0,.95),rgba(255,255,255,.14) 42%,rgba(0,123,255,.55));
             -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;}
-        .pb::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(15,7,50,.9) 0%,rgba(15,7,50,.55) 55%,rgba(15,7,50,0) 100%);}
-        .pb-canvas{position:absolute;right:-70px;top:50%;width:230px;height:230px;transform:translateY(-50%);opacity:.7;z-index:0;pointer-events:none;}
-        .pb-conteudo{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:16px 16px 16px;min-width:0;}
-        .pb-conteudo>*{animation:pb-entra .65s cubic-bezier(.2,.7,.2,1) both;}
-        .pb-conteudo>*:nth-child(2){animation-delay:.07s}.pb-conteudo>*:nth-child(3){animation-delay:.14s}
-        .pb-conteudo>*:nth-child(4){animation-delay:.21s}
+        .pb-topo{grid-area:topo;display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0;}
+        .pb-globo{grid-area:globo;position:relative;width:100%;aspect-ratio:1/1;pointer-events:none;}
+        .pb-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+        .pb-acao{grid-area:acao;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;min-width:0;}
+        .pb-topo>*,.pb-acao>*{animation:pb-entra .65s cubic-bezier(.2,.7,.2,1) both;}
+        .pb-topo>*:nth-child(2){animation-delay:.07s}.pb-topo>*:nth-child(3){animation-delay:.14s}.pb-acao>*{animation-delay:.21s}
         .pb-selo{display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:999px;background:rgba(248,89,0,.16);border:1px solid rgba(248,89,0,.6);
             font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;font-weight:800;color:#ffc7a3;}
         .pb-ponto{width:7px;height:7px;border-radius:50%;background:var(--marca-laranja);animation:pb-pulso 1.8s ease-out infinite;}
@@ -257,7 +257,6 @@
         .pb-titulo span{display:inline;}
         .pb-titulo .a{color:var(--marca-laranja);}
         .pb-sub{margin:0;font-size:.82rem;line-height:1.35;color:rgba(255,255,255,.9);}
-        .pb-acao{display:flex;flex-direction:column;align-items:flex-start;gap:8px;}
         .pb-relogio{display:flex;gap:6px;margin:0;padding:0;}
         .pb-un{min-width:46px;padding:5px 5px 4px;text-align:center;border-radius:11px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);}
         .pb-un b{display:block;font-size:1.1rem;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums;}
@@ -275,30 +274,25 @@
         .badge-promo{position:relative;overflow:hidden;}
         .badge-promo::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.6) 50%,transparent 70%);transform:translateX(-130%);animation:pb-brilho 3.4s ease-in-out infinite;}
         @media(min-width:520px){
-            .pb-canvas{right:-40px;width:270px;height:270px;}
-            .pb-conteudo{padding:20px 24px;gap:9px;}
-            .pb-acao{flex-direction:row;align-items:center;flex-wrap:wrap;gap:10px 18px;}
+            .pb{grid-template-columns:minmax(0,1fr) clamp(130px,24vw,190px);padding:20px 24px;gap:12px 12px;}
             .pb-un{min-width:52px;}.pb-un b{font-size:1.2rem;}
         }
-        @media(min-width:900px){
-            .pb{grid-template-columns:1.2fr .8fr;align-items:center;}
-            .pb::before{display:none;}
-            .pb-canvas{position:relative;right:auto;top:auto;transform:none;grid-column:2;grid-row:1;width:100%;height:230px;opacity:.95;}
-            .pb-conteudo{grid-column:1;grid-row:1;padding:26px 36px;gap:10px;}
-            .pb-titulo{font-size:clamp(2.6rem,3.8vw,3.6rem);}
+        @media(min-width:760px){
+            .pb{grid-template-columns:minmax(0,1fr) clamp(150px,16vw,200px);grid-template-areas:"topo globo" "acao globo";padding:20px 32px;gap:12px 28px;align-content:center;}
+            .pb-titulo{font-size:clamp(2.4rem,3.6vw,3.4rem);}
             .pb-sub{font-size:.95rem;}
+            .pb-un{min-width:58px;}.pb-un b{font-size:1.3rem;}
         }
         @media(max-height:640px){.pb-sub{display:none;}}
         @media(max-height:520px){
-            .pb-canvas,.pb-sub,.pb-selo,.pb-ate{display:none;}.pb::before{display:none;}
-            .pb-conteudo{padding:12px 16px;gap:6px;}
+            .pb{grid-template-columns:minmax(0,1fr);grid-template-areas:"topo" "acao";padding:12px 16px;gap:6px;}
+            .pb-globo,.pb-sub,.pb-selo,.pb-ate{display:none;}
             .pb-titulo{font-size:1.7rem;}
-            .pb-acao{flex-direction:row;align-items:center;gap:10px 14px;}
             .pb-cta{min-height:40px;padding:7px 16px;}
         }
         @media(max-width:359px){.pb-un{min-width:42px}.pb-un b{font-size:1rem}.pb-cta{padding:9px 14px}}
         @media(prefers-reduced-motion:reduce){
-            .pb-conteudo>*,.pb-ponto,.badge-promo::after{animation:none!important;}
+            .pb-topo>*,.pb-acao>*,.pb-ponto,.badge-promo::after{animation:none!important;}
             .pb-cta{transition:none;}
         }
 
@@ -1067,7 +1061,7 @@ const PromoHero=(()=>{
         medir();
         function quadro(t){
             ctx.clearRect(0,0,w,h);
-            const cx=w/2,cy=h/2,R=Math.min(w,h)*0.34;
+            const cx=w/2,cy=h/2,R=Math.min(w,h)*0.33;
             const rotY=t*0.00021,rotX=-0.42+Math.sin(t*0.00014)*0.08;
             const cY=Math.cos(rotY),sY=Math.sin(rotY),cX=Math.cos(rotX),sX=Math.sin(rotX);
             // halo suave (laranja da marca)
@@ -1143,19 +1137,19 @@ const PromoHero=(()=>{
         const n=promos.length;
         el.innerHTML=
           '<div class="pb" role="region" aria-label="Promoção '+san(rotulo)+'">'+
-            '<canvas class="pb-canvas" aria-hidden="true"></canvas>'+
-            '<div class="pb-conteudo">'+
+            '<div class="pb-topo">'+
               '<span class="pb-selo"><span class="pb-ponto" aria-hidden="true"></span>Promoção no ar</span>'+
               '<h2 class="pb-titulo"><span class="a">'+san(a)+'</span>'+(b?'<span>'+san(b)+'</span>':'')+'</h2>'+
-              '<p class="pb-sub">'+n+(n===1?' produto com preço especial':' produtos com preço especial')+' por tempo limitado.</p>'+
-              '<div class="pb-acao">'+
+              '<p class="pb-sub">'+n+(n===1?' produto com preço especial':' produtos com preço especial')+'</p>'+
+            '</div>'+
+            '<div class="pb-globo" aria-hidden="true"><canvas class="pb-canvas"></canvas></div>'+
+            '<div class="pb-acao">'+
               '<div class="pb-relogio" role="timer" aria-label="Tempo restante da promoção" aria-live="off">'+
                 '<div class="pb-un"><b data-u="d">--</b><span>dias</span></div><div class="pb-un"><b data-u="h">--</b><span>horas</span></div>'+
                 '<div class="pb-un"><b data-u="m">--</b><span>min</span></div><div class="pb-un"><b data-u="s">--</b><span>seg</span></div>'+
               '</div>'+
               '<div class="pb-linha"><button type="button" class="pb-cta" id="pb-cta">Ver ofertas <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></button>'+
               '<p class="pb-ate">Até <strong>'+ateDia+'</strong> ou enquanto durar o estoque</p></div>'+
-              '</div>'+
             '</div>'+
           '</div>';
         el.hidden=false; document.body.classList.add('tem-promo-hero'); alvoAtual=alvo;
